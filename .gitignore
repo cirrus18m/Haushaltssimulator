@@ -221,3 +221,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Rohdaten der Datenquellen (per scripts/build_data.py reproduzierbar)
+data/raw/
