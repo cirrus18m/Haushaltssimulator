@@ -1,0 +1,601 @@
+stichtag,ebene,haushalt,schuldenart,schulden_mio_eur
+2024-03-31,Bund,Kernhaushalt,Wertpapierschulden,1500862
+2024-03-31,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,19856
+2024-03-31,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,30214
+2024-03-31,Bund,Kernhaushalt,Insgesamt,1550933
+2024-03-31,Bund,Extrahaushalte,Wertpapierschulden,148068
+2024-03-31,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3658
+2024-03-31,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,246
+2024-03-31,Bund,Extrahaushalte,Insgesamt,151972
+2024-03-31,Bund,Insgesamt,Wertpapierschulden,1648931
+2024-03-31,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,23514
+2024-03-31,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,30460
+2024-03-31,Bund,Insgesamt,Insgesamt,1702905
+2024-03-31,Länder,Kernhaushalt,Wertpapierschulden,421534
+2024-03-31,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,133286
+2024-03-31,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,2586
+2024-03-31,Länder,Kernhaushalt,Insgesamt,557406
+2024-03-31,Länder,Extrahaushalte,Wertpapierschulden,22479
+2024-03-31,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,21287
+2024-03-31,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1161
+2024-03-31,Länder,Extrahaushalte,Insgesamt,44928
+2024-03-31,Länder,Insgesamt,Wertpapierschulden,444013
+2024-03-31,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,154574
+2024-03-31,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,3747
+2024-03-31,Länder,Insgesamt,Insgesamt,602333
+2024-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2716
+2024-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,99900
+2024-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,29073
+2024-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,131690
+2024-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,7
+2024-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,22567
+2024-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1946
+2024-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,24520
+2024-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2723
+2024-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,122468
+2024-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,31019
+2024-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,156210
+2024-03-31,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2024-03-31,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,10
+2024-03-31,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,
+2024-03-31,Sozialversicherung,Kernhaushalt,Insgesamt,10
+2024-03-31,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2024-03-31,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,12
+2024-03-31,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,
+2024-03-31,Sozialversicherung,Extrahaushalte,Insgesamt,12
+2024-03-31,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2024-03-31,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,22
+2024-03-31,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,
+2024-03-31,Sozialversicherung,Insgesamt,Insgesamt,22
+2024-03-31,Insgesamt,Kernhaushalt,Wertpapierschulden,1925113
+2024-03-31,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,253053
+2024-03-31,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,61873
+2024-03-31,Insgesamt,Kernhaushalt,Insgesamt,2240038
+2024-03-31,Insgesamt,Extrahaushalte,Wertpapierschulden,170554
+2024-03-31,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,47525
+2024-03-31,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,3353
+2024-03-31,Insgesamt,Extrahaushalte,Insgesamt,221433
+2024-03-31,Insgesamt,Insgesamt,Wertpapierschulden,2095667
+2024-03-31,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,300578
+2024-03-31,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,65226
+2024-03-31,Insgesamt,Insgesamt,Insgesamt,2461471
+2024-06-30,Bund,Kernhaushalt,Wertpapierschulden,1500033
+2024-06-30,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,20057
+2024-06-30,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,26284
+2024-06-30,Bund,Kernhaushalt,Insgesamt,1546374
+2024-06-30,Bund,Extrahaushalte,Wertpapierschulden,147008
+2024-06-30,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3602
+2024-06-30,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,258
+2024-06-30,Bund,Extrahaushalte,Insgesamt,150868
+2024-06-30,Bund,Insgesamt,Wertpapierschulden,1647040
+2024-06-30,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,23659
+2024-06-30,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,26542
+2024-06-30,Bund,Insgesamt,Insgesamt,1697241
+2024-06-30,Länder,Kernhaushalt,Wertpapierschulden,422213
+2024-06-30,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,133038
+2024-06-30,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,2398
+2024-06-30,Länder,Kernhaushalt,Insgesamt,557649
+2024-06-30,Länder,Extrahaushalte,Wertpapierschulden,22515
+2024-06-30,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,22296
+2024-06-30,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1235
+2024-06-30,Länder,Extrahaushalte,Insgesamt,46047
+2024-06-30,Länder,Insgesamt,Wertpapierschulden,444729
+2024-06-30,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,155334
+2024-06-30,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,3633
+2024-06-30,Länder,Insgesamt,Insgesamt,603695
+2024-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2595
+2024-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,101755
+2024-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,29335
+2024-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,133685
+2024-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,7
+2024-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,23542
+2024-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1859
+2024-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,25408
+2024-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2602
+2024-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,125297
+2024-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,31193
+2024-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,159093
+2024-06-30,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2024-06-30,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,9
+2024-06-30,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,19
+2024-06-30,Sozialversicherung,Kernhaushalt,Insgesamt,28
+2024-06-30,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2024-06-30,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,1
+2024-06-30,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,11
+2024-06-30,Sozialversicherung,Extrahaushalte,Insgesamt,12
+2024-06-30,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2024-06-30,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,10
+2024-06-30,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,31
+2024-06-30,Sozialversicherung,Insgesamt,Insgesamt,41
+2024-06-30,Insgesamt,Kernhaushalt,Wertpapierschulden,1924841
+2024-06-30,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,254858
+2024-06-30,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,58036
+2024-06-30,Insgesamt,Kernhaushalt,Insgesamt,2237736
+2024-06-30,Insgesamt,Extrahaushalte,Wertpapierschulden,169529
+2024-06-30,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,49442
+2024-06-30,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,3363
+2024-06-30,Insgesamt,Extrahaushalte,Insgesamt,222334
+2024-06-30,Insgesamt,Insgesamt,Wertpapierschulden,2094371
+2024-06-30,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,304301
+2024-06-30,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,61399
+2024-06-30,Insgesamt,Insgesamt,Insgesamt,2460070
+2024-09-30,Bund,Kernhaushalt,Wertpapierschulden,1523652
+2024-09-30,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,20468
+2024-09-30,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,24538
+2024-09-30,Bund,Kernhaushalt,Insgesamt,1568658
+2024-09-30,Bund,Extrahaushalte,Wertpapierschulden,146657
+2024-09-30,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3518
+2024-09-30,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,272
+2024-09-30,Bund,Extrahaushalte,Insgesamt,150446
+2024-09-30,Bund,Insgesamt,Wertpapierschulden,1670309
+2024-09-30,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,23985
+2024-09-30,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,24810
+2024-09-30,Bund,Insgesamt,Insgesamt,1719104
+2024-09-30,Länder,Kernhaushalt,Wertpapierschulden,424480
+2024-09-30,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,133426
+2024-09-30,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,1985
+2024-09-30,Länder,Kernhaushalt,Insgesamt,559891
+2024-09-30,Länder,Extrahaushalte,Wertpapierschulden,22333
+2024-09-30,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,22761
+2024-09-30,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1101
+2024-09-30,Länder,Extrahaushalte,Insgesamt,46194
+2024-09-30,Länder,Insgesamt,Wertpapierschulden,446813
+2024-09-30,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,156186
+2024-09-30,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,3086
+2024-09-30,Länder,Insgesamt,Insgesamt,606086
+2024-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2916
+2024-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,103908
+2024-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,30108
+2024-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,136932
+2024-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,1
+2024-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,24147
+2024-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,2237
+2024-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,26385
+2024-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2917
+2024-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,128056
+2024-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,32345
+2024-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,163317
+2024-09-30,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2024-09-30,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,9
+2024-09-30,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,19
+2024-09-30,Sozialversicherung,Kernhaushalt,Insgesamt,28
+2024-09-30,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2024-09-30,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,1
+2024-09-30,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,11
+2024-09-30,Sozialversicherung,Extrahaushalte,Insgesamt,12
+2024-09-30,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2024-09-30,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,10
+2024-09-30,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,30
+2024-09-30,Sozialversicherung,Insgesamt,Insgesamt,40
+2024-09-30,Insgesamt,Kernhaushalt,Wertpapierschulden,1951049
+2024-09-30,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,257811
+2024-09-30,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,56651
+2024-09-30,Insgesamt,Kernhaushalt,Insgesamt,2265510
+2024-09-30,Insgesamt,Extrahaushalte,Wertpapierschulden,168990
+2024-09-30,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,50427
+2024-09-30,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,3620
+2024-09-30,Insgesamt,Extrahaushalte,Insgesamt,223038
+2024-09-30,Insgesamt,Insgesamt,Wertpapierschulden,2120039
+2024-09-30,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,308237
+2024-09-30,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,60271
+2024-09-30,Insgesamt,Insgesamt,Insgesamt,2488548
+2024-12-31,Bund,Kernhaushalt,Wertpapierschulden,1536905
+2024-12-31,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,26178
+2024-12-31,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,20300
+2024-12-31,Bund,Kernhaushalt,Insgesamt,1583384
+2024-12-31,Bund,Extrahaushalte,Wertpapierschulden,145608
+2024-12-31,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3552
+2024-12-31,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,154
+2024-12-31,Bund,Extrahaushalte,Insgesamt,149314
+2024-12-31,Bund,Insgesamt,Wertpapierschulden,1682514
+2024-12-31,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,29730
+2024-12-31,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,20454
+2024-12-31,Bund,Insgesamt,Insgesamt,1732698
+2024-12-31,Länder,Kernhaushalt,Wertpapierschulden,425323
+2024-12-31,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,131098
+2024-12-31,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,3208
+2024-12-31,Länder,Kernhaushalt,Insgesamt,559629
+2024-12-31,Länder,Extrahaushalte,Wertpapierschulden,22737
+2024-12-31,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,23491
+2024-12-31,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1025
+2024-12-31,Länder,Extrahaushalte,Insgesamt,47253
+2024-12-31,Länder,Insgesamt,Wertpapierschulden,448060
+2024-12-31,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,154588
+2024-12-31,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,4234
+2024-12-31,Länder,Insgesamt,Insgesamt,606882
+2024-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2768
+2024-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,109983
+2024-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,29216
+2024-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,141967
+2024-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,0
+2024-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,24827
+2024-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,2571
+2024-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,27399
+2024-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2769
+2024-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,134811
+2024-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,31787
+2024-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,169366
+2024-12-31,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2024-12-31,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,9
+2024-12-31,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,19
+2024-12-31,Sozialversicherung,Kernhaushalt,Insgesamt,28
+2024-12-31,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2024-12-31,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,
+2024-12-31,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,10
+2024-12-31,Sozialversicherung,Extrahaushalte,Insgesamt,10
+2024-12-31,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2024-12-31,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,9
+2024-12-31,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,30
+2024-12-31,Sozialversicherung,Insgesamt,Insgesamt,39
+2024-12-31,Insgesamt,Kernhaushalt,Wertpapierschulden,1964997
+2024-12-31,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,267268
+2024-12-31,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,52744
+2024-12-31,Insgesamt,Kernhaushalt,Insgesamt,2285008
+2024-12-31,Insgesamt,Extrahaushalte,Wertpapierschulden,168345
+2024-12-31,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,51870
+2024-12-31,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,3761
+2024-12-31,Insgesamt,Extrahaushalte,Insgesamt,223976
+2024-12-31,Insgesamt,Insgesamt,Wertpapierschulden,2133342
+2024-12-31,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,319138
+2024-12-31,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,56505
+2024-12-31,Insgesamt,Insgesamt,Insgesamt,2508985
+2025-03-31,Bund,Kernhaushalt,Wertpapierschulden,1543336
+2025-03-31,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,20471
+2025-03-31,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,20323
+2025-03-31,Bund,Kernhaushalt,Insgesamt,1584130
+2025-03-31,Bund,Extrahaushalte,Wertpapierschulden,145437
+2025-03-31,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3663
+2025-03-31,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,186
+2025-03-31,Bund,Extrahaushalte,Insgesamt,149287
+2025-03-31,Bund,Insgesamt,Wertpapierschulden,1688773
+2025-03-31,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,24134
+2025-03-31,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,20510
+2025-03-31,Bund,Insgesamt,Insgesamt,1733417
+2025-03-31,Länder,Kernhaushalt,Wertpapierschulden,437675
+2025-03-31,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,129993
+2025-03-31,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,3292
+2025-03-31,Länder,Kernhaushalt,Insgesamt,570960
+2025-03-31,Länder,Extrahaushalte,Wertpapierschulden,21566
+2025-03-31,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,21938
+2025-03-31,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1035
+2025-03-31,Länder,Extrahaushalte,Insgesamt,44539
+2025-03-31,Länder,Insgesamt,Wertpapierschulden,459241
+2025-03-31,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,151930
+2025-03-31,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,4327
+2025-03-31,Länder,Insgesamt,Insgesamt,615498
+2025-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2491
+2025-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,112116
+2025-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,32867
+2025-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,147475
+2025-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,2
+2025-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,25067
+2025-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1874
+2025-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,26942
+2025-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2493
+2025-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,137183
+2025-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,34741
+2025-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,174417
+2025-03-31,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2025-03-31,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,
+2025-03-31,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-03-31,Sozialversicherung,Kernhaushalt,Insgesamt,
+2025-03-31,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2025-03-31,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,
+2025-03-31,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,10
+2025-03-31,Sozialversicherung,Extrahaushalte,Insgesamt,10
+2025-03-31,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2025-03-31,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,
+2025-03-31,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,10
+2025-03-31,Sozialversicherung,Insgesamt,Insgesamt,10
+2025-03-31,Insgesamt,Kernhaushalt,Wertpapierschulden,1983502
+2025-03-31,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,262580
+2025-03-31,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,56483
+2025-03-31,Insgesamt,Kernhaushalt,Insgesamt,2302564
+2025-03-31,Insgesamt,Extrahaushalte,Wertpapierschulden,167005
+2025-03-31,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,50667
+2025-03-31,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,3105
+2025-03-31,Insgesamt,Extrahaushalte,Insgesamt,220777
+2025-03-31,Insgesamt,Insgesamt,Wertpapierschulden,2150507
+2025-03-31,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,313247
+2025-03-31,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,59588
+2025-03-31,Insgesamt,Insgesamt,Insgesamt,2523342
+2025-06-30,Bund,Kernhaushalt,Wertpapierschulden,1568238
+2025-06-30,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,20726
+2025-06-30,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,27107
+2025-06-30,Bund,Kernhaushalt,Insgesamt,1616071
+2025-06-30,Bund,Extrahaushalte,Wertpapierschulden,144096
+2025-06-30,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3603
+2025-06-30,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,545
+2025-06-30,Bund,Extrahaushalte,Insgesamt,148244
+2025-06-30,Bund,Insgesamt,Wertpapierschulden,1712334
+2025-06-30,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,24328
+2025-06-30,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,27653
+2025-06-30,Bund,Insgesamt,Insgesamt,1764315
+2025-06-30,Länder,Kernhaushalt,Wertpapierschulden,432478
+2025-06-30,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,129393
+2025-06-30,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,3491
+2025-06-30,Länder,Kernhaushalt,Insgesamt,565362
+2025-06-30,Länder,Extrahaushalte,Wertpapierschulden,21861
+2025-06-30,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,21501
+2025-06-30,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1086
+2025-06-30,Länder,Extrahaushalte,Insgesamt,44449
+2025-06-30,Länder,Insgesamt,Wertpapierschulden,454340
+2025-06-30,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,150895
+2025-06-30,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,4577
+2025-06-30,Länder,Insgesamt,Insgesamt,609812
+2025-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2245
+2025-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,114733
+2025-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,35219
+2025-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,152198
+2025-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,2
+2025-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,26237
+2025-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1403
+2025-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,27641
+2025-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2247
+2025-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,140970
+2025-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,36622
+2025-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,179839
+2025-06-30,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2025-06-30,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,
+2025-06-30,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-06-30,Sozialversicherung,Kernhaushalt,Insgesamt,
+2025-06-30,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2025-06-30,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,
+2025-06-30,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,10
+2025-06-30,Sozialversicherung,Extrahaushalte,Insgesamt,10
+2025-06-30,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2025-06-30,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,
+2025-06-30,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,10
+2025-06-30,Sozialversicherung,Insgesamt,Insgesamt,10
+2025-06-30,Insgesamt,Kernhaushalt,Wertpapierschulden,2002962
+2025-06-30,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,264852
+2025-06-30,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,65817
+2025-06-30,Insgesamt,Kernhaushalt,Insgesamt,2333631
+2025-06-30,Insgesamt,Extrahaushalte,Wertpapierschulden,165959
+2025-06-30,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,51341
+2025-06-30,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,3044
+2025-06-30,Insgesamt,Extrahaushalte,Insgesamt,220345
+2025-06-30,Insgesamt,Insgesamt,Wertpapierschulden,2168921
+2025-06-30,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,316193
+2025-06-30,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,68862
+2025-06-30,Insgesamt,Insgesamt,Insgesamt,2553976
+2025-09-30,Bund,Kernhaushalt,Wertpapierschulden,1613752
+2025-09-30,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,21045
+2025-09-30,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,20491
+2025-09-30,Bund,Kernhaushalt,Insgesamt,1655288
+2025-09-30,Bund,Extrahaushalte,Wertpapierschulden,148819
+2025-09-30,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3618
+2025-09-30,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,626
+2025-09-30,Bund,Extrahaushalte,Insgesamt,153063
+2025-09-30,Bund,Insgesamt,Wertpapierschulden,1762571
+2025-09-30,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,24663
+2025-09-30,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,21116
+2025-09-30,Bund,Insgesamt,Insgesamt,1808350
+2025-09-30,Länder,Kernhaushalt,Wertpapierschulden,436261
+2025-09-30,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,127739
+2025-09-30,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,6198
+2025-09-30,Länder,Kernhaushalt,Insgesamt,570199
+2025-09-30,Länder,Extrahaushalte,Wertpapierschulden,20802
+2025-09-30,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,23998
+2025-09-30,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,923
+2025-09-30,Länder,Extrahaushalte,Insgesamt,45723
+2025-09-30,Länder,Insgesamt,Wertpapierschulden,457064
+2025-09-30,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,151737
+2025-09-30,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,7121
+2025-09-30,Länder,Insgesamt,Insgesamt,615922
+2025-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2616
+2025-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,117908
+2025-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,36253
+2025-09-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,156777
+2025-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,2
+2025-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,28302
+2025-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1430
+2025-09-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,29734
+2025-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2618
+2025-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,146210
+2025-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,37683
+2025-09-30,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,186511
+2025-09-30,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2025-09-30,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,
+2025-09-30,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-09-30,Sozialversicherung,Kernhaushalt,Insgesamt,
+2025-09-30,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2025-09-30,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,10
+2025-09-30,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-09-30,Sozialversicherung,Extrahaushalte,Insgesamt,10
+2025-09-30,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2025-09-30,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,10
+2025-09-30,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-09-30,Sozialversicherung,Insgesamt,Insgesamt,10
+2025-09-30,Insgesamt,Kernhaushalt,Wertpapierschulden,2052630
+2025-09-30,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,266692
+2025-09-30,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,62941
+2025-09-30,Insgesamt,Kernhaushalt,Insgesamt,2382263
+2025-09-30,Insgesamt,Extrahaushalte,Wertpapierschulden,169623
+2025-09-30,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,55928
+2025-09-30,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,2979
+2025-09-30,Insgesamt,Extrahaushalte,Insgesamt,228530
+2025-09-30,Insgesamt,Insgesamt,Wertpapierschulden,2222253
+2025-09-30,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,322620
+2025-09-30,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,65920
+2025-09-30,Insgesamt,Insgesamt,Insgesamt,2610793
+2025-12-31,Bund,Kernhaushalt,Wertpapierschulden,1601261
+2025-12-31,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,32932
+2025-12-31,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,27510
+2025-12-31,Bund,Kernhaushalt,Insgesamt,1661703
+2025-12-31,Bund,Extrahaushalte,Wertpapierschulden,174610
+2025-12-31,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3565
+2025-12-31,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,685
+2025-12-31,Bund,Extrahaushalte,Insgesamt,178860
+2025-12-31,Bund,Insgesamt,Wertpapierschulden,1775872
+2025-12-31,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,36496
+2025-12-31,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,28196
+2025-12-31,Bund,Insgesamt,Insgesamt,1840564
+2025-12-31,Länder,Kernhaushalt,Wertpapierschulden,444300
+2025-12-31,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,125948
+2025-12-31,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,7853
+2025-12-31,Länder,Kernhaushalt,Insgesamt,578101
+2025-12-31,Länder,Extrahaushalte,Wertpapierschulden,20699
+2025-12-31,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,24794
+2025-12-31,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1039
+2025-12-31,Länder,Extrahaushalte,Insgesamt,46532
+2025-12-31,Länder,Insgesamt,Wertpapierschulden,464999
+2025-12-31,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,150742
+2025-12-31,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,8892
+2025-12-31,Länder,Insgesamt,Insgesamt,624633
+2025-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,2616
+2025-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,125337
+2025-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,37142
+2025-12-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,165096
+2025-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,2
+2025-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,29799
+2025-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1445
+2025-12-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,31246
+2025-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,2618
+2025-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,155137
+2025-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,38587
+2025-12-31,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,196342
+2025-12-31,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2025-12-31,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,
+2025-12-31,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-12-31,Sozialversicherung,Kernhaushalt,Insgesamt,
+2025-12-31,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2025-12-31,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,9
+2025-12-31,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-12-31,Sozialversicherung,Extrahaushalte,Insgesamt,9
+2025-12-31,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2025-12-31,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,9
+2025-12-31,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,
+2025-12-31,Sozialversicherung,Insgesamt,Insgesamt,9
+2025-12-31,Insgesamt,Kernhaushalt,Wertpapierschulden,2048178
+2025-12-31,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,284217
+2025-12-31,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,72505
+2025-12-31,Insgesamt,Kernhaushalt,Insgesamt,2404900
+2025-12-31,Insgesamt,Extrahaushalte,Wertpapierschulden,195311
+2025-12-31,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,58168
+2025-12-31,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,3170
+2025-12-31,Insgesamt,Extrahaushalte,Insgesamt,256648
+2025-12-31,Insgesamt,Insgesamt,Wertpapierschulden,2243489
+2025-12-31,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,342385
+2025-12-31,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,75675
+2025-12-31,Insgesamt,Insgesamt,Insgesamt,2661549
+2026-03-31,Bund,Kernhaushalt,Wertpapierschulden,1627946
+2026-03-31,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,21178
+2026-03-31,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,41238
+2026-03-31,Bund,Kernhaushalt,Insgesamt,1690363
+2026-03-31,Bund,Extrahaushalte,Wertpapierschulden,192599
+2026-03-31,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3236
+2026-03-31,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,400
+2026-03-31,Bund,Extrahaushalte,Insgesamt,196236
+2026-03-31,Bund,Insgesamt,Wertpapierschulden,1820545
+2026-03-31,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,24414
+2026-03-31,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,41638
+2026-03-31,Bund,Insgesamt,Insgesamt,1886598
+2026-03-31,Länder,Kernhaushalt,Wertpapierschulden,459857
+2026-03-31,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,130445
+2026-03-31,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,6261
+2026-03-31,Länder,Kernhaushalt,Insgesamt,596563
+2026-03-31,Länder,Extrahaushalte,Wertpapierschulden,21099
+2026-03-31,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,24626
+2026-03-31,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,971
+2026-03-31,Länder,Extrahaushalte,Insgesamt,46695
+2026-03-31,Länder,Insgesamt,Wertpapierschulden,480955
+2026-03-31,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,155071
+2026-03-31,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,7232
+2026-03-31,Länder,Insgesamt,Insgesamt,643258
+2026-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,3622
+2026-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,127302
+2026-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,35433
+2026-03-31,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,166358
+2026-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,0
+2026-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,29391
+2026-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1524
+2026-03-31,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,30915
+2026-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,3622
+2026-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,156693
+2026-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,36957
+2026-03-31,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,197273
+2026-03-31,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2026-03-31,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,
+2026-03-31,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,
+2026-03-31,Sozialversicherung,Kernhaushalt,Insgesamt,
+2026-03-31,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2026-03-31,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,9
+2026-03-31,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,
+2026-03-31,Sozialversicherung,Extrahaushalte,Insgesamt,9
+2026-03-31,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2026-03-31,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,9
+2026-03-31,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,
+2026-03-31,Sozialversicherung,Insgesamt,Insgesamt,9
+2026-03-31,Insgesamt,Kernhaushalt,Wertpapierschulden,2091425
+2026-03-31,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,278926
+2026-03-31,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,82933
+2026-03-31,Insgesamt,Kernhaushalt,Insgesamt,2453283
+2026-03-31,Insgesamt,Extrahaushalte,Wertpapierschulden,213698
+2026-03-31,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,57262
+2026-03-31,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,2895
+2026-03-31,Insgesamt,Extrahaushalte,Insgesamt,273855
+2026-03-31,Insgesamt,Insgesamt,Wertpapierschulden,2305123
+2026-03-31,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,336188
+2026-03-31,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,85828
+2026-03-31,Insgesamt,Insgesamt,Insgesamt,2727139
+2026-06-30,Bund,Kernhaushalt,Wertpapierschulden,1648307
+2026-06-30,Bund,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,21340
+2026-06-30,Bund,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,32258
+2026-06-30,Bund,Kernhaushalt,Insgesamt,1701905
+2026-06-30,Bund,Extrahaushalte,Wertpapierschulden,201640
+2026-06-30,Bund,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,3229
+2026-06-30,Bund,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,306
+2026-06-30,Bund,Extrahaushalte,Insgesamt,205174
+2026-06-30,Bund,Insgesamt,Wertpapierschulden,1849946
+2026-06-30,Bund,Insgesamt,Kredite beim nicht-öffentlichen Bereich,24569
+2026-06-30,Bund,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,32564
+2026-06-30,Bund,Insgesamt,Insgesamt,1907079
+2026-06-30,Länder,Kernhaushalt,Wertpapierschulden,464381
+2026-06-30,Länder,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,129158
+2026-06-30,Länder,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,6389
+2026-06-30,Länder,Kernhaushalt,Insgesamt,599928
+2026-06-30,Länder,Extrahaushalte,Wertpapierschulden,21747
+2026-06-30,Länder,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,23546
+2026-06-30,Länder,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,962
+2026-06-30,Länder,Extrahaushalte,Insgesamt,46255
+2026-06-30,Länder,Insgesamt,Wertpapierschulden,486128
+2026-06-30,Länder,Insgesamt,Kredite beim nicht-öffentlichen Bereich,152704
+2026-06-30,Länder,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,7351
+2026-06-30,Länder,Insgesamt,Insgesamt,646183
+2026-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Wertpapierschulden,3722
+2026-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,128471
+2026-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,36567
+2026-06-30,Gemeinden / Gemeindeverbände,Kernhaushalt,Insgesamt,168760
+2026-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Wertpapierschulden,
+2026-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,29934
+2026-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,1510
+2026-06-30,Gemeinden / Gemeindeverbände,Extrahaushalte,Insgesamt,31443
+2026-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Wertpapierschulden,3722
+2026-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Kredite beim nicht-öffentlichen Bereich,158404
+2026-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,38077
+2026-06-30,Gemeinden / Gemeindeverbände,Insgesamt,Insgesamt,200203
+2026-06-30,Sozialversicherung,Kernhaushalt,Wertpapierschulden,
+2026-06-30,Sozialversicherung,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,
+2026-06-30,Sozialversicherung,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,
+2026-06-30,Sozialversicherung,Kernhaushalt,Insgesamt,
+2026-06-30,Sozialversicherung,Extrahaushalte,Wertpapierschulden,
+2026-06-30,Sozialversicherung,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,9
+2026-06-30,Sozialversicherung,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,
+2026-06-30,Sozialversicherung,Extrahaushalte,Insgesamt,9
+2026-06-30,Sozialversicherung,Insgesamt,Wertpapierschulden,
+2026-06-30,Sozialversicherung,Insgesamt,Kredite beim nicht-öffentlichen Bereich,9
+2026-06-30,Sozialversicherung,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,
+2026-06-30,Sozialversicherung,Insgesamt,Insgesamt,9
+2026-06-30,Insgesamt,Kernhaushalt,Wertpapierschulden,2116410
+2026-06-30,Insgesamt,Kernhaushalt,Kredite beim nicht-öffentlichen Bereich,278969
+2026-06-30,Insgesamt,Kernhaushalt,Kassenkredite beim nicht-öffentlichen Bereich,75215
+2026-06-30,Insgesamt,Kernhaushalt,Insgesamt,2470593
+2026-06-30,Insgesamt,Extrahaushalte,Wertpapierschulden,223387
+2026-06-30,Insgesamt,Extrahaushalte,Kredite beim nicht-öffentlichen Bereich,56718
+2026-06-30,Insgesamt,Extrahaushalte,Kassenkredite beim nicht-öffentlichen Bereich,2777
+2026-06-30,Insgesamt,Extrahaushalte,Insgesamt,282882
+2026-06-30,Insgesamt,Insgesamt,Wertpapierschulden,2339797
+2026-06-30,Insgesamt,Insgesamt,Kredite beim nicht-öffentlichen Bereich,335687
+2026-06-30,Insgesamt,Insgesamt,Kassenkredite beim nicht-öffentlichen Bereich,77992
+2026-06-30,Insgesamt,Insgesamt,Insgesamt,2753475
