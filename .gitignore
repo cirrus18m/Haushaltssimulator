@@ -2,6 +2,9 @@
 __pycache__/
 *.py[codz]
 *$py.class
+TODO.md
+
+data/pdfs
 
 # C extensions
 *.so
