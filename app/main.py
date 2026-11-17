@@ -21,6 +21,17 @@ pages = [
     st.Page("pages/3_Bundeslaender.py", title="Bundesländer", icon=":material/map:"),
     st.Page("pages/4_Analysen.py", title="Analysen", icon=":material/analytics:"),
     st.Page("pages/5_Szenario.py", title="Szenario-Rechner", icon=":material/tune:"),
+    st.Page(
+        "pages/6_Haushalt_und_Zinsen.py",
+        title="Haushalt & Zinsen",
+        icon=":material/payments:",
+    ),
+    st.Page(
+        "pages/7_Zinsvergleich.py",
+        title="Zinsvergleich",
+        icon=":material/public:",
+    ),
+    st.Page("pages/8_Quellen.py", title="Quellen", icon=":material/library_books:"),
 ]
 
 st.navigation(pages).run()

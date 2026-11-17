@@ -100,7 +100,7 @@ def main() -> None:
             tickvals=[0, 15, 30, 45, 60, 75, 90],
             secondary_y=True,
         )
-        st.plotly_chart(ui.style(figure, height=460), width="stretch")
+        ui.plot(figure, filename="ueberblick_schuldenstand", height=460)
 
     with right_column:
         st.subheader("Wer schuldet was?")
@@ -138,7 +138,7 @@ def main() -> None:
             font={"size": 14},
         )
         figure.update_layout(legend={"orientation": "h", "y": -0.1, "x": 0})
-        st.plotly_chart(ui.style(figure, height=460), width="stretch")
+        ui.plot(figure, filename="ueberblick_zusammensetzung", height=460)
         st.caption(
             f"Anteile der Ebenen am Schuldenstand {latest_year} (Summe der Ebenen: "
             f"{ui.format_mrd(composition['schulden_mio_eur'].sum(), 0)}). Die konsolidierte "
@@ -163,7 +163,7 @@ def main() -> None:
         )
     )
     figure.update_yaxes(title_text="Veränderung in Mrd. €")
-    st.plotly_chart(ui.style(figure, height=320, legend=False), width="stretch")
+    ui.plot(figure, filename="ueberblick_veraenderung", height=320, legend=False)
 
     retrieved = ui.data_retrieved_at()
     st.caption(

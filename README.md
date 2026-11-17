@@ -56,6 +56,9 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Bundesländer** | Ranking und Entwicklung der 16 Länder, Anteile, Veränderung seit 2024 |
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
+| **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe und die daraus folgende theoretische Zinslast in Mrd. €, in % der Einnahmen und in % des BIP |
+| **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands |
+| **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme und Abrufdatum |
 
 ## Projektstruktur
 
@@ -86,8 +89,32 @@ Alle Quellen sind frei verfügbar und werden ohne API-Schlüssel abgerufen.
 | [Destatis 71311-0001](https://www-genesis.destatis.de/datenbank/online/statistic/71311/table/71311-0001) | Schulden beim nicht-öffentlichen Bereich, vierteljährlich | DL-DE-BY-2.0 |
 | [Destatis 71311-0003](https://www-genesis.destatis.de/datenbank/online/statistic/71311/table/71311-0003) | Dasselbe je Bundesland | DL-DE-BY-2.0 |
 | [Destatis 71321-0005](https://www-genesis.destatis.de/datenbank/online/statistic/71321/table/71321-0005) | Dasselbe jährlich ab 2010 | DL-DE-BY-2.0 |
+| [Eurostat `gov_10a_main`](https://ec.europa.eu/eurostat/databrowser/view/gov_10a_main/default/table) | Einnahmen, Ausgaben, Zinsausgaben und Finanzierungssaldo des Staates | CC BY 4.0 |
+| [Deutsche Bundesbank BBSSY.D.REN.EUR.A630.000000WT1010.A](https://www.bundesbank.de/dynamic/action/de/statistiken/zeitreihen-datenbanken/zeitreihe/723452/723452) | Tagesrendite der aktuellen 10-jährigen Bundesanleihe | Quellenangabe erforderlich |
+| [Eurostat `irt_lt_mcby_m`](https://ec.europa.eu/eurostat/databrowser/view/irt_lt_mcby_m/default/table) | Konvergenzrenditen 10-jähriger Staatsanleihen, monatlich | CC BY 4.0 |
+| [FRED `IRLTLT01USM156N`](https://fred.stlouisfed.org/series/IRLTLT01USM156N) | Langfristige Staatsanleiherendite der USA (OECD MEI) | OECD-Bedingungen |
+| [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |
 
 Details zu Dateien und Spalten: [data/README.md](data/README.md).
+
+## Quellenbibliothek und Datenstand
+
+Jeder Download wird in der versionierten Quellenbibliothek
+[`data/sources.json`](data/sources.json) festgehalten: Titel, Herausgeber, Lizenz, URL,
+verwendete Datensätze, Dateiname, SHA-256, Größe und **Zeitpunkt des Downloads**. Bereits
+vorhandene Rohdaten behalten ihren ursprünglichen Zeitstempel; nur `--refresh` setzt einen
+neuen. Die Seite **Quellen** zeigt die Bibliothek und die Zuordnung „Quelle → Datensatz“.
+
+Aufbereitete Daten werden ausschließlich aus den Rohdaten erzeugt und nie von Hand
+gepflegt. Verbindliche Regeln für Änderungen (Sprache, Quellenpflicht, SVG-/HTML-Export)
+stehen in [.github/copilot-instructions.md](.github/copilot-instructions.md); der
+mehrstufige Ausbau ist in [PLAN.md](PLAN.md) beschrieben.
+
+## Diagramme exportieren
+
+Jedes Diagramm der App lässt sich direkt unter der Grafik als **SVG** (Vektorgrafik) und
+als **HTML** (interaktive Einzeldatei) herunterladen. Zusätzlich bietet die Plotly-
+Werkzeugleiste den Kamera-Button im SVG-Format an.
 
 ## Abgrenzungen
 
@@ -126,6 +153,6 @@ tut das auf jeder Seite im Fußbereich.
 
 ## Ausblick
 
-* Zinsausgaben und Primärsaldo ergänzen, um den Schuldenpfad realistischer zu simulieren
-* Bevölkerungszahlen der Länder für Schulden je Einwohner:in auf Länderebene
-* Weitere Haushaltsdaten (Einnahmen/Ausgaben) für einen vollständigen Haushaltssimulator
+Der nächste Ausbau ist in [PLAN.md](PLAN.md) beschrieben: Wirtschafts- und
+Geldindikatoren (Insolvenzen, Geldmenge, Energiepreise), Sondervermögen sowie der
+Vergleich der Haushaltspläne von Regierung und Opposition.

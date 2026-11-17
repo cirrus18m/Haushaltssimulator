@@ -42,6 +42,24 @@ def test_laender_quarterly_has_sixteen_states() -> None:
     assert frame["stichtag"].nunique() >= 4
 
 
+def test_interest_burden_links_debt_revenue_and_yield() -> None:
+    frame = dataset.load_interest_burden().dropna(subset=["rendite_pct"])
+    latest = frame.iloc[-1]
+    expected = latest["schulden_mio_eur"] * latest["rendite_pct"] / 100
+    # Die gespeicherte Rendite ist auf zwei Nachkommastellen gerundet.
+    tolerance = latest["schulden_mio_eur"] * 0.0001
+    assert latest["zins_theoretisch_mio_eur"] == pytest.approx(expected, abs=tolerance)
+    assert 0 < latest["zins_quote_einnahmen_pct"] < 20
+    assert 0 < latest["zins_quote_bip_pct"] < 10
+
+
+def test_international_yields_cover_germany_usa_and_russia() -> None:
+    frame = dataset.load_international_yields()
+    assert {"Deutschland", "Vereinigte Staaten", "Russland"} <= set(frame["land"])
+    assert frame["monat"].max() >= "2026-01"
+    assert frame["rendite_pct"].between(-5, 100).all()
+
+
 @pytest.mark.parametrize(
     "script",
     [
@@ -52,6 +70,9 @@ def test_laender_quarterly_has_sixteen_states() -> None:
         "pages/3_Bundeslaender.py",
         "pages/4_Analysen.py",
         "pages/5_Szenario.py",
+        "pages/6_Haushalt_und_Zinsen.py",
+        "pages/7_Zinsvergleich.py",
+        "pages/8_Quellen.py",
     ],
 )
 def test_streamlit_pages_run_without_exception(script: str) -> None:

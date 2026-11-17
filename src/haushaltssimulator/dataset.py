@@ -14,8 +14,26 @@ DESTATIS_ANNUAL = "schulden_destatis_jahr.csv"
 DESTATIS_QUARTERLY = "schulden_destatis_quartal.csv"
 DESTATIS_LAENDER = "schulden_destatis_bundeslaender.csv"
 GDP_POPULATION = "bip_bevoelkerung.csv"
+HOUSEHOLD = "haushalt_jahr.csv"
+BUND_YIELD = "zins_bund_10j.csv"
+INTERNATIONAL_YIELDS = "zins_vergleich.csv"
+INTEREST_BURDEN = "zinslast_jahr.csv"
 
-_DATE_COLUMNS = ("stichtag", "quartalsende")
+# Beschreibung der aufbereiteten Tabellen für die Quellenseite.
+DATASET_LABELS = {
+    ANNUAL_DEBT: "Maastricht-Schuldenstand je Jahr und Ebene",
+    QUARTERLY_DEBT: "Maastricht-Schuldenstand je Quartal und Ebene",
+    DESTATIS_ANNUAL: "Schulden beim nicht-öffentlichen Bereich, jährlich",
+    DESTATIS_QUARTERLY: "Schulden beim nicht-öffentlichen Bereich, vierteljährlich",
+    DESTATIS_LAENDER: "Schulden der Bundesländer, vierteljährlich",
+    GDP_POPULATION: "BIP, Bevölkerung und BIP je Einwohner:in",
+    HOUSEHOLD: "Einnahmen, Ausgaben und Zinsausgaben des Staates",
+    BUND_YIELD: "Tagesrendite der 10-jährigen Bundesanleihe",
+    INTERNATIONAL_YIELDS: "Renditen 10-jähriger Staatsanleihen im Ländervergleich",
+    INTEREST_BURDEN: "Theoretische Zinslast und Zinsquoten",
+}
+
+_DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
 
 
 def _read(filename: str, processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
@@ -68,3 +86,23 @@ def with_debt_per_capita(annual_debt: pd.DataFrame, gdp_population: pd.DataFrame
         frame["schulden_mio_eur"] * 1_000_000 / frame["bevoelkerung"]
     )
     return frame
+
+
+def load_household(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Einnahmen, Ausgaben, Zinsausgaben und Finanzierungssaldo je Jahr und Ebene."""
+    return _read(HOUSEHOLD, processed_dir)
+
+
+def load_bund_yield(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Tagesrenditen der aktuellen 10-jährigen Bundesanleihe (Bundesbank)."""
+    return _read(BUND_YIELD, processed_dir)
+
+
+def load_international_yields(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Monatliche Renditen 10-jähriger Staatsanleihen je Land und Quelle."""
+    return _read(INTERNATIONAL_YIELDS, processed_dir)
+
+
+def load_interest_burden(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Schuldenstand, Rendite, theoretische und tatsächliche Zinslast je Jahr."""
+    return _read(INTEREST_BURDEN, processed_dir)

@@ -65,7 +65,7 @@ with chart_area:
             annotation_text="Maastricht-Referenz 60 %",
         )
     figure.update_yaxes(title_text="Mrd. €" if unit == "Mrd. €" else "% des BIP")
-    st.plotly_chart(ui.style(figure), width="stretch")
+    ui.plot(figure, filename="zeitreihe_schuldenstand")
 
 st.divider()
 st.subheader("Kennzahlen des Gesamtstaats")
@@ -113,7 +113,7 @@ figure = go.Figure(
     )
 )
 figure.update_yaxes(title_text="Mrd. €", rangemode="tozero")
-st.plotly_chart(ui.style(figure, height=360, legend=False), width="stretch")
+ui.plot(figure, filename="zeitreihe_quartale", height=360, legend=False)
 st.caption(
     f"Quelle: Eurostat gov_10q_ggdebt, letztes Quartal: {quarterly_total['quartal'].iloc[-1]}."
 )

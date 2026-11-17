@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-import json
 from datetime import datetime
 
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 import streamlit as st
 
-from . import dataset
-from .paths import RAW_DIR
+from . import dataset, sources
 
 EBENE_ORDER = [
     "Bund (Zentralstaat)",
@@ -35,6 +34,30 @@ SCHULDENART_COLORS = {
     "Kredite beim nicht-öffentlichen Bereich": "#2e86ab",
     "Kassenkredite beim nicht-öffentlichen Bereich": "#c9a227",
 }
+
+# Farbfolge für Diagramme mit vielen Linien (z. B. Ländervergleich).
+CHART_COLORS = (
+    "#1f4e79",
+    "#b03a2e",
+    "#c9a227",
+    "#2e7d32",
+    "#6a3d9a",
+    "#e67e22",
+    "#17becf",
+    "#8c564b",
+    "#7f7f7f",
+    "#bcbd22",
+    "#d62728",
+    "#9467bd",
+    "#e377c2",
+    "#393b79",
+    "#637939",
+)
+
+
+def chart_color(index: int) -> str:
+    """Farbe für die Linie mit der angegebenen Position."""
+    return CHART_COLORS[index % len(CHART_COLORS)]
 
 
 @st.cache_data(show_spinner=False)
@@ -68,12 +91,44 @@ def gdp_population() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def household() -> pd.DataFrame:
+    return dataset.load_household()
+
+
+@st.cache_data(show_spinner=False)
+def bund_yield() -> pd.DataFrame:
+    return dataset.load_bund_yield()
+
+
+@st.cache_data(show_spinner=False)
+def international_yields() -> pd.DataFrame:
+    return dataset.load_international_yields()
+
+
+@st.cache_data(show_spinner=False)
+def interest_burden() -> pd.DataFrame:
+    return dataset.load_interest_burden()
+
+
+@st.cache_data(show_spinner=False)
+def sources_library() -> dict:
+    """Quellenbibliothek mit URLs, Lizenzen, Prüfsummen und Abrufzeitpunkten."""
+    return sources.read_library()
+
+
+@st.cache_data(show_spinner=False)
 def data_retrieved_at() -> datetime | None:
-    path = RAW_DIR / "_quellen.json"
-    if not path.exists():
-        return None
-    metadata = json.loads(path.read_text(encoding="utf-8"))
-    return datetime.fromisoformat(metadata["abgerufen_am"])
+    """Jüngster Abrufzeitpunkt über alle Quellen hinweg."""
+    entries = sources_library().get("quellen", [])
+    stamps = [entry["abgerufen_am"] for entry in entries if entry.get("abgerufen_am")]
+    return max(datetime.fromisoformat(value) for value in stamps) if stamps else None
+
+
+def format_timestamp(value: str | None) -> str:
+    """Formatiert einen ISO-Zeitstempel in deutscher Schreibweise."""
+    if not value:
+        return "unbekannt"
+    return datetime.fromisoformat(value).astimezone().strftime("%d.%m.%Y, %H:%M Uhr")
 
 
 def format_number(value: float, decimals: int = 1, unit: str = "") -> str:
@@ -94,7 +149,9 @@ def format_eur(value_eur: float) -> str:
     return format_number(value_eur, 0, " €")
 
 
-def style(fig: go.Figure, *, height: int = 430, legend: bool = True) -> go.Figure:
+def style(
+    fig: go.Figure, *, height: int = 430, legend: bool = True, legend_y: float = 1.02
+) -> go.Figure:
     """Einheitliches Layout für alle Diagramme."""
     fig.update_layout(
         template="plotly_white",
@@ -102,7 +159,58 @@ def style(fig: go.Figure, *, height: int = 430, legend: bool = True) -> go.Figur
         margin={"l": 10, "r": 10, "t": 40, "b": 10},
         hovermode="x unified" if legend else "closest",
         showlegend=legend,
-        legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "x": 0},
+        legend={"orientation": "h", "yanchor": "bottom", "y": legend_y, "x": 0},
         font={"family": "Inter, Segoe UI, sans-serif", "size": 13},
     )
     return fig
+
+
+@st.cache_data(show_spinner=False, max_entries=64)
+def _svg_bytes(figure_json: str) -> bytes | None:
+    """Rendert ein Diagramm als SVG; ohne funktionierendes Kaleido bleibt es leer."""
+    try:
+        return pio.from_json(figure_json).to_image(format="svg")
+    except Exception:  # Kaleido bzw. Chrome kann in manchen Umgebungen fehlen
+        return None
+
+
+def plot(
+    figure: go.Figure,
+    *,
+    filename: str,
+    height: int = 430,
+    legend: bool = True,
+    legend_y: float = 1.02,
+) -> None:
+    """Zeigt ein Diagramm und bietet es als SVG und als HTML zum Download an."""
+    styled = style(figure, height=height, legend=legend, legend_y=legend_y)
+    config = {
+        "displaylogo": False,
+        "toImageButtonOptions": {"format": "svg", "filename": filename, "scale": 1},
+    }
+    st.plotly_chart(styled, width="stretch", config=config)
+
+    svg = _svg_bytes(styled.to_json())
+    html = styled.to_html(full_html=True, include_plotlyjs="cdn", config=config)
+    svg_column, html_column, _ = st.columns([1, 1, 5])
+    if svg is not None:
+        svg_column.download_button(
+            "SVG",
+            svg,
+            file_name=f"{filename}.svg",
+            mime="image/svg+xml",
+            key=f"{filename}-svg",
+            type="tertiary",
+            help="Vektorgrafik zum Weiterverarbeiten oder Drucken",
+        )
+    else:
+        svg_column.caption("SVG über das Kamera-Symbol")
+    html_column.download_button(
+        "HTML",
+        html,
+        file_name=f"{filename}.html",
+        mime="text/html",
+        key=f"{filename}-html",
+        type="tertiary",
+        help="Interaktives Diagramm als eigenständige Datei",
+    )

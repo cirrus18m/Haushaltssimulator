@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "aktualisiert_am": "2026-11-17T17:56:32+00:00",
+  "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
+  "quellen": [
+    {
+      "key": "destatis_schulden_quartal",
+      "titel": "Schulden beim nicht-öffentlichen Bereich: Deutschland, Quartale",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 71311-0001",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/71311-0001_00.csv",
+      "beschreibung": "Destatis 71311-0001: Schulden beim nicht-öffentlichen Bereich, Deutschland, Stichtag zum Quartalsende, Ebenen/Haushalte/Schuldenarten (letzte 10 Quartale)",
+      "datei": "destatis_71311-0001_quartal.csv",
+      "datensaetze": [
+        "schulden_destatis_quartal.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:12+00:00",
+      "sha256": "88d576cf16df000d20cdcb4e882a8898e8e0dcbba42b8a3820e9cb28e7748bbb",
+      "bytes": 7474
+    },
+    {
+      "key": "destatis_schulden_bundeslaender",
+      "titel": "Schulden beim nicht-öffentlichen Bereich: Bundesländer, Quartale",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 71311-0003",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/71311-0003_00.csv",
+      "beschreibung": "Destatis 71311-0003: Schulden beim nicht-öffentlichen Bereich, Bundesländer, Stichtag zum Quartalsende, Ebenen/Haushalte/Schuldenarten (letzte 10 Quartale)",
+      "datei": "destatis_71311-0003_bundeslaender.csv",
+      "datensaetze": [
+        "schulden_destatis_bundeslaender.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:12+00:00",
+      "sha256": "f95b1c7af0421337b6373896a3cf6fe72db81b0728a15ccac11cde7d77a11025",
+      "bytes": 65761
+    },
+    {
+      "key": "destatis_schulden_jahr",
+      "titel": "Schulden beim nicht-öffentlichen Bereich: Deutschland, Jahresreihe",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 71321-0005",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/71321-0005_00.csv",
+      "beschreibung": "Destatis 71321-0005: Schulden beim nicht-öffentlichen Bereich, Deutschland, jährlich ab 31.12.2010, Ebenen/Haushalte/Schuldenarten",
+      "datei": "destatis_71321-0005_jahr.csv",
+      "datensaetze": [
+        "schulden_destatis_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:12+00:00",
+      "sha256": "4981c0b3c8483691df7f8bc6fe42404e17671566c29d0871008294725519e021",
+      "bytes": 9507
+    },
+    {
+      "key": "eurostat_schulden_jahr",
+      "titel": "Maastricht-Schuldenstand: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10dd_edpt1",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&lang=EN&geo=DE&na_item=GD&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10dd_edpt1: Maastricht-Schuldenstand, Deutschland, jährlich, Sektoren S13/S1311/S1312/S1313/S1314, Mio. EUR und % des BIP",
+      "datei": "eurostat_gov_10dd_edpt1.json",
+      "datensaetze": [
+        "schulden_jahresreihe.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:13+00:00",
+      "sha256": "6deaf6eaf9992f97e15caaf794c76bbe46942fdff2689eda4dce88a53790da90",
+      "bytes": 5685
+    },
+    {
+      "key": "eurostat_schulden_quartal",
+      "titel": "Maastricht-Schuldenstand: Deutschland, vierteljährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10q_ggdebt",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10q_ggdebt?format=JSON&lang=EN&geo=DE&na_item=GD&sinceTimePeriod=1999",
+      "beschreibung": "Eurostat gov_10q_ggdebt: Maastricht-Schuldenstand, Deutschland, vierteljährlich, Sektoren S13/S1311/S1312/S1313/S1314, Mio. EUR und % des BIP",
+      "datei": "eurostat_gov_10q_ggdebt.json",
+      "datensaetze": [
+        "schulden_quartalsreihe.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:14+00:00",
+      "sha256": "d1eb76fba883ffc17e31405619a3866d48b05694a461356c92dd0d719f26d898",
+      "bytes": 42964
+    },
+    {
+      "key": "eurostat_bip",
+      "titel": "Bruttoinlandsprodukt: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz nama_10_gdp",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_gdp?format=JSON&lang=EN&geo=DE&na_item=B1GQ&unit=CP_MEUR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat nama_10_gdp: Bruttoinlandsprodukt, Deutschland, jährlich, Mio. EUR",
+      "datei": "eurostat_nama_10_gdp.json",
+      "datensaetze": [
+        "bip_bevoelkerung.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:14+00:00",
+      "sha256": "8ef6f61fb8d4559f691014634cde474dd37461f86d494053e5a0d3127554b329",
+      "bytes": 4143
+    },
+    {
+      "key": "eurostat_bevoelkerung",
+      "titel": "Bevölkerung: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz demo_pjan",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?format=JSON&lang=EN&geo=DE&sex=T&age=TOTAL&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat demo_pjan: Bevölkerung, Deutschland, jährlich, Stichtag 1. Januar",
+      "datei": "eurostat_demo_pjan.json",
+      "datensaetze": [
+        "bip_bevoelkerung.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:14+00:00",
+      "sha256": "09631c810cc3de519861c3d3275c36a922236ca507e85562a50b61608d574387",
+      "bytes": 3798
+    },
+    {
+      "key": "eurostat_haushalt",
+      "titel": "Einnahmen, Ausgaben und Zinsausgaben des Staates: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10a_main",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10a_main?format=JSON&lang=EN&geo=DE&unit=MIO_EUR&sector=S13&sector=S1311&sector=S1312&sector=S1313&sector=S1314&na_item=TR&na_item=TE&na_item=D41PAY&na_item=B9&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10a_main: Gesamteinnahmen (TR), Gesamtausgaben (TE), Zinsausgaben (D41PAY) und Finanzierungssaldo (B9), Deutschland, jährlich ab 1995, Gesamtstaat und Ebenen, Mio. EUR",
+      "datei": "eurostat_gov_10a_main.json",
+      "datensaetze": [
+        "haushalt_jahr.csv",
+        "zinslast_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:46:51+00:00",
+      "sha256": "7e43f43d6f7e9a425aa5f7fb4fb5ad13f738b8fd04497391afcef2701a5c3df3",
+      "bytes": 12591
+    },
+    {
+      "key": "eurostat_zinsvergleich",
+      "titel": "Konvergenzrenditen 10-jähriger Staatsanleihen: Europa, monatlich",
+      "herausgeber": "Eurostat, Datensatz irt_lt_mcby_m",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/irt_lt_mcby_m?format=JSON&lang=EN&int_rt=MCBY&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&sinceTimePeriod=1993",
+      "beschreibung": "Eurostat irt_lt_mcby_m: Renditen 10-jähriger Staatsanleihen nach der Maastricht-Konvergenzmethode, monatlich, EU-Mitgliedstaaten und Vereinigtes Königreich, in Prozent",
+      "datei": "eurostat_irt_lt_mcby_m.json",
+      "datensaetze": [
+        "zins_vergleich.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:46:52+00:00",
+      "sha256": "7b837f3b82f4e952dfa120e516bc4f759631a88c48ad04e8034aad2164e4a1a5",
+      "bytes": 167672
+    },
+    {
+      "key": "bundesbank_rendite_10j",
+      "titel": "Tagesrendite der aktuellen 10-jährigen Bundesanleihe",
+      "herausgeber": "Deutsche Bundesbank, Zeitreihe BBSSY.D.REN.EUR.A630.000000WT1010.A",
+      "lizenz": "Deutsche Bundesbank, Quellenangabe erforderlich",
+      "url": "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A630.000000WT1010.A?format=csv&lang=en",
+      "beschreibung": "Deutsche Bundesbank BBSSY.D.REN.EUR.A630.000000WT1010.A: Daily yield of the current 10 year federal bond, Tageswerte in Prozent, ab Oktober 2001",
+      "datei": "bundesbank_10j_rendite.csv",
+      "datensaetze": [
+        "zins_bund_10j.csv",
+        "zinslast_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:46:53+00:00",
+      "sha256": "ea55c84c312ddfa7393365b9954a2174ce8b301e9074ea4ca24ca67c9d64aec7",
+      "bytes": 200076
+    },
+    {
+      "key": "fred_us_zins",
+      "titel": "Langfristige Staatsanleiherendite: Vereinigte Staaten, monatlich",
+      "herausgeber": "OECD (MEI) über Federal Reserve Bank of St. Louis, Serie IRLTLT01USM156N",
+      "lizenz": "OECD-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IRLTLT01USM156N",
+      "beschreibung": "FRED IRLTLT01USM156N: Long-Term Government Bond Yields, 10-year benchmark, Vereinigte Staaten, monatlich, in Prozent",
+      "datei": "fred_us_10j_rendite.csv",
+      "datensaetze": [
+        "zins_vergleich.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:50:15+00:00",
+      "sha256": "9fdcb7afd821669b48fec45d843170ef7c0fdb2f3732ed0fd41c87422bd42292",
+      "bytes": 14233
+    },
+    {
+      "key": "cbr_ru_zins",
+      "titel": "Zero-Coupon-Yield-Curve: Russische Staatsanleihen (OFZ)",
+      "herausgeber": "Bank of Russia, Russian Government Bond Zero Coupon Yield Curve",
+      "lizenz": "Bank of Russia, Quellenangabe erforderlich",
+      "url": "https://www.cbr.ru/eng/hd_base/zcyc_params/zcyc/?DateTo=TT.MM.JJJJ",
+      "beschreibung": "Bank of Russia: 10-jährige OFZ-Rendite aus der Zero-Coupon-Yield-Curve, Monatsendwert (letzter Handelstag), in Prozent, ab 2015",
+      "datei": "cbr_ru_10j_rendite.csv",
+      "datensaetze": [
+        "zins_vergleich.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:51:44+00:00",
+      "sha256": "76ede1349ee452871ba9c561160e2f609743e1993d003623802d356984fe42a3",
+      "bytes": 2283
+    }
+  ]
+}

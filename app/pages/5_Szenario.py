@@ -100,7 +100,7 @@ figure.add_hline(
     annotation_text="Maastricht-Referenz 60 %",
 )
 figure.update_yaxes(title_text="% des BIP")
-st.plotly_chart(ui.style(figure), width="stretch")
+ui.plot(figure, filename="szenario_schuldenquote")
 
 st.divider()
 st.subheader("Szenariopfad")

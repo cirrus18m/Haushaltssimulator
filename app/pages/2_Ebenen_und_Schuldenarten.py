@@ -59,7 +59,7 @@ for ebene in selected:
     )
 figure.update_yaxes(title_text="Mrd. €")
 figure.update_xaxes(title_text="Quartalsende")
-st.plotly_chart(ui.style(figure), width="stretch")
+ui.plot(figure, filename="ebenen_schuldenarten")
 
 st.divider()
 left, right = st.columns(2)
@@ -86,9 +86,7 @@ with left:
         )
     figure.update_xaxes(title_text="Mrd. €", dtick=500)
     figure.update_layout(barmode="stack")
-    styled = ui.style(figure, height=400)
-    styled.update_layout(legend={"y": 1.12})
-    st.plotly_chart(styled, width="stretch")
+    ui.plot(figure, filename="ebenen_zusammensetzung", height=400, legend_y=1.12)
 
 with right:
     st.subheader("Veränderung zum Vorquartal")
@@ -107,7 +105,7 @@ with right:
         )
     )
     figure.update_xaxes(title_text="Veränderung in Mrd. €")
-    st.plotly_chart(ui.style(figure, height=400, legend=False), width="stretch")
+    ui.plot(figure, filename="ebenen_veraenderung", height=400, legend=False)
 
 st.divider()
 st.subheader("Werte im Überblick (Mio. €)")

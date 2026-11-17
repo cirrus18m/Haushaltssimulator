@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from . import destatis, eurostat, paths, sources
+from . import analysis, bundesbank, destatis, eurostat, fred, laender, paths, sources
 
 SECTOR_LABELS = {
     "S13": "Staat insgesamt",
@@ -30,6 +30,13 @@ SCHULDENART_ORDER = [
 ]
 
 DESTATIS_COLUMNS = ["stichtag", "ebene", "haushalt", "schuldenart", "schulden_mio_eur"]
+
+HOUSEHOLD_ITEMS = {
+    "TR": "einnahmen_mio_eur",
+    "TE": "ausgaben_mio_eur",
+    "D41PAY": "zinsausgaben_mio_eur",
+    "B9": "finanzierungssaldo_mio_eur",
+}
 
 
 def _load_json(raw_dir: Path, filename: str) -> dict:
@@ -179,6 +186,114 @@ def build_gdp_population(raw_dir: Path) -> pd.DataFrame:
     return frame
 
 
+def build_household(raw_dir: Path) -> pd.DataFrame:
+    """Einnahmen, Ausgaben und Zinsausgaben des Staates je Jahr und Ebene (Eurostat)."""
+    frame = eurostat.jsonstat_to_frame(_load_json(raw_dir, "eurostat_gov_10a_main.json"))
+    frame = frame[frame["sector"].isin(SECTOR_LABELS) & frame["na_item"].isin(HOUSEHOLD_ITEMS)]
+    wide = frame.pivot_table(
+        index=["time", "sector"], columns="na_item", values="value", aggfunc="first"
+    ).reset_index()
+    wide = wide.rename(columns={"time": "jahr", **HOUSEHOLD_ITEMS})
+
+    missing = set(HOUSEHOLD_ITEMS.values()) - set(wide.columns)
+    if missing:
+        raise ValueError(f"Merkmale fehlen in gov_10a_main: {sorted(missing)}")
+
+    wide["jahr"] = wide["jahr"].astype(int)
+    wide["ebene"] = wide["sector"].map(SECTOR_LABELS)
+    wide = wide.merge(build_gdp_population(raw_dir)[["jahr", "bip_mio_eur"]], on="jahr", how="left")
+    wide["einnahmenquote_pct"] = wide["einnahmen_mio_eur"] / wide["bip_mio_eur"] * 100
+    wide["ausgabenquote_pct"] = wide["ausgaben_mio_eur"] / wide["bip_mio_eur"] * 100
+    wide["zins_einnahmen_pct"] = wide["zinsausgaben_mio_eur"] / wide["einnahmen_mio_eur"] * 100
+    wide["ebene"] = pd.Categorical(wide["ebene"], EBENE_ORDER, ordered=True)
+    columns = [
+        "jahr",
+        "sector",
+        "ebene",
+        "einnahmen_mio_eur",
+        "ausgaben_mio_eur",
+        "zinsausgaben_mio_eur",
+        "finanzierungssaldo_mio_eur",
+        "bip_mio_eur",
+        "einnahmenquote_pct",
+        "ausgabenquote_pct",
+        "zins_einnahmen_pct",
+    ]
+    return wide[columns].sort_values(["jahr", "ebene"]).reset_index(drop=True)
+
+
+def build_bund_yield(raw_dir: Path) -> pd.DataFrame:
+    """Tagesrendite der 10-jährigen Bundesanleihe (Deutsche Bundesbank)."""
+    frame = bundesbank.parse_yield_csv((raw_dir / "bundesbank_10j_rendite.csv").read_bytes())
+    frame["jahr"] = frame["datum"].dt.year
+    frame["monat"] = frame["datum"].dt.strftime("%Y-%m")
+    return frame[["datum", "jahr", "monat", "rendite_pct"]]
+
+
+def build_international_yields(raw_dir: Path) -> pd.DataFrame:
+    """Monatliche Renditen 10-jähriger Staatsanleihen je Land und Quelle."""
+    frames = []
+
+    euro = eurostat.jsonstat_to_frame(_load_json(raw_dir, "eurostat_irt_lt_mcby_m.json"))
+    euro = euro[euro["geo"].isin(laender.LAND_NAMEN)][["time", "geo", "value"]]
+    euro = euro.rename(columns={"time": "monat", "value": "rendite_pct"})
+    euro["land"] = euro["geo"].map(laender.LAND_NAMEN)
+    euro["quelle"] = "Eurostat irt_lt_mcby_m"
+    euro["quelle_key"] = "eurostat_zinsvergleich"
+    frames.append(euro[["monat", "land", "rendite_pct", "quelle", "quelle_key"]])
+
+    usa = fred.parse_series_csv((raw_dir / "fred_us_10j_rendite.csv").read_bytes())
+    usa["monat"] = usa["datum"].dt.strftime("%Y-%m")
+    usa["land"] = laender.LAND_NAMEN["US"]
+    usa["quelle"] = "FRED IRLTLT01USM156N"
+    usa["quelle_key"] = "fred_us_zins"
+    frames.append(
+        usa.rename(columns={"wert": "rendite_pct"})[
+            ["monat", "land", "rendite_pct", "quelle", "quelle_key"]
+        ]
+    )
+
+    russland = pd.read_csv(raw_dir / "cbr_ru_10j_rendite.csv", parse_dates=["datum"])
+    russland["monat"] = russland["datum"].dt.strftime("%Y-%m")
+    russland["land"] = laender.LAND_NAMEN["RU"]
+    russland["quelle"] = "Bank of Russia (OFZ-Zinskurve)"
+    russland["quelle_key"] = "cbr_ru_zins"
+    frames.append(russland[["monat", "land", "rendite_pct", "quelle", "quelle_key"]])
+
+    frame = pd.concat(frames, ignore_index=True).dropna(subset=["rendite_pct"])
+    return frame.sort_values(["monat", "land"]).reset_index(drop=True)
+
+
+def build_interest_burden(raw_dir: Path) -> pd.DataFrame:
+    """Schuldenstand, Rendite und daraus abgeleitete Zinslast je Jahr."""
+    debt = build_annual_debt(raw_dir)
+    debt = debt[debt["sector"] == "S13"][["jahr", "schulden_mio_eur", "bip_mio_eur"]]
+
+    household = build_household(raw_dir)
+    household = household[household["sector"] == "S13"][
+        ["jahr", "einnahmen_mio_eur", "zinsausgaben_mio_eur"]
+    ]
+
+    yields = build_bund_yield(raw_dir).groupby("jahr", as_index=False)["rendite_pct"].mean()
+
+    frame = debt.merge(household, on="jahr", how="inner").merge(yields, on="jahr", how="left")
+    frame = analysis.with_interest_burden(frame)
+    frame["effektivzins_pct"] = frame["zinsausgaben_mio_eur"] / frame["schulden_mio_eur"] * 100
+    columns = [
+        "jahr",
+        "schulden_mio_eur",
+        "rendite_pct",
+        "zins_theoretisch_mio_eur",
+        "einnahmen_mio_eur",
+        "zins_quote_einnahmen_pct",
+        "bip_mio_eur",
+        "zins_quote_bip_pct",
+        "zinsausgaben_mio_eur",
+        "effektivzins_pct",
+    ]
+    return frame[columns].sort_values("jahr").reset_index(drop=True)
+
+
 BUILDERS = {
     "schulden_jahresreihe.csv": build_annual_debt,
     "schulden_quartalsreihe.csv": build_quarterly_debt,
@@ -186,6 +301,17 @@ BUILDERS = {
     "schulden_destatis_quartal.csv": build_quarterly_debt_destatis,
     "schulden_destatis_bundeslaender.csv": build_quarterly_debt_laender,
     "bip_bevoelkerung.csv": build_gdp_population,
+    "haushalt_jahr.csv": build_household,
+    "zins_bund_10j.csv": build_bund_yield,
+    "zins_vergleich.csv": build_international_yields,
+    "zinslast_jahr.csv": build_interest_burden,
+}
+
+# Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
+FLOAT_FORMATS = {
+    "zins_bund_10j.csv": "%.2f",
+    "zins_vergleich.csv": "%.2f",
+    "zinslast_jahr.csv": "%.2f",
 }
 
 
@@ -198,7 +324,12 @@ def build_all(
     for filename, builder in BUILDERS.items():
         frame = builder(raw_dir)
         target = processed_dir / filename
-        frame.to_csv(target, index=False, float_format="%.1f", date_format="%Y-%m-%d")
+        frame.to_csv(
+            target,
+            index=False,
+            float_format=FLOAT_FORMATS.get(filename, "%.1f"),
+            date_format="%Y-%m-%d",
+        )
         written[filename] = target
     return written
 

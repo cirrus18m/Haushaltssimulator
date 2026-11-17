@@ -24,6 +24,24 @@ def cagr(start_value: float, end_value: float, years: int) -> float:
     return ((end_value / start_value) ** (1 / years) - 1) * 100
 
 
+def with_interest_burden(frame: pd.DataFrame) -> pd.DataFrame:
+    """Ergänzt die theoretische Zinslast und ihre Anteile an Einnahmen und BIP.
+
+    Die theoretische Zinslast ist der Schuldenstand multipliziert mit der
+    Marktrendite des jeweiligen Jahres. Sie ist eine Modellrechnung und nicht mit
+    den tatsächlich gebuchten Zinsausgaben gleichzusetzen.
+    """
+    result = frame.copy()
+    result["zins_theoretisch_mio_eur"] = (
+        result["schulden_mio_eur"] * result["rendite_pct"] / 100
+    )
+    result["zins_quote_einnahmen_pct"] = (
+        result["zins_theoretisch_mio_eur"] / result["einnahmen_mio_eur"] * 100
+    )
+    result["zins_quote_bip_pct"] = result["zins_theoretisch_mio_eur"] / result["bip_mio_eur"] * 100
+    return result
+
+
 def simulate_debt_ratio(
     schulden_mio_eur: float,
     bip_mio_eur: float,
