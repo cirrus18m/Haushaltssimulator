@@ -325,6 +325,23 @@ def build_interest_burden(raw_dir: Path) -> pd.DataFrame:
 
 def build_insolvencies(raw_dir: Path) -> pd.DataFrame:
     """Monatliche Insolvenzverfahren insgesamt und von Unternehmen (Destatis)."""
+    lang = destatis.parse_flagged_columns(
+        destatis.decode(
+            (raw_dir / "stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv").read_bytes()
+        ),
+        ["jahr", "monat_name", "groessenklasse"],
+        ["eroeffnet", "abgewiesen", "schuldenbereinigungsplan", "verfahren"],
+    )
+    lang = lang[lang["groessenklasse"] == "Insgesamt"].drop(columns=["groessenklasse"])
+    lang = lang.rename(
+        columns={
+            "eroeffnet": "eroeffnet_unternehmen",
+            "abgewiesen": "abgewiesen_unternehmen",
+            "schuldenbereinigungsplan": "schuldenbereinigungsplan_unternehmen",
+            "verfahren": "verfahren_unternehmen",
+        }
+    )
+
     total = destatis.parse_fixed_columns(
         destatis.decode((raw_dir / "destatis_52411-0002_insolvenzen.csv").read_bytes()),
         ["jahr", "monat_name", "status"],
@@ -341,9 +358,12 @@ def build_insolvencies(raw_dir: Path) -> pd.DataFrame:
             "betroffene_arbeitnehmer",
         ],
     )
-    unternehmen = unternehmen[unternehmen["rechtsform"] == "Insgesamt"].drop(columns=["rechtsform"])
+    unternehmen = unternehmen[unternehmen["rechtsform"] == "Insgesamt"].drop(
+        columns=["rechtsform", "verfahren_unternehmen"]
+    )
 
-    frame = total.merge(unternehmen, on=["jahr", "monat_name"], how="outer")
+    frame = lang.merge(total, on=["jahr", "monat_name"], how="outer")
+    frame = frame.merge(unternehmen, on=["jahr", "monat_name"], how="outer")
     frame["monat_nummer"] = frame["monat_name"].map(MONATSNAMEN)
     frame = frame.dropna(subset=["monat_nummer"]).copy()
     frame["jahr"] = frame["jahr"].astype(int)
@@ -359,6 +379,9 @@ def build_insolvencies(raw_dir: Path) -> pd.DataFrame:
         "jahr",
         "verfahren_gesamt",
         "verfahren_unternehmen",
+        "eroeffnet_unternehmen",
+        "abgewiesen_unternehmen",
+        "schuldenbereinigungsplan_unternehmen",
         "forderungen_gesamt_mio_eur",
         "forderungen_unternehmen_mio_eur",
         "betroffene_arbeitnehmer",
@@ -399,9 +422,9 @@ def _parse_household_prices(raw_dir: Path, filename: str, wertspalte: str) -> pd
         ["energie_und_vertrieb", "netzkosten", "steuern_abgaben"],
     )
     frame["jahr"] = frame["jahr"].astype(int)
-    frame[wertspalte] = frame[
-        ["energie_und_vertrieb", "netzkosten", "steuern_abgaben"]
-    ].sum(axis=1, min_count=1)
+    frame[wertspalte] = frame[["energie_und_vertrieb", "netzkosten", "steuern_abgaben"]].sum(
+        axis=1, min_count=1
+    )
     return frame[["jahr", "verbrauchsklasse", wertspalte]]
 
 
@@ -410,9 +433,7 @@ def build_energy_prices(raw_dir: Path) -> pd.DataFrame:
     strom = _parse_household_prices(
         raw_dir, "destatis_61243-0002_strompreise.csv", "strompreis_eur_kwh"
     )
-    gas = _parse_household_prices(
-        raw_dir, "destatis_61243-0011_gaspreise.csv", "gaspreis_eur_kwh"
-    )
+    gas = _parse_household_prices(raw_dir, "destatis_61243-0011_gaspreise.csv", "gaspreis_eur_kwh")
     frame = strom.merge(gas, on=["jahr", "verbrauchsklasse"], how="outer")
     return frame.sort_values(["jahr", "verbrauchsklasse"]).reset_index(drop=True)
 

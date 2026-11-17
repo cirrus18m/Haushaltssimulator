@@ -58,7 +58,7 @@ CBR_MAX_FALLBACK_DAYS = 8
 
 USER_AGENT = "Haushaltssimulator/0.1 (+https://github.com/cirrus18m/Haushaltssimulator)"
 
-FetchMode = Literal["http", "cbr_zcyc", "energy_charts"]
+FetchMode = Literal["http", "cbr_zcyc", "energy_charts", "manual"]
 
 
 @dataclass(frozen=True)
@@ -312,6 +312,21 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="destatis_insolvenzen_zeitreihe",
+        filename="stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv",
+        url="https://genesis.destatis.de/datenbank/online/table/52411-0017",
+        title="Unternehmensinsolvenzen: Deutschland, Monate, Größenklassen (Langreihe)",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0017",
+        license="DL-DE-BY-2.0",
+        datasets=("insolvenzen_monat.csv",),
+        fetch_mode="manual",
+        description=(
+            "Manueller Export aus GENESIS-Online, Tabelle 52411-0017: Beantragte "
+            "Insolvenzverfahren von Unternehmen nach Unternehmensgrößenklassen, "
+            "Deutschland, Monate 2003 bis 2026"
+        ),
+    ),
+    Source(
         key="ecb_geldmenge",
         filename="ecb_geldmenge_m3.csv",
         url=ECB_SERIES_URL.format(
@@ -511,6 +526,13 @@ def download(source: Source, target_dir: Path, *, refresh: bool = False) -> Path
     """
     target_dir.mkdir(parents=True, exist_ok=True)
     target = target_dir / source.filename
+    if source.fetch_mode == "manual":
+        if target.exists():
+            return target
+        raise RuntimeError(
+            f"{source.filename} fehlt. Bitte die Tabelle unter {source.url} als CSV "
+            "exportieren und unter diesem Dateinamen in data/raw/ ablegen."
+        )
     if target.exists() and not refresh:
         return target
 
@@ -563,7 +585,7 @@ def download_all(
         known = previous.get(source.key, {})
         if known.get("sha256") == digest and known.get("abgerufen_am"):
             retrieved_at = str(known["abgerufen_am"])
-        elif existed and not refresh:
+        elif source.fetch_mode == "manual" or (existed and not refresh):
             retrieved_at = datetime.fromtimestamp(path.stat().st_mtime, UTC).isoformat(
                 timespec="seconds"
             )

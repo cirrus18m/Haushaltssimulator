@@ -131,3 +131,35 @@ def parse_fixed_columns(
         records.append(record)
 
     return pd.DataFrame.from_records(records)
+
+
+def parse_flagged_columns(
+    raw: str, label_columns: Sequence[str], value_columns: Sequence[str]
+) -> pd.DataFrame:
+    """Liest Tabellen, in denen auf jeden Wert eine Statusspalte folgt.
+
+    Beispiel: ``2003;Januar;Insgesamt;1892;e;1353;e;x;;3245;e``. Ausgelesen werden
+    nur die Wertspalten; Statusspalten (``e``, ``x``, leer) werden verworfen.
+    """
+    rows = list(csv.reader(io.StringIO(raw), delimiter=";"))
+    start = next(
+        (index for index, row in enumerate(rows) if row and re.fullmatch(r"\d{4}", row[0].strip())),
+        None,
+    )
+    if start is None:
+        raise ValueError("Keine Datenzeilen in der Tabelle gefunden")
+
+    records = []
+    for row in rows[start:]:
+        if len(row) <= len(label_columns):
+            continue
+        labels = [cell.strip() for cell in row[: len(label_columns)]]
+        if not all(labels):
+            continue
+        record: dict[str, object] = dict(zip(label_columns, labels, strict=True))
+        for index, column in enumerate(value_columns):
+            position = len(label_columns) + 2 * index
+            record[column] = parse_number(row[position]) if position < len(row) else float("nan")
+        records.append(record)
+
+    return pd.DataFrame.from_records(records)

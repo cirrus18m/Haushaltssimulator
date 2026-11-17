@@ -101,6 +101,7 @@ Alle Quellen sind frei verfügbar und werden ohne API-Schlüssel abgerufen.
 | [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |
 | [Destatis 52411-0002](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0002) | Beantragte Insolvenzverfahren, Monate | DL-DE-BY-2.0 |
 | [Destatis 52411-0011](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0011) | Insolvenzverfahren von Unternehmen, Monate | DL-DE-BY-2.0 |
+| [Destatis 52411-0017](https://genesis.destatis.de/datenbank/online/table/52411-0017) | Unternehmensinsolvenzen 2003–2026 nach Größenklassen (manueller Export) | DL-DE-BY-2.0 |
 | [EZB BSI](https://data.ecb.europa.eu/data/datasets/BSI) | Geldmenge M3, monatlich | Quellenangabe erforderlich |
 | [EZB ICP](https://data.ecb.europa.eu/data/datasets/ICP) | Harmonisierter Verbraucherpreisindex, monatlich | Quellenangabe erforderlich |
 | [Destatis 61243-0002](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0002) | Strompreise für Haushalte, Jahre | DL-DE-BY-2.0 |

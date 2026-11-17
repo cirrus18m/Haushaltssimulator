@@ -18,7 +18,7 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `zins_bund_10j.csv` | Tagesrendite der 10-jährigen Bundesanleihe | Deutsche Bundesbank | 2001–2026 |
 | `zins_vergleich.csv` | Renditen 10-jähriger Staatsanleihen je Land und Monat | Eurostat `irt_lt_mcby_m`, FRED, Bank of Russia | 1993–2026 |
 | `zinslast_jahr.csv` | Schuldenstand, Rendite, theoretische und tatsächliche Zinslast | Eurostat, Bundesbank | 1995–2025 |
-| `insolvenzen_monat.csv` | Insolvenzverfahren gesamt und von Unternehmen je Monat | Destatis 52411-0002, 52411-0011 | 2026 |
+| `insolvenzen_monat.csv` | Insolvenzverfahren gesamt und von Unternehmen je Monat | Destatis 52411-0017 (Langreihe), 52411-0002, 52411-0011 | 2003–2026 |
 | `geldmenge_monat.csv` | Geldmenge M3 und Jahreswachstumsrate | EZB BSI | 1995–2026 |
 | `kaufkraft_monat.csv` | Inflation Deutschland/Euro-Raum und Kaufkraftindex | EZB ICP | 1997–2025 |
 | `energiepreise_jahr.csv` | Strom- und Gaspreise für Haushalte | Destatis 61243-0002, 61243-0011 | 2019–2025 |
@@ -119,9 +119,14 @@ den damals negativen Renditen.
 | `monat` | Berichtsmonat (`JJJJ-MM`) |
 | `verfahren_gesamt`, `verfahren_unternehmen` | beantragte Verfahren |
 | `forderungen_gesamt_mio_eur`, `forderungen_unternehmen_mio_eur` | voraussichtliche Forderungen |
+| `eroeffnet_unternehmen`, `abgewiesen_unternehmen` | Verfahrensausgang der Unternehmensinsolvenzen |
+| `schuldenbereinigungsplan_unternehmen` | angenommene Schuldenbereinigungspläne (ab 2021) |
 | `betroffene_arbeitnehmer` | von Unternehmensinsolvenzen betroffene Beschäftigte |
 
-Die Tabelle des Statistischen Bundesamts enthält das laufende Berichtsjahr.
+Die Langreihe stammt aus der Tabelle 52411-0017 (Monate, Größenklassen) und reicht bis
+2003 zurück. Gesamtzahlen aller Verfahren, Forderungen und betroffene Arbeitnehmer
+stehen nur für das laufende Berichtsjahr aus den Tabellen 52411-0002 und 52411-0011 zur
+Verfügung.
 
 **`geldmenge_monat.csv`**
 
@@ -168,6 +173,12 @@ je Quelle Titel, Herausgeber, Lizenz, URL, verwendete Datensätze, Dateiname, SH
 Größe und Abrufzeitpunkt. Sie wird ausschließlich von
 `haushaltssimulator.sources.download_all` geschrieben und auf der Seite **Quellen**
 angezeigt.
+
+Die Tabelle 52411-0017 (Unternehmensinsolvenzen, Langreihe) wird nicht automatisch
+geladen. Sie ist als **manuelle Quelle** registriert: Die CSV-Datei muss über
+[GENESIS-Online](https://genesis.destatis.de/datenbank/online/table/52411-0017)
+exportiert und unter dem in `sources.json` genannten Dateinamen in `raw/` abgelegt
+werden. Der Abrufzeitpunkt ergibt sich aus dem Änderungsdatum der Datei.
 
 ## Aktualisieren
 

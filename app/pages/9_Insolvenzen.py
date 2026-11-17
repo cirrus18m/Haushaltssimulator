@@ -1,18 +1,18 @@
-"""Unternehmensinsolvenzen: Verfahren, Forderungen und betroffene Arbeitnehmer."""
+"""Unternehmensinsolvenzen: Langreihe, Verfahrensausgang und aktuelle Forderungen."""
 
 from __future__ import annotations
 
 import plotly.graph_objects as go
 import streamlit as st
-from plotly.subplots import make_subplots
 
 from haushaltssimulator import ui
 
 st.title("Insolvenzen")
 st.markdown(
-    "Beantragte Insolvenzverfahren in Deutschland nach der amtlichen "
-    "Insolvenzstatistik. Die Tabelle des Statistischen Bundesamts liefert das laufende "
-    "Berichtsjahr; die Werte werden monatlich nachgemeldet."
+    "Beantragte Insolvenzverfahren von Unternehmen in Deutschland ab 2003. Die "
+    "Langreihe stammt aus der GENESIS-Tabelle 52411-0017 (Monate, Größenklassen), die "
+    "aktuellen Forderungen und betroffenen Arbeitnehmer aus den Tabellen 52411-0002 und "
+    "52411-0011."
 )
 
 insolvenzen = ui.insolvencies()
@@ -20,110 +20,157 @@ if insolvenzen.empty:
     st.warning("Keine Daten gefunden. Bitte `uv run scripts/build_data.py` ausführen.")
     st.stop()
 
-letzte = insolvenzen.iloc[-1]
-vorher = insolvenzen.iloc[-2] if len(insolvenzen) > 1 else letzte
 retrieved = ui.data_retrieved_at()
+unternehmen = insolvenzen.dropna(subset=["verfahren_unternehmen"]).reset_index(drop=True)
+letzte = unternehmen.iloc[-1]
 
-st.subheader(f"Stand {letzte['monat']}")
+vorjahres_monat = f"{int(letzte['jahr']) - 1}-{letzte['monat'][5:7]}"
+vorjahr = unternehmen[unternehmen["monat"] == vorjahres_monat]
+vorjahres_wert = vorjahr.iloc[0]["verfahren_unternehmen"] if not vorjahr.empty else float("nan")
+veraenderung = letzte["verfahren_unternehmen"] - vorjahres_wert
+veraenderung_pct = veraenderung / vorjahres_wert * 100 if vorjahres_wert else float("nan")
+
+summe_12 = unternehmen["verfahren_unternehmen"].tail(12).sum()
+summe_vorjahr_12 = unternehmen["verfahren_unternehmen"].iloc[-24:-12].sum()
+summe_delta_pct = (summe_12 / summe_vorjahr_12 - 1) * 100 if summe_vorjahr_12 else float("nan")
+
 columns = st.columns(4)
 columns[0].metric(
-    "Verfahren insgesamt",
-    ui.format_number(letzte["verfahren_gesamt"], 0),
-    f"{ui.format_number(letzte['verfahren_gesamt'] - vorher['verfahren_gesamt'], 0)} zum Vormonat",
+    "Unternehmensinsolvenzen",
+    ui.format_number(letzte["verfahren_unternehmen"], 0),
+    f"{ui.format_number(veraenderung, 0)} zum Vorjahr",
     delta_color="inverse",
 )
 columns[1].metric(
-    "davon Unternehmen",
-    ui.format_number(letzte["verfahren_unternehmen"], 0),
-    f"{ui.format_number(letzte['verfahren_unternehmen'] - vorher['verfahren_unternehmen'], 0)} "
-    "zum Vormonat",
+    "Letzte 12 Monate",
+    ui.format_number(summe_12, 0),
+    f"{ui.format_number(summe_delta_pct, 1)} % zum Vorjahr",
     delta_color="inverse",
 )
 columns[2].metric(
     "Forderungen (Mrd. €)",
     ui.format_number(letzte["forderungen_unternehmen_mio_eur"] / 1000, 2),
-    "Unternehmen, voraussichtlich",
+    "voraussichtlich",
     delta_color="off",
 )
 columns[3].metric(
     "Arbeitnehmer",
     ui.format_number(letzte["betroffene_arbeitnehmer"], 0),
-    "in Unternehmensverfahren",
+    "betroffen",
     delta_color="off",
 )
+
+st.divider()
+st.header("1. Unternehmensinsolvenzen seit 2003")
+verlauf = unternehmen.set_index("monat")["verfahren_unternehmen"]
+gleitend = verlauf.rolling(12, min_periods=12).mean()
 
 figure = go.Figure()
 figure.add_trace(
     go.Bar(
-        x=insolvenzen["monat"],
-        y=insolvenzen["verfahren_gesamt"],
-        name="Verfahren insgesamt",
+        x=verlauf.index,
+        y=verlauf,
+        name="Verfahren je Monat",
         marker_color="#7fb2d5",
         hovertemplate="%{y:,.0f}<extra></extra>",
     )
 )
 figure.add_trace(
-    go.Bar(
-        x=insolvenzen["monat"],
-        y=insolvenzen["verfahren_unternehmen"],
-        name="Unternehmensinsolvenzen",
-        marker_color="#1f4e79",
-        hovertemplate="%{y:,.0f}<extra></extra>",
-    )
-)
-figure.update_layout(barmode="group")
-figure.update_yaxes(title_text="Verfahren je Monat", rangemode="tozero")
-ui.plot(figure, filename="insolvenzen_verfahren", height=420)
-
-figure = make_subplots(specs=[[{"secondary_y": True}]])
-figure.add_trace(
-    go.Bar(
-        x=insolvenzen["monat"],
-        y=insolvenzen["forderungen_unternehmen_mio_eur"],
-        name="Forderungen Unternehmen (Mio. €)",
-        marker_color="#b03a2e",
-        hovertemplate="%{y:,.0f} Mio. €<extra></extra>",
-    ),
-    secondary_y=False,
-)
-figure.add_trace(
     go.Scatter(
-        x=insolvenzen["monat"],
-        y=insolvenzen["betroffene_arbeitnehmer"],
-        name="betroffene Arbeitnehmer",
-        line={"color": "#c9a227", "width": 2},
+        x=gleitend.index,
+        y=gleitend,
+        name="12-Monats-Mittel",
+        line={"color": "#1f4e79", "width": 3},
         hovertemplate="%{y:,.0f}<extra></extra>",
-    ),
-    secondary_y=True,
-)
-figure.update_yaxes(title_text="Mio. €", secondary_y=False)
-figure.update_yaxes(title_text="Arbeitnehmer", secondary_y=True)
-ui.plot(figure, filename="insolvenzen_forderungen", height=400)
-
-with st.expander("Datenlage und Abgrenzung"):
-    st.markdown(
-        "Die GENESIS-Tabelle 52411-0002 enthält das laufende Berichtsjahr; ältere "
-        "Monatswerte sind über den GENESIS-Webservice nur mit Zeitraumfilter und "
-        "Zugangskennung abrufbar. Deshalb zeigt die Seite die verfügbaren Monate des "
-        "aktuellen Jahres. Die Werte sind vorläufig und werden nachgemeldet.\n\n"
-        "Die Tabelle 52411-0011 weist die Unternehmensinsolvenzen nach Rechtsformen aus; "
-        "dargestellt ist die Zeile „Insgesamt“."
     )
+)
+figure.update_yaxes(title_text="Verfahren je Monat", rangemode="tozero")
+ui.plot(figure, filename="insolvenzen_langreihe", height=440)
+
+st.header("2. Verfahrensausgang")
+letzte_36 = insolvenzen.dropna(subset=["verfahren_unternehmen"]).tail(36)
+figure = go.Figure()
+for spalte, name, farbe in [
+    ("eroeffnet_unternehmen", "eröffnet", "#1f4e79"),
+    ("abgewiesen_unternehmen", "mangels Masse abgewiesen", "#b03a2e"),
+    ("schuldenbereinigungsplan_unternehmen", "Schuldenbereinigungsplan", "#c9a227"),
+]:
+    if letzte_36[spalte].notna().sum() == 0:
+        continue
+    figure.add_trace(
+        go.Bar(
+            x=letzte_36["monat"],
+            y=letzte_36[spalte].fillna(0),
+            name=name,
+            marker_color=farbe,
+            hovertemplate="%{y:,.0f}<extra>" + name + "</extra>",
+        )
+    )
+figure.update_layout(barmode="stack")
+figure.update_yaxes(title_text="Verfahren je Monat", rangemode="tozero")
+ui.plot(figure, filename="insolvenzen_ausgang", height=400)
+
+st.header("3. Aktuelles Berichtsjahr: alle Verfahren")
+aktuell = insolvenzen.dropna(subset=["verfahren_gesamt"])
+if aktuell.empty:
+    st.info("Für das aktuelle Berichtsjahr liegen noch keine Gesamtzahlen vor.")
+else:
+    figure = go.Figure()
+    figure.add_trace(
+        go.Bar(
+            x=aktuell["monat"],
+            y=aktuell["verfahren_gesamt"],
+            name="Verfahren insgesamt",
+            marker_color="#7fb2d5",
+            hovertemplate="%{y:,.0f}<extra></extra>",
+        )
+    )
+    figure.add_trace(
+        go.Bar(
+            x=aktuell["monat"],
+            y=aktuell["verfahren_unternehmen"],
+            name="Unternehmensinsolvenzen",
+            marker_color="#1f4e79",
+            hovertemplate="%{y:,.0f}<extra></extra>",
+        )
+    )
+    figure.update_layout(barmode="group")
+    figure.update_yaxes(title_text="Verfahren je Monat", rangemode="tozero")
+    ui.plot(figure, filename="insolvenzen_berichtsjahr", height=380)
 
 st.subheader("Monatswerte")
-tabelle = insolvenzen.drop(columns=["jahr"]).rename(
-    columns={
-        "monat": "Monat",
-        "verfahren_gesamt": "Verfahren insgesamt",
-        "verfahren_unternehmen": "Unternehmen",
-        "forderungen_gesamt_mio_eur": "Forderungen gesamt (Mio. €)",
-        "forderungen_unternehmen_mio_eur": "Forderungen Unternehmen (Mio. €)",
-        "betroffene_arbeitnehmer": "betroffene Arbeitnehmer",
-    }
+tabelle = (
+    insolvenzen.drop(columns=["jahr"])
+    .tail(24)
+    .rename(
+        columns={
+            "monat": "Monat",
+            "verfahren_gesamt": "Verfahren insgesamt",
+            "verfahren_unternehmen": "Unternehmen",
+            "eroeffnet_unternehmen": "davon eröffnet",
+            "abgewiesen_unternehmen": "mangels Masse abgewiesen",
+            "schuldenbereinigungsplan_unternehmen": "Schuldenbereinigungsplan",
+            "forderungen_gesamt_mio_eur": "Forderungen gesamt (Mio. €)",
+            "forderungen_unternehmen_mio_eur": "Forderungen Unternehmen (Mio. €)",
+            "betroffene_arbeitnehmer": "betroffene Arbeitnehmer",
+        }
+    )
 )
 st.dataframe(tabelle, hide_index=True, width="stretch")
 
+with st.expander("Datenlage und Abgrenzung"):
+    st.markdown(
+        "Die Langreihe 52411-0017 weist beantragte Insolvenzverfahren von Unternehmen "
+        "nach Unternehmensgrößenklassen aus (Zeile „Insgesamt“). Die Werte sind "
+        "vorläufig und werden nachgemeldet. Gesamtzahlen aller Verfahren, Forderungen "
+        "und betroffene Arbeitnehmer stehen für das laufende Berichtsjahr aus den "
+        "Tabellen 52411-0002 und 52411-0011 zur Verfügung.\n\n"
+        "Der Schuldenbereinigungsplan ist erst ab 2021 ausgewiesen; davor ist die "
+        "Position nicht anwendbar."
+    )
+
 st.caption(
-    "Quelle: Statistisches Bundesamt, GENESIS-Online 52411-0002 und 52411-0011. "
-    + (f"Datenabruf: {retrieved:%d.%m.%Y}. " if retrieved else "")
+    "Quellen: Statistisches Bundesamt, GENESIS-Online 52411-0017 (Langreihe), "
+    "52411-0002 und 52411-0011 (aktuelles Berichtsjahr)."
+    + (f" Datenabruf: {retrieved:%d.%m.%Y}. " if retrieved else "")
 )

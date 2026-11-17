@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-17T19:11:56+00:00",
+  "aktualisiert_am": "2026-11-17T20:13:25+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -214,6 +214,21 @@
       "abgerufen_am": "2026-11-17T19:01:24+00:00",
       "sha256": "13cc53d1b08e8bea539f9e87160814c32bb580d90b5a8ff7ce6e76dd670865b3",
       "bytes": 7885
+    },
+    {
+      "key": "destatis_insolvenzen_zeitreihe",
+      "titel": "Unternehmensinsolvenzen: Deutschland, Monate, Größenklassen (Langreihe)",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0017",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/datenbank/online/table/52411-0017",
+      "beschreibung": "Manueller Export aus GENESIS-Online, Tabelle 52411-0017: Beantragte Insolvenzverfahren von Unternehmen nach Unternehmensgrößenklassen, Deutschland, Monate 2003 bis 2026",
+      "datei": "stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv",
+      "datensaetze": [
+        "insolvenzen_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T20:03:40+00:00",
+      "sha256": "315970524d56e911ce581398df906b46ad2aff9a2d421b518115675e818ec4a6",
+      "bytes": 107535
     },
     {
       "key": "ecb_geldmenge",

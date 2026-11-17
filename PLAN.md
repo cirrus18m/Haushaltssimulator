@@ -105,9 +105,9 @@ Ideen aus [TODO.md](TODO.md), umgesetzt als fünf Seiten mit eigenen Quellen:
 
 Offene Punkte dieser Stufe:
 
-* Die GENESIS-Tabelle der Insolvenzen liefert nur das laufende Berichtsjahr. Für eine
-  längere Monatsreihe ist der GENESIS-Webservice mit Zeitraumfilter und Zugangskennung
-  nötig; bis dahin zeigt die Seite die verfügbaren Monate.
+* Die Insolvenzen nutzen die manuell exportierte GENESIS-Langreihe 52411-0017
+  (2003–2026) sowie die Tabellen 52411-0002 und 52411-0011 für das laufende
+  Berichtsjahr.
 * **Sondervermögen** des Bundes liegen nicht als frei maschinenlesbare Zeitreihe vor.
   Die Seite weist sie deshalb noch nicht separat aus.
 
@@ -123,8 +123,8 @@ Offene Punkte dieser Stufe:
 
 * Sollen die Rohdaten aus `data/raw/` zusätzlich versioniert werden? Bislang
   versioniert das Repository nur die Quellenbibliothek und die aufbereiteten Daten.
-* Für die Insolvenzen ist eine längere Monatsreihe über den GENESIS-Webservice zu
-  beschaffen (Zeitraumfilter, Zugangskennung).
+* Die Insolvenz-Langreihe wird manuell über GENESIS-Online exportiert; eine
+  Automatisierung über den GENESIS-Webservice wäre wünschenswert.
 * Für die Sondervermögen des Bundes fehlt eine frei zugängliche, maschinenlesbare
   Quelle.
 * Für Russland liefert die OECD-Reihe nur Daten bis 2018; deshalb der Rückgriff auf

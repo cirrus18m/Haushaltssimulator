@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from haushaltssimulator import dataset, paths, sources
 
 
@@ -31,6 +33,22 @@ def test_library_entries_are_complete() -> None:
 def test_every_processed_file_from_the_library_exists() -> None:
     for filename in dataset.DATASET_LABELS:
         assert (paths.PROCESSED_DIR / filename).exists(), filename
+
+
+def test_manual_source_requires_existing_file(tmp_path) -> None:
+    source = sources.Source(
+        key="manuell",
+        filename="manuell.csv",
+        url="https://example.org/tabelle",
+        description="Test",
+        title="Test",
+        publisher="Test",
+        license="Test",
+        datasets=("manuell.csv",),
+        fetch_mode="manual",
+    )
+    with pytest.raises(RuntimeError, match="manuell.csv"):
+        sources.download(source, tmp_path)
 
 
 def test_retrieved_timestamp_survives_without_new_download(tmp_path) -> None:

@@ -22,6 +22,15 @@ __________
 © Statistisches Bundesamt (Destatis), 2026
 """
 
+FLAGGED_TABLE = """Tabelle: 52411-0017
+Insolvenzverfahren (Unternehmen): Deutschland, Monate;;;;;;
+;;;Beantragte Verfahren;Beantragte Verfahren
+;;;eröffnet;eröffnet
+2003;Januar;Insgesamt;1892;e;1353;e;x;;3245;e
+2003;Februar;Insgesamt;1790;e;1316;e;x;;3106;e
+2003;Januar;1 Arbeitnehmer;197;e;193;e;x;;390;e
+"""
+
 ECB_CSV = b"""KEY,FREQ,REF_AREA,TIME_PERIOD,OBS_VALUE
 ICP.M.DE.N.000000.4.ANR,M,DE,2024-01,2.9
 ICP.M.DE.N.000000.4.ANR,M,DE,2024-02,2.6
@@ -49,6 +58,20 @@ def test_parse_fixed_columns_reads_label_and_value_columns() -> None:
     assert gesamt["jahr"] == "2026"
     assert gesamt["verfahren"] == 10494
     assert gesamt["forderungen_tsd_eur"] == 3913424
+
+
+def test_parse_flagged_columns_skips_status_columns() -> None:
+    frame = destatis.parse_flagged_columns(
+        FLAGGED_TABLE,
+        ["jahr", "monat", "klasse"],
+        ["eroeffnet", "abgewiesen", "plan", "insgesamt"],
+    )
+    assert len(frame) == 3
+    erste = frame.iloc[0]
+    assert erste["eroeffnet"] == 1892
+    assert erste["abgewiesen"] == 1353
+    assert erste["insgesamt"] == 3245
+    assert pd.isna(erste["plan"])
 
 
 def test_ecb_parser_keeps_area_and_month() -> None:

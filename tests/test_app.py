@@ -57,6 +57,8 @@ def test_insolvencies_cover_total_and_companies() -> None:
     frame = dataset.load_insolvencies()
     assert {"verfahren_gesamt", "verfahren_unternehmen"} <= set(frame.columns)
     assert frame["monat"].is_monotonic_increasing
+    assert frame["monat"].min() <= "2003-01"
+    assert frame["verfahren_unternehmen"].notna().sum() >= 250
     assert frame["verfahren_unternehmen"].max() > 0
 
 
