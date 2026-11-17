@@ -52,7 +52,7 @@ figure = go.Figure(
 )
 figure.update_xaxes(title_text="Mrd. €")
 figure.update_yaxes(title_text="")
-st.plotly_chart(ui.style(figure, height=520, legend=False), width="stretch")
+ui.plot(figure, filename="bundeslaender_vergleich", height=520, legend=False)
 
 st.divider()
 st.subheader("Entwicklung ausgewählter Länder")
@@ -84,7 +84,7 @@ if selected:
         )
     figure.update_yaxes(title_text="Mrd. €")
     figure.update_xaxes(title_text="Quartalsende")
-    st.plotly_chart(ui.style(figure, height=420), width="stretch")
+    ui.plot(figure, filename="bundeslaender_zeitreihe", height=420)
 
 st.divider()
 st.subheader("Veränderung seit dem ersten verfügbaren Quartal")

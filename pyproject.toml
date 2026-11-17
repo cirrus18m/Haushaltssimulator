@@ -5,8 +5,11 @@ description = "Streamlit-App zur Visualisierung und Analyse der deutschen Staats
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "kaleido>=1.5.1",
+    "openpyxl>=3.1.5",
     "pandas>=2.2",
     "plotly>=5.24",
+    "python-dotenv>=1.2.4",
     "streamlit>=1.40",
 ]
 

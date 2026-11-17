@@ -32,6 +32,21 @@ def test_year_over_year_uses_groups() -> None:
     assert result.loc[("S1311", 2021), "veraenderung_pct"] == pytest.approx(-20.0)
 
 
+def test_with_interest_burden_links_debt_and_yield() -> None:
+    frame = pd.DataFrame(
+        {
+            "schulden_mio_eur": [2_000_000.0],
+            "rendite_pct": [2.5],
+            "einnahmen_mio_eur": [1_000_000.0],
+            "bip_mio_eur": [4_000_000.0],
+        }
+    )
+    result = analysis.with_interest_burden(frame)
+    assert result.loc[0, "zins_theoretisch_mio_eur"] == pytest.approx(50_000.0)
+    assert result.loc[0, "zins_quote_einnahmen_pct"] == pytest.approx(5.0)
+    assert result.loc[0, "zins_quote_bip_pct"] == pytest.approx(1.25)
+
+
 def test_simulate_debt_ratio_constant_growth() -> None:
     projection = analysis.simulate_debt_ratio(
         schulden_mio_eur=1000,

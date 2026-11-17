@@ -14,6 +14,22 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `schulden_destatis_quartal.csv` | Dasselbe, vierteljährlich | Destatis 71311-0001 | letzte 10 Quartale |
 | `schulden_destatis_bundeslaender.csv` | Dasselbe je Bundesland | Destatis 71311-0003 | letzte 10 Quartale |
 | `bip_bevoelkerung.csv` | BIP, Bevölkerung, BIP je Einwohner:in | Eurostat `nama_10_gdp`, `demo_pjan` | 1995–2026 |
+| `haushalt_jahr.csv` | Einnahmen, Ausgaben, Zinsausgaben, Finanzierungssaldo je Jahr und Ebene | Eurostat `gov_10a_main` | 1995–2025 |
+| `zins_bund_10j.csv` | Tagesrendite der 10-jährigen Bundesanleihe | Deutsche Bundesbank | 2001–2026 |
+| `zins_vergleich.csv` | Renditen 10-jähriger Staatsanleihen je Land und Monat | Eurostat `irt_lt_mcby_m`, FRED, Bank of Russia | 1993–2026 |
+| `zinslast_jahr.csv` | Schuldenstand, Rendite, theoretische und tatsächliche Zinslast | Eurostat, Bundesbank | 1995–2025 |
+| `insolvenzen_monat.csv` | Insolvenzverfahren gesamt und von Unternehmen je Monat | Destatis 52411-0017 (Langreihe), 52411-0002, 52411-0011 | 2003–2026 |
+| `geldmenge_monat.csv` | Geldmenge M3 und Jahreswachstumsrate | EZB BSI | 1995–2026 |
+| `kaufkraft_monat.csv` | Inflation Deutschland/Euro-Raum und Kaufkraftindex | EZB ICP | 1997–2025 |
+| `energiepreise_jahr.csv` | Strom- und Gaspreise für Haushalte | Destatis 61243-0002, 61243-0011 | 2019–2025 |
+| `strom_boerse_tag.csv` | Tagesmittel des Day-Ahead-Strompreises | energy-charts.info | 2019–2026 |
+| `kraftstoffpreise.csv` | Monatsmittel der Kraftstoffpreise je Land | EU Weekly Oil Bulletin | 2016–2026 |
+| `big_mac.csv` | Big-Mac-Preis in US-Dollar und Abweichung | The Economist | 2000–2026 |
+| `eigentumsquote.csv` | Eigentums- und Mietquote je Land | Eurostat `ilc_lvho02` | 2010–2025 |
+| `bund_zinsausgaben.csv` | Zinsausgaben des Bundes am Kreditmarkt | BMF | 2022–2027 |
+| `laender_schulden_jahr.csv` | Schuldenstand und Schuldenquote je europäischem Land | Eurostat `gov_10dd_edpt1` | 1995–2025 |
+| `laender_haushalt_jahr.csv` | Einnahmen, Zinsausgaben, Quoten und Zins je Einwohner:in je Land | Eurostat `gov_10a_main`, `nama_10_gdp`, `demo_pjan` | 1995–2025 |
+| `laender_inflation_monat.csv` | Inflationsrate (HVPI) je europäischem Land | Eurostat `prc_hicp_manr` | 1997-01–2025-12 |
 
 ### Spalten
 
@@ -53,11 +69,168 @@ In der Länderdatei bedeutet `ebene = Insgesamt` die Summe aus Land und seinen G
 | `bevoelkerung` | Bevölkerung am 1. Januar |
 | `bip_je_einwohner_eur` | BIP je Einwohner:in |
 
+**`haushalt_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr`, `sector`, `ebene` | Berichtsjahr und staatliche Ebene |
+| `einnahmen_mio_eur` | Gesamteinnahmen (`TR`) – ohne Kreditaufnahme |
+| `ausgaben_mio_eur` | Gesamtausgaben (`TE`) |
+| `zinsausgaben_mio_eur` | Tatsächlich gebuchte Zinsausgaben (`D41PAY`) |
+| `finanzierungssaldo_mio_eur` | Nettofinanzierungssaldo (`B9`), negativ = Defizit |
+| `einnahmenquote_pct`, `ausgabenquote_pct` | Anteil am BIP |
+| `zins_einnahmen_pct` | Zinsausgaben in % der Einnahmen |
+
+**`zins_bund_10j.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `datum` | Handelstag |
+| `jahr`, `monat` | Jahr und Monat (`JJJJ-MM`) |
+| `rendite_pct` | Tagesrendite der aktuellen 10-jährigen Bundesanleihe in % |
+
+**`zins_vergleich.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Monat (`JJJJ-MM`) |
+| `land` | Deutsche Länderbezeichnung |
+| `rendite_pct` | Rendite 10-jähriger Staatsanleihen in % |
+| `quelle`, `quelle_key` | Quellenbezeichnung und Schlüssel in `data/sources.json` |
+
+**`zinslast_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr` | Berichtsjahr |
+| `schulden_mio_eur` | Maastricht-Schuldenstand des Gesamtstaats |
+| `rendite_pct` | Jahresdurchschnitt der 10-jährigen Bundesanleihe |
+| `zins_theoretisch_mio_eur` | Schuldenstand × Rendite |
+| `einnahmen_mio_eur` | Gesamteinnahmen ohne neue Schulden |
+| `zins_quote_einnahmen_pct` | theoretische Zinslast in % der Einnahmen |
+| `bip_mio_eur`, `zins_quote_bip_pct` | BIP und theoretische Zinslast in % des BIP |
+| `zinsausgaben_mio_eur` | tatsächlich gebuchte Zinsausgaben |
+| `effektivzins_pct` | Zinsausgaben / Schuldenstand × 100 |
+
+Die theoretische Zinslast ist eine Modellrechnung; negative Werte 2019–2021 folgen aus
+den damals negativen Renditen.
+
+**`insolvenzen_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat (`JJJJ-MM`) |
+| `verfahren_gesamt`, `verfahren_unternehmen` | beantragte Verfahren |
+| `forderungen_gesamt_mio_eur`, `forderungen_unternehmen_mio_eur` | voraussichtliche Forderungen |
+| `eroeffnet_unternehmen`, `abgewiesen_unternehmen` | Verfahrensausgang der Unternehmensinsolvenzen |
+| `schuldenbereinigungsplan_unternehmen` | angenommene Schuldenbereinigungspläne (ab 2021) |
+| `betroffene_arbeitnehmer` | von Unternehmensinsolvenzen betroffene Beschäftigte |
+
+Die Langreihe stammt aus der Tabelle 52411-0017 (Monate, Größenklassen) und reicht bis
+2003 zurück. Gesamtzahlen aller Verfahren, Forderungen und betroffene Arbeitnehmer
+stehen nur für das laufende Berichtsjahr aus den Tabellen 52411-0002 und 52411-0011 zur
+Verfügung.
+
+**`geldmenge_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat |
+| `index_m3` | Geldmenge M3, Index Dezember 2010 = 100 |
+| `wachstum_pct` | Veränderung gegenüber dem Vorjahr in Prozent |
+
+**`kaufkraft_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat |
+| `inflation_de_pct`, `inflation_ea_pct` | HVPI-Veränderung gegenüber dem Vorjahr |
+| `kaufkraft_index` | Kaufkraft eines Euro, Startmonat = 100 |
+
+**`energiepreise_jahr.csv`** – `jahr`, `verbrauchsklasse`, `strompreis_eur_kwh`,
+`gaspreis_eur_kwh` (jeweils inklusive Steuern, Abgaben und Umlagen; Summe der
+Preisbestandteile).
+
+**`strom_boerse_tag.csv`** – `datum`, `preis_eur_mwh` (Tagesmittel der stündlichen
+Day-Ahead-Preise).
+
+**`kraftstoffpreise.csv`** – `monat`, `land`, `produkt` (`Diesel`,
+`Superbenzin (Euro 95)`), `preis_eur_l`.
+
+**`big_mac.csv`** – `datum`, `land`, `preis_usd`, `abweichung_pct` (Abweichung vom
+US-Preis).
+
+**`eigentumsquote.csv`** – `jahr`, `geo`, `land`, `eigentumsquote_pct`, `mietquote_pct`.
+
+**`bund_zinsausgaben.csv`** – `jahr`, `art` (`Ist`, `Soll`, `RegE`),
+`zinsausgaben_mrd_eur`.
+
+**`laender_schulden_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr` | Berichtsjahr |
+| `geo`, `land` | Eurostat-Ländercode und deutsche Bezeichnung |
+| `schulden_mio_eur` | Maastricht-Schuldenstand des Gesamtstaats (S13) in Mio. € |
+| `schuldenquote_pct` | Schuldenstand in % des BIP (amtliche Quote) |
+
+**`laender_haushalt_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr` | Berichtsjahr |
+| `geo`, `land` | Eurostat-Ländercode und deutsche Bezeichnung |
+| `einnahmen_mio_eur` | Gesamteinnahmen (TR) in Mio. € |
+| `zinsausgaben_mio_eur` | Tatsächliche Zinsausgaben (D41PAY) in Mio. € |
+| `bip_mio_eur` | Bruttoinlandsprodukt in Mio. € |
+| `bevoelkerung` | Bevölkerung am 1. Januar |
+| `zins_quote_bip_pct` | Zinsausgaben in % des BIP |
+| `zins_quote_einnahmen_pct` | Zinsausgaben in % der Einnahmen |
+| `zins_je_einwohner_eur` | Zinsausgaben je Einwohner:in in € |
+
+**`laender_inflation_monat.csv`** – `monat`, `geo`, `land`, `inflation_pct`
+(HVPI-Veränderung gegenüber dem Vorjahr).
+
 ## `raw/`
 
-Die Originaldateien der Quellen (Destatis-CSV in Windows-1252, Eurostat-JSON-stat)
-werden unverändert gespeichert. `_quellen.json` dokumentiert URLs, Abrufzeitpunkt und
-Prüfsummen. Der Ordner ist per `.gitignore` ausgeschlossen.
+Die Originaldateien der Quellen (Destatis-CSV in Windows-1252, Eurostat-JSON-stat,
+Bundesbank- und FRED-CSV, OFZ-Monatsendwerte der Bank of Russia) werden unverändert
+gespeichert.
+
+* `raw/` selbst ist per `.gitignore` ausgeschlossen: automatisch geladene Dateien sind
+  jederzeit reproduzierbar und gehören nicht ins Repository.
+* `raw/manual/` ist **versioniert**. Hier liegen Exporte, die sich nicht per Skript
+  erneuern lassen.
+
+Die **Quellenbibliothek** [`sources.json`](sources.json) ist versioniert und dokumentiert
+je Quelle Titel, Herausgeber, Lizenz, URL, verwendete Datensätze, Dateiname, SHA-256,
+Größe und Abrufzeitpunkt. Sie wird ausschließlich von
+`haushaltssimulator.sources.download_all` geschrieben und auf der Seite **Quellen**
+angezeigt; dort steht im Abschnitt „Quellen & Links“ auch die API-Dokumentation der
+Anbieter.
+
+Die Tabelle 52411-0017 (Unternehmensinsolvenzen, Langreihe) wird nicht automatisch
+geladen. Sie ist als **manuelle Quelle** registriert: Die CSV-Datei wird über
+[GENESIS-Online](https://genesis.destatis.de/datenbank/online/table/52411-0017)
+exportiert und unter `raw/manual/stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv`
+abgelegt (exakter Name in `sources.json`). Der Abrufzeitpunkt ist der Zeitpunkt des
+Exports.
+
+## Rohdaten aus APIs
+
+Zugangsdaten für Datenquellen-APIs stehen in `.env` (nicht versioniert, Vorlage
+`.env.example`): `DESTATIS_API_TOKEN` (GENESIS-Online, Token wird als Header
+`username` gesendet) und `FRED_API_KEY`. Die Clients `destatis_api.py` und
+`fred_api.py` prüfen die Zugänge mit `uv run scripts/check_destatis_api.py` bzw.
+`uv run scripts/check_fred_api.py`. API-Antworten werden unverändert in `raw/`
+abgelegt und über `build.py` aufbereitet. Die App liest ausschließlich `processed/`
+und macht keine eigenen API-Aufrufe.
+
+Im Datenaufbau aktiv ist derzeit `fred_api`: Die US-Rendite
+(`fred_us_10j_rendite.csv`) wird mit `FRED_API_KEY` über die FRED-API geholt und ohne
+Schlüssel über den öffentlichen CSV-Export. Beide Wege erzeugen dieselbe Tabelle.
+Die Destatis-Tabellen nutzen weiterhin die Export-URLs, weil das API-Format
+(`ffcsv` bzw. `csv` mit `transpose`) anders aufgebaut ist als die Exportdateien.
 
 ## Aktualisieren
 
@@ -72,3 +245,11 @@ CSV-Dateien aus `processed/`.
 
 * Eurostat-Daten: © Europäische Union, Lizenz [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 * Destatis-Daten: © Statistisches Bundesamt (Destatis), Lizenz [DL-DE-BY-2.0](https://www.govdata.de/dl-de/by-2-0)
+* Bundesbank-Daten: © Deutsche Bundesbank, Quellenangabe erforderlich
+* FRED/OECD-Daten: OECD-Nutzungsbedingungen, Quellenangabe erforderlich
+* Bank-of-Russia-Daten: Quellenangabe erforderlich
+* EZB-Daten: Europäische Zentralbank, Quellenangabe erforderlich
+* energy-charts.info: CC BY 4.0, Daten von Bundesnetzagentur | SMARD.de
+* EU Weekly Oil Bulletin: © Europäische Union, Quellenangabe erforderlich
+* Big-Mac-Index: The Economist, Quellenangabe erforderlich
+* Bundeshaushalt: © Bundesministerium der Finanzen, Quellenangabe erforderlich

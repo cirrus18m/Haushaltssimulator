@@ -1,0 +1,64 @@
+jahr,verbrauchsklasse,strompreis_eur_kwh,gaspreis_eur_kwh
+2019,1 000 bis unter 2 500 KWh,0.3243,
+2019,15 000 KWh und mehr,0.2368,
+2019,2 500 bis unter 5 000 KWh,0.2877,
+2019,5 000 bis unter 15 000 KWh,0.2643,
+2019,5 600 bis unter 55 600 KWh,,0.0588
+2019,55 600 KWh und mehr,,0.0528
+2019,Insgesamt,0.2992,0.0583
+2019,unter 1 000 KWh,0.4570,
+2019,unter 5 600 KWh,,0.0789
+2020,1 000 bis unter 2 500 KWh,0.3393,
+2020,15 000 KWh und mehr,0.2553,
+2020,2 500 bis unter 5 000 KWh,0.3027,
+2020,5 000 bis unter 15 000 KWh,0.2837,
+2020,5 600 bis unter 55 600 KWh,,0.0606
+2020,55 600 KWh und mehr,,0.0535
+2020,Insgesamt,0.3161,0.0604
+2020,unter 1 000 KWh,0.4608,
+2020,unter 5 600 KWh,,0.0829
+2021,1 000 bis unter 2 500 KWh,0.3556,
+2021,15 000 KWh und mehr,0.2529,
+2021,2 500 bis unter 5 000 KWh,0.3213,
+2021,5 000 bis unter 15 000 KWh,0.2933,
+2021,5 600 bis unter 55 600 KWh,,0.0666
+2021,55 600 KWh und mehr,,0.0589
+2021,Insgesamt,0.3274,0.0658
+2021,unter 1 000 KWh,0.4675,
+2021,unter 5 600 KWh,,0.0867
+2022,1 000 bis unter 2 500 KWh,0.3690,
+2022,15 000 KWh und mehr,0.2810,
+2022,2 500 bis unter 5 000 KWh,0.3317,
+2022,5 000 bis unter 15 000 KWh,0.3016,
+2022,5 600 bis unter 55 600 KWh,,0.0857
+2022,55 600 KWh und mehr,,0.0784
+2022,Insgesamt,0.3421,0.0853
+2022,unter 1 000 KWh,0.4990,
+2022,unter 5 600 KWh,,0.1159
+2023,1 000 bis unter 2 500 KWh,0.4497,
+2023,15 000 KWh und mehr,0.3456,
+2023,2 500 bis unter 5 000 KWh,0.4074,
+2023,5 000 bis unter 15 000 KWh,0.3811,
+2023,5 600 bis unter 55 600 KWh,,0.1195
+2023,55 600 KWh und mehr,,0.1121
+2023,Insgesamt,0.4202,0.1192
+2023,unter 1 000 KWh,0.5761,
+2023,unter 5 600 KWh,,0.1438
+2024,1 000 bis unter 2 500 KWh,0.4430,
+2024,15 000 KWh und mehr,0.3412,
+2024,2 500 bis unter 5 000 KWh,0.3948,
+2024,5 000 bis unter 15 000 KWh,0.3613,
+2024,5 600 bis unter 55 600 KWh,,0.1216
+2024,55 600 KWh und mehr,,0.1080
+2024,Insgesamt,0.4113,0.1206
+2024,unter 1 000 KWh,0.5846,
+2024,unter 5 600 KWh,,0.1567
+2025,1 000 bis unter 2 500 KWh,0.4365,
+2025,15 000 KWh und mehr,0.3275,
+2025,2 500 bis unter 5 000 KWh,0.3852,
+2025,5 000 bis unter 15 000 KWh,0.3455,
+2025,5 600 bis unter 55 600 KWh,,0.1219
+2025,55 600 KWh und mehr,,0.1125
+2025,Insgesamt,0.4023,0.1218
+2025,unter 1 000 KWh,0.5903,
+2025,unter 5 600 KWh,,0.1612

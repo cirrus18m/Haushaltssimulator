@@ -1,0 +1,516 @@
+{
+  "schema_version": 1,
+  "aktualisiert_am": "2026-11-17T22:30:29+00:00",
+  "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
+  "quellen": [
+    {
+      "key": "destatis_schulden_quartal",
+      "titel": "Schulden beim nicht-öffentlichen Bereich: Deutschland, Quartale",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 71311-0001",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/71311-0001_00.csv",
+      "beschreibung": "Destatis 71311-0001: Schulden beim nicht-öffentlichen Bereich, Deutschland, Stichtag zum Quartalsende, Ebenen/Haushalte/Schuldenarten (letzte 10 Quartale)",
+      "datei": "destatis_71311-0001_quartal.csv",
+      "datensaetze": [
+        "schulden_destatis_quartal.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:12+00:00",
+      "sha256": "88d576cf16df000d20cdcb4e882a8898e8e0dcbba42b8a3820e9cb28e7748bbb",
+      "bytes": 7474
+    },
+    {
+      "key": "destatis_schulden_bundeslaender",
+      "titel": "Schulden beim nicht-öffentlichen Bereich: Bundesländer, Quartale",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 71311-0003",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/71311-0003_00.csv",
+      "beschreibung": "Destatis 71311-0003: Schulden beim nicht-öffentlichen Bereich, Bundesländer, Stichtag zum Quartalsende, Ebenen/Haushalte/Schuldenarten (letzte 10 Quartale)",
+      "datei": "destatis_71311-0003_bundeslaender.csv",
+      "datensaetze": [
+        "schulden_destatis_bundeslaender.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:12+00:00",
+      "sha256": "f95b1c7af0421337b6373896a3cf6fe72db81b0728a15ccac11cde7d77a11025",
+      "bytes": 65761
+    },
+    {
+      "key": "destatis_schulden_jahr",
+      "titel": "Schulden beim nicht-öffentlichen Bereich: Deutschland, Jahresreihe",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 71321-0005",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/71321-0005_00.csv",
+      "beschreibung": "Destatis 71321-0005: Schulden beim nicht-öffentlichen Bereich, Deutschland, jährlich ab 31.12.2010, Ebenen/Haushalte/Schuldenarten",
+      "datei": "destatis_71321-0005_jahr.csv",
+      "datensaetze": [
+        "schulden_destatis_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:12+00:00",
+      "sha256": "4981c0b3c8483691df7f8bc6fe42404e17671566c29d0871008294725519e021",
+      "bytes": 9507
+    },
+    {
+      "key": "eurostat_schulden_jahr",
+      "titel": "Maastricht-Schuldenstand: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10dd_edpt1",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&lang=EN&geo=DE&na_item=GD&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10dd_edpt1: Maastricht-Schuldenstand, Deutschland, jährlich, Sektoren S13/S1311/S1312/S1313/S1314, Mio. EUR und % des BIP",
+      "datei": "eurostat_gov_10dd_edpt1.json",
+      "datensaetze": [
+        "schulden_jahresreihe.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:13+00:00",
+      "sha256": "6deaf6eaf9992f97e15caaf794c76bbe46942fdff2689eda4dce88a53790da90",
+      "bytes": 5685
+    },
+    {
+      "key": "eurostat_schulden_quartal",
+      "titel": "Maastricht-Schuldenstand: Deutschland, vierteljährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10q_ggdebt",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10q_ggdebt?format=JSON&lang=EN&geo=DE&na_item=GD&sinceTimePeriod=1999",
+      "beschreibung": "Eurostat gov_10q_ggdebt: Maastricht-Schuldenstand, Deutschland, vierteljährlich, Sektoren S13/S1311/S1312/S1313/S1314, Mio. EUR und % des BIP",
+      "datei": "eurostat_gov_10q_ggdebt.json",
+      "datensaetze": [
+        "schulden_quartalsreihe.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:14+00:00",
+      "sha256": "d1eb76fba883ffc17e31405619a3866d48b05694a461356c92dd0d719f26d898",
+      "bytes": 42964
+    },
+    {
+      "key": "eurostat_bip",
+      "titel": "Bruttoinlandsprodukt: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz nama_10_gdp",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_gdp?format=JSON&lang=EN&geo=DE&na_item=B1GQ&unit=CP_MEUR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat nama_10_gdp: Bruttoinlandsprodukt, Deutschland, jährlich, Mio. EUR",
+      "datei": "eurostat_nama_10_gdp.json",
+      "datensaetze": [
+        "bip_bevoelkerung.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:14+00:00",
+      "sha256": "8ef6f61fb8d4559f691014634cde474dd37461f86d494053e5a0d3127554b329",
+      "bytes": 4143
+    },
+    {
+      "key": "eurostat_bevoelkerung",
+      "titel": "Bevölkerung: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz demo_pjan",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?format=JSON&lang=EN&geo=DE&sex=T&age=TOTAL&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat demo_pjan: Bevölkerung, Deutschland, jährlich, Stichtag 1. Januar",
+      "datei": "eurostat_demo_pjan.json",
+      "datensaetze": [
+        "bip_bevoelkerung.csv"
+      ],
+      "abgerufen_am": "2026-11-16T22:43:14+00:00",
+      "sha256": "09631c810cc3de519861c3d3275c36a922236ca507e85562a50b61608d574387",
+      "bytes": 3798
+    },
+    {
+      "key": "eurostat_haushalt",
+      "titel": "Einnahmen, Ausgaben und Zinsausgaben des Staates: Deutschland, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10a_main",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10a_main?format=JSON&lang=EN&geo=DE&unit=MIO_EUR&sector=S13&sector=S1311&sector=S1312&sector=S1313&sector=S1314&na_item=TR&na_item=TE&na_item=D41PAY&na_item=B9&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10a_main: Gesamteinnahmen (TR), Gesamtausgaben (TE), Zinsausgaben (D41PAY) und Finanzierungssaldo (B9), Deutschland, jährlich ab 1995, Gesamtstaat und Ebenen, Mio. EUR",
+      "datei": "eurostat_gov_10a_main.json",
+      "datensaetze": [
+        "haushalt_jahr.csv",
+        "zinslast_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:46:51+00:00",
+      "sha256": "7e43f43d6f7e9a425aa5f7fb4fb5ad13f738b8fd04497391afcef2701a5c3df3",
+      "bytes": 12591
+    },
+    {
+      "key": "eurostat_zinsvergleich",
+      "titel": "Konvergenzrenditen 10-jähriger Staatsanleihen: Europa, monatlich",
+      "herausgeber": "Eurostat, Datensatz irt_lt_mcby_m",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/irt_lt_mcby_m?format=JSON&lang=EN&int_rt=MCBY&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&sinceTimePeriod=1993",
+      "beschreibung": "Eurostat irt_lt_mcby_m: Renditen 10-jähriger Staatsanleihen nach der Maastricht-Konvergenzmethode, monatlich, EU-Mitgliedstaaten und Vereinigtes Königreich, in Prozent",
+      "datei": "eurostat_irt_lt_mcby_m.json",
+      "datensaetze": [
+        "zins_vergleich.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:46:52+00:00",
+      "sha256": "7b837f3b82f4e952dfa120e516bc4f759631a88c48ad04e8034aad2164e4a1a5",
+      "bytes": 167672
+    },
+    {
+      "key": "eurostat_schulden_laender",
+      "titel": "Maastricht-Schuldenstand: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10dd_edpt1",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&na_item=GD&sector=S13&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10dd_edpt1: Maastricht-Schuldenstand (GD) des Gesamtstaats (S13), jährlich ab 1995, je Land in Mio. EUR und in % des BIP",
+      "datei": "eurostat_gov_10dd_edpt1_laender.json",
+      "datensaetze": [
+        "laender_schulden_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:04+00:00",
+      "sha256": "110e90c46c2506af9b9160c57169cc86f4983ff6c1dd9083adc53980d849181d",
+      "bytes": 38854
+    },
+    {
+      "key": "eurostat_haushalt_laender",
+      "titel": "Einnahmen und Zinsausgaben: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10a_main",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10a_main?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&unit=MIO_EUR&sector=S13&na_item=D41PAY&na_item=TR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10a_main: Gesamteinnahmen (TR) und Zinsausgaben (D41PAY) des Gesamtstaats (S13), jährlich ab 1995, je Land in Mio. EUR",
+      "datei": "eurostat_gov_10a_main_laender.json",
+      "datensaetze": [
+        "laender_haushalt_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:04+00:00",
+      "sha256": "33331d01b5807d074dea87e70a11dda6cede0248a5784da2f74d8739076efd4e",
+      "bytes": 27432
+    },
+    {
+      "key": "eurostat_bip_laender",
+      "titel": "Bruttoinlandsprodukt: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz nama_10_gdp",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_gdp?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&na_item=B1GQ&unit=CP_MEUR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat nama_10_gdp: Bruttoinlandsprodukt (B1GQ) zu jeweiligen Preisen, jährlich ab 1995, je Land in Mio. EUR",
+      "datei": "eurostat_nama_10_gdp_laender.json",
+      "datensaetze": [
+        "laender_haushalt_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:04+00:00",
+      "sha256": "c4fdbba1a8e4b1a443e980742fee1765bd67bd81dd5faf111da30663e6d876ac",
+      "bytes": 16643
+    },
+    {
+      "key": "eurostat_bevoelkerung_laender",
+      "titel": "Bevölkerung: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz demo_pjan",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&sex=T&age=TOTAL&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat demo_pjan: Bevölkerung am 1. Januar, jährlich ab 1995, je Land",
+      "datei": "eurostat_demo_pjan_laender.json",
+      "datensaetze": [
+        "laender_haushalt_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:05+00:00",
+      "sha256": "a68bd1606ad4aeffad0c26dda3f9e59bc97f0b037ea90b03188153a1405300dd",
+      "bytes": 16725
+    },
+    {
+      "key": "eurostat_inflation_laender",
+      "titel": "Harmonisierter Verbraucherpreisindex: europäische Länder, monatlich",
+      "herausgeber": "Eurostat, Datensatz prc_hicp_manr",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_manr?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&coicop=CP00&unit=RCH_A&sinceTimePeriod=1997",
+      "beschreibung": "Eurostat prc_hicp_manr: Inflationsrate (HVPI, alle Waren und Dienstleistungen) als Veränderung gegenüber dem Vorjahr, monatlich ab 1997, je Land in Prozent",
+      "datei": "eurostat_prc_hicp_manr.json",
+      "datensaetze": [
+        "laender_inflation_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:05+00:00",
+      "sha256": "2352422549a36868fd49954074fa6f2342496762dbf38d369c1c44803ead4188",
+      "bytes": 123622
+    },
+    {
+      "key": "bundesbank_rendite_10j",
+      "titel": "Tagesrendite der aktuellen 10-jährigen Bundesanleihe",
+      "herausgeber": "Deutsche Bundesbank, Zeitreihe BBSSY.D.REN.EUR.A630.000000WT1010.A",
+      "lizenz": "Deutsche Bundesbank, Quellenangabe erforderlich",
+      "url": "https://api.statistiken.bundesbank.de/rest/download/BBSSY/D.REN.EUR.A630.000000WT1010.A?format=csv&lang=en",
+      "beschreibung": "Deutsche Bundesbank BBSSY.D.REN.EUR.A630.000000WT1010.A: Daily yield of the current 10 year federal bond, Tageswerte in Prozent, ab Oktober 2001",
+      "datei": "bundesbank_10j_rendite.csv",
+      "datensaetze": [
+        "zins_bund_10j.csv",
+        "zinslast_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:46:53+00:00",
+      "sha256": "ea55c84c312ddfa7393365b9954a2174ce8b301e9074ea4ca24ca67c9d64aec7",
+      "bytes": 200076
+    },
+    {
+      "key": "fred_us_zins",
+      "titel": "Langfristige Staatsanleiherendite: Vereinigte Staaten, monatlich",
+      "herausgeber": "OECD (MEI) über Federal Reserve Bank of St. Louis, Serie IRLTLT01USM156N",
+      "lizenz": "OECD-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IRLTLT01USM156N",
+      "beschreibung": "FRED IRLTLT01USM156N: Long-Term Government Bond Yields, 10-year benchmark, Vereinigte Staaten, monatlich, in Prozent. Abruf über die FRED-API, ohne API-Key über den öffentlichen CSV-Export",
+      "datei": "fred_us_10j_rendite.csv",
+      "datensaetze": [
+        "zins_vergleich.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:01:02+00:00",
+      "sha256": "f69f41a2300ec6c1f1cd1015a413ee41ced9398c854427fc0ff7033e49e7098b",
+      "bytes": 14115
+    },
+    {
+      "key": "cbr_ru_zins",
+      "titel": "Zero-Coupon-Yield-Curve: Russische Staatsanleihen (OFZ)",
+      "herausgeber": "Bank of Russia, Russian Government Bond Zero Coupon Yield Curve",
+      "lizenz": "Bank of Russia, Quellenangabe erforderlich",
+      "url": "https://www.cbr.ru/eng/hd_base/zcyc_params/zcyc/?DateTo=TT.MM.JJJJ",
+      "beschreibung": "Bank of Russia: 10-jährige OFZ-Rendite aus der Zero-Coupon-Yield-Curve, Monatsendwert (letzter Handelstag), in Prozent, ab 2015",
+      "datei": "cbr_ru_10j_rendite.csv",
+      "datensaetze": [
+        "zins_vergleich.csv"
+      ],
+      "abgerufen_am": "2026-11-17T17:51:44+00:00",
+      "sha256": "76ede1349ee452871ba9c561160e2f609743e1993d003623802d356984fe42a3",
+      "bytes": 2283
+    },
+    {
+      "key": "destatis_insolvenzen",
+      "titel": "Insolvenzverfahren: Deutschland, Monate",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0002",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/52411-0002_00.csv",
+      "beschreibung": "Destatis 52411-0002: Beantragte Insolvenzverfahren und voraussichtliche Forderungen, Deutschland, Monate, Verfahrensstatus",
+      "datei": "destatis_52411-0002_insolvenzen.csv",
+      "datensaetze": [
+        "insolvenzen_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:24+00:00",
+      "sha256": "e4326a1b37c998545d46a8551c78c0231d6ef95d08888892c3dd252a64f06a43",
+      "bytes": 2376
+    },
+    {
+      "key": "destatis_insolvenzen_unternehmen",
+      "titel": "Insolvenzverfahren von Unternehmen: Deutschland, Monate",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0011",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/52411-0011_00.csv",
+      "beschreibung": "Destatis 52411-0011: Insolvenzverfahren von Unternehmen, voraussichtliche Forderungen und betroffene Arbeitnehmer, Deutschland, Monate, Rechtsformen",
+      "datei": "destatis_52411-0011_insolvenzen_unternehmen.csv",
+      "datensaetze": [
+        "insolvenzen_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:24+00:00",
+      "sha256": "13cc53d1b08e8bea539f9e87160814c32bb580d90b5a8ff7ce6e76dd670865b3",
+      "bytes": 7885
+    },
+    {
+      "key": "destatis_insolvenzen_zeitreihe",
+      "titel": "Unternehmensinsolvenzen: Deutschland, Monate, Größenklassen (Langreihe)",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0017",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/datenbank/online/table/52411-0017",
+      "beschreibung": "Manueller Export aus GENESIS-Online, Tabelle 52411-0017: Beantragte Insolvenzverfahren von Unternehmen nach Unternehmensgrößenklassen, Deutschland, Monate 2003 bis 2026",
+      "datei": "manual/stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv",
+      "datensaetze": [
+        "insolvenzen_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T20:03:40+00:00",
+      "sha256": "315970524d56e911ce581398df906b46ad2aff9a2d421b518115675e818ec4a6",
+      "bytes": 107535
+    },
+    {
+      "key": "ecb_geldmenge",
+      "titel": "Geldmenge M3: Euro-Raum, monatlich",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz BSI",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/BSI/M.U2.Y.V.M30.X.I.U2.2300.Z01.E?format=csvdata&startPeriod=1995",
+      "beschreibung": "EZB BSI: Geldmenge M3, Index Dec10 = 100, arbeitstäglich und saisonbereinigt, Euro-Raum (veränderte Zusammensetzung), monatlich ab 1995",
+      "datei": "ecb_geldmenge_m3.csv",
+      "datensaetze": [
+        "geldmenge_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:34+00:00",
+      "sha256": "4f0bbe23dea20554d2d79d00e1a9f6b9b547a5097d155f315dd0cee2ac159d24",
+      "bytes": 194458
+    },
+    {
+      "key": "ecb_hicp",
+      "titel": "Harmonisierter Verbraucherpreisindex: Deutschland und Euro-Raum",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz ICP",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/ICP/M.DE+U2.N.000000.4.ANR?format=csvdata&startPeriod=1997",
+      "beschreibung": "EZB ICP: HVPI-Gesamtindex, Veränderung gegenüber dem Vorjahr in Prozent, Deutschland und Euro-Raum, monatlich ab 1997",
+      "datei": "ecb_hicp_de_ea.csv",
+      "datensaetze": [
+        "kaufkraft_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:40+00:00",
+      "sha256": "6c7d7dccf81f946f7a6cb157ee19720a2f62045418e302768b5ba00a9121450b",
+      "bytes": 188509
+    },
+    {
+      "key": "destatis_strompreise",
+      "titel": "Strompreise für Haushalte: Deutschland, Jahre",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 61243-0002",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/61243-0002_00.csv",
+      "beschreibung": "Destatis 61243-0002: Durchschnittspreise für Strom, Haushalte, Jahre, Jahresverbrauchsklassen und Preisbestandteile, EUR/kWh",
+      "datei": "destatis_61243-0002_strompreise.csv",
+      "datensaetze": [
+        "energiepreise_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:03:23+00:00",
+      "sha256": "0a4a303603d3ae72538b74440c034e7cd38a8404457b4dd98d70f3d85ed1f4ee",
+      "bytes": 2395
+    },
+    {
+      "key": "destatis_gaspreise",
+      "titel": "Erdgaspreise für Haushalte: Deutschland, Jahre",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 61243-0011",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/61243-0011_00.csv",
+      "beschreibung": "Destatis 61243-0011: Durchschnittspreise für Erdgas, Haushalte, Jahre, Jahresverbrauchsklassen und Preisbestandteile, EUR/kWh",
+      "datei": "destatis_61243-0011_gaspreise.csv",
+      "datensaetze": [
+        "energiepreise_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:03:23+00:00",
+      "sha256": "445829f1f77f2f59bcad262c87e62459fe027f99456d9ebf84ea3418ed5895b2",
+      "bytes": 1671
+    },
+    {
+      "key": "energy_charts_strompreis",
+      "titel": "Börsenstrompreis Day-Ahead: Gebotszone Deutschland/Luxemburg",
+      "herausgeber": "energy-charts.info (Fraunhofer ISE), Daten von Bundesnetzagentur | SMARD.de",
+      "lizenz": "CC BY 4.0",
+      "url": "https://api.energy-charts.info/price?bzn=DE-LU&start=JJJJ-MM-TT&end=JJJJ-MM-TT",
+      "beschreibung": "energy-charts.info: Day-Ahead-Preise der Gebotszone DE-LU, stündlich, EUR/MWh; die App bildet Tagesmittelwerte der letzten sieben Jahre",
+      "datei": "energy_charts_day_ahead.json",
+      "datensaetze": [
+        "strom_boerse_tag.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:47+00:00",
+      "sha256": "a8302f2fc13e30d9e007c1a9e799b11ac146ff5c2231de0546fdb4892c92ed15",
+      "bytes": 1703772
+    },
+    {
+      "key": "oil_bulletin",
+      "titel": "Wöchentliche Kraftstoffpreise in der EU",
+      "herausgeber": "Europäische Kommission, Weekly Oil Bulletin, Preise mit Steuern",
+      "lizenz": "© Europäische Union, Quellenangabe erforderlich",
+      "url": "https://energy.ec.europa.eu/document/download/906e60ca-8b6a-44e7-8589-652854d2fd3f_en?filename=Weekly_Oil_Bulletin_Prices_History_maticni_4web.xlsx",
+      "beschreibung": "EU Weekly Oil Bulletin: Verbraucherpreise für Superbenzin (Euro 95) und Diesel je Land, wöchentlich, mit Steuern, in EUR je 1000 Liter",
+      "datei": "oil_bulletin_preise.xlsx",
+      "datensaetze": [
+        "kraftstoffpreise.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:48+00:00",
+      "sha256": "7e14b5edc46bb654b5bec6a66a70f95a187ca7a293a002e1b40b6eef9d0cd1e3",
+      "bytes": 4506196
+    },
+    {
+      "key": "big_mac",
+      "titel": "Big-Mac-Index: Preise und Abweichungen je Land",
+      "herausgeber": "The Economist, big-mac-data",
+      "lizenz": "The Economist, Quellenangabe erforderlich",
+      "url": "https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-full-index.csv",
+      "beschreibung": "The Economist: Big-Mac-Index, Preis eines Big Mac in US-Dollar und Abweichung vom US-Preis, halbjährlich je Land",
+      "datei": "big_mac_index.csv",
+      "datensaetze": [
+        "big_mac.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:48+00:00",
+      "sha256": "faf0bc0dd4e01b15d6c647c6229dbba0d992f073dc7bbbe9bd37a89d3cf85789",
+      "bytes": 336855
+    },
+    {
+      "key": "eurostat_eigentumsquote",
+      "titel": "Eigentums- und Mietquote der Haushalte: Europa, jährlich",
+      "herausgeber": "Eurostat, Datensatz ilc_lvho02",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_lvho02?format=JSON&lang=EN&unit=PC&rskpovth=TOTAL&hhcomp=TOTAL&tenure=OWN&tenure=RENT&sinceTimePeriod=2010&geo=DE&geo=FR&geo=IT&geo=ES&geo=NL&geo=AT&geo=PL&geo=SE&geo=DK&geo=FI&geo=EU27_2020",
+      "beschreibung": "Eurostat ilc_lvho02: Verteilung der Bevölkerung nach Wohnstatus (Eigentum, Miete), Anteile in Prozent, ausgewählte EU-Länder und EU-27",
+      "datei": "eurostat_ilc_lvho02.json",
+      "datensaetze": [
+        "eigentumsquote.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:48+00:00",
+      "sha256": "ba040dd409130e01ed488ca61302964c694f580a5fff03dc4b7ebf93722fbea7",
+      "bytes": 8189
+    },
+    {
+      "key": "bmf_zinsausgaben",
+      "titel": "Zinsausgaben des Bundes am Kreditmarkt",
+      "herausgeber": "Bundesministerium der Finanzen, Bundeshaushalt",
+      "lizenz": "© Bundesministerium der Finanzen, Quellenangabe erforderlich",
+      "url": "https://www.bundeshaushalt.de/Content/DE/Diagramme/Dashboard-Startseite/zinsausgaben-kreditmarkt-csv.csv?__blob=publicationFile&v=10",
+      "beschreibung": "BMF: Zinsausgaben am Kreditmarkt in Mrd. EUR je Haushaltsjahr (Ist, Soll und Regierungsentwurf)",
+      "datei": "bmf_zinsausgaben_kreditmarkt.csv",
+      "datensaetze": [
+        "bund_zinsausgaben.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:49+00:00",
+      "sha256": "df99772ca0ffdee9e3b2323ebdf97d2abd797d3c6765842e3d2f2c6aee29e550",
+      "bytes": 129
+    }
+  ],
+  "anbieter": [
+    {
+      "anbieter": "Statistisches Bundesamt (Destatis)",
+      "daten": "Insolvenzverfahren, Preise für Strom und Gas",
+      "portal": "https://www-genesis.destatis.de/datenbank/online",
+      "api": "https://genesis.destatis.de/genesisWS/rest/2020",
+      "zugang": "kostenlos, API-Token nach Registrierung"
+    },
+    {
+      "anbieter": "Eurostat",
+      "daten": "Haushalte, Schuldenquote, Zinsvergleich, Eigentumsquote",
+      "portal": "https://ec.europa.eu/eurostat/databrowser/",
+      "api": "https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-introduction",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Deutsche Bundesbank",
+      "daten": "Rendite der 10-jährigen Bundesanleihe",
+      "portal": "https://www.bundesbank.de/de/statistiken",
+      "api": "https://api.statistiken.bundesbank.de/",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
+      "daten": "US-Staatsanleiherendite",
+      "portal": "https://fred.stlouisfed.org/",
+      "api": "https://fred.stlouisfed.org/docs/api/fred/",
+      "zugang": "kostenlos, API-Key erforderlich"
+    },
+    {
+      "anbieter": "EZB – Data Portal",
+      "daten": "Geldmenge M3, Harmonisierter Verbraucherpreisindex",
+      "portal": "https://data.ecb.europa.eu/",
+      "api": "https://data.ecb.europa.eu/help/api/overview",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Bank of Russia",
+      "daten": "Rendite russischer Staatsanleihen (OFZ)",
+      "portal": "https://www.cbr.ru/eng/",
+      "api": "https://www.cbr.ru/eng/hd_base/zcyc_params/",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "energy-charts.info (Fraunhofer ISE)",
+      "daten": "Day-Ahead-Strompreise",
+      "portal": "https://energy-charts.info/",
+      "api": "https://api.energy-charts.info/",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Europäische Kommission – Weekly Oil Bulletin",
+      "daten": "Kraftstoffpreise",
+      "portal": "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en",
+      "api": "",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "The Economist – Big Mac Index",
+      "daten": "Kaufkraftvergleich über Burger-Preise",
+      "portal": "https://github.com/TheEconomist/big-mac-data",
+      "api": "",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Bundesministerium der Finanzen",
+      "daten": "Zinsausgaben des Bundes am Kreditmarkt",
+      "portal": "https://www.bundeshaushalt.de/",
+      "api": "",
+      "zugang": "kostenlos, ohne API-Key"
+    }
+  ]
+}

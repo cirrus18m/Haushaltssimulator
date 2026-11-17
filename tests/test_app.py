@@ -42,6 +42,67 @@ def test_laender_quarterly_has_sixteen_states() -> None:
     assert frame["stichtag"].nunique() >= 4
 
 
+def test_interest_burden_links_debt_revenue_and_yield() -> None:
+    frame = dataset.load_interest_burden().dropna(subset=["rendite_pct"])
+    latest = frame.iloc[-1]
+    expected = latest["schulden_mio_eur"] * latest["rendite_pct"] / 100
+    # Die gespeicherte Rendite ist auf zwei Nachkommastellen gerundet.
+    tolerance = latest["schulden_mio_eur"] * 0.0001
+    assert latest["zins_theoretisch_mio_eur"] == pytest.approx(expected, abs=tolerance)
+    assert 0 < latest["zins_quote_einnahmen_pct"] < 20
+    assert 0 < latest["zins_quote_bip_pct"] < 10
+
+
+def test_insolvencies_cover_total_and_companies() -> None:
+    frame = dataset.load_insolvencies()
+    assert {"verfahren_gesamt", "verfahren_unternehmen"} <= set(frame.columns)
+    assert frame["monat"].is_monotonic_increasing
+    assert frame["monat"].min() <= "2003-01"
+    assert frame["verfahren_unternehmen"].notna().sum() >= 250
+    assert frame["verfahren_unternehmen"].max() > 0
+
+
+def test_energy_prices_cover_electricity_and_gas() -> None:
+    frame = dataset.load_energy_prices()
+    gesamt = frame[frame["verbrauchsklasse"] == "Insgesamt"]
+    assert gesamt["strompreis_eur_kwh"].between(0.1, 1.0).all()
+    assert gesamt["gaspreis_eur_kwh"].between(0.01, 0.5).all()
+
+
+def test_fuel_prices_have_european_countries() -> None:
+    frame = dataset.load_fuel_prices()
+    assert frame["land"].nunique() >= 20
+    assert frame["preis_eur_l"].between(0.5, 3.5).all()
+
+
+def test_big_mac_and_homeownership_cover_germany() -> None:
+    big_mac = dataset.load_big_mac()
+    assert "Euro-Raum" in set(big_mac["land"])
+    eigentum = dataset.load_homeownership()
+    assert eigentum["eigentumsquote_pct"].between(0, 100).all()
+
+
+def test_bund_interest_has_plan_values() -> None:
+    frame = dataset.load_bund_interest()
+    assert {"Ist", "Soll"} & set(frame["art"])
+    assert (frame["zinsausgaben_mrd_eur"] > 0).all()
+
+
+def test_international_yields_cover_germany_usa_and_russia() -> None:
+    frame = dataset.load_international_yields()
+    assert {"Deutschland", "Vereinigte Staaten", "Russland"} <= set(frame["land"])
+    assert frame["monat"].max() >= "2026-01"
+    assert frame["rendite_pct"].between(-5, 100).all()
+
+
+def test_app_does_not_import_api_clients() -> None:
+    """Die Streamlit-App liest nur aufbereitete Daten und macht keine API-Aufrufe."""
+    for path in (paths.PROJECT_ROOT / "app").rglob("*.py"):
+        text = path.read_text(encoding="utf-8")
+        assert "destatis_api" not in text, path
+        assert "urllib.request" not in text, path
+
+
 @pytest.mark.parametrize(
     "script",
     [
@@ -52,11 +113,20 @@ def test_laender_quarterly_has_sixteen_states() -> None:
         "pages/3_Bundeslaender.py",
         "pages/4_Analysen.py",
         "pages/5_Szenario.py",
+        "pages/6_Haushalt_und_Zinsen.py",
+        "pages/7_Zinsvergleich.py",
+        "pages/8_Quellen.py",
+        "pages/9_Insolvenzen.py",
+        "pages/10_Geld_und_Kaufkraft.py",
+        "pages/11_Energiepreise.py",
+        "pages/12_Preisniveau_und_Wohnen.py",
+        "pages/13_Bund_und_Schuldendienst.py",
     ],
 )
 def test_streamlit_pages_run_without_exception(script: str) -> None:
     from streamlit.testing.v1 import AppTest
 
-    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=60)
+    # Großzügiges Timeout: Die Seiten rendern Diagramme nach SVG und sind unter Last langsam.
+    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=180)
     test.run()
     assert not test.exception, [str(exception.value) for exception in test.exception]

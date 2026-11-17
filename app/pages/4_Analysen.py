@@ -64,7 +64,7 @@ with left:
     figure.update_yaxes(
         title_text="% des BIP", range=[0, max(90, total["schuldenquote_pct"].max() + 10)]
     )
-    st.plotly_chart(ui.style(figure, height=400, legend=False), width="stretch")
+    ui.plot(figure, filename="analysen_schuldenquote", height=400, legend=False)
     peak_quote = ui.format_number(peak["schuldenquote_pct"], 1, " %")
     trough_quote = ui.format_number(trough["schuldenquote_pct"], 1, " %")
     st.caption(
@@ -100,7 +100,7 @@ with right:
     figure.add_vline(x=0, line={"color": "#999", "width": 1})
     figure.update_xaxes(title_text="BIP-Wachstum (%)")
     figure.update_yaxes(title_text="Schuldenwachstum (%)")
-    st.plotly_chart(ui.style(figure, height=400, legend=False), width="stretch")
+    ui.plot(figure, filename="analysen_wachstum", height=400, legend=False)
 
 st.divider()
 st.subheader("Schuldenstand je Einwohner:in")
@@ -127,7 +127,7 @@ figure.add_trace(
 )
 figure.update_yaxes(title_text="€ je Einwohner:in", secondary_y=False)
 figure.update_yaxes(title_text="% des BIP", range=[40, 90], dtick=10, secondary_y=True)
-st.plotly_chart(ui.style(figure, height=380), width="stretch")
+ui.plot(figure, filename="analysen_je_einwohner", height=380)
 st.caption(
     "Bevölkerung jeweils zum Jahresbeginn (Eurostat demo_pjan), Schuldenstand zum Jahresende."
 )
