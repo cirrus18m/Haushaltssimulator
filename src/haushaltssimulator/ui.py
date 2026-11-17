@@ -156,6 +156,21 @@ def bund_interest() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def laender_debt() -> pd.DataFrame:
+    return dataset.load_laender_debt()
+
+
+@st.cache_data(show_spinner=False)
+def laender_budget() -> pd.DataFrame:
+    return dataset.load_laender_budget()
+
+
+@st.cache_data(show_spinner=False)
+def laender_inflation() -> pd.DataFrame:
+    return dataset.load_laender_inflation()
+
+
+@st.cache_data(show_spinner=False)
 def sources_library() -> dict:
     """Quellenbibliothek mit URLs, Lizenzen, Prüfsummen und Abrufzeitpunkten."""
     return sources.read_library()

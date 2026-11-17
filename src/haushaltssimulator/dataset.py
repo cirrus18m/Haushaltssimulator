@@ -27,6 +27,9 @@ FUEL_PRICES = "kraftstoffpreise.csv"
 BIG_MAC = "big_mac.csv"
 HOMEOWNERSHIP = "eigentumsquote.csv"
 BUND_INTEREST = "bund_zinsausgaben.csv"
+LAENDER_DEBT = "laender_schulden_jahr.csv"
+LAENDER_BUDGET = "laender_haushalt_jahr.csv"
+LAENDER_INFLATION = "laender_inflation_monat.csv"
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -49,6 +52,9 @@ DATASET_LABELS = {
     BIG_MAC: "Big-Mac-Index je Land",
     HOMEOWNERSHIP: "Eigentums- und Mietquote in Europa",
     BUND_INTEREST: "Zinsausgaben des Bundes am Kreditmarkt",
+    LAENDER_DEBT: "Schuldenstand und Schuldenquote der europäischen Länder",
+    LAENDER_BUDGET: "Einnahmen und Zinsausgaben der europäischen Länder",
+    LAENDER_INFLATION: "Inflationsraten der europäischen Länder (HVPI)",
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -164,6 +170,21 @@ def load_big_mac(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 def load_homeownership(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     """Eigentums- und Mietquote der Haushalte je Land und Jahr."""
     return _read(HOMEOWNERSHIP, processed_dir)
+
+
+def load_laender_debt(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Maastricht-Schuldenstand und Schuldenquote je europäischem Land."""
+    return _read(LAENDER_DEBT, processed_dir)
+
+
+def load_laender_budget(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Einnahmen, Zinsausgaben und Quoten je europäischem Land."""
+    return _read(LAENDER_BUDGET, processed_dir)
+
+
+def load_laender_inflation(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Monatliche Inflationsrate (HVPI) je europäischem Land."""
+    return _read(LAENDER_INFLATION, processed_dir)
 
 
 def load_bund_interest(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:

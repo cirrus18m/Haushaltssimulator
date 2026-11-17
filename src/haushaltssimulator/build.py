@@ -60,6 +60,8 @@ MONATSNAMEN = {
     "Dezember": 12,
 }
 
+LAENDER_CODES = tuple(code for code, _ in laender.EUROPA_LAENDER)
+
 HOUSEHOLD_ITEMS = {
     "TR": "einnahmen_mio_eur",
     "TE": "ausgaben_mio_eur",
@@ -257,6 +259,98 @@ def build_bund_yield(raw_dir: Path) -> pd.DataFrame:
     frame["jahr"] = frame["datum"].dt.year
     frame["monat"] = frame["datum"].dt.strftime("%Y-%m")
     return frame[["datum", "jahr", "monat", "rendite_pct"]]
+
+
+def _laender_eurostat(raw_dir: Path, filename: str, value_column: str) -> pd.DataFrame:
+    """Liest eine Eurostat-Tabelle mit Länderdimension und ergänzt deutsche Namen."""
+    frame = eurostat.jsonstat_to_frame(_load_json(raw_dir, filename))
+    frame = frame[frame["geo"].isin(LAENDER_CODES)].copy()
+    frame["land"] = frame["geo"].map(laender.LAND_NAMEN)
+    return frame.rename(columns={"value": value_column})
+
+
+def _laender_gdp(raw_dir: Path) -> pd.DataFrame:
+    """BIP je Land und Jahr in Mio. EUR."""
+    frame = _laender_eurostat(raw_dir, "eurostat_nama_10_gdp_laender.json", "bip_mio_eur")
+    frame["jahr"] = frame["time"].astype(int)
+    return frame[["jahr", "geo", "bip_mio_eur"]].dropna(subset=["bip_mio_eur"])
+
+
+def _laender_population(raw_dir: Path) -> pd.DataFrame:
+    """Bevölkerung je Land und Jahr."""
+    frame = _laender_eurostat(raw_dir, "eurostat_demo_pjan_laender.json", "bevoelkerung")
+    frame["jahr"] = frame["time"].astype(int)
+    return frame[["jahr", "geo", "bevoelkerung"]].dropna(subset=["bevoelkerung"])
+
+
+def build_laender_debt(raw_dir: Path) -> pd.DataFrame:
+    """Maastricht-Schuldenstand je europäischem Land, jährlich (Eurostat)."""
+    frame = _laender_eurostat(raw_dir, "eurostat_gov_10dd_edpt1_laender.json", "value")
+    wide = frame.pivot_table(
+        index=["time", "geo", "land"], columns="unit", values="value", aggfunc="first"
+    ).reset_index()
+    for column in ("MIO_EUR", "PC_GDP"):
+        if column not in wide.columns:
+            raise ValueError(f"Einheit {column} fehlt in gov_10dd_edpt1 (Länder)")
+    wide = wide.rename(
+        columns={
+            "time": "jahr",
+            "MIO_EUR": "schulden_mio_eur",
+            "PC_GDP": "schuldenquote_pct",
+        }
+    )
+    wide["jahr"] = wide["jahr"].astype(int)
+    columns = ["jahr", "geo", "land", "schulden_mio_eur", "schuldenquote_pct"]
+    return wide[columns].sort_values(["jahr", "land"]).reset_index(drop=True)
+
+
+def build_laender_budget(raw_dir: Path) -> pd.DataFrame:
+    """Einnahmen, Zinsausgaben und abgeleitete Quoten je europäischem Land."""
+    frame = _laender_eurostat(raw_dir, "eurostat_gov_10a_main_laender.json", "value")
+    wide = frame.pivot_table(
+        index=["time", "geo", "land"], columns="na_item", values="value", aggfunc="first"
+    ).reset_index()
+    wide = wide.rename(
+        columns={
+            "time": "jahr",
+            "D41PAY": "zinsausgaben_mio_eur",
+            "TR": "einnahmen_mio_eur",
+        }
+    )
+    wide["jahr"] = wide["jahr"].astype(int)
+    wide = wide.merge(_laender_gdp(raw_dir), on=["jahr", "geo"], how="left")
+    wide = wide.merge(_laender_population(raw_dir), on=["jahr", "geo"], how="left")
+
+    wide["zins_quote_bip_pct"] = wide["zinsausgaben_mio_eur"] / wide["bip_mio_eur"] * 100
+    wide["zins_quote_einnahmen_pct"] = (
+        wide["zinsausgaben_mio_eur"] / wide["einnahmen_mio_eur"] * 100
+    )
+    wide["zins_je_einwohner_eur"] = wide["zinsausgaben_mio_eur"] * 1_000_000 / wide["bevoelkerung"]
+    columns = [
+        "jahr",
+        "geo",
+        "land",
+        "einnahmen_mio_eur",
+        "zinsausgaben_mio_eur",
+        "bip_mio_eur",
+        "bevoelkerung",
+        "zins_quote_bip_pct",
+        "zins_quote_einnahmen_pct",
+        "zins_je_einwohner_eur",
+    ]
+    return wide[columns].sort_values(["jahr", "land"]).reset_index(drop=True)
+
+
+def build_laender_inflation(raw_dir: Path) -> pd.DataFrame:
+    """Monatliche HVPI-Inflationsrate je europäischem Land (Eurostat)."""
+    frame = _laender_eurostat(raw_dir, "eurostat_prc_hicp_manr.json", "inflation_pct")
+    frame = frame.rename(columns={"time": "monat"})
+    return (
+        frame[["monat", "geo", "land", "inflation_pct"]]
+        .dropna(subset=["inflation_pct"])
+        .sort_values(["monat", "land"])
+        .reset_index(drop=True)
+    )
 
 
 def build_international_yields(raw_dir: Path) -> pd.DataFrame:
@@ -525,6 +619,9 @@ BUILDERS = {
     "big_mac.csv": build_big_mac,
     "eigentumsquote.csv": build_homeownership,
     "bund_zinsausgaben.csv": build_bmf_interest,
+    "laender_schulden_jahr.csv": build_laender_debt,
+    "laender_haushalt_jahr.csv": build_laender_budget,
+    "laender_inflation_monat.csv": build_laender_inflation,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -540,6 +637,9 @@ FLOAT_FORMATS = {
     "big_mac.csv": "%.2f",
     "eigentumsquote.csv": "%.1f",
     "bund_zinsausgaben.csv": "%.2f",
+    "laender_schulden_jahr.csv": "%.1f",
+    "laender_haushalt_jahr.csv": "%.1f",
+    "laender_inflation_monat.csv": "%.2f",
 }
 
 

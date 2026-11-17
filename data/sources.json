@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-17T22:21:57+00:00",
+  "aktualisiert_am": "2026-11-17T22:30:29+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -138,6 +138,81 @@
       "abgerufen_am": "2026-11-17T17:46:52+00:00",
       "sha256": "7b837f3b82f4e952dfa120e516bc4f759631a88c48ad04e8034aad2164e4a1a5",
       "bytes": 167672
+    },
+    {
+      "key": "eurostat_schulden_laender",
+      "titel": "Maastricht-Schuldenstand: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10dd_edpt1",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&na_item=GD&sector=S13&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10dd_edpt1: Maastricht-Schuldenstand (GD) des Gesamtstaats (S13), jährlich ab 1995, je Land in Mio. EUR und in % des BIP",
+      "datei": "eurostat_gov_10dd_edpt1_laender.json",
+      "datensaetze": [
+        "laender_schulden_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:04+00:00",
+      "sha256": "110e90c46c2506af9b9160c57169cc86f4983ff6c1dd9083adc53980d849181d",
+      "bytes": 38854
+    },
+    {
+      "key": "eurostat_haushalt_laender",
+      "titel": "Einnahmen und Zinsausgaben: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz gov_10a_main",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10a_main?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&unit=MIO_EUR&sector=S13&na_item=D41PAY&na_item=TR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat gov_10a_main: Gesamteinnahmen (TR) und Zinsausgaben (D41PAY) des Gesamtstaats (S13), jährlich ab 1995, je Land in Mio. EUR",
+      "datei": "eurostat_gov_10a_main_laender.json",
+      "datensaetze": [
+        "laender_haushalt_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:04+00:00",
+      "sha256": "33331d01b5807d074dea87e70a11dda6cede0248a5784da2f74d8739076efd4e",
+      "bytes": 27432
+    },
+    {
+      "key": "eurostat_bip_laender",
+      "titel": "Bruttoinlandsprodukt: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz nama_10_gdp",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_gdp?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&na_item=B1GQ&unit=CP_MEUR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat nama_10_gdp: Bruttoinlandsprodukt (B1GQ) zu jeweiligen Preisen, jährlich ab 1995, je Land in Mio. EUR",
+      "datei": "eurostat_nama_10_gdp_laender.json",
+      "datensaetze": [
+        "laender_haushalt_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:04+00:00",
+      "sha256": "c4fdbba1a8e4b1a443e980742fee1765bd67bd81dd5faf111da30663e6d876ac",
+      "bytes": 16643
+    },
+    {
+      "key": "eurostat_bevoelkerung_laender",
+      "titel": "Bevölkerung: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz demo_pjan",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&sex=T&age=TOTAL&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat demo_pjan: Bevölkerung am 1. Januar, jährlich ab 1995, je Land",
+      "datei": "eurostat_demo_pjan_laender.json",
+      "datensaetze": [
+        "laender_haushalt_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:05+00:00",
+      "sha256": "a68bd1606ad4aeffad0c26dda3f9e59bc97f0b037ea90b03188153a1405300dd",
+      "bytes": 16725
+    },
+    {
+      "key": "eurostat_inflation_laender",
+      "titel": "Harmonisierter Verbraucherpreisindex: europäische Länder, monatlich",
+      "herausgeber": "Eurostat, Datensatz prc_hicp_manr",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_manr?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&coicop=CP00&unit=RCH_A&sinceTimePeriod=1997",
+      "beschreibung": "Eurostat prc_hicp_manr: Inflationsrate (HVPI, alle Waren und Dienstleistungen) als Veränderung gegenüber dem Vorjahr, monatlich ab 1997, je Land in Prozent",
+      "datei": "eurostat_prc_hicp_manr.json",
+      "datensaetze": [
+        "laender_inflation_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T22:30:05+00:00",
+      "sha256": "2352422549a36868fd49954074fa6f2342496762dbf38d369c1c44803ead4188",
+      "bytes": 123622
     },
     {
       "key": "bundesbank_rendite_10j",

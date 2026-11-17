@@ -93,8 +93,25 @@ Ziel: Staatsanleiherenditen im europäischen und internationalen Vergleich.
 * ✅ Seite **Zinsvergleich**: Länderauswahl, Zeitraumauswahl, Verlauf der Renditen,
   Tabelle der letzten Werte inklusive Quelle und Datenstand.
 
+Ausbau derselben Seite um Schulden, Zinsausgaben und Preise:
+
+* ✅ **Schuldenstand und Schuldenquote** der europäischen Länder über die Zeit
+  (Eurostat `gov_10dd_edpt1`).
+* ✅ **Zinsausgaben** je Land in Prozent des BIP und je Einwohner:in in Euro
+  (Eurostat `gov_10a_main`, `nama_10_gdp`, `demo_pjan`) – die Pro-Kopf-Angabe macht
+  Länder unterschiedlicher Größe vergleichbar.
+* ✅ **Theoretische Zinslast bei aktuellem Marktzins** je Land: Schuldenstand des
+  letzten Jahres × aktuelle 10-jährige Rendite, ausgewiesen in Mrd. Euro, in Prozent
+  des BIP, in Prozent der Einnahmen und je Einwohner:in (`analysis.theoretical_interest_by_country`).
+* ✅ **Inflation (HVPI) und Realzins** je Land, monatlich; der Realzins ist die
+  Rendite minus Inflationsrate (`analysis.real_interest_rate`).
+* ⬜ Für die USA und Russland fehlen in der Quellenbibliothek vergleichbare
+  Schulden- und Zinsreihen; die Abschnitte zeigen deshalb nur europäische Länder.
+
 Abnahmekriterien: Mindestens Deutschland, Frankreich, Italien, Spanien, USA und
-Russland sind auswählbar; Herkunft und Datenstand jeder Reihe sind sichtbar.
+Russland sind auswählbar; Herkunft und Datenstand jeder Reihe sind sichtbar; für
+europäische Länder liegen Schuldenquote, Zinsquote, Zins je Einwohner:in,
+theoretische Zinslast, Inflation und Realzins vor.
 
 ## Stufe 4 – Wirtschafts- und Geldindikatoren ✅
 

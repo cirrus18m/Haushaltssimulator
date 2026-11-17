@@ -57,7 +57,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
 | **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe und die daraus folgende theoretische Zinslast in Mrd. €, in % der Einnahmen und in % des BIP |
-| **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands |
+| **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
 | **Geld & Kaufkraft** | Geldmenge M3, Inflation und kumulierter Kaufkraftverlust |
@@ -102,6 +102,11 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Eurostat `gov_10a_main`](https://ec.europa.eu/eurostat/databrowser/view/gov_10a_main/default/table) | Einnahmen, Ausgaben, Zinsausgaben und Finanzierungssaldo des Staates | CC BY 4.0 |
 | [Deutsche Bundesbank BBSSY.D.REN.EUR.A630.000000WT1010.A](https://www.bundesbank.de/dynamic/action/de/statistiken/zeitreihen-datenbanken/zeitreihe/723452/723452) | Tagesrendite der aktuellen 10-jährigen Bundesanleihe | Quellenangabe erforderlich |
 | [Eurostat `irt_lt_mcby_m`](https://ec.europa.eu/eurostat/databrowser/view/irt_lt_mcby_m/default/table) | Konvergenzrenditen 10-jähriger Staatsanleihen, monatlich | CC BY 4.0 |
+| [Eurostat `gov_10dd_edpt1`](https://ec.europa.eu/eurostat/databrowser/view/gov_10dd_edpt1/default/table) | Schuldenstand und Schuldenquote der europäischen Länder, jährlich | CC BY 4.0 |
+| [Eurostat `gov_10a_main`](https://ec.europa.eu/eurostat/databrowser/view/gov_10a_main/default/table) | Einnahmen und Zinsausgaben der europäischen Länder, jährlich | CC BY 4.0 |
+| [Eurostat `nama_10_gdp`](https://ec.europa.eu/eurostat/databrowser/view/nama_10_gdp/default/table) | BIP der europäischen Länder, jährlich | CC BY 4.0 |
+| [Eurostat `demo_pjan`](https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table) | Bevölkerung der europäischen Länder, jährlich | CC BY 4.0 |
+| [Eurostat `prc_hicp_manr`](https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_manr/default/table) | Inflationsraten (HVPI) der europäischen Länder, monatlich | CC BY 4.0 |
 | [FRED `IRLTLT01USM156N`](https://fred.stlouisfed.org/series/IRLTLT01USM156N) | Langfristige Staatsanleiherendite der USA (OECD MEI) | OECD-Bedingungen |
 | [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |
 | [Destatis 52411-0002](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0002) | Beantragte Insolvenzverfahren, Monate | DL-DE-BY-2.0 |

@@ -247,6 +247,111 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="eurostat_schulden_laender",
+        filename="eurostat_gov_10dd_edpt1_laender.json",
+        url=_eurostat(
+            "gov_10dd_edpt1",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            na_item="GD",
+            sector="S13",
+            sinceTimePeriod="1995",
+        ),
+        title="Maastricht-Schuldenstand: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz gov_10dd_edpt1",
+        license="CC BY 4.0",
+        datasets=("laender_schulden_jahr.csv",),
+        description=(
+            "Eurostat gov_10dd_edpt1: Maastricht-Schuldenstand (GD) des Gesamtstaats "
+            "(S13), jährlich ab 1995, je Land in Mio. EUR und in % des BIP"
+        ),
+    ),
+    Source(
+        key="eurostat_haushalt_laender",
+        filename="eurostat_gov_10a_main_laender.json",
+        url=_eurostat(
+            "gov_10a_main",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            unit="MIO_EUR",
+            sector="S13",
+            na_item=("D41PAY", "TR"),
+            sinceTimePeriod="1995",
+        ),
+        title="Einnahmen und Zinsausgaben: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz gov_10a_main",
+        license="CC BY 4.0",
+        datasets=("laender_haushalt_jahr.csv",),
+        description=(
+            "Eurostat gov_10a_main: Gesamteinnahmen (TR) und Zinsausgaben (D41PAY) des "
+            "Gesamtstaats (S13), jährlich ab 1995, je Land in Mio. EUR"
+        ),
+    ),
+    Source(
+        key="eurostat_bip_laender",
+        filename="eurostat_nama_10_gdp_laender.json",
+        url=_eurostat(
+            "nama_10_gdp",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            na_item="B1GQ",
+            unit="CP_MEUR",
+            sinceTimePeriod="1995",
+        ),
+        title="Bruttoinlandsprodukt: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz nama_10_gdp",
+        license="CC BY 4.0",
+        datasets=("laender_haushalt_jahr.csv",),
+        description=(
+            "Eurostat nama_10_gdp: Bruttoinlandsprodukt (B1GQ) zu jeweiligen Preisen, "
+            "jährlich ab 1995, je Land in Mio. EUR"
+        ),
+    ),
+    Source(
+        key="eurostat_bevoelkerung_laender",
+        filename="eurostat_demo_pjan_laender.json",
+        url=_eurostat(
+            "demo_pjan",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            sex="T",
+            age="TOTAL",
+            sinceTimePeriod="1995",
+        ),
+        title="Bevölkerung: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz demo_pjan",
+        license="CC BY 4.0",
+        datasets=("laender_haushalt_jahr.csv",),
+        description=(
+            "Eurostat demo_pjan: Bevölkerung am 1. Januar, jährlich ab 1995, je Land"
+        ),
+    ),
+    Source(
+        key="eurostat_inflation_laender",
+        filename="eurostat_prc_hicp_manr.json",
+        url=_eurostat(
+            "prc_hicp_manr",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            coicop="CP00",
+            unit="RCH_A",
+            sinceTimePeriod="1997",
+        ),
+        title="Harmonisierter Verbraucherpreisindex: europäische Länder, monatlich",
+        publisher="Eurostat, Datensatz prc_hicp_manr",
+        license="CC BY 4.0",
+        datasets=("laender_inflation_monat.csv",),
+        description=(
+            "Eurostat prc_hicp_manr: Inflationsrate (HVPI, alle Waren und Dienstleistungen) "
+            "als Veränderung gegenüber dem Vorjahr, monatlich ab 1997, je Land in Prozent"
+        ),
+    ),
+    Source(
         key="bundesbank_rendite_10j",
         filename="bundesbank_10j_rendite.csv",
         url=BUNDESBANK_SERIES_URL,
