@@ -114,6 +114,28 @@ Alle Quellen sind frei verfügbar und werden ohne API-Schlüssel abgerufen.
 
 Details zu Dateien und Spalten: [data/README.md](data/README.md).
 
+## Zugangsdaten und API-Schlüssel
+
+Zugangsdaten werden **nie committet**. Die versionierte Vorlage ist
+[.env.example](.env.example); die lokale Datei `.env` ist per `.gitignore`
+ausgeschlossen.
+
+```bash
+cp .env.example .env          # falls noch nicht vorhanden
+# .env öffnen und die Platzhalter ersetzen:
+#   DESTATIS_API_USER=...
+#   DESTATIS_API_TOKEN=MY_DESTATIS_TOKEN_HERE
+uv run scripts/check_destatis_api.py
+```
+
+Das Skript prüft die Anmeldung über `login/check` und zeigt nur den Status an,
+niemals die Werte. Weitere Anbieter folgen demselben Muster: Schlüsselname in
+`config.KNOWN_SECRETS` ergänzen und ein eigenes Client-Modul anlegen.
+
+Die Streamlit-App macht **keine** API-Aufrufe. Der Datenfluss bleibt:
+API/Download → `data/raw/` → `build.py` → `data/processed/` → App. Der Client
+`destatis_api.py` wird ausschließlich von Skripten und dem Datenaufbau genutzt.
+
 ## Quellenbibliothek und Datenstand
 
 Jeder Download wird in der versionierten Quellenbibliothek

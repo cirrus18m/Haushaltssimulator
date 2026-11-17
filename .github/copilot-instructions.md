@@ -68,6 +68,8 @@ app/pages/        Streamlit-Seiten, nur Darstellung
 * Parser je Quelle in einem eigenen Modul (`destatis.py`, `eurostat.py`,
   `bundesbank.py`, `fred.py`, `cbr.py`). Parser sind reine Funktionen ohne Netzwerk-
   zugriff und ohne Streamlit-Abhängigkeit.
+* Zugangsdaten liest `config.py`; API-Clients (z. B. `destatis_api.py`) werden nur von
+  Skripten und `build.py` verwendet, nie von der App.
 * Berechnungen gehören nach `analysis.py` und müssen ohne Streamlit testbar sein.
 * Die Streamlit-Seiten enthalten keine Fachlogik: laden, filtern, darstellen.
 
@@ -92,7 +94,14 @@ app/pages/        Streamlit-Seiten, nur Darstellung
   Abweichungen (z. B. Monatsendwerte statt Tagesdurchschnitte) dokumentieren.
 * Keine Prognosen als Fakten darstellen; Szenarien bleiben als Szenarien erkennbar.
 
-## 7. Sicherheit
+## 7. Zugangsdaten und Sicherheit
 
+* Zugangsdaten ausschließlich in `.env` oder in Umgebungsvariablen. `.env` ist
+  gitignoriert; `.env.example` enthält nur Platzhalter der Form `MY_..._HERE`.
+* Neue Quellen: Schlüsselnamen in `config.KNOWN_SECRETS` ergänzen, ein eigenes
+  Client-Modul anlegen und ein Prüfskript unter `scripts/` bereitstellen.
+* Die Streamlit-App liest ausschließlich `data/processed/` und importiert keine
+  API-Clients. API-Aufrufe gehören in den Datenaufbau
+  (API → `data/raw/` → `build.py` → `data/processed/`).
 * Keine Zugangsdaten, API-Schlüssel oder personenbezogenen Daten im Repository.
 * Nur frei lizenzierte, öffentlich zugängliche Quellen anbinden.

@@ -95,6 +95,14 @@ def test_international_yields_cover_germany_usa_and_russia() -> None:
     assert frame["rendite_pct"].between(-5, 100).all()
 
 
+def test_app_does_not_import_api_clients() -> None:
+    """Die Streamlit-App liest nur aufbereitete Daten und macht keine API-Aufrufe."""
+    for path in (paths.PROJECT_ROOT / "app").rglob("*.py"):
+        text = path.read_text(encoding="utf-8")
+        assert "destatis_api" not in text, path
+        assert "urllib.request" not in text, path
+
+
 @pytest.mark.parametrize(
     "script",
     [

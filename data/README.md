@@ -180,6 +180,13 @@ geladen. Sie ist als **manuelle Quelle** registriert: Die CSV-Datei muss über
 exportiert und unter dem in `sources.json` genannten Dateinamen in `raw/` abgelegt
 werden. Der Abrufzeitpunkt ergibt sich aus dem Änderungsdatum der Datei.
 
+## Rohdaten aus APIs
+
+Zugangsdaten für Datenquellen-APIs stehen in `.env` (nicht versioniert, Vorlage
+`.env.example`). API-Antworten werden unverändert in `raw/` abgelegt und über
+`build.py` aufbereitet. Die App liest ausschließlich `processed/` und macht keine
+eigenen API-Aufrufe.
+
 ## Aktualisieren
 
 ```bash
