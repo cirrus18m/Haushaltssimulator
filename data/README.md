@@ -166,26 +166,36 @@ US-Preis).
 
 Die Originaldateien der Quellen (Destatis-CSV in Windows-1252, Eurostat-JSON-stat,
 Bundesbank- und FRED-CSV, OFZ-Monatsendwerte der Bank of Russia) werden unverändert
-gespeichert. Der Ordner ist per `.gitignore` ausgeschlossen.
+gespeichert.
+
+* `raw/` selbst ist per `.gitignore` ausgeschlossen: automatisch geladene Dateien sind
+  jederzeit reproduzierbar und gehören nicht ins Repository.
+* `raw/manual/` ist **versioniert**. Hier liegen Exporte, die sich nicht per Skript
+  erneuern lassen.
 
 Die **Quellenbibliothek** [`sources.json`](sources.json) ist versioniert und dokumentiert
 je Quelle Titel, Herausgeber, Lizenz, URL, verwendete Datensätze, Dateiname, SHA-256,
 Größe und Abrufzeitpunkt. Sie wird ausschließlich von
 `haushaltssimulator.sources.download_all` geschrieben und auf der Seite **Quellen**
-angezeigt.
+angezeigt; dort steht im Abschnitt „Quellen & Links“ auch die API-Dokumentation der
+Anbieter.
 
 Die Tabelle 52411-0017 (Unternehmensinsolvenzen, Langreihe) wird nicht automatisch
-geladen. Sie ist als **manuelle Quelle** registriert: Die CSV-Datei muss über
+geladen. Sie ist als **manuelle Quelle** registriert: Die CSV-Datei wird über
 [GENESIS-Online](https://genesis.destatis.de/datenbank/online/table/52411-0017)
-exportiert und unter dem in `sources.json` genannten Dateinamen in `raw/` abgelegt
-werden. Der Abrufzeitpunkt ergibt sich aus dem Änderungsdatum der Datei.
+exportiert und unter `raw/manual/stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv`
+abgelegt (exakter Name in `sources.json`). Der Abrufzeitpunkt ist der Zeitpunkt des
+Exports.
 
 ## Rohdaten aus APIs
 
 Zugangsdaten für Datenquellen-APIs stehen in `.env` (nicht versioniert, Vorlage
-`.env.example`). API-Antworten werden unverändert in `raw/` abgelegt und über
-`build.py` aufbereitet. Die App liest ausschließlich `processed/` und macht keine
-eigenen API-Aufrufe.
+`.env.example`): `DESTATIS_API_TOKEN` (GENESIS-Online, Token wird als Header
+`username` gesendet) und `FRED_API_KEY`. Die Clients `destatis_api.py` und
+`fred_api.py` prüfen die Zugänge mit `uv run scripts/check_destatis_api.py` bzw.
+`uv run scripts/check_fred_api.py`. API-Antworten werden unverändert in `raw/`
+abgelegt und über `build.py` aufbereitet. Die App liest ausschließlich `processed/`
+und macht keine eigenen API-Aufrufe.
 
 ## Aktualisieren
 

@@ -9,15 +9,15 @@ from haushaltssimulator.destatis_api import DestatisApi, DestatisApiError
 def main() -> int:
     status = config.secret_status()
     print("Konfigurierte Zugangsdaten (nur Status, keine Werte):")
-    for name, present in status.items():
-        print(f"  {name}: {'gesetzt' if present else 'fehlt'}")
+    for name in ("DESTATIS_API_TOKEN", "DESTATIS_API_USER", "DESTATIS_API_PASSWORD"):
+        print(f"  {name}: {'gesetzt' if status[name] else 'fehlt'}")
 
-    if not all(status.values()):
+    if config.DestatisCredentials.from_env() is None:
         print()
         print(f"Bitte die Platzhalter in {config.ENV_FILE} ersetzen")
         print("(Datei bei Bedarf aus .env.example anlegen):")
-        print("  DESTATIS_API_USER=MY_DESTATIS_USER_HERE")
         print("  DESTATIS_API_TOKEN=MY_DESTATIS_TOKEN_HERE")
+        print("  optional: DESTATIS_API_USER / DESTATIS_API_PASSWORD")
         return 1
 
     try:

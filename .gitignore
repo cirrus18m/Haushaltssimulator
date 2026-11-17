@@ -228,5 +228,9 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Rohdaten der Datenquellen (per scripts/build_data.py reproduzierbar)
-data/raw/
+# Rohdaten der Datenquellen: automatisch ladbare Dateien sind über
+# scripts/build_data.py reproduzierbar und werden nicht versioniert.
+# Manuell beschaffte Dateien unter data/raw/manual/ werden versioniert.
+data/raw/*
+!data/raw/manual/
+!data/raw/manual/**

@@ -126,6 +126,7 @@ def test_app_does_not_import_api_clients() -> None:
 def test_streamlit_pages_run_without_exception(script: str) -> None:
     from streamlit.testing.v1 import AppTest
 
-    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=60)
+    # Großzügiges Timeout: Die Seiten rendern Diagramme nach SVG und sind unter Last langsam.
+    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=180)
     test.run()
     assert not test.exception, [str(exception.value) for exception in test.exception]

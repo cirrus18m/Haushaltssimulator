@@ -44,9 +44,16 @@ von Menschen oder von KI-Assistenten vorgenommen werden.
   Downloads**.
 * Der Downloadzeitpunkt wird beim Abruf gesetzt und bei bereits vorhandenen Dateien
   beibehalten. Er wird auf der Seite **Quellen** angezeigt.
-* Rohdaten liegen in `data/raw/` (nicht versioniert), aufbereitete Daten in
-  `data/processed/` (versioniert). Aufbereitete Daten werden ausschließlich aus
-  Rohdaten erzeugt (`uv run scripts/build_data.py`), nie von Hand gepflegt.
+* Rohdaten liegen in `data/raw/` (nicht versioniert; Ausnahme: `data/raw/manual/` für
+  von Hand geladene Exporte), aufbereitete Daten in `data/processed/` (versioniert).
+  Aufbereitete Daten werden ausschließlich aus Rohdaten erzeugt
+  (`uv run scripts/build_data.py`), nie von Hand gepflegt.
+* Von Hand exportierte Dateien, die sich nicht automatisch erneuern lassen, gehören
+  nach `data/raw/manual/` und werden versioniert; sie werden als Quelle mit
+  `fetch_mode="manual"` registriert.
+* Die Seite **Quellen** führt im Abschnitt „Quellen & Links“ zusätzlich Portale und
+  API-Dokumentation der Anbieter (`sources.PROVIDER_LINKS`). Neue Anbieter werden dort
+  ergänzt.
 * Lizenzangaben der Quellen (z. B. DL-DE-BY-2.0, CC BY 4.0) müssen in der
   Quellenbibliothek und auf der Quellenseite erscheinen.
 
@@ -54,6 +61,7 @@ von Menschen oder von KI-Assistenten vorgenommen werden.
 
 ```
 data/raw/          Rohdaten, unverändert, mit Zeitstempel in data/sources.json
+data/raw/manual/   manuell geladene Rohdaten (versioniert)
       │  sources.py   (Download, Metadaten, Prüfsummen)
       ▼
 src/haushaltssimulator/build.py   (Parser → tidy DataFrames)

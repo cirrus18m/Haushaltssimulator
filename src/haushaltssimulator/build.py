@@ -327,7 +327,9 @@ def build_insolvencies(raw_dir: Path) -> pd.DataFrame:
     """Monatliche Insolvenzverfahren insgesamt und von Unternehmen (Destatis)."""
     lang = destatis.parse_flagged_columns(
         destatis.decode(
-            (raw_dir / "stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv").read_bytes()
+            (
+                raw_dir / "manual" / "stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv"
+            ).read_bytes()
         ),
         ["jahr", "monat_name", "groessenklasse"],
         ["eroeffnet", "abgewiesen", "schuldenbereinigungsplan", "verfahren"],

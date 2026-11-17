@@ -75,3 +75,35 @@ def test_retrieved_timestamp_survives_without_new_download(tmp_path) -> None:
     sources.download_all(raw_dir, sources=(source,), library_file=library_file)
     again = sources.read_library(library_file)["quellen"][0]["abgerufen_am"]
     assert again == stamp
+
+
+def test_library_lists_provider_links() -> None:
+    anbieter = sources.read_library()["anbieter"]
+    assert [eintrag["anbieter"] for eintrag in anbieter] == [
+        eintrag["anbieter"] for eintrag in sources.PROVIDER_LINKS
+    ]
+
+
+def test_provider_links_are_complete() -> None:
+    for eintrag in sources.read_library()["anbieter"]:
+        assert eintrag["anbieter"]
+        assert eintrag["daten"]
+        assert eintrag["zugang"]
+        assert eintrag["portal"].startswith("https://")
+        assert eintrag["api"] == "" or eintrag["api"].startswith("https://")
+
+
+def test_provider_links_cover_required_portals() -> None:
+    namen = " ".join(eintrag["anbieter"] for eintrag in sources.read_library()["anbieter"])
+    assert "Destatis" in namen
+    assert "FRED" in namen
+    assert "EZB" in namen
+    assert "Eurostat" in namen
+    assert "Bundesbank" in namen
+
+
+def test_manual_files_live_in_tracked_subfolder() -> None:
+    for source in sources.SOURCES:
+        if source.fetch_mode == "manual":
+            assert source.filename.startswith("manual/")
+            assert (paths.RAW_DIR / source.filename).exists(), source.filename

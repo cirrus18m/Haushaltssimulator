@@ -58,7 +58,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
 | **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe und die daraus folgende theoretische Zinslast in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands |
-| **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme und Abrufdatum |
+| **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
 | **Geld & Kaufkraft** | Geldmenge M3, Inflation und kumulierter Kaufkraftverlust |
 | **Energiepreise** | Strom- und Gaspreise für Haushalte, Börsenstrompreis und Kraftstoffe im EU-Vergleich |
@@ -73,7 +73,8 @@ Haushaltssimulator/
 │   ├── main.py               # Einstiegspunkt und Navigation
 │   └── pages/                # einzelne Seiten
 ├── data/
-│   ├── raw/                  # unveränderte Quelldateien (nicht versioniert)
+│   ├── raw/                  # automatisch geladene Rohdaten (nicht versioniert)
+│   │   └── manual/           # von Hand geladene Rohdaten (versioniert)
 │   └── processed/            # aufbereitete CSVs für die App
 ├── scripts/
 │   └── build_data.py         # Datenabruf und -aufbereitung
@@ -83,7 +84,11 @@ Haushaltssimulator/
 
 ## Datenquellen
 
-Alle Quellen sind frei verfügbar und werden ohne API-Schlüssel abgerufen.
+Alle Quellen sind frei verfügbar. Automatische Abrufe funktionieren ohne
+API-Schlüssel; für Destatis GENESIS und FRED sind Schlüssel hinterlegt (siehe
+[Zugangsdaten](#zugangsdaten-und-api-schlüssel)), die App selbst benötigt sie nicht.
+Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abschnitt
+„Quellen & Links“.
 
 | Quelle | Inhalt | Lizenz |
 | --- | --- | --- |
@@ -118,23 +123,37 @@ Details zu Dateien und Spalten: [data/README.md](data/README.md).
 
 Zugangsdaten werden **nie committet**. Die versionierte Vorlage ist
 [.env.example](.env.example); die lokale Datei `.env` ist per `.gitignore`
-ausgeschlossen.
+ausgeschlossen. Platzhalter wie `MY_DESTATIS_TOKEN_HERE` erkennt `config.py` als
+„nicht gesetzt“.
 
 ```bash
 cp .env.example .env          # falls noch nicht vorhanden
 # .env öffnen und die Platzhalter ersetzen:
-#   DESTATIS_API_USER=...
 #   DESTATIS_API_TOKEN=MY_DESTATIS_TOKEN_HERE
-uv run scripts/check_destatis_api.py
+#   FRED_API_KEY=MY_FRED_API_KEY_HERE
+uv run scripts/check_destatis_api.py   # GENESIS-Online: helloworld/logincheck
+uv run scripts/check_fred_api.py       # FRED: series/observations
 ```
 
-Das Skript prüft die Anmeldung über `login/check` und zeigt nur den Status an,
-niemals die Werte. Weitere Anbieter folgen demselben Muster: Schlüsselname in
-`config.KNOWN_SECRETS` ergänzen und ein eigenes Client-Modul anlegen.
+Die Skripte zeigen nur den Status an, niemals die Werte. Der GENESIS-Client sendet den
+Token als HTTP-Header `username` mit leerem `password`; alternativ sind
+`DESTATIS_API_USER` und `DESTATIS_API_PASSWORD` möglich. Weitere Anbieter folgen
+demselben Muster: Schlüsselname in `config.KNOWN_SECRETS` ergänzen und ein eigenes
+Client-Modul anlegen.
+
+| Variable | Anbieter | Zugang |
+| --- | --- | --- |
+| `DESTATIS_API_TOKEN` | Destatis GENESIS-Online | kostenlos nach Registrierung |
+| `DESTATIS_API_USER` / `DESTATIS_API_PASSWORD` | Destatis (Alternative zum Token) | kostenlos nach Registrierung |
+| `FRED_API_KEY` | FRED, Federal Reserve Bank of St. Louis | kostenlos, [API-Doku](https://fred.stlouisfed.org/docs/api/fred/) |
+
+Das EZB-Data-Portal (`https://data.ecb.europa.eu/`) und Eurostat bieten frei nutzbare
+Schnittstellen ohne Schlüssel; sie sind bereits über öffentliche Export-URLs angebunden.
 
 Die Streamlit-App macht **keine** API-Aufrufe. Der Datenfluss bleibt:
-API/Download → `data/raw/` → `build.py` → `data/processed/` → App. Der Client
-`destatis_api.py` wird ausschließlich von Skripten und dem Datenaufbau genutzt.
+API/Download → `data/raw/` → `build.py` → `data/processed/` → App. Die Clients
+`destatis_api.py` und `fred_api.py` werden ausschließlich von Skripten und dem
+Datenaufbau genutzt.
 
 ## Quellenbibliothek und Datenstand
 
@@ -148,6 +167,19 @@ Aufbereitete Daten werden ausschließlich aus den Rohdaten erzeugt und nie von H
 gepflegt. Verbindliche Regeln für Änderungen (Sprache, Quellenpflicht, SVG-/HTML-Export)
 stehen in [.github/copilot-instructions.md](.github/copilot-instructions.md); der
 mehrstufige Ausbau ist in [PLAN.md](PLAN.md) beschrieben.
+
+### Rohdaten: was versioniert wird
+
+* `data/raw/*` – automatisch geladene Dateien. Sie sind reproduzierbar und werden
+  deshalb **nicht** versioniert; die Quellenbibliothek hält URL, Prüfsumme und
+  Abrufdatum fest.
+* `data/raw/manual/*` – von Hand exportierte Dateien (z. B. die GENESIS-Langreihe
+  `stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv`). Solche Exporte lassen sich
+  nicht mit einem Skript wiederherstellen und sind daher **im Repository enthalten**.
+
+Ein neuer manueller Export wird unter `data/raw/manual/` abgelegt, in
+`sources.py` als Quelle mit `fetch_mode="manual"` eingetragen und mit
+`uv run scripts/build_data.py` eingebunden.
 
 ## Diagramme exportieren
 

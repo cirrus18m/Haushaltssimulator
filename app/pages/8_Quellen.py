@@ -12,7 +12,8 @@ st.markdown(
     "Alle Kennzahlen der App stammen aus frei verfügbaren, öffentlichen Quellen. "
     "Die **Quellenbibliothek** (`data/sources.json`) ist Teil des Repositories und hält "
     "je Quelle URL, Lizenz, verwendete Datensätze, Prüfsumme und den Zeitpunkt des "
-    "Downloads fest. Rohdaten liegen unter `data/raw/`, aufbereitete Tabellen unter "
+    "Downloads fest. Automatisch geladene Rohdaten liegen unter `data/raw/`, von Hand "
+    "geladene unter `data/raw/manual/` (versioniert), aufbereitete Tabellen unter "
     "`data/processed/`."
 )
 
@@ -107,10 +108,45 @@ for entry in entries:
         st.markdown(f"**SHA-256:** `{entry['sha256']}`")
         st.link_button("Quelle öffnen", entry["url"])
 
+st.header("Quellen & Links")
+anbieter = library.get("anbieter", [])
+if anbieter:
+    st.dataframe(
+        pd.DataFrame(
+            [
+                {
+                    "Anbieter": eintrag["anbieter"],
+                    "Daten in dieser App": eintrag["daten"],
+                    "Portal": eintrag["portal"],
+                    "API / Doku": eintrag["api"] or None,
+                    "Zugang": eintrag["zugang"],
+                }
+                for eintrag in anbieter
+            ]
+        ),
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "Anbieter": st.column_config.TextColumn(width="medium"),
+            "Daten in dieser App": st.column_config.TextColumn(width="large"),
+            "Portal": st.column_config.LinkColumn("Portal", display_text="Portal öffnen"),
+            "API / Doku": st.column_config.LinkColumn("API / Doku", display_text="API-Doku"),
+            "Zugang": st.column_config.TextColumn(width="medium"),
+        },
+    )
+    st.caption(
+        "Direkt nutzbare Schnittstellen sind Destatis GENESIS, FRED, das EZB-Data-Portal, "
+        "Eurostat und die Bundesbank. Die App selbst ruft keine APIs auf: Abrufe laufen "
+        "vorgelagert über Skripte, Zugangsdaten stehen in `.env` (nicht versioniert)."
+    )
+else:
+    st.info("Anbieter-Links fehlen in der Quellenbibliothek – bitte Datenaufbau erneut ausführen.")
+
 st.divider()
 st.subheader("Datenfluss")
 st.code(
-    "data/raw/  (Rohdaten, nicht versioniert)\n"
+    "data/raw/         (automatisch geladene Rohdaten, nicht versioniert)\n"
+    "data/raw/manual/  (manuell geladene Rohdaten, versioniert)\n"
     "    │  sources.py: Download, Prüfsumme, Zeitstempel → data/sources.json\n"
     "    ▼\n"
     "build.py: Parser und Aufbereitung\n"

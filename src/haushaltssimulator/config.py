@@ -17,7 +17,12 @@ from .paths import PROJECT_ROOT
 
 ENV_FILE = PROJECT_ROOT / ".env"
 PLACEHOLDER_PREFIX = "MY_"
-KNOWN_SECRETS = ("DESTATIS_API_USER", "DESTATIS_API_TOKEN")
+KNOWN_SECRETS = (
+    "DESTATIS_API_TOKEN",
+    "DESTATIS_API_USER",
+    "DESTATIS_API_PASSWORD",
+    "FRED_API_KEY",
+)
 
 
 def load_environment() -> None:
@@ -41,16 +46,32 @@ def secret_status() -> dict[str, bool]:
 
 @dataclass(frozen=True)
 class DestatisCredentials:
-    """Zugangsdaten für die GENESIS-Online-REST-API."""
+    """Zugangsdaten für die GENESIS-Online-REST-API.
 
-    username: str
-    token: str
+    Variante A: API-Token (wird als ``username``-Header gesendet, Passwort leer).
+    Variante B: Nutzerkennung und Passwort (nötig für schreibende Zugriffe).
+    """
+
+    token: str | None = None
+    username: str | None = None
+    password: str | None = None
 
     @classmethod
     def from_env(cls) -> DestatisCredentials | None:
-        """Liest die Zugangsdaten; fehlt einer der Werte, wird ``None`` geliefert."""
-        username = get_secret("DESTATIS_API_USER")
+        """Liest die Zugangsdaten; ohne Token oder Nutzerkennung/Passwort ``None``."""
         token = get_secret("DESTATIS_API_TOKEN")
-        if username is None or token is None:
+        if token is not None:
+            return cls(token=token)
+        username = get_secret("DESTATIS_API_USER")
+        password = get_secret("DESTATIS_API_PASSWORD")
+        if username is None or password is None:
             return None
-        return cls(username=username, token=token)
+        return cls(username=username, password=password)
+
+    @property
+    def header_username(self) -> str:
+        return self.token or self.username or ""
+
+    @property
+    def header_password(self) -> str:
+        return "" if self.token else (self.password or "")

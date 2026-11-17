@@ -313,7 +313,7 @@ SOURCES: tuple[Source, ...] = (
     ),
     Source(
         key="destatis_insolvenzen_zeitreihe",
-        filename="stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv",
+        filename="manual/stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv",
         url="https://genesis.destatis.de/datenbank/online/table/52411-0017",
         title="Unternehmensinsolvenzen: Deutschland, Monate, Größenklassen (Langreihe)",
         publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0017",
@@ -470,6 +470,84 @@ SOURCES: tuple[Source, ...] = (
     ),
 )
 
+# Portale und API-Dokumentation der Anbieter – erscheint als "Quellen & Links"
+# auf der Quellenseite.
+PROVIDER_LINKS: tuple[dict[str, str], ...] = (
+    {
+        "anbieter": "Statistisches Bundesamt (Destatis)",
+        "daten": "Insolvenzverfahren, Preise für Strom und Gas",
+        "portal": "https://www-genesis.destatis.de/datenbank/online",
+        "api": "https://genesis.destatis.de/genesisWS/rest/2020",
+        "zugang": "kostenlos, API-Token nach Registrierung",
+    },
+    {
+        "anbieter": "Eurostat",
+        "daten": "Haushalte, Schuldenquote, Zinsvergleich, Eigentumsquote",
+        "portal": "https://ec.europa.eu/eurostat/databrowser/",
+        "api": (
+            "https://ec.europa.eu/eurostat/web/user-guides/data-browser/"
+            "api-data-access/api-introduction"
+        ),
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Deutsche Bundesbank",
+        "daten": "Rendite der 10-jährigen Bundesanleihe",
+        "portal": "https://www.bundesbank.de/de/statistiken",
+        "api": "https://api.statistiken.bundesbank.de/",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
+        "daten": "US-Staatsanleiherendite",
+        "portal": "https://fred.stlouisfed.org/",
+        "api": "https://fred.stlouisfed.org/docs/api/fred/",
+        "zugang": "kostenlos, API-Key erforderlich",
+    },
+    {
+        "anbieter": "EZB – Data Portal",
+        "daten": "Geldmenge M3, Harmonisierter Verbraucherpreisindex",
+        "portal": "https://data.ecb.europa.eu/",
+        "api": "https://data.ecb.europa.eu/help/api/overview",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Bank of Russia",
+        "daten": "Rendite russischer Staatsanleihen (OFZ)",
+        "portal": "https://www.cbr.ru/eng/",
+        "api": "https://www.cbr.ru/eng/hd_base/zcyc_params/",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "energy-charts.info (Fraunhofer ISE)",
+        "daten": "Day-Ahead-Strompreise",
+        "portal": "https://energy-charts.info/",
+        "api": "https://api.energy-charts.info/",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Europäische Kommission – Weekly Oil Bulletin",
+        "daten": "Kraftstoffpreise",
+        "portal": "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en",
+        "api": "",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "The Economist – Big Mac Index",
+        "daten": "Kaufkraftvergleich über Burger-Preise",
+        "portal": "https://github.com/TheEconomist/big-mac-data",
+        "api": "",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Bundesministerium der Finanzen",
+        "daten": "Zinsausgaben des Bundes am Kreditmarkt",
+        "portal": "https://www.bundeshaushalt.de/",
+        "api": "",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+)
+
 
 def _read_url(url: str) -> bytes:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
@@ -524,8 +602,8 @@ def download(source: Source, target_dir: Path, *, refresh: bool = False) -> Path
 
     Existierende Dateien werden nur mit ``refresh=True`` erneut geladen.
     """
-    target_dir.mkdir(parents=True, exist_ok=True)
     target = target_dir / source.filename
+    target.parent.mkdir(parents=True, exist_ok=True)
     if source.fetch_mode == "manual":
         if target.exists():
             return target
@@ -601,6 +679,7 @@ def download_all(
             "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten."
         ),
         "quellen": entries,
+        "anbieter": [dict(eintrag) for eintrag in PROVIDER_LINKS],
     }
     library_file.parent.mkdir(parents=True, exist_ok=True)
     library_file.write_text(

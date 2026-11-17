@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-17T20:13:25+00:00",
+  "aktualisiert_am": "2026-11-17T21:14:10+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -222,7 +222,7 @@
       "lizenz": "DL-DE-BY-2.0",
       "url": "https://genesis.destatis.de/datenbank/online/table/52411-0017",
       "beschreibung": "Manueller Export aus GENESIS-Online, Tabelle 52411-0017: Beantragte Insolvenzverfahren von Unternehmen nach Unternehmensgrößenklassen, Deutschland, Monate 2003 bis 2026",
-      "datei": "stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv",
+      "datei": "manual/stat_bundesamt_insolvenzen_52411-0017_de_Nov2026.csv",
       "datensaetze": [
         "insolvenzen_monat.csv"
       ],
@@ -364,6 +364,78 @@
       "abgerufen_am": "2026-11-17T19:01:49+00:00",
       "sha256": "df99772ca0ffdee9e3b2323ebdf97d2abd797d3c6765842e3d2f2c6aee29e550",
       "bytes": 129
+    }
+  ],
+  "anbieter": [
+    {
+      "anbieter": "Statistisches Bundesamt (Destatis)",
+      "daten": "Insolvenzverfahren, Preise für Strom und Gas",
+      "portal": "https://www-genesis.destatis.de/datenbank/online",
+      "api": "https://genesis.destatis.de/genesisWS/rest/2020",
+      "zugang": "kostenlos, API-Token nach Registrierung"
+    },
+    {
+      "anbieter": "Eurostat",
+      "daten": "Haushalte, Schuldenquote, Zinsvergleich, Eigentumsquote",
+      "portal": "https://ec.europa.eu/eurostat/databrowser/",
+      "api": "https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-introduction",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Deutsche Bundesbank",
+      "daten": "Rendite der 10-jährigen Bundesanleihe",
+      "portal": "https://www.bundesbank.de/de/statistiken",
+      "api": "https://api.statistiken.bundesbank.de/",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
+      "daten": "US-Staatsanleiherendite",
+      "portal": "https://fred.stlouisfed.org/",
+      "api": "https://fred.stlouisfed.org/docs/api/fred/",
+      "zugang": "kostenlos, API-Key erforderlich"
+    },
+    {
+      "anbieter": "EZB – Data Portal",
+      "daten": "Geldmenge M3, Harmonisierter Verbraucherpreisindex",
+      "portal": "https://data.ecb.europa.eu/",
+      "api": "https://data.ecb.europa.eu/help/api/overview",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Bank of Russia",
+      "daten": "Rendite russischer Staatsanleihen (OFZ)",
+      "portal": "https://www.cbr.ru/eng/",
+      "api": "https://www.cbr.ru/eng/hd_base/zcyc_params/",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "energy-charts.info (Fraunhofer ISE)",
+      "daten": "Day-Ahead-Strompreise",
+      "portal": "https://energy-charts.info/",
+      "api": "https://api.energy-charts.info/",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Europäische Kommission – Weekly Oil Bulletin",
+      "daten": "Kraftstoffpreise",
+      "portal": "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en",
+      "api": "",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "The Economist – Big Mac Index",
+      "daten": "Kaufkraftvergleich über Burger-Preise",
+      "portal": "https://github.com/TheEconomist/big-mac-data",
+      "api": "",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Bundesministerium der Finanzen",
+      "daten": "Zinsausgaben des Bundes am Kreditmarkt",
+      "portal": "https://www.bundeshaushalt.de/",
+      "api": "",
+      "zugang": "kostenlos, ohne API-Key"
     }
   ]
 }
