@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-17T17:56:32+00:00",
+  "aktualisiert_am": "2026-11-17T19:11:56+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -184,6 +184,171 @@
       "abgerufen_am": "2026-11-17T17:51:44+00:00",
       "sha256": "76ede1349ee452871ba9c561160e2f609743e1993d003623802d356984fe42a3",
       "bytes": 2283
+    },
+    {
+      "key": "destatis_insolvenzen",
+      "titel": "Insolvenzverfahren: Deutschland, Monate",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0002",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/52411-0002_00.csv",
+      "beschreibung": "Destatis 52411-0002: Beantragte Insolvenzverfahren und voraussichtliche Forderungen, Deutschland, Monate, Verfahrensstatus",
+      "datei": "destatis_52411-0002_insolvenzen.csv",
+      "datensaetze": [
+        "insolvenzen_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:24+00:00",
+      "sha256": "e4326a1b37c998545d46a8551c78c0231d6ef95d08888892c3dd252a64f06a43",
+      "bytes": 2376
+    },
+    {
+      "key": "destatis_insolvenzen_unternehmen",
+      "titel": "Insolvenzverfahren von Unternehmen: Deutschland, Monate",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0011",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/52411-0011_00.csv",
+      "beschreibung": "Destatis 52411-0011: Insolvenzverfahren von Unternehmen, voraussichtliche Forderungen und betroffene Arbeitnehmer, Deutschland, Monate, Rechtsformen",
+      "datei": "destatis_52411-0011_insolvenzen_unternehmen.csv",
+      "datensaetze": [
+        "insolvenzen_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:24+00:00",
+      "sha256": "13cc53d1b08e8bea539f9e87160814c32bb580d90b5a8ff7ce6e76dd670865b3",
+      "bytes": 7885
+    },
+    {
+      "key": "ecb_geldmenge",
+      "titel": "Geldmenge M3: Euro-Raum, monatlich",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz BSI",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/BSI/M.U2.Y.V.M30.X.I.U2.2300.Z01.E?format=csvdata&startPeriod=1995",
+      "beschreibung": "EZB BSI: Geldmenge M3, Index Dec10 = 100, arbeitstäglich und saisonbereinigt, Euro-Raum (veränderte Zusammensetzung), monatlich ab 1995",
+      "datei": "ecb_geldmenge_m3.csv",
+      "datensaetze": [
+        "geldmenge_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:34+00:00",
+      "sha256": "4f0bbe23dea20554d2d79d00e1a9f6b9b547a5097d155f315dd0cee2ac159d24",
+      "bytes": 194458
+    },
+    {
+      "key": "ecb_hicp",
+      "titel": "Harmonisierter Verbraucherpreisindex: Deutschland und Euro-Raum",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz ICP",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/ICP/M.DE+U2.N.000000.4.ANR?format=csvdata&startPeriod=1997",
+      "beschreibung": "EZB ICP: HVPI-Gesamtindex, Veränderung gegenüber dem Vorjahr in Prozent, Deutschland und Euro-Raum, monatlich ab 1997",
+      "datei": "ecb_hicp_de_ea.csv",
+      "datensaetze": [
+        "kaufkraft_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:40+00:00",
+      "sha256": "6c7d7dccf81f946f7a6cb157ee19720a2f62045418e302768b5ba00a9121450b",
+      "bytes": 188509
+    },
+    {
+      "key": "destatis_strompreise",
+      "titel": "Strompreise für Haushalte: Deutschland, Jahre",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 61243-0002",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/61243-0002_00.csv",
+      "beschreibung": "Destatis 61243-0002: Durchschnittspreise für Strom, Haushalte, Jahre, Jahresverbrauchsklassen und Preisbestandteile, EUR/kWh",
+      "datei": "destatis_61243-0002_strompreise.csv",
+      "datensaetze": [
+        "energiepreise_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:03:23+00:00",
+      "sha256": "0a4a303603d3ae72538b74440c034e7cd38a8404457b4dd98d70f3d85ed1f4ee",
+      "bytes": 2395
+    },
+    {
+      "key": "destatis_gaspreise",
+      "titel": "Erdgaspreise für Haushalte: Deutschland, Jahre",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 61243-0011",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/61243-0011_00.csv",
+      "beschreibung": "Destatis 61243-0011: Durchschnittspreise für Erdgas, Haushalte, Jahre, Jahresverbrauchsklassen und Preisbestandteile, EUR/kWh",
+      "datei": "destatis_61243-0011_gaspreise.csv",
+      "datensaetze": [
+        "energiepreise_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:03:23+00:00",
+      "sha256": "445829f1f77f2f59bcad262c87e62459fe027f99456d9ebf84ea3418ed5895b2",
+      "bytes": 1671
+    },
+    {
+      "key": "energy_charts_strompreis",
+      "titel": "Börsenstrompreis Day-Ahead: Gebotszone Deutschland/Luxemburg",
+      "herausgeber": "energy-charts.info (Fraunhofer ISE), Daten von Bundesnetzagentur | SMARD.de",
+      "lizenz": "CC BY 4.0",
+      "url": "https://api.energy-charts.info/price?bzn=DE-LU&start=JJJJ-MM-TT&end=JJJJ-MM-TT",
+      "beschreibung": "energy-charts.info: Day-Ahead-Preise der Gebotszone DE-LU, stündlich, EUR/MWh; die App bildet Tagesmittelwerte der letzten sieben Jahre",
+      "datei": "energy_charts_day_ahead.json",
+      "datensaetze": [
+        "strom_boerse_tag.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:47+00:00",
+      "sha256": "a8302f2fc13e30d9e007c1a9e799b11ac146ff5c2231de0546fdb4892c92ed15",
+      "bytes": 1703772
+    },
+    {
+      "key": "oil_bulletin",
+      "titel": "Wöchentliche Kraftstoffpreise in der EU",
+      "herausgeber": "Europäische Kommission, Weekly Oil Bulletin, Preise mit Steuern",
+      "lizenz": "© Europäische Union, Quellenangabe erforderlich",
+      "url": "https://energy.ec.europa.eu/document/download/906e60ca-8b6a-44e7-8589-652854d2fd3f_en?filename=Weekly_Oil_Bulletin_Prices_History_maticni_4web.xlsx",
+      "beschreibung": "EU Weekly Oil Bulletin: Verbraucherpreise für Superbenzin (Euro 95) und Diesel je Land, wöchentlich, mit Steuern, in EUR je 1000 Liter",
+      "datei": "oil_bulletin_preise.xlsx",
+      "datensaetze": [
+        "kraftstoffpreise.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:48+00:00",
+      "sha256": "7e14b5edc46bb654b5bec6a66a70f95a187ca7a293a002e1b40b6eef9d0cd1e3",
+      "bytes": 4506196
+    },
+    {
+      "key": "big_mac",
+      "titel": "Big-Mac-Index: Preise und Abweichungen je Land",
+      "herausgeber": "The Economist, big-mac-data",
+      "lizenz": "The Economist, Quellenangabe erforderlich",
+      "url": "https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/big-mac-full-index.csv",
+      "beschreibung": "The Economist: Big-Mac-Index, Preis eines Big Mac in US-Dollar und Abweichung vom US-Preis, halbjährlich je Land",
+      "datei": "big_mac_index.csv",
+      "datensaetze": [
+        "big_mac.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:48+00:00",
+      "sha256": "faf0bc0dd4e01b15d6c647c6229dbba0d992f073dc7bbbe9bd37a89d3cf85789",
+      "bytes": 336855
+    },
+    {
+      "key": "eurostat_eigentumsquote",
+      "titel": "Eigentums- und Mietquote der Haushalte: Europa, jährlich",
+      "herausgeber": "Eurostat, Datensatz ilc_lvho02",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_lvho02?format=JSON&lang=EN&unit=PC&rskpovth=TOTAL&hhcomp=TOTAL&tenure=OWN&tenure=RENT&sinceTimePeriod=2010&geo=DE&geo=FR&geo=IT&geo=ES&geo=NL&geo=AT&geo=PL&geo=SE&geo=DK&geo=FI&geo=EU27_2020",
+      "beschreibung": "Eurostat ilc_lvho02: Verteilung der Bevölkerung nach Wohnstatus (Eigentum, Miete), Anteile in Prozent, ausgewählte EU-Länder und EU-27",
+      "datei": "eurostat_ilc_lvho02.json",
+      "datensaetze": [
+        "eigentumsquote.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:48+00:00",
+      "sha256": "ba040dd409130e01ed488ca61302964c694f580a5fff03dc4b7ebf93722fbea7",
+      "bytes": 8189
+    },
+    {
+      "key": "bmf_zinsausgaben",
+      "titel": "Zinsausgaben des Bundes am Kreditmarkt",
+      "herausgeber": "Bundesministerium der Finanzen, Bundeshaushalt",
+      "lizenz": "© Bundesministerium der Finanzen, Quellenangabe erforderlich",
+      "url": "https://www.bundeshaushalt.de/Content/DE/Diagramme/Dashboard-Startseite/zinsausgaben-kreditmarkt-csv.csv?__blob=publicationFile&v=10",
+      "beschreibung": "BMF: Zinsausgaben am Kreditmarkt in Mrd. EUR je Haushaltsjahr (Ist, Soll und Regierungsentwurf)",
+      "datei": "bmf_zinsausgaben_kreditmarkt.csv",
+      "datensaetze": [
+        "bund_zinsausgaben.csv"
+      ],
+      "abgerufen_am": "2026-11-17T19:01:49+00:00",
+      "sha256": "df99772ca0ffdee9e3b2323ebdf97d2abd797d3c6765842e3d2f2c6aee29e550",
+      "bytes": 129
     }
   ]
 }

@@ -35,6 +35,22 @@ BUNDESBANK_SERIES_URL = (
 )
 FRED_SERIES_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}"
 CBR_ZCYC_URL = "https://www.cbr.ru/eng/hd_base/zcyc_params/zcyc/?DateTo={datum}"
+ECB_SERIES_URL = (
+    "https://data-api.ecb.europa.eu/service/data/{dataset}/{key}?format=csvdata&startPeriod={start}"
+)
+ENERGY_CHARTS_URL = "https://api.energy-charts.info/price?bzn=DE-LU&start={start}&end={end}"
+OIL_BULLETIN_URL = (
+    "https://energy.ec.europa.eu/document/download/906e60ca-8b6a-44e7-8589-652854d2fd3f_en"
+    "?filename=Weekly_Oil_Bulletin_Prices_History_maticni_4web.xlsx"
+)
+BIG_MAC_URL = (
+    "https://raw.githubusercontent.com/TheEconomist/big-mac-data/master/output-data/"
+    "big-mac-full-index.csv"
+)
+BMF_INTEREST_URL = (
+    "https://www.bundeshaushalt.de/Content/DE/Diagramme/Dashboard-Startseite/"
+    "zinsausgaben-kreditmarkt-csv.csv?__blob=publicationFile&v=10"
+)
 
 # Ab diesem Jahr liefert die Bank of Russia die Zinskurve in der genutzten Form.
 CBR_START_YEAR = 2015
@@ -42,7 +58,7 @@ CBR_MAX_FALLBACK_DAYS = 8
 
 USER_AGENT = "Haushaltssimulator/0.1 (+https://github.com/cirrus18m/Haushaltssimulator)"
 
-FetchMode = Literal["http", "cbr_zcyc"]
+FetchMode = Literal["http", "cbr_zcyc", "energy_charts"]
 
 
 @dataclass(frozen=True)
@@ -269,13 +285,179 @@ SOURCES: tuple[Source, ...] = (
             "Monatsendwert (letzter Handelstag), in Prozent, ab 2015"
         ),
     ),
+    Source(
+        key="destatis_insolvenzen",
+        filename="destatis_52411-0002_insolvenzen.csv",
+        url=DESTATIS_TABLE_URL.format(code="52411-0002"),
+        title="Insolvenzverfahren: Deutschland, Monate",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0002",
+        license="DL-DE-BY-2.0",
+        datasets=("insolvenzen_monat.csv",),
+        description=(
+            "Destatis 52411-0002: Beantragte Insolvenzverfahren und voraussichtliche "
+            "Forderungen, Deutschland, Monate, Verfahrensstatus"
+        ),
+    ),
+    Source(
+        key="destatis_insolvenzen_unternehmen",
+        filename="destatis_52411-0011_insolvenzen_unternehmen.csv",
+        url=DESTATIS_TABLE_URL.format(code="52411-0011"),
+        title="Insolvenzverfahren von Unternehmen: Deutschland, Monate",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0011",
+        license="DL-DE-BY-2.0",
+        datasets=("insolvenzen_monat.csv",),
+        description=(
+            "Destatis 52411-0011: Insolvenzverfahren von Unternehmen, voraussichtliche "
+            "Forderungen und betroffene Arbeitnehmer, Deutschland, Monate, Rechtsformen"
+        ),
+    ),
+    Source(
+        key="ecb_geldmenge",
+        filename="ecb_geldmenge_m3.csv",
+        url=ECB_SERIES_URL.format(
+            dataset="BSI", key="M.U2.Y.V.M30.X.I.U2.2300.Z01.E", start="1995"
+        ),
+        title="Geldmenge M3: Euro-Raum, monatlich",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz BSI",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=("geldmenge_monat.csv",),
+        description=(
+            "EZB BSI: Geldmenge M3, Index Dec10 = 100, arbeitstäglich und saisonbereinigt, "
+            "Euro-Raum (veränderte Zusammensetzung), monatlich ab 1995"
+        ),
+    ),
+    Source(
+        key="ecb_hicp",
+        filename="ecb_hicp_de_ea.csv",
+        url=ECB_SERIES_URL.format(dataset="ICP", key="M.DE+U2.N.000000.4.ANR", start="1997"),
+        title="Harmonisierter Verbraucherpreisindex: Deutschland und Euro-Raum",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz ICP",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=("kaufkraft_monat.csv",),
+        description=(
+            "EZB ICP: HVPI-Gesamtindex, Veränderung gegenüber dem Vorjahr in Prozent, "
+            "Deutschland und Euro-Raum, monatlich ab 1997"
+        ),
+    ),
+    Source(
+        key="destatis_strompreise",
+        filename="destatis_61243-0002_strompreise.csv",
+        url=DESTATIS_TABLE_URL.format(code="61243-0002"),
+        title="Strompreise für Haushalte: Deutschland, Jahre",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 61243-0002",
+        license="DL-DE-BY-2.0",
+        datasets=("energiepreise_jahr.csv",),
+        description=(
+            "Destatis 61243-0002: Durchschnittspreise für Strom, Haushalte, Jahre, "
+            "Jahresverbrauchsklassen und Preisbestandteile, EUR/kWh"
+        ),
+    ),
+    Source(
+        key="destatis_gaspreise",
+        filename="destatis_61243-0011_gaspreise.csv",
+        url=DESTATIS_TABLE_URL.format(code="61243-0011"),
+        title="Erdgaspreise für Haushalte: Deutschland, Jahre",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 61243-0011",
+        license="DL-DE-BY-2.0",
+        datasets=("energiepreise_jahr.csv",),
+        description=(
+            "Destatis 61243-0011: Durchschnittspreise für Erdgas, Haushalte, Jahre, "
+            "Jahresverbrauchsklassen und Preisbestandteile, EUR/kWh"
+        ),
+    ),
+    Source(
+        key="energy_charts_strompreis",
+        filename="energy_charts_day_ahead.json",
+        url=ENERGY_CHARTS_URL.format(start="JJJJ-MM-TT", end="JJJJ-MM-TT"),
+        title="Börsenstrompreis Day-Ahead: Gebotszone Deutschland/Luxemburg",
+        publisher="energy-charts.info (Fraunhofer ISE), Daten von Bundesnetzagentur | SMARD.de",
+        license="CC BY 4.0",
+        datasets=("strom_boerse_tag.csv",),
+        fetch_mode="energy_charts",
+        description=(
+            "energy-charts.info: Day-Ahead-Preise der Gebotszone DE-LU, stündlich, "
+            "EUR/MWh; die App bildet Tagesmittelwerte der letzten sieben Jahre"
+        ),
+    ),
+    Source(
+        key="oil_bulletin",
+        filename="oil_bulletin_preise.xlsx",
+        url=OIL_BULLETIN_URL,
+        title="Wöchentliche Kraftstoffpreise in der EU",
+        publisher="Europäische Kommission, Weekly Oil Bulletin, Preise mit Steuern",
+        license="© Europäische Union, Quellenangabe erforderlich",
+        datasets=("kraftstoffpreise.csv",),
+        description=(
+            "EU Weekly Oil Bulletin: Verbraucherpreise für Superbenzin (Euro 95) und "
+            "Diesel je Land, wöchentlich, mit Steuern, in EUR je 1000 Liter"
+        ),
+    ),
+    Source(
+        key="big_mac",
+        filename="big_mac_index.csv",
+        url=BIG_MAC_URL,
+        title="Big-Mac-Index: Preise und Abweichungen je Land",
+        publisher="The Economist, big-mac-data",
+        license="The Economist, Quellenangabe erforderlich",
+        datasets=("big_mac.csv",),
+        description=(
+            "The Economist: Big-Mac-Index, Preis eines Big Mac in US-Dollar und "
+            "Abweichung vom US-Preis, halbjährlich je Land"
+        ),
+    ),
+    Source(
+        key="eurostat_eigentumsquote",
+        filename="eurostat_ilc_lvho02.json",
+        url=_eurostat(
+            "ilc_lvho02",
+            format="JSON",
+            lang="EN",
+            unit="PC",
+            rskpovth="TOTAL",
+            hhcomp="TOTAL",
+            tenure=("OWN", "RENT"),
+            sinceTimePeriod="2010",
+            geo=(
+                "DE",
+                "FR",
+                "IT",
+                "ES",
+                "NL",
+                "AT",
+                "PL",
+                "SE",
+                "DK",
+                "FI",
+                "EU27_2020",
+            ),
+        ),
+        title="Eigentums- und Mietquote der Haushalte: Europa, jährlich",
+        publisher="Eurostat, Datensatz ilc_lvho02",
+        license="CC BY 4.0",
+        datasets=("eigentumsquote.csv",),
+        description=(
+            "Eurostat ilc_lvho02: Verteilung der Bevölkerung nach Wohnstatus "
+            "(Eigentum, Miete), Anteile in Prozent, ausgewählte EU-Länder und EU-27"
+        ),
+    ),
+    Source(
+        key="bmf_zinsausgaben",
+        filename="bmf_zinsausgaben_kreditmarkt.csv",
+        url=BMF_INTEREST_URL,
+        title="Zinsausgaben des Bundes am Kreditmarkt",
+        publisher="Bundesministerium der Finanzen, Bundeshaushalt",
+        license="© Bundesministerium der Finanzen, Quellenangabe erforderlich",
+        datasets=("bund_zinsausgaben.csv",),
+        description=(
+            "BMF: Zinsausgaben am Kreditmarkt in Mrd. EUR je Haushaltsjahr "
+            "(Ist, Soll und Regierungsentwurf)"
+        ),
+    ),
 )
 
 
 def _read_url(url: str) -> bytes:
-    request = urllib.request.Request(
-        url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"}
-    )
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
     with urllib.request.urlopen(request, timeout=120) as response:
         payload = response.read()
     if not payload:
@@ -308,9 +490,17 @@ def _fetch_cbr_zcyc(source: Source) -> bytes:
     return buffer.getvalue().encode("utf-8")
 
 
+def _fetch_energy_charts(source: Source) -> bytes:
+    today = datetime.now(UTC).date()
+    start = date(max(today.year - 7, 2019), 1, 1)
+    return _read_url(ENERGY_CHARTS_URL.format(start=start.isoformat(), end=today.isoformat()))
+
+
 def _fetch(source: Source) -> bytes:
     if source.fetch_mode == "cbr_zcyc":
         return _fetch_cbr_zcyc(source)
+    if source.fetch_mode == "energy_charts":
+        return _fetch_energy_charts(source)
     return _read_url(source.url)
 
 

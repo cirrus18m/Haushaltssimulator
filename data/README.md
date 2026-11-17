@@ -18,6 +18,15 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `zins_bund_10j.csv` | Tagesrendite der 10-jährigen Bundesanleihe | Deutsche Bundesbank | 2001–2026 |
 | `zins_vergleich.csv` | Renditen 10-jähriger Staatsanleihen je Land und Monat | Eurostat `irt_lt_mcby_m`, FRED, Bank of Russia | 1993–2026 |
 | `zinslast_jahr.csv` | Schuldenstand, Rendite, theoretische und tatsächliche Zinslast | Eurostat, Bundesbank | 1995–2025 |
+| `insolvenzen_monat.csv` | Insolvenzverfahren gesamt und von Unternehmen je Monat | Destatis 52411-0002, 52411-0011 | 2026 |
+| `geldmenge_monat.csv` | Geldmenge M3 und Jahreswachstumsrate | EZB BSI | 1995–2026 |
+| `kaufkraft_monat.csv` | Inflation Deutschland/Euro-Raum und Kaufkraftindex | EZB ICP | 1997–2025 |
+| `energiepreise_jahr.csv` | Strom- und Gaspreise für Haushalte | Destatis 61243-0002, 61243-0011 | 2019–2025 |
+| `strom_boerse_tag.csv` | Tagesmittel des Day-Ahead-Strompreises | energy-charts.info | 2019–2026 |
+| `kraftstoffpreise.csv` | Monatsmittel der Kraftstoffpreise je Land | EU Weekly Oil Bulletin | 2016–2026 |
+| `big_mac.csv` | Big-Mac-Preis in US-Dollar und Abweichung | The Economist | 2000–2026 |
+| `eigentumsquote.csv` | Eigentums- und Mietquote je Land | Eurostat `ilc_lvho02` | 2010–2025 |
+| `bund_zinsausgaben.csv` | Zinsausgaben des Bundes am Kreditmarkt | BMF | 2022–2027 |
 
 ### Spalten
 
@@ -103,6 +112,51 @@ In der Länderdatei bedeutet `ebene = Insgesamt` die Summe aus Land und seinen G
 Die theoretische Zinslast ist eine Modellrechnung; negative Werte 2019–2021 folgen aus
 den damals negativen Renditen.
 
+**`insolvenzen_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat (`JJJJ-MM`) |
+| `verfahren_gesamt`, `verfahren_unternehmen` | beantragte Verfahren |
+| `forderungen_gesamt_mio_eur`, `forderungen_unternehmen_mio_eur` | voraussichtliche Forderungen |
+| `betroffene_arbeitnehmer` | von Unternehmensinsolvenzen betroffene Beschäftigte |
+
+Die Tabelle des Statistischen Bundesamts enthält das laufende Berichtsjahr.
+
+**`geldmenge_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat |
+| `index_m3` | Geldmenge M3, Index Dezember 2010 = 100 |
+| `wachstum_pct` | Veränderung gegenüber dem Vorjahr in Prozent |
+
+**`kaufkraft_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat |
+| `inflation_de_pct`, `inflation_ea_pct` | HVPI-Veränderung gegenüber dem Vorjahr |
+| `kaufkraft_index` | Kaufkraft eines Euro, Startmonat = 100 |
+
+**`energiepreise_jahr.csv`** – `jahr`, `verbrauchsklasse`, `strompreis_eur_kwh`,
+`gaspreis_eur_kwh` (jeweils inklusive Steuern, Abgaben und Umlagen; Summe der
+Preisbestandteile).
+
+**`strom_boerse_tag.csv`** – `datum`, `preis_eur_mwh` (Tagesmittel der stündlichen
+Day-Ahead-Preise).
+
+**`kraftstoffpreise.csv`** – `monat`, `land`, `produkt` (`Diesel`,
+`Superbenzin (Euro 95)`), `preis_eur_l`.
+
+**`big_mac.csv`** – `datum`, `land`, `preis_usd`, `abweichung_pct` (Abweichung vom
+US-Preis).
+
+**`eigentumsquote.csv`** – `jahr`, `geo`, `land`, `eigentumsquote_pct`, `mietquote_pct`.
+
+**`bund_zinsausgaben.csv`** – `jahr`, `art` (`Ist`, `Soll`, `RegE`),
+`zinsausgaben_mrd_eur`.
+
 ## `raw/`
 
 Die Originaldateien der Quellen (Destatis-CSV in Windows-1252, Eurostat-JSON-stat,
@@ -131,3 +185,8 @@ CSV-Dateien aus `processed/`.
 * Bundesbank-Daten: © Deutsche Bundesbank, Quellenangabe erforderlich
 * FRED/OECD-Daten: OECD-Nutzungsbedingungen, Quellenangabe erforderlich
 * Bank-of-Russia-Daten: Quellenangabe erforderlich
+* EZB-Daten: Europäische Zentralbank, Quellenangabe erforderlich
+* energy-charts.info: CC BY 4.0, Daten von Bundesnetzagentur | SMARD.de
+* EU Weekly Oil Bulletin: © Europäische Union, Quellenangabe erforderlich
+* Big-Mac-Index: The Economist, Quellenangabe erforderlich
+* Bundeshaushalt: © Bundesministerium der Finanzen, Quellenangabe erforderlich

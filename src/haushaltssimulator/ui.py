@@ -111,6 +111,51 @@ def interest_burden() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def insolvencies() -> pd.DataFrame:
+    return dataset.load_insolvencies()
+
+
+@st.cache_data(show_spinner=False)
+def money_supply() -> pd.DataFrame:
+    return dataset.load_money_supply()
+
+
+@st.cache_data(show_spinner=False)
+def purchasing_power() -> pd.DataFrame:
+    return dataset.load_purchasing_power()
+
+
+@st.cache_data(show_spinner=False)
+def energy_prices() -> pd.DataFrame:
+    return dataset.load_energy_prices()
+
+
+@st.cache_data(show_spinner=False)
+def day_ahead_prices() -> pd.DataFrame:
+    return dataset.load_day_ahead_prices()
+
+
+@st.cache_data(show_spinner=False)
+def fuel_prices() -> pd.DataFrame:
+    return dataset.load_fuel_prices()
+
+
+@st.cache_data(show_spinner=False)
+def big_mac() -> pd.DataFrame:
+    return dataset.load_big_mac()
+
+
+@st.cache_data(show_spinner=False)
+def homeownership() -> pd.DataFrame:
+    return dataset.load_homeownership()
+
+
+@st.cache_data(show_spinner=False)
+def bund_interest() -> pd.DataFrame:
+    return dataset.load_bund_interest()
+
+
+@st.cache_data(show_spinner=False)
 def sources_library() -> dict:
     """Quellenbibliothek mit URLs, Lizenzen, Prüfsummen und Abrufzeitpunkten."""
     return sources.read_library()

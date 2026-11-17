@@ -4,6 +4,17 @@ Dieser Plan beschreibt, wie die Ideen aus [TODO.md](TODO.md) in mehreren, jeweil
 lauffähigen Stufen in den Haushaltssimulator einfließen. Jede Stufe endet mit einem
 lauffähigen Stand (App startet, Tests grün, Daten reproduzierbar) und einem Commit.
 
+## Umsetzungsstand
+
+| Stufe | Inhalt | Stand |
+| --- | --- | --- |
+| 0 | Fundament: Quellenbibliothek, Zeitstempel, Quellenseite, Export | umgesetzt |
+| 1 | Haushalt: Einnahmen ohne neue Schulden, Ausgaben, Zinsausgaben | umgesetzt |
+| 2 | Schulden und Zinslast: 10-jährige Bundesanleihe × Schuldenstand | umgesetzt |
+| 3 | Internationaler Zinsvergleich | umgesetzt |
+| 4 | Wirtschafts- und Geldindikatoren | umgesetzt, Sondervermögen offen |
+| 5 | Haushaltspläne im Vergleich | offen |
+
 ## Leitplanken
 
 Verbindlich für alle Stufen sind die Projektregeln in
@@ -78,15 +89,27 @@ Ziel: Staatsanleiherenditen im europäischen und internationalen Vergleich.
 Abnahmekriterien: Mindestens Deutschland, Frankreich, Italien, Spanien, USA und
 Russland sind auswählbar; Herkunft und Datenstand jeder Reihe sind sichtbar.
 
-## Stufe 4 – Wirtschafts- und Geldindikatoren
+## Stufe 4 – Wirtschafts- und Geldindikatoren (umgesetzt)
 
-Ideen aus [TODO.md](TODO.md), jeweils als eigene Quelle mit eigener Seite:
+Ideen aus [TODO.md](TODO.md), umgesetzt als fünf Seiten mit eigenen Quellen:
 
-* Unternehmensinsolvenzen (Destatis, Monatsbericht).
-* Geldmenge und Kaufkraft (Eurostat beziehungsweise EZB).
-* Energiepreise (energy-charts.info, Destatis).
-* Big-Mac-Index und Eigentumsquote in Europa.
-* Sondervermögen und Schuldendienst des Bundes.
+* **Insolvenzen** – Destatis 52411-0002 und 52411-0011 (Verfahren, Forderungen,
+  betroffene Arbeitnehmer).
+* **Geld & Kaufkraft** – EZB BSI (M3) und ICP (HVPI Deutschland und Euro-Raum).
+* **Energiepreise** – Destatis 61243-0002 und 61243-0011 (Strom/Gas Haushalte),
+  energy-charts.info (Day-Ahead) und EU Weekly Oil Bulletin (Kraftstoffe).
+* **Preisniveau & Wohnen** – The Economist (Big-Mac-Index) und Eurostat ilc_lvho02
+  (Eigentumsquote).
+* **Bund & Schuldendienst** – Eurostat gov_10a_main/gov_10dd_edpt1 (Sektor S1311) und
+  BMF-Zinsausgaben am Kreditmarkt.
+
+Offene Punkte dieser Stufe:
+
+* Die GENESIS-Tabelle der Insolvenzen liefert nur das laufende Berichtsjahr. Für eine
+  längere Monatsreihe ist der GENESIS-Webservice mit Zeitraumfilter und Zugangskennung
+  nötig; bis dahin zeigt die Seite die verfügbaren Monate.
+* **Sondervermögen** des Bundes liegen nicht als frei maschinenlesbare Zeitreihe vor.
+  Die Seite weist sie deshalb noch nicht separat aus.
 
 ## Stufe 5 – Haushaltspläne im Vergleich
 
@@ -100,6 +123,10 @@ Ideen aus [TODO.md](TODO.md), jeweils als eigene Quelle mit eigener Seite:
 
 * Sollen die Rohdaten aus `data/raw/` zusätzlich versioniert werden? Bislang
   versioniert das Repository nur die Quellenbibliothek und die aufbereiteten Daten.
+* Für die Insolvenzen ist eine längere Monatsreihe über den GENESIS-Webservice zu
+  beschaffen (Zeitraumfilter, Zugangskennung).
+* Für die Sondervermögen des Bundes fehlt eine frei zugängliche, maschinenlesbare
+  Quelle.
 * Für Russland liefert die OECD-Reihe nur Daten bis 2018; deshalb der Rückgriff auf
   die Tagesdaten der Bank of Russia (Monatsendwerte).
 * Die theoretische Zinslast ist eine Modellrechnung (gesamter Schuldenstand zur

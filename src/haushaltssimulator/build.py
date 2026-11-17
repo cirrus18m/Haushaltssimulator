@@ -4,11 +4,25 @@ from __future__ import annotations
 
 import argparse
 import json
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import pandas as pd
 
-from . import analysis, bundesbank, destatis, eurostat, fred, laender, paths, sources
+from . import (
+    analysis,
+    bigmac,
+    bmf,
+    bundesbank,
+    destatis,
+    ecb,
+    eurostat,
+    fred,
+    laender,
+    oil,
+    paths,
+    sources,
+)
 
 SECTOR_LABELS = {
     "S13": "Staat insgesamt",
@@ -30,6 +44,21 @@ SCHULDENART_ORDER = [
 ]
 
 DESTATIS_COLUMNS = ["stichtag", "ebene", "haushalt", "schuldenart", "schulden_mio_eur"]
+
+MONATSNAMEN = {
+    "Januar": 1,
+    "Februar": 2,
+    "März": 3,
+    "April": 4,
+    "Mai": 5,
+    "Juni": 6,
+    "Juli": 7,
+    "August": 8,
+    "September": 9,
+    "Oktober": 10,
+    "November": 11,
+    "Dezember": 12,
+}
 
 HOUSEHOLD_ITEMS = {
     "TR": "einnahmen_mio_eur",
@@ -294,6 +323,165 @@ def build_interest_burden(raw_dir: Path) -> pd.DataFrame:
     return frame[columns].sort_values("jahr").reset_index(drop=True)
 
 
+def build_insolvencies(raw_dir: Path) -> pd.DataFrame:
+    """Monatliche Insolvenzverfahren insgesamt und von Unternehmen (Destatis)."""
+    total = destatis.parse_fixed_columns(
+        destatis.decode((raw_dir / "destatis_52411-0002_insolvenzen.csv").read_bytes()),
+        ["jahr", "monat_name", "status"],
+        ["verfahren_gesamt", "forderungen_gesamt_tsd_eur"],
+    )
+    total = total[total["status"] == "Insgesamt"].drop(columns=["status"])
+
+    unternehmen = destatis.parse_fixed_columns(
+        destatis.decode((raw_dir / "destatis_52411-0011_insolvenzen_unternehmen.csv").read_bytes()),
+        ["jahr", "monat_name", "rechtsform"],
+        [
+            "verfahren_unternehmen",
+            "forderungen_unternehmen_tsd_eur",
+            "betroffene_arbeitnehmer",
+        ],
+    )
+    unternehmen = unternehmen[unternehmen["rechtsform"] == "Insgesamt"].drop(columns=["rechtsform"])
+
+    frame = total.merge(unternehmen, on=["jahr", "monat_name"], how="outer")
+    frame["monat_nummer"] = frame["monat_name"].map(MONATSNAMEN)
+    frame = frame.dropna(subset=["monat_nummer"]).copy()
+    frame["jahr"] = frame["jahr"].astype(int)
+    frame["monat_nummer"] = frame["monat_nummer"].astype(int)
+    frame["monat"] = (
+        frame["jahr"].astype(str) + "-" + frame["monat_nummer"].map(lambda monat: f"{monat:02d}")
+    )
+    frame = frame.dropna(subset=["verfahren_gesamt", "verfahren_unternehmen"], how="all")
+    frame["forderungen_gesamt_mio_eur"] = frame["forderungen_gesamt_tsd_eur"] / 1000
+    frame["forderungen_unternehmen_mio_eur"] = frame["forderungen_unternehmen_tsd_eur"] / 1000
+    columns = [
+        "monat",
+        "jahr",
+        "verfahren_gesamt",
+        "verfahren_unternehmen",
+        "forderungen_gesamt_mio_eur",
+        "forderungen_unternehmen_mio_eur",
+        "betroffene_arbeitnehmer",
+    ]
+    return frame[columns].sort_values("monat").reset_index(drop=True)
+
+
+def build_money_supply(raw_dir: Path) -> pd.DataFrame:
+    """Geldmenge M3 des Euro-Raums mit Jahreswachstumsrate (EZB)."""
+    frame = ecb.parse_csv((raw_dir / "ecb_geldmenge_m3.csv").read_bytes())
+    frame = frame[["monat", "wert"]].rename(columns={"wert": "index_m3"}).sort_values("monat")
+    frame["wachstum_pct"] = frame["index_m3"].pct_change(periods=12) * 100
+    return frame[["monat", "index_m3", "wachstum_pct"]].reset_index(drop=True)
+
+
+def build_purchasing_power(raw_dir: Path) -> pd.DataFrame:
+    """Inflation und kumulierter Kaufkraftverlust (EZB-HVPI)."""
+    frame = ecb.parse_csv((raw_dir / "ecb_hicp_de_ea.csv").read_bytes())
+    wide = frame.pivot_table(
+        index="monat", columns="gebiet", values="wert", aggfunc="first"
+    ).reset_index()
+    missing = {"DE", "U2"} - set(wide.columns)
+    if missing:
+        raise ValueError(f"Gebiete fehlen im HVPI-Export: {sorted(missing)}")
+    wide = wide.rename(columns={"DE": "inflation_de_pct", "U2": "inflation_ea_pct"})
+    wide = wide.sort_values("monat").reset_index(drop=True)
+    # Jahresrate in eine Monatsrate umrechnen, sonst kumuliert sich der Verlust zu stark.
+    faktor = (1 + wide["inflation_de_pct"].fillna(0) / 100) ** (-1 / 12)
+    wide["kaufkraft_index"] = 100 * faktor.cumprod()
+    return wide[["monat", "inflation_de_pct", "inflation_ea_pct", "kaufkraft_index"]]
+
+
+def _parse_household_prices(raw_dir: Path, filename: str, wertspalte: str) -> pd.DataFrame:
+    """Summiert die Preisbestandteile zu einem Gesamtpreis je Verbrauchsklasse."""
+    frame = destatis.parse_fixed_columns(
+        destatis.decode((raw_dir / filename).read_bytes()),
+        ["jahr", "verbrauchsklasse"],
+        ["energie_und_vertrieb", "netzkosten", "steuern_abgaben"],
+    )
+    frame["jahr"] = frame["jahr"].astype(int)
+    frame[wertspalte] = frame[
+        ["energie_und_vertrieb", "netzkosten", "steuern_abgaben"]
+    ].sum(axis=1, min_count=1)
+    return frame[["jahr", "verbrauchsklasse", wertspalte]]
+
+
+def build_energy_prices(raw_dir: Path) -> pd.DataFrame:
+    """Strom- und Gaspreise für Haushalte je Jahr (Destatis)."""
+    strom = _parse_household_prices(
+        raw_dir, "destatis_61243-0002_strompreise.csv", "strompreis_eur_kwh"
+    )
+    gas = _parse_household_prices(
+        raw_dir, "destatis_61243-0011_gaspreise.csv", "gaspreis_eur_kwh"
+    )
+    frame = strom.merge(gas, on=["jahr", "verbrauchsklasse"], how="outer")
+    return frame.sort_values(["jahr", "verbrauchsklasse"]).reset_index(drop=True)
+
+
+def build_day_ahead_prices(raw_dir: Path) -> pd.DataFrame:
+    """Tagesmittel der Day-Ahead-Strompreise für die Gebotszone DE-LU."""
+    document = _load_json(raw_dir, "energy_charts_day_ahead.json")
+    frame = pd.DataFrame(
+        {
+            "zeit": pd.to_datetime(document["unix_seconds"], unit="s", utc=True),
+            "preis_eur_mwh": pd.to_numeric(pd.Series(document["price"]), errors="coerce"),
+        }
+    )
+    frame["zeit"] = frame["zeit"].dt.tz_convert("Europe/Berlin")
+    frame["datum"] = frame["zeit"].dt.normalize().dt.tz_localize(None)
+    daily = frame.groupby("datum", as_index=False)["preis_eur_mwh"].mean()
+    return daily.sort_values("datum").reset_index(drop=True)
+
+
+def build_fuel_prices(raw_dir: Path) -> pd.DataFrame:
+    """Monatliche Kraftstoffpreise je Land aus dem EU-Ölbulletin."""
+    aktuelles_jahr = datetime.now(UTC).year
+    frame = oil.parse_prices(
+        (raw_dir / "oil_bulletin_preise.xlsx").read_bytes(),
+        since=date(aktuelles_jahr - 10, 1, 1),
+    )
+    frame = frame[frame["land_code"].isin(laender.OIL_LAND_NAMEN)].copy()
+    if frame.empty:
+        raise ValueError("Keine Kraftstoffpreise für die bekannten Länder gefunden")
+    frame["land"] = frame["land_code"].map(laender.OIL_LAND_NAMEN)
+    frame["monat"] = pd.to_datetime(frame["datum"]).dt.strftime("%Y-%m")
+    monthly = frame.groupby(["monat", "land", "produkt"], as_index=False)["preis_eur_l"].mean()
+    return monthly.sort_values(["monat", "land", "produkt"]).reset_index(drop=True)
+
+
+def build_big_mac(raw_dir: Path) -> pd.DataFrame:
+    """Big-Mac-Index für die ausgewählten Länder (The Economist)."""
+    frame = bigmac.parse_index((raw_dir / "big_mac_index.csv").read_bytes())
+    frame = frame[frame["iso3"].isin(laender.BIG_MAC_LAENDER)].copy()
+    frame["land"] = frame["iso3"].map(laender.BIG_MAC_LAENDER)
+    columns = ["datum", "land", "preis_usd", "abweichung_pct"]
+    return frame[columns].sort_values(["datum", "land"]).reset_index(drop=True)
+
+
+def build_homeownership(raw_dir: Path) -> pd.DataFrame:
+    """Eigentums- und Mietquote der Haushalte je Land und Jahr (Eurostat)."""
+    frame = eurostat.jsonstat_to_frame(_load_json(raw_dir, "eurostat_ilc_lvho02.json"))
+    frame = frame[frame["tenure"].isin(["OWN", "RENT"])]
+    wide = frame.pivot_table(
+        index=["time", "geo"], columns="tenure", values="value", aggfunc="first"
+    ).reset_index()
+    wide = wide.rename(
+        columns={"time": "jahr", "OWN": "eigentumsquote_pct", "RENT": "mietquote_pct"}
+    )
+    wide["jahr"] = wide["jahr"].astype(int)
+    wide["land"] = wide["geo"].map(laender.LAND_NAMEN)
+    wide.loc[wide["geo"] == "EU27_2020", "land"] = "EU-27"
+    columns = ["jahr", "geo", "land", "eigentumsquote_pct", "mietquote_pct"]
+    return wide[columns].sort_values(["jahr", "land"]).reset_index(drop=True)
+
+
+def build_bmf_interest(raw_dir: Path) -> pd.DataFrame:
+    """Zinsausgaben des Bundes am Kreditmarkt (BMF)."""
+    frame = bmf.parse_interest_csv((raw_dir / "bmf_zinsausgaben_kreditmarkt.csv").read_bytes())
+    frame = frame.dropna(subset=["zinsausgaben_mrd_eur"])
+    columns = ["jahr", "art", "zinsausgaben_mrd_eur"]
+    return frame[columns].sort_values("jahr").reset_index(drop=True)
+
+
 BUILDERS = {
     "schulden_jahresreihe.csv": build_annual_debt,
     "schulden_quartalsreihe.csv": build_quarterly_debt,
@@ -305,6 +493,15 @@ BUILDERS = {
     "zins_bund_10j.csv": build_bund_yield,
     "zins_vergleich.csv": build_international_yields,
     "zinslast_jahr.csv": build_interest_burden,
+    "insolvenzen_monat.csv": build_insolvencies,
+    "geldmenge_monat.csv": build_money_supply,
+    "kaufkraft_monat.csv": build_purchasing_power,
+    "energiepreise_jahr.csv": build_energy_prices,
+    "strom_boerse_tag.csv": build_day_ahead_prices,
+    "kraftstoffpreise.csv": build_fuel_prices,
+    "big_mac.csv": build_big_mac,
+    "eigentumsquote.csv": build_homeownership,
+    "bund_zinsausgaben.csv": build_bmf_interest,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -312,6 +509,14 @@ FLOAT_FORMATS = {
     "zins_bund_10j.csv": "%.2f",
     "zins_vergleich.csv": "%.2f",
     "zinslast_jahr.csv": "%.2f",
+    "geldmenge_monat.csv": "%.2f",
+    "kaufkraft_monat.csv": "%.2f",
+    "energiepreise_jahr.csv": "%.4f",
+    "strom_boerse_tag.csv": "%.2f",
+    "kraftstoffpreise.csv": "%.3f",
+    "big_mac.csv": "%.2f",
+    "eigentumsquote.csv": "%.1f",
+    "bund_zinsausgaben.csv": "%.2f",
 }
 
 

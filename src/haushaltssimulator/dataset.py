@@ -18,6 +18,15 @@ HOUSEHOLD = "haushalt_jahr.csv"
 BUND_YIELD = "zins_bund_10j.csv"
 INTERNATIONAL_YIELDS = "zins_vergleich.csv"
 INTEREST_BURDEN = "zinslast_jahr.csv"
+INSOLVENCIES = "insolvenzen_monat.csv"
+MONEY_SUPPLY = "geldmenge_monat.csv"
+PURCHASING_POWER = "kaufkraft_monat.csv"
+HOUSEHOLD_ENERGY = "energiepreise_jahr.csv"
+DAY_AHEAD = "strom_boerse_tag.csv"
+FUEL_PRICES = "kraftstoffpreise.csv"
+BIG_MAC = "big_mac.csv"
+HOMEOWNERSHIP = "eigentumsquote.csv"
+BUND_INTEREST = "bund_zinsausgaben.csv"
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -31,6 +40,15 @@ DATASET_LABELS = {
     BUND_YIELD: "Tagesrendite der 10-jährigen Bundesanleihe",
     INTERNATIONAL_YIELDS: "Renditen 10-jähriger Staatsanleihen im Ländervergleich",
     INTEREST_BURDEN: "Theoretische Zinslast und Zinsquoten",
+    INSOLVENCIES: "Insolvenzverfahren je Monat",
+    MONEY_SUPPLY: "Geldmenge M3 und Wachstumsrate",
+    PURCHASING_POWER: "Inflation und Kaufkraftindex",
+    HOUSEHOLD_ENERGY: "Strom- und Gaspreise für Haushalte",
+    DAY_AHEAD: "Börsenstrompreis (Day-Ahead), Tagesmittel",
+    FUEL_PRICES: "Kraftstoffpreise im EU-Vergleich",
+    BIG_MAC: "Big-Mac-Index je Land",
+    HOMEOWNERSHIP: "Eigentums- und Mietquote in Europa",
+    BUND_INTEREST: "Zinsausgaben des Bundes am Kreditmarkt",
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -106,3 +124,48 @@ def load_international_yields(processed_dir: Path = PROCESSED_DIR) -> pd.DataFra
 def load_interest_burden(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     """Schuldenstand, Rendite, theoretische und tatsächliche Zinslast je Jahr."""
     return _read(INTEREST_BURDEN, processed_dir)
+
+
+def load_insolvencies(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Monatliche Insolvenzverfahren insgesamt und von Unternehmen."""
+    return _read(INSOLVENCIES, processed_dir)
+
+
+def load_money_supply(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Geldmenge M3 des Euro-Raums mit Jahreswachstumsrate."""
+    return _read(MONEY_SUPPLY, processed_dir)
+
+
+def load_purchasing_power(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Inflation in Deutschland und im Euro-Raum sowie Kaufkraftindex."""
+    return _read(PURCHASING_POWER, processed_dir)
+
+
+def load_energy_prices(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Strom- und Gaspreise für Haushalte je Jahr und Verbrauchsklasse."""
+    return _read(HOUSEHOLD_ENERGY, processed_dir)
+
+
+def load_day_ahead_prices(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Tagesmittel der Day-Ahead-Strompreise für Deutschland/Luxemburg."""
+    return _read(DAY_AHEAD, processed_dir)
+
+
+def load_fuel_prices(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Monatliche Kraftstoffpreise je Land und Produkt."""
+    return _read(FUEL_PRICES, processed_dir)
+
+
+def load_big_mac(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Big-Mac-Preis in US-Dollar und Abweichung vom US-Preis."""
+    return _read(BIG_MAC, processed_dir)
+
+
+def load_homeownership(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Eigentums- und Mietquote der Haushalte je Land und Jahr."""
+    return _read(HOMEOWNERSHIP, processed_dir)
+
+
+def load_bund_interest(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Zinsausgaben des Bundes am Kreditmarkt je Haushaltsjahr."""
+    return _read(BUND_INTEREST, processed_dir)

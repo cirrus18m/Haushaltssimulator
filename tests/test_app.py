@@ -53,6 +53,39 @@ def test_interest_burden_links_debt_revenue_and_yield() -> None:
     assert 0 < latest["zins_quote_bip_pct"] < 10
 
 
+def test_insolvencies_cover_total_and_companies() -> None:
+    frame = dataset.load_insolvencies()
+    assert {"verfahren_gesamt", "verfahren_unternehmen"} <= set(frame.columns)
+    assert frame["monat"].is_monotonic_increasing
+    assert frame["verfahren_unternehmen"].max() > 0
+
+
+def test_energy_prices_cover_electricity_and_gas() -> None:
+    frame = dataset.load_energy_prices()
+    gesamt = frame[frame["verbrauchsklasse"] == "Insgesamt"]
+    assert gesamt["strompreis_eur_kwh"].between(0.1, 1.0).all()
+    assert gesamt["gaspreis_eur_kwh"].between(0.01, 0.5).all()
+
+
+def test_fuel_prices_have_european_countries() -> None:
+    frame = dataset.load_fuel_prices()
+    assert frame["land"].nunique() >= 20
+    assert frame["preis_eur_l"].between(0.5, 3.5).all()
+
+
+def test_big_mac_and_homeownership_cover_germany() -> None:
+    big_mac = dataset.load_big_mac()
+    assert "Euro-Raum" in set(big_mac["land"])
+    eigentum = dataset.load_homeownership()
+    assert eigentum["eigentumsquote_pct"].between(0, 100).all()
+
+
+def test_bund_interest_has_plan_values() -> None:
+    frame = dataset.load_bund_interest()
+    assert {"Ist", "Soll"} & set(frame["art"])
+    assert (frame["zinsausgaben_mrd_eur"] > 0).all()
+
+
 def test_international_yields_cover_germany_usa_and_russia() -> None:
     frame = dataset.load_international_yields()
     assert {"Deutschland", "Vereinigte Staaten", "Russland"} <= set(frame["land"])
@@ -73,6 +106,11 @@ def test_international_yields_cover_germany_usa_and_russia() -> None:
         "pages/6_Haushalt_und_Zinsen.py",
         "pages/7_Zinsvergleich.py",
         "pages/8_Quellen.py",
+        "pages/9_Insolvenzen.py",
+        "pages/10_Geld_und_Kaufkraft.py",
+        "pages/11_Energiepreise.py",
+        "pages/12_Preisniveau_und_Wohnen.py",
+        "pages/13_Bund_und_Schuldendienst.py",
     ],
 )
 def test_streamlit_pages_run_without_exception(script: str) -> None:

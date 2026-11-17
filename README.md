@@ -59,6 +59,11 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe und die daraus folgende theoretische Zinslast in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme und Abrufdatum |
+| **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
+| **Geld & Kaufkraft** | Geldmenge M3, Inflation und kumulierter Kaufkraftverlust |
+| **Energiepreise** | Strom- und Gaspreise für Haushalte, Börsenstrompreis und Kraftstoffe im EU-Vergleich |
+| **Preisniveau & Wohnen** | Big-Mac-Index und Eigentumsquote in Europa |
+| **Bund & Schuldendienst** | Zinsausgaben und Schuldenstand des Bundes, Planwerte aus dem Bundeshaushalt |
 
 ## Projektstruktur
 
@@ -94,6 +99,17 @@ Alle Quellen sind frei verfügbar und werden ohne API-Schlüssel abgerufen.
 | [Eurostat `irt_lt_mcby_m`](https://ec.europa.eu/eurostat/databrowser/view/irt_lt_mcby_m/default/table) | Konvergenzrenditen 10-jähriger Staatsanleihen, monatlich | CC BY 4.0 |
 | [FRED `IRLTLT01USM156N`](https://fred.stlouisfed.org/series/IRLTLT01USM156N) | Langfristige Staatsanleiherendite der USA (OECD MEI) | OECD-Bedingungen |
 | [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |
+| [Destatis 52411-0002](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0002) | Beantragte Insolvenzverfahren, Monate | DL-DE-BY-2.0 |
+| [Destatis 52411-0011](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0011) | Insolvenzverfahren von Unternehmen, Monate | DL-DE-BY-2.0 |
+| [EZB BSI](https://data.ecb.europa.eu/data/datasets/BSI) | Geldmenge M3, monatlich | Quellenangabe erforderlich |
+| [EZB ICP](https://data.ecb.europa.eu/data/datasets/ICP) | Harmonisierter Verbraucherpreisindex, monatlich | Quellenangabe erforderlich |
+| [Destatis 61243-0002](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0002) | Strompreise für Haushalte, Jahre | DL-DE-BY-2.0 |
+| [Destatis 61243-0011](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0011) | Erdgaspreise für Haushalte, Jahre | DL-DE-BY-2.0 |
+| [energy-charts.info](https://api.energy-charts.info/) | Börsenstrompreis Day-Ahead (Bundesnetzagentur \| SMARD.de) | CC BY 4.0 |
+| [EU Weekly Oil Bulletin](https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en) | Kraftstoffpreise je Land, wöchentlich | Quellenangabe erforderlich |
+| [The Economist Big-Mac-Data](https://github.com/TheEconomist/big-mac-data) | Big-Mac-Index je Land | Quellenangabe erforderlich |
+| [Eurostat `ilc_lvho02`](https://ec.europa.eu/eurostat/databrowser/view/ilc_lvho02/default/table) | Eigentums- und Mietquote | CC BY 4.0 |
+| [BMF Bundeshaushalt](https://www.bundeshaushalt.de/) | Zinsausgaben des Bundes am Kreditmarkt | Quellenangabe erforderlich |
 
 Details zu Dateien und Spalten: [data/README.md](data/README.md).
 
@@ -153,6 +169,7 @@ tut das auf jeder Seite im Fußbereich.
 
 ## Ausblick
 
-Der nächste Ausbau ist in [PLAN.md](PLAN.md) beschrieben: Wirtschafts- und
-Geldindikatoren (Insolvenzen, Geldmenge, Energiepreise), Sondervermögen sowie der
-Vergleich der Haushaltspläne von Regierung und Opposition.
+Stufe 4 (Wirtschafts- und Geldindikatoren) ist umgesetzt. Offen sind die
+Sondervermögen des Bundes – dafür fehlt eine frei maschinenlesbare Zeitreihe – und
+Stufe 5, der Vergleich der Haushaltspläne von Regierung und Opposition. Details stehen
+in [PLAN.md](PLAN.md).
