@@ -197,6 +197,12 @@ Zugangsdaten für Datenquellen-APIs stehen in `.env` (nicht versioniert, Vorlage
 abgelegt und über `build.py` aufbereitet. Die App liest ausschließlich `processed/`
 und macht keine eigenen API-Aufrufe.
 
+Im Datenaufbau aktiv ist derzeit `fred_api`: Die US-Rendite
+(`fred_us_10j_rendite.csv`) wird mit `FRED_API_KEY` über die FRED-API geholt und ohne
+Schlüssel über den öffentlichen CSV-Export. Beide Wege erzeugen dieselbe Tabelle.
+Die Destatis-Tabellen nutzen weiterhin die Export-URLs, weil das API-Format
+(`ffcsv` bzw. `csv` mit `transpose`) anders aufgebaut ist als die Exportdateien.
+
 ## Aktualisieren
 
 ```bash

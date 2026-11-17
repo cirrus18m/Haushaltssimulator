@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pandas as pd
 import pytest
 
 from haushaltssimulator import dataset, paths, sources
@@ -107,3 +108,56 @@ def test_manual_files_live_in_tracked_subfolder() -> None:
         if source.fetch_mode == "manual":
             assert source.filename.startswith("manual/")
             assert (paths.RAW_DIR / source.filename).exists(), source.filename
+
+
+def _fred_source() -> sources.Source:
+    return next(source for source in sources.SOURCES if source.key == "fred_us_zins")
+
+
+def test_fred_source_uses_api_when_key_is_configured(monkeypatch) -> None:
+    from haushaltssimulator import fred_api
+
+    class FakeApi:
+        def series_observations(self, series_id: str) -> list[dict]:
+            assert series_id == "IRLTLT01USM156N"
+            return [
+                {"date": "2024-01-01", "value": "2.50"},
+                {"date": "2024-02-01", "value": "."},
+            ]
+
+    monkeypatch.setattr(fred_api.FredApi, "from_env", classmethod(lambda cls: FakeApi()))
+
+    payload = sources._fetch(_fred_source()).decode("utf-8")
+
+    assert payload.splitlines() == [
+        "observation_date,IRLTLT01USM156N",
+        "2024-01-01,2.50",
+        "2024-02-01,.",
+    ]
+
+
+def test_fred_source_falls_back_to_public_export_without_key(monkeypatch) -> None:
+    from haushaltssimulator import fred_api
+
+    def without_key(cls):
+        raise fred_api.FredApiError("kein Schlüssel")
+
+    monkeypatch.setattr(fred_api.FredApi, "from_env", classmethod(without_key))
+    monkeypatch.setattr(sources, "_read_url", lambda url: b"observation_date,IRLTLT01USM156N\n")
+
+    assert sources._fetch(_fred_source()) == b"observation_date,IRLTLT01USM156N\n"
+
+
+def test_fred_source_writes_csv_that_the_parser_reads(monkeypatch, tmp_path) -> None:
+    from haushaltssimulator import fred, fred_api
+
+    class FakeApi:
+        def series_observations(self, series_id: str) -> list[dict]:
+            return [{"date": "2024-01-01", "value": "2.50"}]
+
+    monkeypatch.setattr(fred_api.FredApi, "from_env", classmethod(lambda cls: FakeApi()))
+    path = sources.download(_fred_source(), tmp_path, refresh=True)
+
+    frame = fred.parse_series_csv(path.read_bytes())
+
+    assert frame.iloc[0].tolist() == [pd.Timestamp("2024-01-01"), 2.5]

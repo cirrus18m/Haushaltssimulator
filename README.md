@@ -150,6 +150,13 @@ Client-Modul anlegen.
 Das EZB-Data-Portal (`https://data.ecb.europa.eu/`) und Eurostat bieten frei nutzbare
 Schnittstellen ohne Schlüssel; sie sind bereits über öffentliche Export-URLs angebunden.
 
+Genutzt werden die Clients derzeit im Datenaufbau für die US-Staatsanleiherendite
+(Quelle `fred_us_zins`, Modus `fred_api`): Mit `FRED_API_KEY` läuft der Abruf über die
+FRED-API, ohne Schlüssel automatisch über den öffentlichen CSV-Export. Die
+Destatis-Tabellen kommen weiterhin über die Export-URLs, weil das API-CSV-Format
+(`transpose`/`ffcsv`) nicht dem Aufbau der Exportdateien entspricht und eigene Parser
+braucht.
+
 Die Streamlit-App macht **keine** API-Aufrufe. Der Datenfluss bleibt:
 API/Download → `data/raw/` → `build.py` → `data/processed/` → App. Die Clients
 `destatis_api.py` und `fred_api.py` werden ausschließlich von Skripten und dem

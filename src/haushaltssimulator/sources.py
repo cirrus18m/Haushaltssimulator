@@ -25,7 +25,7 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Literal
 
-from . import cbr, laender, paths
+from . import cbr, fred_api, laender, paths
 
 DESTATIS_TABLE_URL = "https://genesis.destatis.de/genesisWS/downloads/00/tables/{code}_00.csv"
 EUROSTAT_DATA_URL = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/{dataset}"
@@ -58,7 +58,7 @@ CBR_MAX_FALLBACK_DAYS = 8
 
 USER_AGENT = "Haushaltssimulator/0.1 (+https://github.com/cirrus18m/Haushaltssimulator)"
 
-FetchMode = Literal["http", "cbr_zcyc", "energy_charts", "manual"]
+FetchMode = Literal["http", "cbr_zcyc", "energy_charts", "manual", "fred_api"]
 
 
 @dataclass(frozen=True)
@@ -74,6 +74,7 @@ class Source:
     license: str
     datasets: tuple[str, ...]
     fetch_mode: FetchMode = "http"
+    api_series: str | None = None
 
 
 def _eurostat(dataset: str, **params: object) -> str:
@@ -266,9 +267,12 @@ SOURCES: tuple[Source, ...] = (
         publisher="OECD (MEI) über Federal Reserve Bank of St. Louis, Serie IRLTLT01USM156N",
         license="OECD-Nutzungsbedingungen, Quellenangabe erforderlich",
         datasets=("zins_vergleich.csv",),
+        fetch_mode="fred_api",
+        api_series="IRLTLT01USM156N",
         description=(
             "FRED IRLTLT01USM156N: Long-Term Government Bond Yields, 10-year benchmark, "
-            "Vereinigte Staaten, monatlich, in Prozent"
+            "Vereinigte Staaten, monatlich, in Prozent. Abruf über die FRED-API, ohne "
+            "API-Key über den öffentlichen CSV-Export"
         ),
     ),
     Source(
@@ -589,11 +593,28 @@ def _fetch_energy_charts(source: Source) -> bytes:
     return _read_url(ENERGY_CHARTS_URL.format(start=start.isoformat(), end=today.isoformat()))
 
 
+def _fetch_fred_api(source: Source) -> bytes:
+    """Lädt eine FRED-Serie über die API; ohne Schlüssel den öffentlichen CSV-Export."""
+    series = source.api_series or ""
+    try:
+        client = fred_api.FredApi.from_env()
+    except fred_api.FredApiError:
+        return _read_url(source.url)
+    observations = client.series_observations(series)
+    if not observations:
+        raise RuntimeError(f"FRED liefert keine Beobachtungen für {series}")
+    lines = [f"observation_date,{series}"]
+    lines.extend(f"{item.get('date', '')},{item.get('value', '')}" for item in observations)
+    return ("\n".join(lines) + "\n").encode("utf-8")
+
+
 def _fetch(source: Source) -> bytes:
     if source.fetch_mode == "cbr_zcyc":
         return _fetch_cbr_zcyc(source)
     if source.fetch_mode == "energy_charts":
         return _fetch_energy_charts(source)
+    if source.fetch_mode == "fred_api":
+        return _fetch_fred_api(source)
     return _read_url(source.url)
 
 

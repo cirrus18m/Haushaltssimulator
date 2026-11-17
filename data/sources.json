@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-17T21:14:10+00:00",
+  "aktualisiert_am": "2026-11-17T22:21:57+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -161,14 +161,14 @@
       "herausgeber": "OECD (MEI) über Federal Reserve Bank of St. Louis, Serie IRLTLT01USM156N",
       "lizenz": "OECD-Nutzungsbedingungen, Quellenangabe erforderlich",
       "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IRLTLT01USM156N",
-      "beschreibung": "FRED IRLTLT01USM156N: Long-Term Government Bond Yields, 10-year benchmark, Vereinigte Staaten, monatlich, in Prozent",
+      "beschreibung": "FRED IRLTLT01USM156N: Long-Term Government Bond Yields, 10-year benchmark, Vereinigte Staaten, monatlich, in Prozent. Abruf über die FRED-API, ohne API-Key über den öffentlichen CSV-Export",
       "datei": "fred_us_10j_rendite.csv",
       "datensaetze": [
         "zins_vergleich.csv"
       ],
-      "abgerufen_am": "2026-11-17T17:50:15+00:00",
-      "sha256": "9fdcb7afd821669b48fec45d843170ef7c0fdb2f3732ed0fd41c87422bd42292",
-      "bytes": 14233
+      "abgerufen_am": "2026-11-17T22:01:02+00:00",
+      "sha256": "f69f41a2300ec6c1f1cd1015a413ee41ced9398c854427fc0ff7033e49e7098b",
+      "bytes": 14115
     },
     {
       "key": "cbr_ru_zins",
