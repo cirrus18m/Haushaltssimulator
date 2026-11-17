@@ -220,6 +220,12 @@ uv run ruff check .    # Linting
 uv run ruff format .   # Formatierung
 ```
 
+Nach Änderungen an `src/haushaltssimulator/` den laufenden Streamlit-Prozess neu
+starten. Streamlit führt beim Rerun nur das Seiten-Skript erneut aus; bereits
+importierte Module bleiben im Speicher. Neue Funktionen in `ui.py`, `dataset.py` oder
+`analysis.py` erscheinen sonst erst nach einem Neustart – der Fehler sieht dann aus wie
+`AttributeError: module 'haushaltssimulator.ui' has no attribute ...`.
+
 ## Lizenz
 
 Der Quellcode dieses Projekts steht unter der [MIT-Lizenz](LICENSE), © 2026 cirrus18m.
