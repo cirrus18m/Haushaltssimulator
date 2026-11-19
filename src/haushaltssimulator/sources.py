@@ -5,7 +5,10 @@ Quellen:
 * Eurostat (Data Browser API): JSON-stat, Lizenz CC BY 4.0
 * Deutsche Bundesbank: Zeitreihenexport als CSV, Quellenangabe erforderlich
 * Federal Reserve Bank of St. Louis (FRED): CSV-Export, Quellenangabe erforderlich
-* Bank of Russia: Zero-Coupon-Yield-Curve, Quellenangabe erforderlich
+* Bank of Russia: Zero-Coupon-Yield-Curve und Preisdynamik, Quellenangabe erforderlich
+* Internationaler Währungsfonds (IWF): DataMapper-API, Quellenangabe erforderlich
+* Rosstat über EMISS: Verbraucherpreise, Quellenangabe erforderlich
+* Weltbank: World Development Indicators, CC BY 4.0
 
 Jeder Abruf wird in der versionierten Quellenbibliothek ``data/sources.json``
 festgehalten: URL, Lizenz, verwendete Datensätze, Prüfsumme und Zeitpunkt des
@@ -18,6 +21,7 @@ import csv
 import hashlib
 import io
 import json
+import urllib.error
 import urllib.request
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -25,7 +29,9 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Literal
 
-from . import cbr, fred_api, laender, paths
+import pandas as pd
+
+from . import cbr, config, fred_api, imf, laender, paths, rosstat
 
 DESTATIS_TABLE_URL = "https://genesis.destatis.de/genesisWS/downloads/00/tables/{code}_00.csv"
 EUROSTAT_DATA_URL = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/{dataset}"
@@ -51,6 +57,26 @@ BMF_INTEREST_URL = (
     "https://www.bundeshaushalt.de/Content/DE/Diagramme/Dashboard-Startseite/"
     "zinsausgaben-kreditmarkt-csv.csv?__blob=publicationFile&v=10"
 )
+IMF_DATAMAPPER_URL = "https://www.imf.org/external/datamapper/api/v1/{indicator}"
+EMISS_URL = "https://fedstat.ru/indicator/data.do?id={indicator}&format=csv"
+CBR_CPI_XLSX_URL = "https://www.cbr.ru/Content/Document/File/112040/indicators_cpd_eng.xlsx"
+WELTBANK_INDICATOR_URL = (
+    "https://api.worldbank.org/v2/country/{iso3}/indicator/{indicator}?format=json&per_page=100"
+)
+
+# Indikatoren des IWF, die der Datenaufbau in einer Datei sammelt.
+IMF_INDICATORS = (
+    imf.WEO_SCHULDENQUOTE,
+    imf.WEO_BIP_USD,
+    imf.WEO_BIP_JE_EINWOHNER,
+    imf.WEO_BEVOELKERUNG,
+    imf.FPP_SCHULDENQUOTE,
+    imf.FPP_EINNAHMEN,
+    imf.FPP_ZINSEN,
+)
+
+# EMISS-Indikator "Индекс потребительских цен" (monatlich, Russland).
+ROSSTAT_CPI_INDICATOR = 31074
 
 # Ab diesem Jahr liefert die Bank of Russia die Zinskurve in der genutzten Form.
 CBR_START_YEAR = 2015
@@ -58,7 +84,9 @@ CBR_MAX_FALLBACK_DAYS = 8
 
 USER_AGENT = "Haushaltssimulator/0.1 (+https://github.com/cirrus18m/Haushaltssimulator)"
 
-FetchMode = Literal["http", "cbr_zcyc", "energy_charts", "manual", "fred_api"]
+FetchMode = Literal[
+    "http", "cbr_zcyc", "energy_charts", "manual", "fred_api", "imf_datamapper", "emiss_api"
+]
 
 
 @dataclass(frozen=True)
@@ -395,6 +423,170 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="imf_fiskal",
+        filename="imf_fiskal.csv",
+        url=IMF_DATAMAPPER_URL.format(indicator=imf.WEO_SCHULDENQUOTE),
+        title="Staatsfinanzen und Schulden: internationale Länder, jährlich",
+        publisher=(
+            "Internationaler Währungsfonds (IWF), World Economic Outlook und "
+            "Public Finances in Modern History"
+        ),
+        license="IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=(
+            "laender_schulden_jahr.csv",
+            "laender_haushalt_jahr.csv",
+            "laender_einkommen_jahr.csv",
+        ),
+        fetch_mode="imf_datamapper",
+        api_series=",".join(IMF_INDICATORS),
+        description=(
+            "IWF DataMapper: Bruttoschulden des Gesamtstaats und BIP in Mrd. US-Dollar "
+            "(WEO GGXWDG_NGDP, NGDPD), BIP je Einwohner:in (NGDPDPC), Bevölkerung in "
+            "Mio. (LP) sowie Schuldenquote, Einnahmen und Zinsausgaben in Prozent des "
+            "BIP aus der Datenbank Public Finances in Modern History (d, rev, ie). "
+            "Alle Länder je Indikator in einer Datei; Einschränkung auf die in der App "
+            "verwendeten Länder erfolgt im Datenaufbau."
+        ),
+    ),
+    Source(
+        key="ecb_eur_usd_jahr",
+        filename="ecb_eur_usd_jahr.csv",
+        url=ECB_SERIES_URL.format(dataset="EXR", key="A.USD.EUR.SP00.A", start="1995"),
+        title="Wechselkurs US-Dollar/Euro, Jahresdurchschnitt",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz EXR",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=(
+            "laender_schulden_jahr.csv",
+            "laender_haushalt_jahr.csv",
+            "laender_einkommen_jahr.csv",
+        ),
+        description=(
+            "EZB EXR A.USD.EUR.SP00.A: Referenzkurs des US-Dollars gegenüber dem Euro, "
+            "Jahresdurchschnitt, für die Umrechnung der IWF- und Weltbank-Werte in Euro"
+        ),
+    ),
+    Source(
+        key="rosstat_cpi",
+        filename="rosstat_cpi_monatlich.csv",
+        url=EMISS_URL.format(indicator=ROSSTAT_CPI_INDICATOR),
+        title="Verbraucherpreise: Russland, monatlich",
+        publisher="Rosstat über EMISS; Rückgriff auf die Bank of Russia",
+        license="Rosstat bzw. Bank of Russia, Quellenangabe erforderlich",
+        datasets=("laender_inflation_monat.csv",),
+        fetch_mode="emiss_api",
+        api_series=str(ROSSTAT_CPI_INDICATOR),
+        description=(
+            "Rosstat/EMISS: Inflationsrate Russlands gegenüber dem Vorjahr, monatlich, "
+            "in Prozent. Ohne API-Key oder bei nicht erreichbarer Schnittstelle wird "
+            "die 12-Monats-Rate aus den saisonbereinigten Monatsraten der Bank of "
+            "Russia verkettet (Näherung); die tatsächlich verwendete Reihe steht je "
+            "Zeile in der Spalte quelle."
+        ),
+    ),
+    Source(
+        key="weltbank_bne_russland",
+        filename="weltbank_bne_russland.json",
+        url=WELTBANK_INDICATOR_URL.format(iso3="RUS", indicator="NY.GNP.PCAP.CD"),
+        title="Bruttonationaleinkommen je Einwohner:in: Russland, jährlich",
+        publisher="Weltbank, World Development Indicators, NY.GNP.PCAP.CD",
+        license="CC BY 4.0",
+        datasets=("laender_einkommen_jahr.csv",),
+        description=(
+            "Weltbank WDI NY.GNP.PCAP.CD: Bruttonationaleinkommen je Einwohner:in "
+            "(Atlas-Methode, laufende US-Dollar), jährlich. Dient als Ersatzreihe für "
+            "das verfügbare Einkommen Russlands, das nicht automatisch abrufbar ist."
+        ),
+    ),
+    Source(
+        key="eurostat_einkommen_laender",
+        filename="eurostat_ilc_di03_laender.json",
+        url=_eurostat(
+            "ilc_di03",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            age="TOTAL",
+            sex="T",
+            statinfo="MEAN_EI",
+            unit="EUR",
+            sinceTimePeriod="1995",
+        ),
+        title="Verfügbares Einkommen je Einwohner:in: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz ilc_di03",
+        license="CC BY 4.0",
+        datasets=("laender_einkommen_jahr.csv",),
+        description=(
+            "Eurostat ilc_di03: mittleres äquivalisiertes Nettoeinkommen der "
+            "Bevölkerung (MEAN_EI), jährlich ab 1995, je Land in Euro"
+        ),
+    ),
+    Source(
+        key="eurostat_arbeitnehmerentgelt_laender",
+        filename="eurostat_nama_10_lp_ulc_laender.json",
+        url=_eurostat(
+            "nama_10_lp_ulc",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            na_item="D1_SAL_PER",
+            unit="EUR",
+            sinceTimePeriod="1995",
+        ),
+        title="Arbeitnehmerentgelt je Arbeitnehmer:in: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz nama_10_lp_ulc",
+        license="CC BY 4.0",
+        datasets=("laender_einkommen_jahr.csv",),
+        description=(
+            "Eurostat nama_10_lp_ulc: Arbeitnehmerentgelt je Arbeitnehmer:in "
+            "(D1_SAL_PER), jährlich ab 1995, je Land in Euro"
+        ),
+    ),
+    Source(
+        key="fred_us_einkommen",
+        filename="fred_us_einkommen.csv",
+        url=FRED_SERIES_URL.format(series="A229RC0A052NBEA"),
+        title="Verfügbares Einkommen je Einwohner:in: Vereinigte Staaten, jährlich",
+        publisher="BEA über Federal Reserve Bank of St. Louis, Serie A229RC0A052NBEA",
+        license="BEA-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("laender_einkommen_jahr.csv",),
+        fetch_mode="fred_api",
+        api_series="A229RC0A052NBEA",
+        description=(
+            "FRED A229RC0A052NBEA: Disposable Personal Income per Capita, laufende "
+            "US-Dollar, jährlich"
+        ),
+    ),
+    Source(
+        key="fred_us_lohn",
+        filename="fred_us_lohn.csv",
+        url=FRED_SERIES_URL.format(series="CES0500000011"),
+        title="Wochenverdienst: Vereinigte Staaten, monatlich",
+        publisher="BLS über Federal Reserve Bank of St. Louis, Serie CES0500000011",
+        license="BLS-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("laender_einkommen_jahr.csv",),
+        fetch_mode="fred_api",
+        api_series="CES0500000011",
+        description=(
+            "FRED CES0500000011: Average Weekly Earnings of All Employees, Total "
+            "Private, laufende US-Dollar, monatlich; Jahreswert als Durchschnitt × 52"
+        ),
+    ),
+    Source(
+        key="fred_us_cpi",
+        filename="fred_us_cpi.csv",
+        url=FRED_SERIES_URL.format(series="CPIAUCSL"),
+        title="Verbraucherpreisindex: Vereinigte Staaten, monatlich",
+        publisher="BLS über Federal Reserve Bank of St. Louis, Serie CPIAUCSL",
+        license="BLS-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("laender_inflation_monat.csv",),
+        fetch_mode="fred_api",
+        api_series="CPIAUCSL",
+        description=(
+            "FRED CPIAUCSL: Consumer Price Index for All Urban Consumers, alle Güter, "
+            "saisonbereinigt, monatlich; Vorjahresrate in Prozent"
+        ),
+    ),
+    Source(
         key="destatis_insolvenzen",
         filename="destatis_52411-0002_insolvenzen.csv",
         url=DESTATIS_TABLE_URL.format(code="52411-0002"),
@@ -622,9 +814,30 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     },
     {
         "anbieter": "Bank of Russia",
-        "daten": "Rendite russischer Staatsanleihen (OFZ)",
+        "daten": "Rendite russischer Staatsanleihen (OFZ), Preisdynamik",
         "portal": "https://www.cbr.ru/eng/",
         "api": "https://www.cbr.ru/eng/hd_base/zcyc_params/",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Internationaler Währungsfonds (IWF)",
+        "daten": "Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung",
+        "portal": "https://www.imf.org/en/Data",
+        "api": "https://www.imf.org/external/datamapper/api/help",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Rosstat über EMISS",
+        "daten": "Verbraucherpreise Russlands",
+        "portal": "https://rosstat.gov.ru/statistics/price",
+        "api": "https://fedstat.ru/",
+        "zugang": "kostenlos, API-Key nach Registrierung",
+    },
+    {
+        "anbieter": "Weltbank – World Development Indicators",
+        "daten": "Bruttonationaleinkommen je Einwohner:in",
+        "portal": "https://data.worldbank.org/",
+        "api": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392",
         "zugang": "kostenlos, ohne API-Key",
     },
     {
@@ -713,6 +926,45 @@ def _fetch_fred_api(source: Source) -> bytes:
     return ("\n".join(lines) + "\n").encode("utf-8")
 
 
+def _csv_bytes(frame: pd.DataFrame, float_format: str = "%.4f") -> bytes:
+    buffer = io.StringIO()
+    frame.to_csv(buffer, index=False, float_format=float_format)
+    return buffer.getvalue().encode("utf-8")
+
+
+def _fetch_imf_datamapper(source: Source) -> bytes:
+    """Sammelt mehrere IWF-Indikatoren in einer langen CSV-Datei."""
+    indicators = [item.strip() for item in (source.api_series or "").split(",") if item.strip()]
+    if not indicators:
+        raise RuntimeError(f"Keine IWF-Indikatoren für {source.key} hinterlegt")
+    frames = [
+        imf.parse_datamapper(_read_url(IMF_DATAMAPPER_URL.format(indicator=indicator)), indicator)
+        for indicator in indicators
+    ]
+    return _csv_bytes(pd.concat(frames, ignore_index=True), float_format="%.6f")
+
+
+def _fetch_emiss_api(source: Source) -> bytes:
+    """Lädt Rosstat-Daten über EMISS; ohne Key den Preisdynamik-Export der Notenbank."""
+    key = config.get_secret("ROSSTAT_API_KEY")
+    if key:
+        request = urllib.request.Request(
+            source.url,
+            headers={"User-Agent": USER_AGENT, "Accept": "text/csv", "X-API-KEY": key},
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=120) as response:
+                frame = rosstat.parse_emiss_csv(response.read())
+            frame["quelle"] = "Rosstat (EMISS)"
+            return _csv_bytes(frame, float_format="%.4f")
+        except (urllib.error.URLError, OSError, ValueError):
+            pass
+
+    frame = rosstat.parse_cbr_cpi(_read_url(CBR_CPI_XLSX_URL))
+    frame["quelle"] = "Bank of Russia (12-Monats-Rate aus saisonbereinigten Monatsraten)"
+    return _csv_bytes(frame, float_format="%.4f")
+
+
 def _fetch(source: Source) -> bytes:
     if source.fetch_mode == "cbr_zcyc":
         return _fetch_cbr_zcyc(source)
@@ -720,6 +972,10 @@ def _fetch(source: Source) -> bytes:
         return _fetch_energy_charts(source)
     if source.fetch_mode == "fred_api":
         return _fetch_fred_api(source)
+    if source.fetch_mode == "imf_datamapper":
+        return _fetch_imf_datamapper(source)
+    if source.fetch_mode == "emiss_api":
+        return _fetch_emiss_api(source)
     return _read_url(source.url)
 
 

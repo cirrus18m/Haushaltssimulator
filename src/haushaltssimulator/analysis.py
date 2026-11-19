@@ -44,12 +44,17 @@ def theoretical_interest_by_country(
     debt: pd.DataFrame,
     budget: pd.DataFrame,
     yields: pd.DataFrame,
+    income: pd.DataFrame | None = None,
+    einkommensart: str | None = None,
 ) -> pd.DataFrame:
     """Theoretische Zinslast je Land: aktueller Marktzins auf den Schuldenstand.
 
     Verknüpft den Schuldenstand und die Einnahmen des letzten verfügbaren Jahres mit
-    der aktuellsten 10-jährigen Rendite. Das Ergebnis ist eine Modellrechnung und
-    nicht mit den tatsächlich gebuchten Zinsausgaben gleichzusetzen.
+    der aktuellsten 10-jährigen Rendite. Ist ``income`` übergeben, wird zusätzlich
+    das jüngste verfügbare Durchschnittseinkommen der gewählten Abgrenzung
+    herangezogen und die Zinslast je Einwohner:in ins Verhältnis dazu gesetzt.
+    Das Ergebnis ist eine Modellrechnung und nicht mit den tatsächlich gebuchten
+    Zinsausgaben gleichzusetzen.
     """
     latest_debt = (
         debt.dropna(subset=["schulden_mio_eur"])
@@ -85,6 +90,26 @@ def theoretical_interest_by_country(
     frame["zins_je_einwohner_eur"] = (
         frame["zins_theoretisch_mio_eur"] * 1_000_000 / frame["bevoelkerung"]
     )
+
+    if income is not None and einkommensart:
+        latest_income = (
+            income[income["einkommensart"] == einkommensart]
+            .dropna(subset=["einkommen_eur"])
+            .sort_values(["land", "jahr"])
+            .groupby("land", as_index=False)
+            .tail(1)
+            .rename(columns={"jahr": "einkommen_jahr"})
+        )
+        frame = frame.merge(
+            latest_income[["land", "einkommen_jahr", "einkommen_eur"]], on="land", how="left"
+        )
+    else:
+        frame["einkommen_jahr"] = pd.NA
+        frame["einkommen_eur"] = pd.NA
+
+    frame["zins_quote_einkommen_pct"] = (
+        frame["zins_je_einwohner_eur"] / frame["einkommen_eur"] * 100
+    )
     columns = [
         "land",
         "jahr",
@@ -96,6 +121,9 @@ def theoretical_interest_by_country(
         "zins_quote_bip_pct",
         "zins_quote_einnahmen_pct",
         "zins_je_einwohner_eur",
+        "einkommen_jahr",
+        "einkommen_eur",
+        "zins_quote_einkommen_pct",
     ]
     return frame[columns].sort_values("zins_quote_bip_pct", ascending=False).reset_index(drop=True)
 

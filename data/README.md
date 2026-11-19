@@ -27,9 +27,10 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `big_mac.csv` | Big-Mac-Preis in US-Dollar und Abweichung | The Economist | 2000–2026 |
 | `eigentumsquote.csv` | Eigentums- und Mietquote je Land | Eurostat `ilc_lvho02` | 2010–2025 |
 | `bund_zinsausgaben.csv` | Zinsausgaben des Bundes am Kreditmarkt | BMF | 2022–2027 |
-| `laender_schulden_jahr.csv` | Schuldenstand und Schuldenquote je europäischem Land | Eurostat `gov_10dd_edpt1` | 1995–2025 |
-| `laender_haushalt_jahr.csv` | Einnahmen, Zinsausgaben, Quoten und Zins je Einwohner:in je Land | Eurostat `gov_10a_main`, `nama_10_gdp`, `demo_pjan` | 1995–2025 |
-| `laender_inflation_monat.csv` | Inflationsrate (HVPI) je europäischem Land | Eurostat `prc_hicp_manr` | 1997-01–2025-12 |
+| `laender_schulden_jahr.csv` | Schuldenstand und Schuldenquote im Ländervergleich | Eurostat `gov_10dd_edpt1`; IWF WEO/FPP für USA und Russland | 1995–2024 |
+| `laender_haushalt_jahr.csv` | Einnahmen, Zinsausgaben, Quoten und Zins je Einwohner:in im Ländervergleich | Eurostat `gov_10a_main`, `nama_10_gdp`, `demo_pjan`; IWF WEO/FPP | 1995–2024 |
+| `laender_inflation_monat.csv` | Inflationsrate je Land | Eurostat `prc_hicp_manr`, FRED `CPIAUCSL`, Rosstat/EMISS bzw. Bank of Russia | 1997-01–2026-10 |
+| `laender_einkommen_jahr.csv` | Durchschnittseinkommen in drei Abgrenzungen | Eurostat `nama_10_gdp`, `demo_pjan`, `ilc_di03`, `nama_10_lp_ulc`; IWF WEO; FRED; Weltbank | 1995–2025 |
 
 ### Spalten
 
@@ -170,26 +171,39 @@ US-Preis).
 | Spalte | Bedeutung |
 | --- | --- |
 | `jahr` | Berichtsjahr |
-| `geo`, `land` | Eurostat-Ländercode und deutsche Bezeichnung |
-| `schulden_mio_eur` | Maastricht-Schuldenstand des Gesamtstaats (S13) in Mio. € |
+| `geo`, `land` | Ländercode (Eurostat bzw. ISO-3166-alpha-3) und deutsche Bezeichnung |
+| `schulden_mio_eur` | Schuldenstand des Gesamtstaats in Mio. € |
 | `schuldenquote_pct` | Schuldenstand in % des BIP (amtliche Quote) |
+| `quelle`, `quelle_key` | Verwendete Quelle und Schlüssel in `data/sources.json` |
 
 **`laender_haushalt_jahr.csv`**
 
 | Spalte | Bedeutung |
 | --- | --- |
 | `jahr` | Berichtsjahr |
-| `geo`, `land` | Eurostat-Ländercode und deutsche Bezeichnung |
+| `geo`, `land` | Ländercode und deutsche Bezeichnung |
 | `einnahmen_mio_eur` | Gesamteinnahmen (TR) in Mio. € |
 | `zinsausgaben_mio_eur` | Tatsächliche Zinsausgaben (D41PAY) in Mio. € |
 | `bip_mio_eur` | Bruttoinlandsprodukt in Mio. € |
-| `bevoelkerung` | Bevölkerung am 1. Januar |
+| `bevoelkerung` | Bevölkerung |
 | `zins_quote_bip_pct` | Zinsausgaben in % des BIP |
 | `zins_quote_einnahmen_pct` | Zinsausgaben in % der Einnahmen |
 | `zins_je_einwohner_eur` | Zinsausgaben je Einwohner:in in € |
+| `quelle`, `quelle_key` | Verwendete Quelle und Schlüssel in `data/sources.json` |
 
-**`laender_inflation_monat.csv`** – `monat`, `geo`, `land`, `inflation_pct`
-(HVPI-Veränderung gegenüber dem Vorjahr).
+**`laender_inflation_monat.csv`** – `monat`, `geo`, `land`, `inflation_pct`,
+`quelle`, `quelle_key`. HVPI für die EU-Länder, CPI für die USA, Rosstat bzw.
+verkettete 12-Monats-Rate der Bank of Russia für Russland.
+
+**`laender_einkommen_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr` | Berichtsjahr |
+| `geo`, `land` | Ländercode und deutsche Bezeichnung |
+| `einkommensart` | `bip_pro_kopf`, `verfuegbar_pro_kopf` oder `bruttolohn` |
+| `einkommen_eur` | Einkommen je Einwohner:in bzw. je Beschäftigten in € |
+| `quelle`, `quelle_key` | Verwendete Quelle und Schlüssel in `data/sources.json` |
 
 ## `raw/`
 

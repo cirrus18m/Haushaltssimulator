@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-17T22:30:29+00:00",
+  "aktualisiert_am": "2026-11-18T23:50:25+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -261,6 +261,145 @@
       "bytes": 2283
     },
     {
+      "key": "imf_fiskal",
+      "titel": "Staatsfinanzen und Schulden: internationale Länder, jährlich",
+      "herausgeber": "Internationaler Währungsfonds (IWF), World Economic Outlook und Public Finances in Modern History",
+      "lizenz": "IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://www.imf.org/external/datamapper/api/v1/GGXWDG_NGDP",
+      "beschreibung": "IWF DataMapper: Bruttoschulden des Gesamtstaats und BIP in Mrd. US-Dollar (WEO GGXWDG_NGDP, NGDPD), BIP je Einwohner:in (NGDPDPC), Bevölkerung in Mio. (LP) sowie Schuldenquote, Einnahmen und Zinsausgaben in Prozent des BIP aus der Datenbank Public Finances in Modern History (d, rev, ie). Alle Länder je Indikator in einer Datei; Einschränkung auf die in der App verwendeten Länder erfolgt im Datenaufbau.",
+      "datei": "imf_fiskal.csv",
+      "datensaetze": [
+        "laender_schulden_jahr.csv",
+        "laender_haushalt_jahr.csv",
+        "laender_einkommen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:54+00:00",
+      "sha256": "f3b7d8263b5bc2e0800caf74184bb2619e1073fcd444008c92bb66d0dbeecffb",
+      "bytes": 1663475
+    },
+    {
+      "key": "ecb_eur_usd_jahr",
+      "titel": "Wechselkurs US-Dollar/Euro, Jahresdurchschnitt",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz EXR",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/EXR/A.USD.EUR.SP00.A?format=csvdata&startPeriod=1995",
+      "beschreibung": "EZB EXR A.USD.EUR.SP00.A: Referenzkurs des US-Dollars gegenüber dem Euro, Jahresdurchschnitt, für die Umrechnung der IWF- und Weltbank-Werte in Euro",
+      "datei": "ecb_eur_usd_jahr.csv",
+      "datensaetze": [
+        "laender_schulden_jahr.csv",
+        "laender_haushalt_jahr.csv",
+        "laender_einkommen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:56+00:00",
+      "sha256": "a60f69e2a82d03eb8d3914dd9414635e03788bbfe1ab62aeb921790dd0b7910c",
+      "bytes": 5799
+    },
+    {
+      "key": "rosstat_cpi",
+      "titel": "Verbraucherpreise: Russland, monatlich",
+      "herausgeber": "Rosstat über EMISS; Rückgriff auf die Bank of Russia",
+      "lizenz": "Rosstat bzw. Bank of Russia, Quellenangabe erforderlich",
+      "url": "https://fedstat.ru/indicator/data.do?id=31074&format=csv",
+      "beschreibung": "Rosstat/EMISS: Inflationsrate Russlands gegenüber dem Vorjahr, monatlich, in Prozent. Ohne API-Key oder bei nicht erreichbarer Schnittstelle wird die 12-Monats-Rate aus den saisonbereinigten Monatsraten der Bank of Russia verkettet (Näherung); die tatsächlich verwendete Reihe steht je Zeile in der Spalte quelle.",
+      "datei": "rosstat_cpi_monatlich.csv",
+      "datensaetze": [
+        "laender_inflation_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:56+00:00",
+      "sha256": "0a1a5b9e87ee22fa01ef34e75ab66aea41f286b5701ffb97aa99d59aa9c47582",
+      "bytes": 23286
+    },
+    {
+      "key": "weltbank_bne_russland",
+      "titel": "Bruttonationaleinkommen je Einwohner:in: Russland, jährlich",
+      "herausgeber": "Weltbank, World Development Indicators, NY.GNP.PCAP.CD",
+      "lizenz": "CC BY 4.0",
+      "url": "https://api.worldbank.org/v2/country/RUS/indicator/NY.GNP.PCAP.CD?format=json&per_page=100",
+      "beschreibung": "Weltbank WDI NY.GNP.PCAP.CD: Bruttonationaleinkommen je Einwohner:in (Atlas-Methode, laufende US-Dollar), jährlich. Dient als Ersatzreihe für das verfügbare Einkommen Russlands, das nicht automatisch abrufbar ist.",
+      "datei": "weltbank_bne_russland.json",
+      "datensaetze": [
+        "laender_einkommen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:57+00:00",
+      "sha256": "f7b43bbf6e0b66b140dcdf77dfb27101fac894af4e6ea796fb363a12ef775f6f",
+      "bytes": 15351
+    },
+    {
+      "key": "eurostat_einkommen_laender",
+      "titel": "Verfügbares Einkommen je Einwohner:in: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz ilc_di03",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_di03?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&age=TOTAL&sex=T&statinfo=MEAN_EI&unit=EUR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat ilc_di03: mittleres äquivalisiertes Nettoeinkommen der Bevölkerung (MEAN_EI), jährlich ab 1995, je Land in Euro",
+      "datei": "eurostat_ilc_di03_laender.json",
+      "datensaetze": [
+        "laender_einkommen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:57+00:00",
+      "sha256": "0f3e18f6da14f1d2fcc6a192eb43abd0c8b9afd5ea4101f306c7a4ee9a900110",
+      "bytes": 13011
+    },
+    {
+      "key": "eurostat_arbeitnehmerentgelt_laender",
+      "titel": "Arbeitnehmerentgelt je Arbeitnehmer:in: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz nama_10_lp_ulc",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_lp_ulc?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&na_item=D1_SAL_PER&unit=EUR&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat nama_10_lp_ulc: Arbeitnehmerentgelt je Arbeitnehmer:in (D1_SAL_PER), jährlich ab 1995, je Land in Euro",
+      "datei": "eurostat_nama_10_lp_ulc_laender.json",
+      "datensaetze": [
+        "laender_einkommen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:58+00:00",
+      "sha256": "7e23fc908dace712ade49184ddfeb89623001b28b95f71815523596664fb74e1",
+      "bytes": 16032
+    },
+    {
+      "key": "fred_us_einkommen",
+      "titel": "Verfügbares Einkommen je Einwohner:in: Vereinigte Staaten, jährlich",
+      "herausgeber": "BEA über Federal Reserve Bank of St. Louis, Serie A229RC0A052NBEA",
+      "lizenz": "BEA-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=A229RC0A052NBEA",
+      "beschreibung": "FRED A229RC0A052NBEA: Disposable Personal Income per Capita, laufende US-Dollar, jährlich",
+      "datei": "fred_us_einkommen.csv",
+      "datensaetze": [
+        "laender_einkommen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:58+00:00",
+      "sha256": "641f1a9f6c2f6710a7e17c5dd3d22158ff4c08e107972bb44d8268b10b1ad4ba",
+      "bytes": 1779
+    },
+    {
+      "key": "fred_us_lohn",
+      "titel": "Wochenverdienst: Vereinigte Staaten, monatlich",
+      "herausgeber": "BLS über Federal Reserve Bank of St. Louis, Serie CES0500000011",
+      "lizenz": "BLS-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CES0500000011",
+      "beschreibung": "FRED CES0500000011: Average Weekly Earnings of All Employees, Total Private, laufende US-Dollar, monatlich; Jahreswert als Durchschnitt × 52",
+      "datei": "fred_us_lohn.csv",
+      "datensaetze": [
+        "laender_einkommen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:59+00:00",
+      "sha256": "641c2241dbcb35cd9a8e514e2a1cc2bec2cf6d27a21c6613572d88a5327eddff",
+      "bytes": 4573
+    },
+    {
+      "key": "fred_us_cpi",
+      "titel": "Verbraucherpreisindex: Vereinigte Staaten, monatlich",
+      "herausgeber": "BLS über Federal Reserve Bank of St. Louis, Serie CPIAUCSL",
+      "lizenz": "BLS-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL",
+      "beschreibung": "FRED CPIAUCSL: Consumer Price Index for All Urban Consumers, alle Güter, saisonbereinigt, monatlich; Vorjahresrate in Prozent",
+      "datei": "fred_us_cpi.csv",
+      "datensaetze": [
+        "laender_inflation_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-18T23:31:59+00:00",
+      "sha256": "4e4337f2508ad4e3ba6bc1868c5979d55ba4d63e562db011140734f75c6c8b5b",
+      "bytes": 16657
+    },
+    {
       "key": "destatis_insolvenzen",
       "titel": "Insolvenzverfahren: Deutschland, Monate",
       "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0002",
@@ -479,9 +618,30 @@
     },
     {
       "anbieter": "Bank of Russia",
-      "daten": "Rendite russischer Staatsanleihen (OFZ)",
+      "daten": "Rendite russischer Staatsanleihen (OFZ), Preisdynamik",
       "portal": "https://www.cbr.ru/eng/",
       "api": "https://www.cbr.ru/eng/hd_base/zcyc_params/",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Internationaler Währungsfonds (IWF)",
+      "daten": "Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung",
+      "portal": "https://www.imf.org/en/Data",
+      "api": "https://www.imf.org/external/datamapper/api/help",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Rosstat über EMISS",
+      "daten": "Verbraucherpreise Russlands",
+      "portal": "https://rosstat.gov.ru/statistics/price",
+      "api": "https://fedstat.ru/",
+      "zugang": "kostenlos, API-Key nach Registrierung"
+    },
+    {
+      "anbieter": "Weltbank – World Development Indicators",
+      "daten": "Bruttonationaleinkommen je Einwohner:in",
+      "portal": "https://data.worldbank.org/",
+      "api": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392",
       "zugang": "kostenlos, ohne API-Key"
     },
     {

@@ -30,6 +30,7 @@ BUND_INTEREST = "bund_zinsausgaben.csv"
 LAENDER_DEBT = "laender_schulden_jahr.csv"
 LAENDER_BUDGET = "laender_haushalt_jahr.csv"
 LAENDER_INFLATION = "laender_inflation_monat.csv"
+LAENDER_INCOME = "laender_einkommen_jahr.csv"
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -52,9 +53,10 @@ DATASET_LABELS = {
     BIG_MAC: "Big-Mac-Index je Land",
     HOMEOWNERSHIP: "Eigentums- und Mietquote in Europa",
     BUND_INTEREST: "Zinsausgaben des Bundes am Kreditmarkt",
-    LAENDER_DEBT: "Schuldenstand und Schuldenquote der europäischen Länder",
-    LAENDER_BUDGET: "Einnahmen und Zinsausgaben der europäischen Länder",
-    LAENDER_INFLATION: "Inflationsraten der europäischen Länder (HVPI)",
+    LAENDER_DEBT: "Schuldenstand und Schuldenquote im Ländervergleich",
+    LAENDER_BUDGET: "Einnahmen und Zinsausgaben im Ländervergleich",
+    LAENDER_INFLATION: "Inflationsraten im Ländervergleich",
+    LAENDER_INCOME: "Durchschnittseinkommen im Ländervergleich",
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -183,8 +185,13 @@ def load_laender_budget(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 
 
 def load_laender_inflation(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
-    """Monatliche Inflationsrate (HVPI) je europäischem Land."""
+    """Monatliche Inflationsrate je Land."""
     return _read(LAENDER_INFLATION, processed_dir)
+
+
+def load_laender_income(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Durchschnittseinkommen je Land, Jahr und Abgrenzung."""
+    return _read(LAENDER_INCOME, processed_dir)
 
 
 def load_bund_interest(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:

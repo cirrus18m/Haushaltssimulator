@@ -7,6 +7,19 @@ import io
 import pandas as pd
 
 
+def parse_exr_csv(raw: bytes) -> pd.DataFrame:
+    """Liest Jahresdurchschnitte eines Wechselkurses aus dem EZB-Export."""
+    frame = pd.read_csv(io.BytesIO(raw))
+    if not {"TIME_PERIOD", "OBS_VALUE"}.issubset(frame.columns):
+        raise ValueError("EZB-Export enthält TIME_PERIOD oder OBS_VALUE nicht")
+    result = frame[["TIME_PERIOD", "OBS_VALUE"]].rename(
+        columns={"TIME_PERIOD": "jahr", "OBS_VALUE": "wert"}
+    )
+    result["jahr"] = pd.to_numeric(result["jahr"], errors="coerce")
+    result["wert"] = pd.to_numeric(result["wert"], errors="coerce")
+    return result.dropna().drop_duplicates(subset="jahr", keep="last").sort_values("jahr")
+
+
 def parse_csv(raw: bytes) -> pd.DataFrame:
     """Liest Zeitreihen aus dem CSV-Export des ECB Data Portals.
 
