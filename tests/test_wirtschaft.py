@@ -46,6 +46,38 @@ BIG_MAC_CSV = (
     "2024-01-01,USA,USD,United States,5.69,1,5.69,0.0\n"
 )
 
+YEAR_TABLE = (
+    "Tabelle: 81000-0025\n"
+    "VGR des Bundes - Bruttoanlageinvestitionen;;;;;;;;;;;;\n"
+    "Deutschland, Jahre;;;;;;;;;;;;\n"
+    ";;;2023;2024\n"
+    "in jeweiligen Preisen (Mrd. EUR);Bruttoanlageinvestitionen des Staates;jew. ME;"
+    "122,802;139,707\n"
+    "in jeweiligen Preisen (Mrd. EUR);"
+    "Bruttoanlageinvestitionen der nichtstaatl.Sektoren;jew. ME;775,246;758,566\n"
+    "preisbereinigt, Kettenindex (2020=100);"
+    "Bruttoanlageinvestitionen des Staates;jew. ME;95,910;106,460\n"
+    "__________\n"
+    "© Statistisches Bundesamt (Destatis), 2026\n"
+)
+
+PRODUCTION_TABLE = (
+    "Tabelle: 42153-0001\n"
+    "Produktionsindex für das Verarbeitende Gewerbe:;;;;;;;\n"
+    "Deutschland, Monate, Original- und bereinigte Daten,;;;;;;;\n"
+    ";;;Original- und bereinigte Daten;Original- und bereinigte Daten;"
+    "Original- und bereinigte Daten;Original- und bereinigte Daten;"
+    "Original- und bereinigte Daten\n"
+    ";;;Originalwerte;X13 JDemetra+  kalenderbereinigt;"
+    "X13 JDemetra+  kalender- und saisonbereinigt;"
+    "BV4.1 kalender- und saisonbereinigt;BV4.1 Trend\n"
+    "Produzierendes Gewerbe;2026;Januar;80,0;81,6;91,3;-;91,5\n"
+    "Verarbeitendes Gewerbe;2026;Januar;82,5;84,2;91,8;-;92,1\n"
+    "Verarbeitendes Gewerbe;2026;Februar;88,4;89,3;91,9;-;92,0\n"
+    "__________\n"
+    "© Statistisches Bundesamt (Destatis), 2026\n"
+)
+
 
 def test_parse_fixed_columns_reads_label_and_value_columns() -> None:
     frame = destatis.parse_fixed_columns(
@@ -72,6 +104,42 @@ def test_parse_flagged_columns_skips_status_columns() -> None:
     assert erste["abgewiesen"] == 1353
     assert erste["insgesamt"] == 3245
     assert pd.isna(erste["plan"])
+
+
+def test_parse_year_columns_reads_years_from_header() -> None:
+    frame = destatis.parse_year_columns(
+        YEAR_TABLE, ["preisbasis", "aggregat", "einheit"]
+    )
+    assert set(frame["jahr"]) == {2023, 2024}
+    staat = frame[
+        (frame["preisbasis"] == "in jeweiligen Preisen (Mrd. EUR)")
+        & (frame["aggregat"] == "Bruttoanlageinvestitionen des Staates")
+    ].set_index("jahr")
+    assert staat.loc[2023, "wert"] == pytest.approx(122.802)
+    assert staat.loc[2024, "wert"] == pytest.approx(139.707)
+    assert len(frame) == 6
+
+
+def test_parse_fixed_columns_reads_year_after_label() -> None:
+    frame = destatis.parse_fixed_columns(
+        PRODUCTION_TABLE,
+        ["wirtschaftszweig", "jahr", "monat_name"],
+        [
+            "index_2021_original",
+            "index_2021_kalenderbereinigt",
+            "index_2021_saisonbereinigt",
+            "index_2021_bv4_saisonbereinigt",
+            "index_2021_trend",
+        ],
+        year_column=1,
+    )
+    assert len(frame) == 3
+    erste = frame.iloc[0]
+    assert erste["wirtschaftszweig"] == "Produzierendes Gewerbe"
+    assert erste["jahr"] == "2026"
+    assert erste["index_2021_original"] == 80.0
+    assert erste["index_2021_saisonbereinigt"] == 91.3
+    assert pd.isna(erste["index_2021_bv4_saisonbereinigt"])
 
 
 def test_ecb_parser_keeps_area_and_month() -> None:
@@ -130,3 +198,45 @@ def test_oil_parser_converts_to_euro_per_litre() -> None:
 def test_oil_parser_filters_dates() -> None:
     frame = oil.parse_prices(_oil_fixture(), since=datetime(2026, 1, 10).date())
     assert frame["datum"].min() == pd.Timestamp("2026-01-12").date()
+
+
+def _heating_oil_fixture() -> bytes:
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = "Prices with taxes"
+    sheet.append(
+        [
+            "Consumer prices of petroleum products inclusive of duties and taxes",
+            "CTR",
+            "DE_price_with_tax_heating_oil",
+            "EU_price_with_tax_heating_oil",
+        ]
+    )
+    sheet.append([None, None, "Heizöl (II)", "Heizöl (II)"])
+    sheet.append([None, None, "1000 l", "1000 l"])
+    sheet.append(["Date", None, "1000 l", "1000 l"])
+    sheet.append([datetime(2026, 1, 5), "DE_", 1800.0, 1900.0])
+    buffer = io.BytesIO()
+    workbook.save(buffer)
+    return buffer.getvalue()
+
+
+def test_oil_parser_supports_heating_oil() -> None:
+    frame = oil.parse_prices(_heating_oil_fixture(), produkte={"heating_oil": "Heizöl"})
+    assert set(frame["produkt"]) == {"Heizöl"}
+    assert set(frame["land_code"]) == {"DE", "EU"}
+    deutschland = frame[frame["land_code"] == "DE"].iloc[0]
+    assert deutschland["preis_eur_l"] == pytest.approx(1.8)
+
+
+ECB_DAILY_CSV = b"""KEY,TIME_PERIOD,OBS_VALUE
+EXR.D.USD.EUR.SP00.A,2024-01-02,1.0950
+EXR.D.USD.EUR.SP00.A,2024-01-03,1.0921
+"""
+
+
+def test_ecb_daily_parser_keeps_dates() -> None:
+    frame = ecb.parse_exr_daily_csv(ECB_DAILY_CSV)
+    assert list(frame.columns) == ["datum", "usd_je_eur"]
+    assert frame.iloc[0]["datum"] == pd.Timestamp("2024-01-02")
+    assert frame["usd_je_eur"].tolist() == [1.095, 1.0921]

@@ -6,7 +6,7 @@ from datetime import date
 
 import pytest
 
-from haushaltssimulator import bundesbank, cbr, fred, sources
+from haushaltssimulator import bundesbank, cbr, dataset, fred, sources
 
 BUNDESBANK_CSV = (
     b'''\xef\xbb\xbf"",BBSSY.D.REN.EUR.A630.000000WT1010.A,'''
@@ -89,3 +89,25 @@ def test_source_metadata_is_complete(source: sources.Source) -> None:
     assert source.license
     assert source.url.startswith("https://")
     assert source.datasets
+
+
+def test_finanzplan_interest_stays_in_line_with_drucksache() -> None:
+    """Die geplanten Zinsausgaben des Bundes folgen Tabelle 9 der Drucksache 21/7301."""
+    frame = dataset.load_bund_interest_plan()
+    assert frame["jahr"].tolist() == [2025, 2026, 2027, 2028, 2029, 2030]
+    assert frame["art"].tolist() == [
+        "Ist",
+        "Soll",
+        "Entwurf",
+        "Finanzplan",
+        "Finanzplan",
+        "Finanzplan",
+    ]
+    assert frame["zinsausgaben_mrd_eur"].round(1).tolist() == [
+        29.9,
+        30.2,
+        41.8,
+        55.1,
+        68.0,
+        80.6,
+    ]

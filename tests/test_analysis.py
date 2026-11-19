@@ -70,3 +70,16 @@ def test_simulate_debt_ratio_growing_debt_reduces_ratio() -> None:
         startjahr=2025,
     )
     assert projection.loc[1, "schuldenquote_pct"] == pytest.approx(1000 / 2200 * 100)
+
+
+def test_linear_trend_extrapolates_fit_period() -> None:
+    frame = pd.DataFrame(
+        {
+            "monat": pd.date_range("2000-01-01", periods=25, freq="MS").strftime("%Y-%m"),
+            "wert": [10 + 0.5 * index for index in range(25)],
+        }
+    )
+    trend = analysis.linear_trend(frame, "wert", fit_end="2001-12")
+    assert trend.iloc[0] == pytest.approx(10.0, abs=0.05)
+    assert trend.iloc[-1] == pytest.approx(22.0, abs=0.05)
+    assert trend.is_monotonic_increasing

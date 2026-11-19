@@ -13,19 +13,26 @@ PRODUKTE = {
 }
 
 
-def parse_prices(raw: bytes, *, since: date | None = None) -> pd.DataFrame:
+def parse_prices(
+    raw: bytes,
+    *,
+    since: date | None = None,
+    produkte: dict[str, str] | None = None,
+) -> pd.DataFrame:
     """Liest die wöchentlichen Verbraucherpreise (mit Steuern) je Land.
 
     Die Preise stehen im Blatt ``Prices with taxes`` in Blöcken je Land; die
     Spaltennamen lauten ``<CODE>_price_with_tax_<produkt>``. Die Werte sind in
     EUR je 1000 Liter hinterlegt und werden hier in EUR je Liter umgerechnet.
+    ``produkte`` ordnet Spaltenschlüssel den deutschen Bezeichnungen zu.
     """
+    produkte = PRODUKTE if produkte is None else produkte
     frame = pd.read_excel(io.BytesIO(raw), sheet_name="Prices with taxes", header=None)
     columns: dict[str, dict[str, int]] = {}
     for index, name in enumerate(frame.iloc[0]):
         if not isinstance(name, str):
             continue
-        for product in PRODUKTE:
+        for product in produkte:
             suffix = f"_price_with_tax_{product}"
             if name.endswith(suffix):
                 columns.setdefault(name[: -len(suffix)], {})[product] = index
@@ -49,7 +56,7 @@ def parse_prices(raw: bytes, *, since: date | None = None) -> pd.DataFrame:
                     {
                         "datum": tag,
                         "land_code": code,
-                        "produkt": PRODUKTE[product],
+                        "produkt": produkte[product],
                         "preis_eur_l": float(value) / 1000,
                     }
                 )

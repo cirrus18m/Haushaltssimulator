@@ -69,6 +69,7 @@ IMF_INDICATORS = (
     imf.WEO_SCHULDENQUOTE,
     imf.WEO_BIP_USD,
     imf.WEO_BIP_JE_EINWOHNER,
+    imf.WEO_BIP_WACHSTUM,
     imf.WEO_BEVOELKERUNG,
     imf.FPP_SCHULDENQUOTE,
     imf.FPP_EINNAHMEN,
@@ -436,16 +437,18 @@ SOURCES: tuple[Source, ...] = (
             "laender_schulden_jahr.csv",
             "laender_haushalt_jahr.csv",
             "laender_einkommen_jahr.csv",
+            "bip_wachstum_jahr.csv",
         ),
         fetch_mode="imf_datamapper",
         api_series=",".join(IMF_INDICATORS),
         description=(
             "IWF DataMapper: Bruttoschulden des Gesamtstaats und BIP in Mrd. US-Dollar "
-            "(WEO GGXWDG_NGDP, NGDPD), BIP je Einwohner:in (NGDPDPC), Bevölkerung in "
-            "Mio. (LP) sowie Schuldenquote, Einnahmen und Zinsausgaben in Prozent des "
-            "BIP aus der Datenbank Public Finances in Modern History (d, rev, ie). "
-            "Alle Länder je Indikator in einer Datei; Einschränkung auf die in der App "
-            "verwendeten Länder erfolgt im Datenaufbau."
+            "(WEO GGXWDG_NGDP, NGDPD), reales BIP-Wachstum (NGDP_RPCH), BIP je "
+            "Einwohner:in (NGDPDPC), Bevölkerung in Mio. (LP) sowie Schuldenquote, "
+            "Einnahmen und Zinsausgaben in Prozent des BIP aus der Datenbank Public "
+            "Finances in Modern History (d, rev, ie). Alle Länder je Indikator in einer "
+            "Datei; Einschränkung auf die in der App verwendeten Länder erfolgt im "
+            "Datenaufbau."
         ),
     ),
     Source(
@@ -682,6 +685,48 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="destatis_vgr_bip",
+        filename="destatis_81000-0001_vgr_jahr.csv",
+        url=DESTATIS_TABLE_URL.format(code="81000-0001"),
+        title="Bruttowertschöpfung und Bruttoinlandsprodukt: Deutschland, Jahre",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 81000-0001",
+        license="DL-DE-BY-2.0",
+        datasets=("bip_deutschland_jahr.csv", "investitionen_jahr.csv"),
+        description=(
+            "Destatis 81000-0001: VGR des Bundes, Bruttowertschöpfung und "
+            "Bruttoinlandsprodukt, nominal und preisbereinigt (Kettenindex 2020=100), "
+            "Veränderung gegenüber dem Vorjahr in Prozent, Deutschland, Jahre"
+        ),
+    ),
+    Source(
+        key="destatis_investitionen",
+        filename="destatis_81000-0025_investitionen.csv",
+        url=DESTATIS_TABLE_URL.format(code="81000-0025"),
+        title="Bruttoanlageinvestitionen von Staat und nichtstaatlichen Sektoren",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 81000-0025",
+        license="DL-DE-BY-2.0",
+        datasets=("investitionen_jahr.csv",),
+        description=(
+            "Destatis 81000-0025: Bruttoanlageinvestitionen des Staates und der "
+            "nichtstaatlichen Sektoren, nominal (Mrd. EUR) und preisbereinigt "
+            "(Kettenindex 2020=100), Deutschland, Jahre"
+        ),
+    ),
+    Source(
+        key="destatis_produktion",
+        filename="destatis_42153-0001_produktion.csv",
+        url=DESTATIS_TABLE_URL.format(code="42153-0001"),
+        title="Produktionsindex für das Verarbeitende Gewerbe: Deutschland, Monate",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online 42153-0001",
+        license="DL-DE-BY-2.0",
+        datasets=("produktion_deutschland_monat.csv",),
+        description=(
+            "Destatis 42153-0001: Indizes der Produktion im Verarbeitenden Gewerbe "
+            "(2021=100), Deutschland, Monate, Originalwerte sowie kalender- und "
+            "saisonbereinigte Werte, Wirtschaftszweige (Hauptgruppen und Aggregate)"
+        ),
+    ),
+    Source(
         key="energy_charts_strompreis",
         filename="energy_charts_day_ahead.json",
         url=ENERGY_CHARTS_URL.format(start="JJJJ-MM-TT", end="JJJJ-MM-TT"),
@@ -699,13 +744,138 @@ SOURCES: tuple[Source, ...] = (
         key="oil_bulletin",
         filename="oil_bulletin_preise.xlsx",
         url=OIL_BULLETIN_URL,
-        title="Wöchentliche Kraftstoffpreise in der EU",
+        title="Wöchentliche Kraftstoff- und Heizölpreise in der EU",
         publisher="Europäische Kommission, Weekly Oil Bulletin, Preise mit Steuern",
         license="© Europäische Union, Quellenangabe erforderlich",
-        datasets=("kraftstoffpreise.csv",),
+        datasets=("kraftstoffpreise.csv", "energie_maerkte_monat.csv"),
         description=(
-            "EU Weekly Oil Bulletin: Verbraucherpreise für Superbenzin (Euro 95) und "
-            "Diesel je Land, wöchentlich, mit Steuern, in EUR je 1000 Liter"
+            "EU Weekly Oil Bulletin: Verbraucherpreise für Superbenzin (Euro 95), "
+            "Diesel und Heizöl je Land, wöchentlich, mit Steuern, in EUR je 1000 Liter"
+        ),
+    ),
+    Source(
+        key="fred_brent",
+        filename="fred_brent_rohoel.csv",
+        url=FRED_SERIES_URL.format(series="DCOILBRENTEU"),
+        title="Rohölpreis Brent: Europa, täglich",
+        publisher=(
+            "U.S. Energy Information Administration über Federal Reserve Bank of "
+            "St. Louis, Serie DCOILBRENTEU"
+        ),
+        license="EIA-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("energie_maerkte_monat.csv",),
+        fetch_mode="fred_api",
+        api_series="DCOILBRENTEU",
+        description=(
+            "FRED DCOILBRENTEU: Crude Oil Prices, Brent - Europe, Tagespreise in "
+            "US-Dollar je Barrel; Umrechnung in Euro mit dem EZB-Tageskurs"
+        ),
+    ),
+    Source(
+        key="fred_erdgas",
+        filename="fred_erdgas_europa.csv",
+        url=FRED_SERIES_URL.format(series="PNGASEUUSDM"),
+        title="Gaspreis Europa: monatlich",
+        publisher=(
+            "Internationaler Währungsfonds (Primary Commodity Prices) über Federal "
+            "Reserve Bank of St. Louis, Serie PNGASEUUSDM"
+        ),
+        license="IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("energie_maerkte_monat.csv",),
+        fetch_mode="fred_api",
+        api_series="PNGASEUUSDM",
+        description=(
+            "FRED PNGASEUUSDM: Global price of Natural gas, EU, Monatsdurchschnitt "
+            "in US-Dollar je Million British Thermal Unit; Umrechnung in ct/kWh mit "
+            "dem EZB-Monatsdurchschnitt des Dollar-Euro-Kurses"
+        ),
+    ),
+    Source(
+        key="fred_lng_japan",
+        filename="fred_lng_japan.csv",
+        url=FRED_SERIES_URL.format(series="PNGASJPUSDM"),
+        title="LNG-Preis Japan: monatlich",
+        publisher=(
+            "Internationaler Währungsfonds (Primary Commodity Prices) über Federal "
+            "Reserve Bank of St. Louis, Serie PNGASJPUSDM"
+        ),
+        license="IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("energie_maerkte_monat.csv",),
+        fetch_mode="fred_api",
+        api_series="PNGASJPUSDM",
+        description=(
+            "FRED PNGASJPUSDM: Global price of LNG, Japan, Monatsdurchschnitt in "
+            "US-Dollar je Million British Thermal Unit; frei verfügbare Referenz für "
+            "den nordostasiatischen LNG-Markt (JKM), Umrechnung in EUR je MWh"
+        ),
+    ),
+    Source(
+        key="fred_henry_hub",
+        filename="fred_henry_hub.csv",
+        url=FRED_SERIES_URL.format(series="DHHNGSP"),
+        title="Henry-Hub-Erdgaspreis: USA, täglich",
+        publisher=(
+            "U.S. Energy Information Administration über Federal Reserve Bank of "
+            "St. Louis, Serie DHHNGSP"
+        ),
+        license="EIA-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("energie_maerkte_monat.csv",),
+        fetch_mode="fred_api",
+        api_series="DHHNGSP",
+        description=(
+            "FRED DHHNGSP: Henry Hub Natural Gas Spot Price, Tagespreise in US-Dollar "
+            "je Million British Thermal Unit; Umrechnung in EUR je MWh mit dem "
+            "EZB-Tageskurs"
+        ),
+    ),
+    Source(
+        key="fred_wti",
+        filename="fred_wti_rohoel.csv",
+        url=FRED_SERIES_URL.format(series="DCOILWTICO"),
+        title="Rohölpreis WTI: USA, täglich",
+        publisher=(
+            "U.S. Energy Information Administration über Federal Reserve Bank of "
+            "St. Louis, Serie DCOILWTICO"
+        ),
+        license="EIA-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("energie_maerkte_monat.csv",),
+        fetch_mode="fred_api",
+        api_series="DCOILWTICO",
+        description=(
+            "FRED DCOILWTICO: Crude Oil Prices, West Texas Intermediate - Cushing, "
+            "Tagespreise in US-Dollar je Barrel; Umrechnung in Euro mit dem "
+            "EZB-Tageskurs"
+        ),
+    ),
+    Source(
+        key="fred_dubai",
+        filename="fred_dubai_rohoel.csv",
+        url=FRED_SERIES_URL.format(series="POILDUBUSDM"),
+        title="Rohölpreis Dubai: monatlich",
+        publisher=(
+            "Internationaler Währungsfonds (Primary Commodity Prices) über Federal "
+            "Reserve Bank of St. Louis, Serie POILDUBUSDM"
+        ),
+        license="IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+        datasets=("energie_maerkte_monat.csv",),
+        fetch_mode="fred_api",
+        api_series="POILDUBUSDM",
+        description=(
+            "FRED POILDUBUSDM: Crude Oil, Dubai, Monatsdurchschnitt in US-Dollar je "
+            "Barrel; Umrechnung in Euro mit dem EZB-Monatsdurchschnitt"
+        ),
+    ),
+    Source(
+        key="ecb_eur_usd_tag",
+        filename="ecb_eur_usd_tag.csv",
+        url=ECB_SERIES_URL.format(dataset="EXR", key="D.USD.EUR.SP00.A", start="1999-01-01"),
+        title="Wechselkurs US-Dollar/Euro, täglich",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz EXR",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=("energie_maerkte_monat.csv",),
+        description=(
+            "EZB EXR D.USD.EUR.SP00.A: Referenzkurs des US-Dollars gegenüber dem "
+            "Euro, Tageswerte ab 1999, für die Umrechnung der Brent- und Gaspreise"
         ),
     ),
     Source(
@@ -757,6 +927,74 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="eurostat_bip_wachstum",
+        filename="eurostat_nama_10_gdp_wachstum.json",
+        url=_eurostat(
+            "nama_10_gdp",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER] + ["EU27_2020"],
+            na_item="B1GQ",
+            unit="CLV_PCH_PRE",
+            sinceTimePeriod="1995",
+        ),
+        title="Reales BIP-Wachstum: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz nama_10_gdp",
+        license="CC BY 4.0",
+        datasets=("bip_wachstum_jahr.csv",),
+        description=(
+            "Eurostat nama_10_gdp: Bruttoinlandsprodukt (B1GQ) in verketteten "
+            "Volumina, Veränderung gegenüber dem Vorjahr in Prozent, jährlich ab 1995, "
+            "europäische Länder"
+        ),
+    ),
+    Source(
+        key="eurostat_produktion",
+        filename="eurostat_sts_inpr_m.json",
+        url=_eurostat(
+            "sts_inpr_m",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            nace_r2="C",
+            s_adj="SCA",
+            unit="I21",
+            sinceTimePeriod="1995-01",
+        ),
+        title="Produktionsindex des Verarbeitenden Gewerbes: Europa, monatlich",
+        publisher="Eurostat, Datensatz sts_inpr_m",
+        license="CC BY 4.0",
+        datasets=("produktion_vergleich_monat.csv",),
+        description=(
+            "Eurostat sts_inpr_m: Produktionsindex des Verarbeitenden Gewerbes "
+            "(NACE C), kalender- und saisonbereinigt, Index 2021=100, monatlich ab 1995, "
+            "europäische Länder"
+        ),
+    ),
+    Source(
+        key="eurostat_produktion_deutschland",
+        filename="eurostat_sts_inpr_m_deutschland.json",
+        url=_eurostat(
+            "sts_inpr_m",
+            format="JSON",
+            lang="EN",
+            geo="DE",
+            nace_r2="B-D",
+            s_adj="SCA",
+            unit="I21",
+            sinceTimePeriod="1993-01",
+        ),
+        title="Produktionsindex der Industrie: Deutschland, monatlich",
+        publisher="Eurostat, Datensatz sts_inpr_m",
+        license="CC BY 4.0",
+        datasets=("produktion_deutschland_lang.csv",),
+        description=(
+            "Eurostat sts_inpr_m: Produktionsindex der Industrie ohne Baugewerbe "
+            "(NACE B-D), kalender- und saisonbereinigt, Index 2021=100, monatlich "
+            "ab 1993; der Datenaufbau rechnet auf 2015=100 um"
+        ),
+    ),
+    Source(
         key="bmf_zinsausgaben",
         filename="bmf_zinsausgaben_kreditmarkt.csv",
         url=BMF_INTEREST_URL,
@@ -769,6 +1007,21 @@ SOURCES: tuple[Source, ...] = (
             "(Ist, Soll und Regierungsentwurf)"
         ),
     ),
+    Source(
+        key="bund_finanzplan_zinsausgaben",
+        filename="manual/bund_finanzplan_2026-2030_zinsausgaben.csv",
+        url="https://dserver.bundestag.de/btd/21/073/2107301.pdf",
+        title="Finanzplan des Bundes 2026 bis 2030 (Drucksache 21/7301)",
+        publisher="Deutscher Bundestag, 21. Wahlperiode",
+        license="© Deutscher Bundestag, Quellenangabe erforderlich",
+        datasets=("bund_zinsausgaben_plan.csv",),
+        fetch_mode="manual",
+        description=(
+            "Manuell aus Drucksache 21/7301 (Tabelle 9, Ausgabeart 1.3 Zinsausgaben) "
+            "übernommen: geplante Zinsausgaben des Bundes im Kernhaushalt in Mrd. EUR "
+            "für Ist 2025, Soll 2026, Entwurf 2027 sowie Finanzplan 2028 bis 2030"
+        ),
+    ),
 )
 
 # Portale und API-Dokumentation der Anbieter – erscheint als "Quellen & Links"
@@ -776,14 +1029,20 @@ SOURCES: tuple[Source, ...] = (
 PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     {
         "anbieter": "Statistisches Bundesamt (Destatis)",
-        "daten": "Insolvenzverfahren, Preise für Strom und Gas",
+        "daten": (
+            "Insolvenzverfahren, Strom- und Gaspreise, BIP und Investitionen, "
+            "Produktionsindex"
+        ),
         "portal": "https://www-genesis.destatis.de/datenbank/online",
         "api": "https://genesis.destatis.de/genesisWS/rest/2020",
         "zugang": "kostenlos, API-Token nach Registrierung",
     },
     {
         "anbieter": "Eurostat",
-        "daten": "Haushalte, Schuldenquote, Zinsvergleich, Eigentumsquote",
+        "daten": (
+            "Haushalte, Schuldenquote, Zinsvergleich, Eigentumsquote, BIP-Wachstum, "
+            "Produktionsindex"
+        ),
         "portal": "https://ec.europa.eu/eurostat/databrowser/",
         "api": (
             "https://ec.europa.eu/eurostat/web/user-guides/data-browser/"
@@ -800,14 +1059,23 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     },
     {
         "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
-        "daten": "US-Staatsanleiherendite",
+        "daten": (
+            "US-Staatsanleiherendite, Brent und WTI, Gaspreise Europa, Japan und USA"
+        ),
         "portal": "https://fred.stlouisfed.org/",
         "api": "https://fred.stlouisfed.org/docs/api/fred/",
         "zugang": "kostenlos, API-Key erforderlich",
     },
     {
+        "anbieter": "U.S. Energy Information Administration (EIA)",
+        "daten": "Brent- und WTI-Rohölpreise, Henry-Hub-Gaspreis",
+        "portal": "https://www.eia.gov/",
+        "api": "https://www.eia.gov/opendata/",
+        "zugang": "kostenlos, API-Key erforderlich (Abruf hier über FRED)",
+    },
+    {
         "anbieter": "EZB – Data Portal",
-        "daten": "Geldmenge M3, Harmonisierter Verbraucherpreisindex",
+        "daten": "Geldmenge M3, Verbraucherpreisindex, Wechselkurs US-Dollar/Euro",
         "portal": "https://data.ecb.europa.eu/",
         "api": "https://data.ecb.europa.eu/help/api/overview",
         "zugang": "kostenlos, ohne API-Key",
@@ -821,7 +1089,10 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     },
     {
         "anbieter": "Internationaler Währungsfonds (IWF)",
-        "daten": "Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung",
+        "daten": (
+            "Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung; "
+            "Rohstoffpreise (Gas Europa/Japan, Dubai-Öl)"
+        ),
         "portal": "https://www.imf.org/en/Data",
         "api": "https://www.imf.org/external/datamapper/api/help",
         "zugang": "kostenlos, ohne API-Key",
@@ -849,7 +1120,7 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     },
     {
         "anbieter": "Europäische Kommission – Weekly Oil Bulletin",
-        "daten": "Kraftstoffpreise",
+        "daten": "Kraftstoff- und Heizölpreise",
         "portal": "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en",
         "api": "",
         "zugang": "kostenlos, ohne API-Key",

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-18T23:50:25+00:00",
+  "aktualisiert_am": "2026-11-19T23:02:46+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -266,16 +266,17 @@
       "herausgeber": "Internationaler Währungsfonds (IWF), World Economic Outlook und Public Finances in Modern History",
       "lizenz": "IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
       "url": "https://www.imf.org/external/datamapper/api/v1/GGXWDG_NGDP",
-      "beschreibung": "IWF DataMapper: Bruttoschulden des Gesamtstaats und BIP in Mrd. US-Dollar (WEO GGXWDG_NGDP, NGDPD), BIP je Einwohner:in (NGDPDPC), Bevölkerung in Mio. (LP) sowie Schuldenquote, Einnahmen und Zinsausgaben in Prozent des BIP aus der Datenbank Public Finances in Modern History (d, rev, ie). Alle Länder je Indikator in einer Datei; Einschränkung auf die in der App verwendeten Länder erfolgt im Datenaufbau.",
+      "beschreibung": "IWF DataMapper: Bruttoschulden des Gesamtstaats und BIP in Mrd. US-Dollar (WEO GGXWDG_NGDP, NGDPD), reales BIP-Wachstum (NGDP_RPCH), BIP je Einwohner:in (NGDPDPC), Bevölkerung in Mio. (LP) sowie Schuldenquote, Einnahmen und Zinsausgaben in Prozent des BIP aus der Datenbank Public Finances in Modern History (d, rev, ie). Alle Länder je Indikator in einer Datei; Einschränkung auf die in der App verwendeten Länder erfolgt im Datenaufbau.",
       "datei": "imf_fiskal.csv",
       "datensaetze": [
         "laender_schulden_jahr.csv",
         "laender_haushalt_jahr.csv",
-        "laender_einkommen_jahr.csv"
+        "laender_einkommen_jahr.csv",
+        "bip_wachstum_jahr.csv"
       ],
-      "abgerufen_am": "2026-11-18T23:31:54+00:00",
-      "sha256": "f3b7d8263b5bc2e0800caf74184bb2619e1073fcd444008c92bb66d0dbeecffb",
-      "bytes": 1663475
+      "abgerufen_am": "2026-11-19T20:13:18+00:00",
+      "sha256": "4add09c3b0c55bee46b09a0b6eb0b924ea4bc455cfe86c631693065d6a0bd51a",
+      "bytes": 1971873
     },
     {
       "key": "ecb_eur_usd_jahr",
@@ -505,6 +506,52 @@
       "bytes": 1671
     },
     {
+      "key": "destatis_vgr_bip",
+      "titel": "Bruttowertschöpfung und Bruttoinlandsprodukt: Deutschland, Jahre",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 81000-0001",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/81000-0001_00.csv",
+      "beschreibung": "Destatis 81000-0001: VGR des Bundes, Bruttowertschöpfung und Bruttoinlandsprodukt, nominal und preisbereinigt (Kettenindex 2020=100), Veränderung gegenüber dem Vorjahr in Prozent, Deutschland, Jahre",
+      "datei": "destatis_81000-0001_vgr_jahr.csv",
+      "datensaetze": [
+        "bip_deutschland_jahr.csv",
+        "investitionen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:13:18+00:00",
+      "sha256": "f81145b9c21fcbc0300f8351de8caa41b40e6bd8aa8883fc985835eb7f4f6731",
+      "bytes": 4610
+    },
+    {
+      "key": "destatis_investitionen",
+      "titel": "Bruttoanlageinvestitionen von Staat und nichtstaatlichen Sektoren",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 81000-0025",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/81000-0025_00.csv",
+      "beschreibung": "Destatis 81000-0025: Bruttoanlageinvestitionen des Staates und der nichtstaatlichen Sektoren, nominal (Mrd. EUR) und preisbereinigt (Kettenindex 2020=100), Deutschland, Jahre",
+      "datei": "destatis_81000-0025_investitionen.csv",
+      "datensaetze": [
+        "investitionen_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:13:18+00:00",
+      "sha256": "4feeb072dbe1c5e82279d968a53c0e8151851dcdd5c6c9c8cad8d638a66e7b91",
+      "bytes": 8411
+    },
+    {
+      "key": "destatis_produktion",
+      "titel": "Produktionsindex für das Verarbeitende Gewerbe: Deutschland, Monate",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 42153-0001",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/42153-0001_00.csv",
+      "beschreibung": "Destatis 42153-0001: Indizes der Produktion im Verarbeitenden Gewerbe (2021=100), Deutschland, Monate, Originalwerte sowie kalender- und saisonbereinigte Werte, Wirtschaftszweige (Hauptgruppen und Aggregate)",
+      "datei": "destatis_42153-0001_produktion.csv",
+      "datensaetze": [
+        "produktion_deutschland_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:13:18+00:00",
+      "sha256": "f4bc5e77c2e516c8ae5faafb630176c8ab50bc3661a60aecfab17aefe4ce2edf",
+      "bytes": 91097
+    },
+    {
       "key": "energy_charts_strompreis",
       "titel": "Börsenstrompreis Day-Ahead: Gebotszone Deutschland/Luxemburg",
       "herausgeber": "energy-charts.info (Fraunhofer ISE), Daten von Bundesnetzagentur | SMARD.de",
@@ -521,18 +568,124 @@
     },
     {
       "key": "oil_bulletin",
-      "titel": "Wöchentliche Kraftstoffpreise in der EU",
+      "titel": "Wöchentliche Kraftstoff- und Heizölpreise in der EU",
       "herausgeber": "Europäische Kommission, Weekly Oil Bulletin, Preise mit Steuern",
       "lizenz": "© Europäische Union, Quellenangabe erforderlich",
       "url": "https://energy.ec.europa.eu/document/download/906e60ca-8b6a-44e7-8589-652854d2fd3f_en?filename=Weekly_Oil_Bulletin_Prices_History_maticni_4web.xlsx",
-      "beschreibung": "EU Weekly Oil Bulletin: Verbraucherpreise für Superbenzin (Euro 95) und Diesel je Land, wöchentlich, mit Steuern, in EUR je 1000 Liter",
+      "beschreibung": "EU Weekly Oil Bulletin: Verbraucherpreise für Superbenzin (Euro 95), Diesel und Heizöl je Land, wöchentlich, mit Steuern, in EUR je 1000 Liter",
       "datei": "oil_bulletin_preise.xlsx",
       "datensaetze": [
-        "kraftstoffpreise.csv"
+        "kraftstoffpreise.csv",
+        "energie_maerkte_monat.csv"
       ],
       "abgerufen_am": "2026-11-17T19:01:48+00:00",
       "sha256": "7e14b5edc46bb654b5bec6a66a70f95a187ca7a293a002e1b40b6eef9d0cd1e3",
       "bytes": 4506196
+    },
+    {
+      "key": "fred_brent",
+      "titel": "Rohölpreis Brent: Europa, täglich",
+      "herausgeber": "U.S. Energy Information Administration über Federal Reserve Bank of St. Louis, Serie DCOILBRENTEU",
+      "lizenz": "EIA-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU",
+      "beschreibung": "FRED DCOILBRENTEU: Crude Oil Prices, Brent - Europe, Tagespreise in US-Dollar je Barrel; Umrechnung in Euro mit dem EZB-Tageskurs",
+      "datei": "fred_brent_rohoel.csv",
+      "datensaetze": [
+        "energie_maerkte_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:43:39+00:00",
+      "sha256": "835757ab5ef4615d380dc58cea57c4d90c90d0a2e7164fa65bbbebe4b014f6e5",
+      "bytes": 171473
+    },
+    {
+      "key": "fred_erdgas",
+      "titel": "Gaspreis Europa: monatlich",
+      "herausgeber": "Internationaler Währungsfonds (Primary Commodity Prices) über Federal Reserve Bank of St. Louis, Serie PNGASEUUSDM",
+      "lizenz": "IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PNGASEUUSDM",
+      "beschreibung": "FRED PNGASEUUSDM: Global price of Natural gas, EU, Monatsdurchschnitt in US-Dollar je Million British Thermal Unit; Umrechnung in ct/kWh mit dem EZB-Monatsdurchschnitt des Dollar-Euro-Kurses",
+      "datei": "fred_erdgas_europa.csv",
+      "datensaetze": [
+        "energie_maerkte_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:43:39+00:00",
+      "sha256": "948d29691d347775fa9dddfa1e84d6af37673971f2adef814dfd11eaf7a7f676",
+      "bytes": 9900
+    },
+    {
+      "key": "fred_lng_japan",
+      "titel": "LNG-Preis Japan: monatlich",
+      "herausgeber": "Internationaler Währungsfonds (Primary Commodity Prices) über Federal Reserve Bank of St. Louis, Serie PNGASJPUSDM",
+      "lizenz": "IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PNGASJPUSDM",
+      "beschreibung": "FRED PNGASJPUSDM: Global price of LNG, Japan, Monatsdurchschnitt in US-Dollar je Million British Thermal Unit; frei verfügbare Referenz für den nordostasiatischen LNG-Markt (JKM), Umrechnung in EUR je MWh",
+      "datei": "fred_lng_japan.csv",
+      "datensaetze": [
+        "energie_maerkte_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T21:04:17+00:00",
+      "sha256": "0907b5772593253460caa312a3344c83b95bd6221f14ff0a2069aff797360821",
+      "bytes": 7459
+    },
+    {
+      "key": "fred_henry_hub",
+      "titel": "Henry-Hub-Erdgaspreis: USA, täglich",
+      "herausgeber": "U.S. Energy Information Administration über Federal Reserve Bank of St. Louis, Serie DHHNGSP",
+      "lizenz": "EIA-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DHHNGSP",
+      "beschreibung": "FRED DHHNGSP: Henry Hub Natural Gas Spot Price, Tagespreise in US-Dollar je Million British Thermal Unit; Umrechnung in EUR je MWh mit dem EZB-Tageskurs",
+      "datei": "fred_henry_hub.csv",
+      "datensaetze": [
+        "energie_maerkte_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T21:04:17+00:00",
+      "sha256": "520567a011611e5291a4853dfdae991e2401f86c011724741a0851e0537286c9",
+      "bytes": 118268
+    },
+    {
+      "key": "fred_wti",
+      "titel": "Rohölpreis WTI: USA, täglich",
+      "herausgeber": "U.S. Energy Information Administration über Federal Reserve Bank of St. Louis, Serie DCOILWTICO",
+      "lizenz": "EIA-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO",
+      "beschreibung": "FRED DCOILWTICO: Crude Oil Prices, West Texas Intermediate - Cushing, Tagespreise in US-Dollar je Barrel; Umrechnung in Euro mit dem EZB-Tageskurs",
+      "datei": "fred_wti_rohoel.csv",
+      "datensaetze": [
+        "energie_maerkte_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T21:04:18+00:00",
+      "sha256": "478b2104c98e28f6c0c185744a5b4892ae3a144a7664086668e08b0e518bf646",
+      "bytes": 177213
+    },
+    {
+      "key": "fred_dubai",
+      "titel": "Rohölpreis Dubai: monatlich",
+      "herausgeber": "Internationaler Währungsfonds (Primary Commodity Prices) über Federal Reserve Bank of St. Louis, Serie POILDUBUSDM",
+      "lizenz": "IWF-Nutzungsbedingungen, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=POILDUBUSDM",
+      "beschreibung": "FRED POILDUBUSDM: Crude Oil, Dubai, Monatsdurchschnitt in US-Dollar je Barrel; Umrechnung in Euro mit dem EZB-Monatsdurchschnitt",
+      "datei": "fred_dubai_rohoel.csv",
+      "datensaetze": [
+        "energie_maerkte_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T21:04:18+00:00",
+      "sha256": "44fb1cc09f2671c165a43343a2c27cbd5488a74055565a1af53ea4821d70832f",
+      "bytes": 13246
+    },
+    {
+      "key": "ecb_eur_usd_tag",
+      "titel": "Wechselkurs US-Dollar/Euro, täglich",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz EXR",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+      "beschreibung": "EZB EXR D.USD.EUR.SP00.A: Referenzkurs des US-Dollars gegenüber dem Euro, Tageswerte ab 1999, für die Umrechnung der Brent- und Gaspreise",
+      "datei": "ecb_eur_usd_tag.csv",
+      "datensaetze": [
+        "energie_maerkte_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:43:41+00:00",
+      "sha256": "9bb96ee5cb0450560a8c3dcf741a0d69500cf05e6ad5c60c5f7acc70c549bba4",
+      "bytes": 1492315
     },
     {
       "key": "big_mac",
@@ -565,6 +718,51 @@
       "bytes": 8189
     },
     {
+      "key": "eurostat_bip_wachstum",
+      "titel": "Reales BIP-Wachstum: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz nama_10_gdp",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_gdp?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&geo=EU27_2020&na_item=B1GQ&unit=CLV_PCH_PRE&sinceTimePeriod=1995",
+      "beschreibung": "Eurostat nama_10_gdp: Bruttoinlandsprodukt (B1GQ) in verketteten Volumina, Veränderung gegenüber dem Vorjahr in Prozent, jährlich ab 1995, europäische Länder",
+      "datei": "eurostat_nama_10_gdp_wachstum.json",
+      "datensaetze": [
+        "bip_wachstum_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:31:31+00:00",
+      "sha256": "ab7118e84c42de99d0c1e6cc671cc890a4ebda21b5b51297b240b9adfca51f6d",
+      "bytes": 13016
+    },
+    {
+      "key": "eurostat_produktion",
+      "titel": "Produktionsindex des Verarbeitenden Gewerbes: Europa, monatlich",
+      "herausgeber": "Eurostat, Datensatz sts_inpr_m",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sts_inpr_m?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&nace_r2=C&s_adj=SCA&unit=I21&sinceTimePeriod=1995-01",
+      "beschreibung": "Eurostat sts_inpr_m: Produktionsindex des Verarbeitenden Gewerbes (NACE C), kalender- und saisonbereinigt, Index 2021=100, monatlich ab 1995, europäische Länder",
+      "datei": "eurostat_sts_inpr_m.json",
+      "datensaetze": [
+        "produktion_vergleich_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-19T20:13:20+00:00",
+      "sha256": "fdf997cbc6509adb99372354e619ae5ab4d605906c2b3b00330e7b1f44c9e62c",
+      "bytes": 138085
+    },
+    {
+      "key": "eurostat_produktion_deutschland",
+      "titel": "Produktionsindex der Industrie: Deutschland, monatlich",
+      "herausgeber": "Eurostat, Datensatz sts_inpr_m",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sts_inpr_m?format=JSON&lang=EN&geo=DE&nace_r2=B-D&s_adj=SCA&unit=I21&sinceTimePeriod=1993-01",
+      "beschreibung": "Eurostat sts_inpr_m: Produktionsindex der Industrie ohne Baugewerbe (NACE B-D), kalender- und saisonbereinigt, Index 2021=100, monatlich ab 1993; der Datenaufbau rechnet auf 2015=100 um",
+      "datei": "eurostat_sts_inpr_m_deutschland.json",
+      "datensaetze": [
+        "produktion_deutschland_lang.csv"
+      ],
+      "abgerufen_am": "2026-11-19T21:51:58+00:00",
+      "sha256": "1005dbbc3d32b723ac0ba4846782fadfcd2bf1c084c5ea822a6db3ebaee793ce",
+      "bytes": 21945
+    },
+    {
       "key": "bmf_zinsausgaben",
       "titel": "Zinsausgaben des Bundes am Kreditmarkt",
       "herausgeber": "Bundesministerium der Finanzen, Bundeshaushalt",
@@ -578,19 +776,34 @@
       "abgerufen_am": "2026-11-17T19:01:49+00:00",
       "sha256": "df99772ca0ffdee9e3b2323ebdf97d2abd797d3c6765842e3d2f2c6aee29e550",
       "bytes": 129
+    },
+    {
+      "key": "bund_finanzplan_zinsausgaben",
+      "titel": "Finanzplan des Bundes 2026 bis 2030 (Drucksache 21/7301)",
+      "herausgeber": "Deutscher Bundestag, 21. Wahlperiode",
+      "lizenz": "© Deutscher Bundestag, Quellenangabe erforderlich",
+      "url": "https://dserver.bundestag.de/btd/21/073/2107301.pdf",
+      "beschreibung": "Manuell aus Drucksache 21/7301 (Tabelle 9, Ausgabeart 1.3 Zinsausgaben) übernommen: geplante Zinsausgaben des Bundes im Kernhaushalt in Mrd. EUR für Ist 2025, Soll 2026, Entwurf 2027 sowie Finanzplan 2028 bis 2030",
+      "datei": "manual/bund_finanzplan_2026-2030_zinsausgaben.csv",
+      "datensaetze": [
+        "bund_zinsausgaben_plan.csv"
+      ],
+      "abgerufen_am": "2026-11-19T23:00:08+00:00",
+      "sha256": "4112c9f2fa56a0f2e11d35c7ce5ed5a1bd9a374eccee89a68f3af77c41b07953",
+      "bytes": 157
     }
   ],
   "anbieter": [
     {
       "anbieter": "Statistisches Bundesamt (Destatis)",
-      "daten": "Insolvenzverfahren, Preise für Strom und Gas",
+      "daten": "Insolvenzverfahren, Strom- und Gaspreise, BIP und Investitionen, Produktionsindex",
       "portal": "https://www-genesis.destatis.de/datenbank/online",
       "api": "https://genesis.destatis.de/genesisWS/rest/2020",
       "zugang": "kostenlos, API-Token nach Registrierung"
     },
     {
       "anbieter": "Eurostat",
-      "daten": "Haushalte, Schuldenquote, Zinsvergleich, Eigentumsquote",
+      "daten": "Haushalte, Schuldenquote, Zinsvergleich, Eigentumsquote, BIP-Wachstum, Produktionsindex",
       "portal": "https://ec.europa.eu/eurostat/databrowser/",
       "api": "https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-introduction",
       "zugang": "kostenlos, ohne API-Key"
@@ -604,14 +817,21 @@
     },
     {
       "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
-      "daten": "US-Staatsanleiherendite",
+      "daten": "US-Staatsanleiherendite, Brent und WTI, Gaspreise Europa, Japan und USA",
       "portal": "https://fred.stlouisfed.org/",
       "api": "https://fred.stlouisfed.org/docs/api/fred/",
       "zugang": "kostenlos, API-Key erforderlich"
     },
     {
+      "anbieter": "U.S. Energy Information Administration (EIA)",
+      "daten": "Brent- und WTI-Rohölpreise, Henry-Hub-Gaspreis",
+      "portal": "https://www.eia.gov/",
+      "api": "https://www.eia.gov/opendata/",
+      "zugang": "kostenlos, API-Key erforderlich (Abruf hier über FRED)"
+    },
+    {
       "anbieter": "EZB – Data Portal",
-      "daten": "Geldmenge M3, Harmonisierter Verbraucherpreisindex",
+      "daten": "Geldmenge M3, Verbraucherpreisindex, Wechselkurs US-Dollar/Euro",
       "portal": "https://data.ecb.europa.eu/",
       "api": "https://data.ecb.europa.eu/help/api/overview",
       "zugang": "kostenlos, ohne API-Key"
@@ -625,7 +845,7 @@
     },
     {
       "anbieter": "Internationaler Währungsfonds (IWF)",
-      "daten": "Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung",
+      "daten": "Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung; Rohstoffpreise (Gas Europa/Japan, Dubai-Öl)",
       "portal": "https://www.imf.org/en/Data",
       "api": "https://www.imf.org/external/datamapper/api/help",
       "zugang": "kostenlos, ohne API-Key"
@@ -653,7 +873,7 @@
     },
     {
       "anbieter": "Europäische Kommission – Weekly Oil Bulletin",
-      "daten": "Kraftstoffpreise",
+      "daten": "Kraftstoff- und Heizölpreise",
       "portal": "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en",
       "api": "",
       "zugang": "kostenlos, ohne API-Key"

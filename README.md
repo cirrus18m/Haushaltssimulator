@@ -56,14 +56,15 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Bundesländer** | Ranking und Entwicklung der 16 Länder, Anteile, Veränderung seit 2024 |
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
-| **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe und die daraus folgende theoretische Zinslast in Mrd. €, in % der Einnahmen und in % des BIP |
+| **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe mit Inflation sowie die daraus folgende theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes – in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, drei Einkommensgrößen, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
 | **Geld & Kaufkraft** | Geldmenge M3, Inflation und kumulierter Kaufkraftverlust |
-| **Energiepreise** | Strom- und Gaspreise für Haushalte, Börsenstrompreis und Kraftstoffe im EU-Vergleich |
+| **Energiepreise** | Strom- und Gaspreise für Haushalte, Börsenstrompreis, Kraftstoffe im EU-Vergleich, Heizöl sowie regionale Gas- und Öl-Benchmarks (TTF, JKM, Henry Hub; Brent, WTI, Dubai) |
 | **Preisniveau & Wohnen** | Big-Mac-Index und Eigentumsquote in Europa |
 | **Bund & Schuldendienst** | Zinsausgaben und Schuldenstand des Bundes, Planwerte aus dem Bundeshaushalt |
+| **Wirtschaft** | Reales BIP-Wachstum, Produktion im Verarbeitenden Gewerbe, Industrieproduktion im langfristigen Trend sowie private/staatliche Investitionen |
 
 ## Projektstruktur
 
@@ -111,8 +112,10 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Eurostat `prc_hicp_manr`](https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_manr/default/table) | Inflationsraten (HVPI) der europäischen Länder, monatlich | CC BY 4.0 |
 | [FRED `IRLTLT01USM156N`](https://fred.stlouisfed.org/series/IRLTLT01USM156N) | Langfristige Staatsanleiherendite der USA (OECD MEI) | OECD-Bedingungen |
 | [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |
-| [IWF DataMapper](https://www.imf.org/external/datamapper/api/help) | Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung für USA und Russland (WEO, Public Finances in Modern History) | IWF-Bedingungen |
-| [EZB EXR](https://data.ecb.europa.eu/data/datasets/EXR) | Wechselkurs US-Dollar/Euro, Jahresdurchschnitt | Quellenangabe erforderlich |
+| [IWF DataMapper](https://www.imf.org/external/datamapper/api/help) | Schuldenquote, Einnahmen, Zinsausgaben, reales BIP-Wachstum, BIP und Bevölkerung für USA und Russland (WEO, Public Finances in Modern History) | IWF-Bedingungen |
+| [FRED `PNGASJPUSDM`](https://fred.stlouisfed.org/series/PNGASJPUSDM) | LNG-Preis Japan, monatlich (IWF; JKM-Referenz) | IWF-Bedingungen |
+| [FRED `POILDUBUSDM`](https://fred.stlouisfed.org/series/POILDUBUSDM) | Rohölpreis Dubai, monatlich (IWF) | IWF-Bedingungen |
+| [EZB EXR](https://data.ecb.europa.eu/data/datasets/EXR) | Wechselkurs US-Dollar/Euro, Jahres- und Tageswerte | Quellenangabe erforderlich |
 | [Rosstat über EMISS](https://fedstat.ru/) | Verbraucherpreise Russlands, monatlich (Rückgriff: Bank of Russia) | Quellenangabe erforderlich |
 | [Weltbank WDI `NY.GNP.PCAP.CD`](https://data.worldbank.org/indicator/NY.GNP.PCAP.CD) | Bruttonationaleinkommen je Einwohner:in Russlands (Ersatzreihe) | CC BY 4.0 |
 | [Eurostat `ilc_di03`](https://ec.europa.eu/eurostat/databrowser/view/ilc_di03/default/table) | Verfügbares Einkommen je Einwohner:in der europäischen Länder | CC BY 4.0 |
@@ -123,12 +126,21 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Destatis 52411-0002](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0002) | Beantragte Insolvenzverfahren, Monate | DL-DE-BY-2.0 |
 | [Destatis 52411-0011](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0011) | Insolvenzverfahren von Unternehmen, Monate | DL-DE-BY-2.0 |
 | [Destatis 52411-0017](https://genesis.destatis.de/datenbank/online/table/52411-0017) | Unternehmensinsolvenzen 2003–2026 nach Größenklassen (manueller Export) | DL-DE-BY-2.0 |
+| [Destatis 81000-0001](https://www-genesis.destatis.de/datenbank/online/statistic/81000/table/81000-0001) | Bruttoinlandsprodukt nominal und real, Wachstumsraten, Jahre | DL-DE-BY-2.0 |
+| [Destatis 81000-0025](https://www-genesis.destatis.de/datenbank/online/statistic/81000/table/81000-0025) | Bruttoanlageinvestitionen des Staates und der nichtstaatlichen Sektoren | DL-DE-BY-2.0 |
+| [Destatis 42153-0001](https://www-genesis.destatis.de/datenbank/online/statistic/42153/table/42153-0001) | Produktionsindex des Verarbeitenden Gewerbes, Monate | DL-DE-BY-2.0 |
+| [Eurostat `nama_10_gdp`](https://ec.europa.eu/eurostat/databrowser/view/nama_10_gdp/default/table) | Reales BIP-Wachstum der europäischen Länder, jährlich | CC BY 4.0 |
+| [Eurostat `sts_inpr_m`](https://ec.europa.eu/eurostat/databrowser/view/sts_inpr_m/default/table) | Produktionsindex des Verarbeitenden Gewerbes und der Industrie (NACE B-D), monatlich ab 1993 | CC BY 4.0 |
 | [EZB BSI](https://data.ecb.europa.eu/data/datasets/BSI) | Geldmenge M3, monatlich | Quellenangabe erforderlich |
 | [EZB ICP](https://data.ecb.europa.eu/data/datasets/ICP) | Harmonisierter Verbraucherpreisindex, monatlich | Quellenangabe erforderlich |
 | [Destatis 61243-0002](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0002) | Strompreise für Haushalte, Jahre | DL-DE-BY-2.0 |
 | [Destatis 61243-0011](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0011) | Erdgaspreise für Haushalte, Jahre | DL-DE-BY-2.0 |
 | [energy-charts.info](https://api.energy-charts.info/) | Börsenstrompreis Day-Ahead (Bundesnetzagentur \| SMARD.de) | CC BY 4.0 |
-| [EU Weekly Oil Bulletin](https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en) | Kraftstoffpreise je Land, wöchentlich | Quellenangabe erforderlich |
+| [EU Weekly Oil Bulletin](https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en) | Kraftstoff- und Heizölpreise je Land, wöchentlich | Quellenangabe erforderlich |
+| [FRED `DCOILBRENTEU`](https://fred.stlouisfed.org/series/DCOILBRENTEU) | Brent-Rohölpreis, täglich (EIA) | EIA-Bedingungen |
+| [FRED `DCOILWTICO`](https://fred.stlouisfed.org/series/DCOILWTICO) | WTI-Rohölpreis, täglich (EIA) | EIA-Bedingungen |
+| [FRED `PNGASEUUSDM`](https://fred.stlouisfed.org/series/PNGASEUUSDM) | Gaspreis Europa, monatlich (IWF) | IWF-Bedingungen |
+| [FRED `DHHNGSP`](https://fred.stlouisfed.org/series/DHHNGSP) | Henry-Hub-Gaspreis, täglich (EIA) | EIA-Bedingungen |
 | [The Economist Big-Mac-Data](https://github.com/TheEconomist/big-mac-data) | Big-Mac-Index je Land | Quellenangabe erforderlich |
 | [Eurostat `ilc_lvho02`](https://ec.europa.eu/eurostat/databrowser/view/ilc_lvho02/default/table) | Eigentums- und Mietquote | CC BY 4.0 |
 | [BMF Bundeshaushalt](https://www.bundeshaushalt.de/) | Zinsausgaben des Bundes am Kreditmarkt | Quellenangabe erforderlich |

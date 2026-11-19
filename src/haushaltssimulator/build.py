@@ -319,6 +319,7 @@ def _internationale_finanzen(raw_dir: Path) -> pd.DataFrame:
         "einnahmenquote_pct": imf.FPP_EINNAHMEN,
         "zinsquote_pct": imf.FPP_ZINSEN,
         "bip_mrd_usd": imf.WEO_BIP_USD,
+        "bip_wachstum_pct": imf.WEO_BIP_WACHSTUM,
         "bevoelkerung_mio": imf.WEO_BEVOELKERUNG,
         "bip_je_einwohner_usd": imf.WEO_BIP_JE_EINWOHNER,
     }
@@ -838,6 +839,120 @@ def build_fuel_prices(raw_dir: Path) -> pd.DataFrame:
     return monthly.sort_values(["monat", "land", "produkt"]).reset_index(drop=True)
 
 
+# Energiegehalt für die Umrechnung in ct je kWh.
+KWH_JE_LITER_HEIZOEL = 10.0
+KWH_JE_BARREL_ROHOEL = 1700.0
+KWH_JE_MMBTU = 293.071
+
+
+def build_energy_markets(raw_dir: Path) -> pd.DataFrame:
+    """Monatspreise für Heizöl, Gas und Rohöl, regional vergleichbar.
+
+    Heizöl stammt aus dem EU-Ölbulletin. Gas- und Öl-Benchmarks kommen von EIA
+    bzw. IWF über FRED. Die US-Dollar-Preise werden mit dem EZB-Referenzkurs in
+    Euro umgerechnet; Gas zusätzlich in Euro je MWh.
+    """
+    heizoel = oil.parse_prices(
+        (raw_dir / "oil_bulletin_preise.xlsx").read_bytes(),
+        produkte={"heating_oil": "Heizöl"},
+    )
+    heizoel = heizoel[heizoel["land_code"] == "DE"].copy()
+    if heizoel.empty:
+        raise ValueError("Keine Heizölpreise für Deutschland im Ölbulletin gefunden")
+    heizoel["monat"] = pd.to_datetime(heizoel["datum"]).dt.strftime("%Y-%m")
+    heizoel_monat = heizoel.groupby("monat", as_index=False)["preis_eur_l"].mean()
+    heizoel_monat["heizoel_ct_l"] = heizoel_monat["preis_eur_l"] * 100
+    heizoel_monat["heizoel_ct_kwh"] = heizoel_monat["heizoel_ct_l"] / KWH_JE_LITER_HEIZOEL
+
+    wechselkurs = ecb.parse_exr_daily_csv((raw_dir / "ecb_eur_usd_tag.csv").read_bytes())
+    wechselkurs_monat = (
+        wechselkurs.assign(monat=wechselkurs["datum"].dt.strftime("%Y-%m"))
+        .groupby("monat", as_index=False)["usd_je_eur"]
+        .mean()
+    )
+
+    def monatsmittel(frame: pd.DataFrame, wertspalte: str) -> pd.DataFrame:
+        return frame.groupby("monat", as_index=False)[wertspalte].mean()
+
+    # Europa: IWF-Benchmark für europäisches Erdgas (TTF-orientiert).
+    gas = fred.parse_series_csv((raw_dir / "fred_erdgas_europa.csv").read_bytes())
+    gas["monat"] = gas["datum"].dt.strftime("%Y-%m")
+    gas = gas.merge(wechselkurs_monat, on="monat", how="left")
+    gas["gas_ct_kwh"] = 100 * gas["wert"] / (KWH_JE_MMBTU * gas["usd_je_eur"])
+    gas["gas_ttf_eur_mwh"] = gas["gas_ct_kwh"] * 10
+
+    # Nordostasien: IWF-Preis für LNG Japan als frei verfügbare JKM-Referenz.
+    japan = fred.parse_series_csv((raw_dir / "fred_lng_japan.csv").read_bytes())
+    japan["monat"] = japan["datum"].dt.strftime("%Y-%m")
+    japan = japan.merge(wechselkurs_monat, on="monat", how="left")
+    japan["gas_jkm_eur_mwh"] = (
+        japan["wert"] / (KWH_JE_MMBTU / 1000) / japan["usd_je_eur"]
+    )
+
+    # USA: Henry-Hub-Spotpreis, täglich in Euro je MWh umgerechnet.
+    henry = fred.parse_series_csv((raw_dir / "fred_henry_hub.csv").read_bytes())
+    henry = henry.merge(wechselkurs, on="datum", how="inner")
+    henry["monat"] = henry["datum"].dt.strftime("%Y-%m")
+    henry["preis_eur_mwh"] = henry["wert"] / (KWH_JE_MMBTU / 1000) / henry["usd_je_eur"]
+    henry_monat = monatsmittel(henry, "preis_eur_mwh").rename(
+        columns={"preis_eur_mwh": "gas_henry_hub_eur_mwh"}
+    )
+
+    # Öl: Brent und WTI täglich, Dubai monatlich, jeweils in Euro je Barrel.
+    brent = fred.parse_series_csv((raw_dir / "fred_brent_rohoel.csv").read_bytes())
+    brent["monat"] = brent["datum"].dt.strftime("%Y-%m")
+    brent = brent.merge(wechselkurs, on="datum", how="inner")
+    brent["brent_eur_barrel"] = brent["wert"] / brent["usd_je_eur"]
+    brent_monat = monatsmittel(brent, "brent_eur_barrel")
+    brent_monat["brent_ct_kwh"] = brent_monat["brent_eur_barrel"] * 100 / KWH_JE_BARREL_ROHOEL
+
+    wti = fred.parse_series_csv((raw_dir / "fred_wti_rohoel.csv").read_bytes())
+    wti = wti.merge(wechselkurs, on="datum", how="inner")
+    wti["monat"] = wti["datum"].dt.strftime("%Y-%m")
+    wti["wti_eur_barrel"] = wti["wert"] / wti["usd_je_eur"]
+    wti_monat = monatsmittel(wti, "wti_eur_barrel")
+
+    dubai = fred.parse_series_csv((raw_dir / "fred_dubai_rohoel.csv").read_bytes())
+    dubai["monat"] = dubai["datum"].dt.strftime("%Y-%m")
+    dubai = dubai.merge(wechselkurs_monat, on="monat", how="left")
+    dubai["dubai_eur_barrel"] = dubai["wert"] / dubai["usd_je_eur"]
+
+    frame = heizoel_monat[["monat", "heizoel_ct_l", "heizoel_ct_kwh"]]
+    for teil in (
+        gas[["monat", "gas_ct_kwh", "gas_ttf_eur_mwh"]],
+        japan[["monat", "gas_jkm_eur_mwh"]],
+        henry_monat,
+        brent_monat[["monat", "brent_eur_barrel", "brent_ct_kwh"]],
+        wti_monat,
+        dubai[["monat", "dubai_eur_barrel"]],
+    ):
+        frame = frame.merge(teil, on="monat", how="outer")
+
+    preisspalten = [
+        "heizoel_ct_l",
+        "gas_ttf_eur_mwh",
+        "gas_jkm_eur_mwh",
+        "gas_henry_hub_eur_mwh",
+        "brent_eur_barrel",
+        "wti_eur_barrel",
+        "dubai_eur_barrel",
+    ]
+    frame = frame.dropna(subset=preisspalten, how="all")
+    columns = [
+        "monat",
+        "heizoel_ct_l",
+        "heizoel_ct_kwh",
+        "gas_ct_kwh",
+        "gas_ttf_eur_mwh",
+        "gas_jkm_eur_mwh",
+        "gas_henry_hub_eur_mwh",
+        "brent_eur_barrel",
+        "brent_ct_kwh",
+        "wti_eur_barrel",
+        "dubai_eur_barrel",
+    ]
+    return frame[columns].sort_values("monat").reset_index(drop=True)
+
 def build_big_mac(raw_dir: Path) -> pd.DataFrame:
     """Big-Mac-Index für die ausgewählten Länder (The Economist)."""
     frame = bigmac.parse_index((raw_dir / "big_mac_index.csv").read_bytes())
@@ -872,6 +987,189 @@ def build_bmf_interest(raw_dir: Path) -> pd.DataFrame:
     return frame[columns].sort_values("jahr").reset_index(drop=True)
 
 
+def build_finanzplan_interest(raw_dir: Path) -> pd.DataFrame:
+    """Geplante Zinsausgaben des Bundes im Kernhaushalt (Drucksache 21/7301)."""
+    frame = bmf.parse_interest_csv(
+        (raw_dir / "manual" / "bund_finanzplan_2026-2030_zinsausgaben.csv").read_bytes()
+    )
+    frame = frame.dropna(subset=["zinsausgaben_mrd_eur"])
+    columns = ["jahr", "art", "zinsausgaben_mrd_eur"]
+    return frame[columns].sort_values("jahr").reset_index(drop=True)
+
+
+PREISE_NOMINAL = "in jeweiligen Preisen (Mrd. EUR)"
+PREISE_REAL = "preisbereinigt, Kettenindex (2020=100)"
+STAAT_INVESTITIONEN = "Bruttoanlageinvestitionen des Staates"
+NICHTSTAAT_INVESTITIONEN = "Bruttoanlageinvestitionen der nichtstaatl.Sektoren"
+
+
+def _destatis_jahresreihe(
+    frame: pd.DataFrame, preisbasis: str, aggregat: str, spalte: str
+) -> pd.DataFrame:
+    """Wählt eine Zeile der VGR-Jahrestabelle aus und benennt ihren Wert um."""
+    teil = frame[(frame["preisbasis"] == preisbasis) & (frame["aggregat"] == aggregat)]
+    if teil.empty:
+        raise ValueError(f"Zeile {preisbasis!r} / {aggregat!r} fehlt in der Tabelle")
+    return teil[["jahr", "wert"]].rename(columns={"wert": spalte})
+
+
+def build_bip_deutschland(raw_dir: Path) -> pd.DataFrame:
+    """BIP, realer Index und Wachstumsraten Deutschlands (Destatis, Jahre)."""
+    raw = destatis.decode((raw_dir / "destatis_81000-0001_vgr_jahr.csv").read_bytes())
+    frame = destatis.parse_year_columns(raw, ["preisbasis", "aggregat", "einheit"])
+
+    result = _destatis_jahresreihe(
+        frame, PREISE_NOMINAL, "Bruttoinlandsprodukt", "bip_nominal_mrd_eur"
+    )
+    veraenderung = "nachr.: Bruttoinlandsprodukt (Veränderung in %)"
+    reihen = (
+        ("bip_wachstum_nominal_pct", PREISE_NOMINAL, veraenderung),
+        ("bip_real_index", PREISE_REAL, "Bruttoinlandsprodukt"),
+        ("bip_wachstum_real_pct", PREISE_REAL, veraenderung),
+    )
+    for spalte, preisbasis, aggregat in reihen:
+        result = result.merge(
+            _destatis_jahresreihe(frame, preisbasis, aggregat, spalte), on="jahr", how="outer"
+        )
+
+    columns = [
+        "jahr",
+        "bip_nominal_mrd_eur",
+        "bip_real_index",
+        "bip_wachstum_nominal_pct",
+        "bip_wachstum_real_pct",
+    ]
+    return result[columns].sort_values("jahr").reset_index(drop=True)
+
+
+def build_investitionen(raw_dir: Path) -> pd.DataFrame:
+    """Private und staatliche Bruttoanlageinvestitionen (Destatis, Jahre)."""
+    raw = destatis.decode((raw_dir / "destatis_81000-0025_investitionen.csv").read_bytes())
+    frame = destatis.parse_year_columns(raw, ["preisbasis", "aggregat", "einheit"])
+
+    sektoren = {
+        STAAT_INVESTITIONEN: "Staat",
+        NICHTSTAAT_INVESTITIONEN: "Nichtstaatliche Sektoren",
+    }
+    nominal = frame[(frame["preisbasis"] == PREISE_NOMINAL) & frame["aggregat"].isin(sektoren)]
+    nominal = nominal.assign(sektor=nominal["aggregat"].map(sektoren)).rename(
+        columns={"wert": "investitionen_mrd_eur"}
+    )
+    real = frame[(frame["preisbasis"] == PREISE_REAL) & frame["aggregat"].isin(sektoren)]
+    real = real.assign(sektor=real["aggregat"].map(sektoren)).rename(
+        columns={"wert": "real_index"}
+    )
+    if nominal.empty or real.empty:
+        raise ValueError("Investitionszeilen fehlen in der Tabelle 81000-0025")
+
+    result = nominal[["jahr", "sektor", "investitionen_mrd_eur"]].merge(
+        real[["jahr", "sektor", "real_index"]], on=["jahr", "sektor"], how="outer"
+    )
+    bip = build_bip_deutschland(raw_dir)[["jahr", "bip_nominal_mrd_eur"]]
+    result = result.merge(bip, on="jahr", how="left")
+    result["anteil_bip_pct"] = result["investitionen_mrd_eur"] / result["bip_nominal_mrd_eur"] * 100
+    columns = ["jahr", "sektor", "investitionen_mrd_eur", "real_index", "anteil_bip_pct"]
+    return result[columns].sort_values(["jahr", "sektor"]).reset_index(drop=True)
+
+
+def build_bip_wachstum(raw_dir: Path) -> pd.DataFrame:
+    """Reales BIP-Wachstum je Land und Jahr (Eurostat; USA und Russland: IWF)."""
+    frame = eurostat.jsonstat_to_frame(_load_json(raw_dir, "eurostat_nama_10_gdp_wachstum.json"))
+    frame = frame[frame["geo"].isin([*LAENDER_CODES, "EU27_2020"])].copy()
+    frame["land"] = frame["geo"].map(laender.LAND_NAMEN)
+    frame.loc[frame["geo"] == "EU27_2020", "land"] = "EU-27"
+    frame["jahr"] = frame["time"].astype(int)
+    frame["quelle"] = "Eurostat nama_10_gdp"
+    frame["quelle_key"] = "eurostat_bip_wachstum"
+    columns = ["jahr", "geo", "land", "wachstum_pct", "quelle", "quelle_key"]
+    europe = frame.rename(columns={"value": "wachstum_pct"})[columns].dropna(
+        subset=["wachstum_pct"]
+    )
+
+    international = _internationale_finanzen(raw_dir).rename(
+        columns={"bip_wachstum_pct": "wachstum_pct"}
+    )
+    international["quelle"] = "IWF WEO"
+    international["quelle_key"] = "imf_fiskal"
+    result = pd.concat(
+        [europe, international[columns].dropna(subset=["wachstum_pct"])], ignore_index=True
+    )
+    return result.sort_values(["jahr", "land"]).reset_index(drop=True)
+
+
+def build_produktion_deutschland(raw_dir: Path) -> pd.DataFrame:
+    """Monatlicher Produktionsindex des Verarbeitenden Gewerbes (Destatis)."""
+    raw = destatis.decode((raw_dir / "destatis_42153-0001_produktion.csv").read_bytes())
+    frame = destatis.parse_fixed_columns(
+        raw,
+        ["wirtschaftszweig", "jahr", "monat_name"],
+        [
+            "index_2021_original",
+            "index_2021_kalenderbereinigt",
+            "index_2021_saisonbereinigt",
+            "index_2021_bv4_saisonbereinigt",
+            "index_2021_trend",
+        ],
+        year_column=1,
+    )
+    frame = frame[frame["wirtschaftszweig"] == "Verarbeitendes Gewerbe"].copy()
+    index_spalten = [
+        "index_2021_original",
+        "index_2021_kalenderbereinigt",
+        "index_2021_saisonbereinigt",
+        "index_2021_bv4_saisonbereinigt",
+        "index_2021_trend",
+    ]
+    frame = frame.dropna(subset=index_spalten, how="all")
+    frame["jahr"] = frame["jahr"].astype(int)
+    frame["monat_nummer"] = frame["monat_name"].map(MONATSNAMEN)
+    frame = frame.dropna(subset=["monat_nummer"]).copy()
+    frame["monat_nummer"] = frame["monat_nummer"].astype(int)
+    frame["monat"] = (
+        frame["jahr"].astype(str) + "-" + frame["monat_nummer"].map(lambda monat: f"{monat:02d}")
+    )
+    columns = [
+        "monat",
+        "jahr",
+        "index_2021_original",
+        "index_2021_kalenderbereinigt",
+        "index_2021_saisonbereinigt",
+        "index_2021_bv4_saisonbereinigt",
+        "index_2021_trend",
+    ]
+    return frame[columns].sort_values("monat").reset_index(drop=True)
+
+
+def build_produktion_deutschland_lang(raw_dir: Path) -> pd.DataFrame:
+    """Langfristiger Produktionsindex der Industrie, 2015=100 (Eurostat)."""
+    frame = eurostat.jsonstat_to_frame(
+        _load_json(raw_dir, "eurostat_sts_inpr_m_deutschland.json")
+    )
+    frame = frame.rename(columns={"time": "monat", "value": "index_2021"})
+    frame["jahr"] = frame["monat"].str[:4].astype(int)
+    basis = frame.loc[frame["jahr"] == 2015, "index_2021"].mean()
+    if pd.isna(basis) or basis <= 0:
+        raise ValueError("Basisfahr 2015 fehlt im Produktionsindex")
+    frame["index_2015"] = frame["index_2021"] / basis * 100
+    frame = frame.sort_values("monat").reset_index(drop=True)
+    frame["trend_2015"] = analysis.linear_trend(frame, "index_2015", fit_end="2017-12")
+    frame["abweichung_pct"] = (frame["index_2015"] / frame["trend_2015"] - 1) * 100
+    columns = ["monat", "jahr", "index_2015", "trend_2015", "abweichung_pct"]
+    return frame[columns]
+
+
+def build_produktion_vergleich(raw_dir: Path) -> pd.DataFrame:
+    """Produktionsindex des Verarbeitenden Gewerbes im Ländervergleich (Eurostat)."""
+    frame = _laender_eurostat(raw_dir, "eurostat_sts_inpr_m.json", "index_2021")
+    frame = frame.rename(columns={"time": "monat"})
+    frame["quelle"] = "Eurostat sts_inpr_m"
+    frame["quelle_key"] = "eurostat_produktion"
+    columns = ["monat", "geo", "land", "index_2021", "quelle", "quelle_key"]
+    return frame[columns].dropna(subset=["index_2021"]).sort_values(
+        ["monat", "land"]
+    ).reset_index(drop=True)
+
+
 BUILDERS = {
     "schulden_jahresreihe.csv": build_annual_debt,
     "schulden_quartalsreihe.csv": build_quarterly_debt,
@@ -892,10 +1190,18 @@ BUILDERS = {
     "big_mac.csv": build_big_mac,
     "eigentumsquote.csv": build_homeownership,
     "bund_zinsausgaben.csv": build_bmf_interest,
+    "bund_zinsausgaben_plan.csv": build_finanzplan_interest,
     "laender_schulden_jahr.csv": build_laender_debt,
     "laender_haushalt_jahr.csv": build_laender_budget,
     "laender_inflation_monat.csv": build_laender_inflation,
     "laender_einkommen_jahr.csv": build_laender_einkommen,
+    "bip_deutschland_jahr.csv": build_bip_deutschland,
+    "bip_wachstum_jahr.csv": build_bip_wachstum,
+    "investitionen_jahr.csv": build_investitionen,
+    "produktion_deutschland_monat.csv": build_produktion_deutschland,
+    "produktion_deutschland_lang.csv": build_produktion_deutschland_lang,
+    "produktion_vergleich_monat.csv": build_produktion_vergleich,
+    "energie_maerkte_monat.csv": build_energy_markets,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -911,10 +1217,18 @@ FLOAT_FORMATS = {
     "big_mac.csv": "%.2f",
     "eigentumsquote.csv": "%.1f",
     "bund_zinsausgaben.csv": "%.2f",
+    "bund_zinsausgaben_plan.csv": "%.2f",
     "laender_schulden_jahr.csv": "%.1f",
     "laender_haushalt_jahr.csv": "%.1f",
     "laender_inflation_monat.csv": "%.2f",
     "laender_einkommen_jahr.csv": "%.2f",
+    "bip_deutschland_jahr.csv": "%.2f",
+    "bip_wachstum_jahr.csv": "%.2f",
+    "investitionen_jahr.csv": "%.2f",
+    "produktion_deutschland_monat.csv": "%.2f",
+    "produktion_deutschland_lang.csv": "%.2f",
+    "produktion_vergleich_monat.csv": "%.2f",
+    "energie_maerkte_monat.csv": "%.2f",
 }
 
 

@@ -156,6 +156,11 @@ def bund_interest() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def bund_interest_plan() -> pd.DataFrame:
+    return dataset.load_bund_interest_plan()
+
+
+@st.cache_data(show_spinner=False)
 def laender_debt() -> pd.DataFrame:
     return dataset.load_laender_debt()
 
@@ -173,6 +178,41 @@ def laender_inflation() -> pd.DataFrame:
 @st.cache_data(show_spinner=False)
 def laender_income() -> pd.DataFrame:
     return dataset.load_laender_income()
+
+
+@st.cache_data(show_spinner=False)
+def gdp_germany() -> pd.DataFrame:
+    return dataset.load_gdp_germany()
+
+
+@st.cache_data(show_spinner=False)
+def gdp_growth() -> pd.DataFrame:
+    return dataset.load_gdp_growth()
+
+
+@st.cache_data(show_spinner=False)
+def investments() -> pd.DataFrame:
+    return dataset.load_investments()
+
+
+@st.cache_data(show_spinner=False)
+def production_germany() -> pd.DataFrame:
+    return dataset.load_production_germany()
+
+
+@st.cache_data(show_spinner=False)
+def production_germany_long() -> pd.DataFrame:
+    return dataset.load_production_germany_long()
+
+
+@st.cache_data(show_spinner=False)
+def production_comparison() -> pd.DataFrame:
+    return dataset.load_production_comparison()
+
+
+@st.cache_data(show_spinner=False)
+def energy_markets() -> pd.DataFrame:
+    return dataset.load_energy_markets()
 
 
 @st.cache_data(show_spinner=False)
@@ -196,6 +236,27 @@ def format_timestamp(value: str | None) -> str:
     return datetime.fromisoformat(value).astimezone().strftime("%d.%m.%Y, %H:%M Uhr")
 
 
+MONATSNAMEN = (
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
+)
+
+
+def format_month(value: str) -> str:
+    """Formatiert einen Monat ``JJJJ-MM`` in deutscher Schreibweise."""
+    return f"{MONATSNAMEN[int(value[5:7]) - 1]} {value[:4]}"
+
+
 def format_number(value: float, decimals: int = 1, unit: str = "") -> str:
     """Formatiert Zahlen in deutscher Schreibweise."""
     if value is None or pd.isna(value):
@@ -215,13 +276,18 @@ def format_eur(value_eur: float) -> str:
 
 
 def style(
-    fig: go.Figure, *, height: int = 430, legend: bool = True, legend_y: float = 1.02
+    fig: go.Figure,
+    *,
+    height: int = 430,
+    legend: bool = True,
+    legend_y: float = 1.02,
+    top_margin: int = 40,
 ) -> go.Figure:
     """Einheitliches Layout für alle Diagramme."""
     fig.update_layout(
         template="plotly_white",
         height=height,
-        margin={"l": 10, "r": 10, "t": 40, "b": 10},
+        margin={"l": 10, "r": 10, "t": top_margin, "b": 10},
         hovermode="x unified" if legend else "closest",
         showlegend=legend,
         legend={"orientation": "h", "yanchor": "bottom", "y": legend_y, "x": 0},
@@ -246,9 +312,10 @@ def plot(
     height: int = 430,
     legend: bool = True,
     legend_y: float = 1.02,
+    top_margin: int = 40,
 ) -> None:
     """Zeigt ein Diagramm und bietet es als SVG und als HTML zum Download an."""
-    styled = style(figure, height=height, legend=legend, legend_y=legend_y)
+    styled = style(figure, height=height, legend=legend, legend_y=legend_y, top_margin=top_margin)
     config = {
         "displaylogo": False,
         "toImageButtonOptions": {"format": "svg", "filename": filename, "scale": 1},

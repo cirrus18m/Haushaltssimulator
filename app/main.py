@@ -49,6 +49,7 @@ pages = [
         title="Bund & Schuldendienst",
         icon=":material/account_balance_wallet:",
     ),
+    st.Page("pages/14_Wirtschaft.py", title="Wirtschaft", icon=":material/trending_up:"),
 ]
 
 st.navigation(pages).run()

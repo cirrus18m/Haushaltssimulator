@@ -14,7 +14,7 @@ _YEAR = re.compile(r"(\d{4})\s*(?:\(([^)]*)\))?")
 
 
 def parse_interest_csv(raw: bytes) -> pd.DataFrame:
-    """Liest Zinsausgaben je Haushaltsjahr (Ist, Soll, Regierungsentwurf)."""
+    """Liest Zinsausgaben je Haushaltsjahr (Ist, Soll, Entwurf oder Finanzplan)."""
     text = raw.decode("utf-8-sig")
     records = []
     for row in csv.reader(io.StringIO(text), delimiter=";"):

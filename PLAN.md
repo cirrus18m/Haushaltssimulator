@@ -77,6 +77,10 @@ Ziel: Die 10-jährige Bundesanleihe mit dem Schuldenstand verknüpfen.
 * ✅ Seite **Haushalt & Zinsen**, Abschnitte Schulden und Zinslast: Darstellung von
   Rendite, Schuldenstand und den drei Kennzahlen, inklusive Vergleich „theoretisch
   gegen tatsächlich“.
+* ✅ Gemeinsames Diagramm für Rendite/Inflation und Zinslast: zwei Teilbilder in einer
+  Grafik, mit den Zeitmarken in beiden Teilbildern, dem Effektivzins und den im
+  Finanzplan 2026 bis 2030 veranschlagten Zinsausgaben des Bundes (Drucksache
+  21/7301, Tabelle 9; manuelle Quelle `bund_finanzplan_zinsausgaben`).
 
 Abnahmekriterien: Für das letzte Datenjahr existieren theoretische Zinslast in
 Mrd. Euro, in Prozent der Einnahmen und in Prozent des BIP; die Rechenwege sind im
@@ -127,17 +131,25 @@ Zinslast, Inflation und Realzins vor.
 
 ## Stufe 4 – Wirtschafts- und Geldindikatoren ✅
 
-Ideen aus [TODO.md](TODO.md), umgesetzt als fünf Seiten mit eigenen Quellen:
+Ideen aus [TODO.md](TODO.md), umgesetzt als sechs Seiten mit eigenen Quellen:
 
 * ✅ **Insolvenzen** – Destatis 52411-0002 und 52411-0011 (Verfahren, Forderungen,
   betroffene Arbeitnehmer), dazu die manuell exportierte Langreihe 52411-0017.
 * ✅ **Geld & Kaufkraft** – EZB BSI (M3) und ICP (HVPI Deutschland und Euro-Raum).
 * ✅ **Energiepreise** – Destatis 61243-0002 und 61243-0011 (Strom/Gas Haushalte),
-  energy-charts.info (Day-Ahead) und EU Weekly Oil Bulletin (Kraftstoffe).
+  energy-charts.info (Day-Ahead), EU Weekly Oil Bulletin (Kraftstoffe und Heizöl)
+  sowie regionale Gas- und Öl-Benchmarks (TTF, JKM, Henry Hub; Brent, WTI, Dubai)
+  über FRED.
 * ✅ **Preisniveau & Wohnen** – The Economist (Big-Mac-Index) und Eurostat ilc_lvho02
   (Eigentumsquote).
 * ✅ **Bund & Schuldendienst** – Eurostat gov_10a_main/gov_10dd_edpt1 (Sektor S1311) und
   BMF-Zinsausgaben am Kreditmarkt.
+* ✅ **Wirtschaft** – reales BIP-Wachstum (Destatis 81000-0001, Eurostat `nama_10_gdp`,
+  IWF-WEO für USA und Russland), Produktionsindex des Verarbeitenden Gewerbes
+  (Destatis 42153-0001, Eurostat `sts_inpr_m`), langfristige Industrieproduktion
+  mit Trend 1993–2017 (Eurostat `sts_inpr_m`, NACE B-D) sowie private und
+  staatliche Bruttoanlageinvestitionen (Destatis 81000-0025) mit Investitionsquote
+  zum BIP.
 
 Offene Punkte dieser Stufe:
 

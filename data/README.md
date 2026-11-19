@@ -31,6 +31,13 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `laender_haushalt_jahr.csv` | Einnahmen, Zinsausgaben, Quoten und Zins je Einwohner:in im Ländervergleich | Eurostat `gov_10a_main`, `nama_10_gdp`, `demo_pjan`; IWF WEO/FPP | 1995–2024 |
 | `laender_inflation_monat.csv` | Inflationsrate je Land | Eurostat `prc_hicp_manr`, FRED `CPIAUCSL`, Rosstat/EMISS bzw. Bank of Russia | 1997-01–2026-10 |
 | `laender_einkommen_jahr.csv` | Durchschnittseinkommen in drei Abgrenzungen | Eurostat `nama_10_gdp`, `demo_pjan`, `ilc_di03`, `nama_10_lp_ulc`; IWF WEO; FRED; Weltbank | 1995–2025 |
+| `bip_deutschland_jahr.csv` | BIP nominal, realer Index und Wachstumsraten | Destatis 81000-0001 | 2016–2025 |
+| `bip_wachstum_jahr.csv` | Reales BIP-Wachstum im Ländervergleich | Eurostat `nama_10_gdp`; IWF WEO für USA und Russland | 1995–2025 |
+| `investitionen_jahr.csv` | Private und staatliche Bruttoanlageinvestitionen | Destatis 81000-0025, 81000-0001 | 2016–2025 |
+| `produktion_deutschland_monat.csv` | Produktionsindex des Verarbeitenden Gewerbes | Destatis 42153-0001 | 2025-01–2026-09 |
+| `produktion_deutschland_lang.csv` | Industrieproduktion mit Langfristtrend | Eurostat `sts_inpr_m` | 1993-01–2026-09 |
+| `produktion_vergleich_monat.csv` | Produktionsindex im Ländervergleich | Eurostat `sts_inpr_m` | 1995-01–2026-09 |
+| `energie_maerkte_monat.csv` | Heizöl sowie regionale Gas- und Öl-Benchmarks | EU Weekly Oil Bulletin; IWF und EIA über FRED; EZB | 1999-01–2026-11 |
 
 ### Spalten
 
@@ -205,6 +212,87 @@ verkettete 12-Monats-Rate der Bank of Russia für Russland.
 | `einkommen_eur` | Einkommen je Einwohner:in bzw. je Beschäftigten in € |
 | `quelle`, `quelle_key` | Verwendete Quelle und Schlüssel in `data/sources.json` |
 
+**`bip_deutschland_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr` | Berichtsjahr |
+| `bip_nominal_mrd_eur` | Bruttoinlandsprodukt in jeweiligen Preisen, Mrd. € |
+| `bip_real_index` | Bruttoinlandsprodukt preisbereinigt, Kettenindex 2020 = 100 |
+| `bip_wachstum_nominal_pct`, `bip_wachstum_real_pct` | Veränderung gegenüber dem Vorjahr in % |
+
+**`bip_wachstum_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr` | Berichtsjahr |
+| `geo`, `land` | Ländercode (Eurostat bzw. ISO-3166-alpha-3) und deutsche Bezeichnung |
+| `wachstum_pct` | Reales BIP-Wachstum in % (verkettete Volumina) |
+| `quelle`, `quelle_key` | Verwendete Quelle und Schlüssel in `data/sources.json` |
+
+Die Reihe enthält nur Ist-Jahre; Prognosejahre des IWF werden nicht übernommen.
+
+**`investitionen_jahr.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `jahr` | Berichtsjahr |
+| `sektor` | `Staat` oder `Nichtstaatliche Sektoren` (private Haushalte, Unternehmen, Organisationen ohne Erwerbszweck) |
+| `investitionen_mrd_eur` | Bruttoanlageinvestitionen in jeweiligen Preisen, Mrd. € |
+| `real_index` | Bruttoanlageinvestitionen preisbereinigt, Kettenindex 2020 = 100 |
+| `anteil_bip_pct` | Investitionen in % des nominalen BIP |
+
+**`produktion_deutschland_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat (`JJJJ-MM`) |
+| `jahr` | Berichtsjahr |
+| `index_2021_original` | Produktionsindex, Originalwert (2021 = 100) |
+| `index_2021_kalenderbereinigt` | kalenderbereinigt (X13 JDemetra+) |
+| `index_2021_saisonbereinigt` | kalender- und saisonbereinigt (X13 JDemetra+) |
+| `index_2021_bv4_saisonbereinigt` | kalender- und saisonbereinigt (BV4.1), soweit berichtet |
+| `index_2021_trend` | BV4.1-Trend |
+
+**`produktion_deutschland_lang.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat (`JJJJ-MM`) |
+| `jahr` | Berichtsjahr |
+| `index_2015` | Produktionsindex der Industrie ohne Baugewerbe (NACE B-D), kalender- und saisonbereinigt, 2015 = 100 |
+| `trend_2015` | linearer Langfristtrend aus Januar 1993 bis Dezember 2017, fortgeschrieben |
+| `abweichung_pct` | Abweichung des Index vom Trend in Prozent des Trends |
+
+Die Reihe stammt aus Eurostat `sts_inpr_m` (Index 2021 = 100) und wird mit dem
+Jahresmittel 2015 auf 2015 = 100 umbasiert. Der Trend ist eine lineare Regression
+über die Monatswerte bis Dezember 2017.
+
+**`produktion_vergleich_monat.csv`** – `monat`, `geo`, `land`, `index_2021`
+(kalender- und saisonbereinigt, 2021 = 100), `quelle`, `quelle_key`.
+
+**`energie_maerkte_monat.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat (`JJJJ-MM`) |
+| `heizoel_ct_l` | Heizöl, Verbraucherpreis Deutschland inkl. Steuern, ct/l |
+| `heizoel_ct_kwh` | Heizöl, umgerechnet mit 1 l = 10 kWh, ct/kWh |
+| `gas_ct_kwh` | Europäischer Gas-Benchmarkpreis (IWF), ct/kWh |
+| `gas_ttf_eur_mwh` | TTF/Europa (IWF-Benchmark), €/MWh |
+| `gas_jkm_eur_mwh` | JKM/Nordostasien (IWF-Preis für LNG Japan), €/MWh |
+| `gas_henry_hub_eur_mwh` | Henry Hub/USA (EIA), €/MWh |
+| `brent_eur_barrel` | Brent/Europa, Spotpreis (EIA) mit EZB-Tageskurs, €/Barrel |
+| `brent_ct_kwh` | Brent, umgerechnet mit 1 Barrel = 1.700 kWh, ct/kWh |
+| `wti_eur_barrel` | WTI/USA (EIA) mit EZB-Tageskurs, €/Barrel |
+| `dubai_eur_barrel` | Dubai/Asien (IWF) mit EZB-Monatsdurchschnitt, €/Barrel |
+
+Heizöl ist ein Endverbraucherpreis mit Steuern und Abgaben; Gas und Öl sind
+Großhandels- bzw. Börsenpreise. Die Umrechnung in ct/kWh dient dem Vergleich der
+Energiegehalte, nicht den tatsächlichen Haushaltskosten. Der JKM selbst ist ein
+kostenpflichtiger Platts-Benchmark; die frei verfügbare Reihe ist der IWF-Preis für
+LNG Japan.
+
 ## `raw/`
 
 Die Originaldateien der Quellen (Destatis-CSV in Windows-1252, Eurostat-JSON-stat,
@@ -261,6 +349,7 @@ CSV-Dateien aus `processed/`.
 * Destatis-Daten: © Statistisches Bundesamt (Destatis), Lizenz [DL-DE-BY-2.0](https://www.govdata.de/dl-de/by-2-0)
 * Bundesbank-Daten: © Deutsche Bundesbank, Quellenangabe erforderlich
 * FRED/OECD-Daten: OECD-Nutzungsbedingungen, Quellenangabe erforderlich
+* IWF (Primary Commodity Prices) und EIA (Brent) über FRED: Nutzungsbedingungen, Quellenangabe erforderlich
 * Bank-of-Russia-Daten: Quellenangabe erforderlich
 * EZB-Daten: Europäische Zentralbank, Quellenangabe erforderlich
 * energy-charts.info: CC BY 4.0, Daten von Bundesnetzagentur | SMARD.de

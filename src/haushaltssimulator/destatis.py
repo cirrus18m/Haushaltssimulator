@@ -102,17 +102,26 @@ def parse_table(raw: str, label_columns: Sequence[str]) -> pd.DataFrame:
 
 
 def parse_fixed_columns(
-    raw: str, label_columns: Sequence[str], value_columns: Sequence[str]
+    raw: str,
+    label_columns: Sequence[str],
+    value_columns: Sequence[str],
+    *,
+    year_column: int = 0,
 ) -> pd.DataFrame:
     """Liest Tabellen mit festen Merkmals- und Wertspalten.
 
-    Anders als bei den Stichtagstabellen enthält die erste Spalte das Jahr
+    Anders als bei den Stichtagstabellen enthalten die Merkmalsspalten das Jahr
     (z. B. ``2026;Januar;Insgesamt;9418;3611659``). Kopfzeilen werden übersprungen,
-    bis eine Zeile mit einer Jahreszahl beginnt.
+    bis in ``year_column`` eine Jahreszahl steht. Bei ``year_column=1`` beginnt die
+    Tabelle mit einem Merkmal, etwa ``Verarbeitendes Gewerbe;2026;Januar;...``.
     """
     rows = list(csv.reader(io.StringIO(raw), delimiter=";"))
     start = next(
-        (index for index, row in enumerate(rows) if row and re.fullmatch(r"\d{4}", row[0].strip())),
+        (
+            index
+            for index, row in enumerate(rows)
+            if len(row) > year_column and re.fullmatch(r"\d{4}", row[year_column].strip())
+        ),
         None,
     )
     if start is None:
@@ -129,6 +138,58 @@ def parse_fixed_columns(
         for offset, column in enumerate(value_columns):
             record[column] = parse_number(row[len(label_columns) + offset])
         records.append(record)
+
+    return pd.DataFrame.from_records(records)
+
+
+def parse_year_columns(raw: str, label_columns: Sequence[str]) -> pd.DataFrame:
+    """Liest Tabellen, die Jahre als Spalten führen (z. B. VGR-Jahrestabellen).
+
+    Beispiel::
+
+        ;;;2016;2017;2018
+        in jeweiligen Preisen (Mrd. EUR);Bruttoinlandsprodukt;jew. ME;3204,870;3345,860;3450,580
+
+    Zurückgegeben wird je Merkmalszeile und Jahr ein Datensatz mit den
+    ``label_columns``, ``jahr`` und ``wert``.
+    """
+    rows = list(csv.reader(io.StringIO(raw), delimiter=";"))
+    header_index = None
+    year_columns: list[tuple[int, int]] = []
+    for index, row in enumerate(rows):
+        columns = [
+            (position, int(cell.strip()))
+            for position, cell in enumerate(row)
+            if re.fullmatch(r"\d{4}", cell.strip())
+        ]
+        # Die Jahreszahlen stehen nach den Merkmalsspalten und steigen auf.
+        if (
+            len(columns) >= 2
+            and columns[0][0] >= len(label_columns)
+            and all(
+                links[1] < rechts[1]
+                for links, rechts in zip(columns, columns[1:], strict=False)
+            )
+        ):
+            header_index = index
+            year_columns = columns
+            break
+    if header_index is None:
+        raise ValueError("Keine Jahres-Kopfzeile in der Tabelle gefunden")
+
+    records = []
+    for row in rows[header_index + 1 :]:
+        labels = [cell.strip() for cell in row[: len(label_columns)]]
+        if len(labels) != len(label_columns) or not all(labels):
+            continue
+        for position, jahr in year_columns:
+            records.append(
+                {
+                    **dict(zip(label_columns, labels, strict=True)),
+                    "jahr": jahr,
+                    "wert": parse_number(row[position]) if position < len(row) else float("nan"),
+                }
+            )
 
     return pd.DataFrame.from_records(records)
 
