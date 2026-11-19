@@ -77,6 +77,10 @@ Ziel: Die 10-jährige Bundesanleihe mit dem Schuldenstand verknüpfen.
 * ✅ Seite **Haushalt & Zinsen**, Abschnitte Schulden und Zinslast: Darstellung von
   Rendite, Schuldenstand und den drei Kennzahlen, inklusive Vergleich „theoretisch
   gegen tatsächlich“.
+* ✅ Gemeinsames Diagramm für Rendite/Inflation und Zinslast: zwei Teilbilder in einer
+  Grafik, mit den Zeitmarken in beiden Teilbildern, dem Effektivzins und den im
+  Finanzplan 2026 bis 2030 veranschlagten Zinsausgaben des Bundes (Drucksache
+  21/7301, Tabelle 9; manuelle Quelle `bund_finanzplan_zinsausgaben`).
 
 Abnahmekriterien: Für das letzte Datenjahr existieren theoretische Zinslast in
 Mrd. Euro, in Prozent der Einnahmen und in Prozent des BIP; die Rechenwege sind im

@@ -987,6 +987,16 @@ def build_bmf_interest(raw_dir: Path) -> pd.DataFrame:
     return frame[columns].sort_values("jahr").reset_index(drop=True)
 
 
+def build_finanzplan_interest(raw_dir: Path) -> pd.DataFrame:
+    """Geplante Zinsausgaben des Bundes im Kernhaushalt (Drucksache 21/7301)."""
+    frame = bmf.parse_interest_csv(
+        (raw_dir / "manual" / "bund_finanzplan_2026-2030_zinsausgaben.csv").read_bytes()
+    )
+    frame = frame.dropna(subset=["zinsausgaben_mrd_eur"])
+    columns = ["jahr", "art", "zinsausgaben_mrd_eur"]
+    return frame[columns].sort_values("jahr").reset_index(drop=True)
+
+
 PREISE_NOMINAL = "in jeweiligen Preisen (Mrd. EUR)"
 PREISE_REAL = "preisbereinigt, Kettenindex (2020=100)"
 STAAT_INVESTITIONEN = "Bruttoanlageinvestitionen des Staates"
@@ -1180,6 +1190,7 @@ BUILDERS = {
     "big_mac.csv": build_big_mac,
     "eigentumsquote.csv": build_homeownership,
     "bund_zinsausgaben.csv": build_bmf_interest,
+    "bund_zinsausgaben_plan.csv": build_finanzplan_interest,
     "laender_schulden_jahr.csv": build_laender_debt,
     "laender_haushalt_jahr.csv": build_laender_budget,
     "laender_inflation_monat.csv": build_laender_inflation,
@@ -1206,6 +1217,7 @@ FLOAT_FORMATS = {
     "big_mac.csv": "%.2f",
     "eigentumsquote.csv": "%.1f",
     "bund_zinsausgaben.csv": "%.2f",
+    "bund_zinsausgaben_plan.csv": "%.2f",
     "laender_schulden_jahr.csv": "%.1f",
     "laender_haushalt_jahr.csv": "%.1f",
     "laender_inflation_monat.csv": "%.2f",

@@ -1007,6 +1007,21 @@ SOURCES: tuple[Source, ...] = (
             "(Ist, Soll und Regierungsentwurf)"
         ),
     ),
+    Source(
+        key="bund_finanzplan_zinsausgaben",
+        filename="manual/bund_finanzplan_2026-2030_zinsausgaben.csv",
+        url="https://dserver.bundestag.de/btd/21/073/2107301.pdf",
+        title="Finanzplan des Bundes 2026 bis 2030 (Drucksache 21/7301)",
+        publisher="Deutscher Bundestag, 21. Wahlperiode",
+        license="© Deutscher Bundestag, Quellenangabe erforderlich",
+        datasets=("bund_zinsausgaben_plan.csv",),
+        fetch_mode="manual",
+        description=(
+            "Manuell aus Drucksache 21/7301 (Tabelle 9, Ausgabeart 1.3 Zinsausgaben) "
+            "übernommen: geplante Zinsausgaben des Bundes im Kernhaushalt in Mrd. EUR "
+            "für Ist 2025, Soll 2026, Entwurf 2027 sowie Finanzplan 2028 bis 2030"
+        ),
+    ),
 )
 
 # Portale und API-Dokumentation der Anbieter – erscheint als "Quellen & Links"

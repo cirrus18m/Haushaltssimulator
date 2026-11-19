@@ -27,6 +27,7 @@ FUEL_PRICES = "kraftstoffpreise.csv"
 BIG_MAC = "big_mac.csv"
 HOMEOWNERSHIP = "eigentumsquote.csv"
 BUND_INTEREST = "bund_zinsausgaben.csv"
+BUND_INTEREST_PLAN = "bund_zinsausgaben_plan.csv"
 LAENDER_DEBT = "laender_schulden_jahr.csv"
 LAENDER_BUDGET = "laender_haushalt_jahr.csv"
 LAENDER_INFLATION = "laender_inflation_monat.csv"
@@ -60,6 +61,7 @@ DATASET_LABELS = {
     BIG_MAC: "Big-Mac-Index je Land",
     HOMEOWNERSHIP: "Eigentums- und Mietquote in Europa",
     BUND_INTEREST: "Zinsausgaben des Bundes am Kreditmarkt",
+    BUND_INTEREST_PLAN: "Geplante Zinsausgaben des Bundes (Finanzplan 2026 bis 2030)",
     LAENDER_DEBT: "Schuldenstand und Schuldenquote im Ländervergleich",
     LAENDER_BUDGET: "Einnahmen und Zinsausgaben im Ländervergleich",
     LAENDER_INFLATION: "Inflationsraten im Ländervergleich",
@@ -211,6 +213,11 @@ def load_laender_income(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 def load_bund_interest(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     """Zinsausgaben des Bundes am Kreditmarkt je Haushaltsjahr."""
     return _read(BUND_INTEREST, processed_dir)
+
+
+def load_bund_interest_plan(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Geplante Zinsausgaben des Bundes im Kernhaushalt je Haushaltsjahr."""
+    return _read(BUND_INTEREST_PLAN, processed_dir)
 
 
 def load_gdp_germany(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:

@@ -156,6 +156,11 @@ def bund_interest() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def bund_interest_plan() -> pd.DataFrame:
+    return dataset.load_bund_interest_plan()
+
+
+@st.cache_data(show_spinner=False)
 def laender_debt() -> pd.DataFrame:
     return dataset.load_laender_debt()
 
@@ -271,13 +276,18 @@ def format_eur(value_eur: float) -> str:
 
 
 def style(
-    fig: go.Figure, *, height: int = 430, legend: bool = True, legend_y: float = 1.02
+    fig: go.Figure,
+    *,
+    height: int = 430,
+    legend: bool = True,
+    legend_y: float = 1.02,
+    top_margin: int = 40,
 ) -> go.Figure:
     """Einheitliches Layout für alle Diagramme."""
     fig.update_layout(
         template="plotly_white",
         height=height,
-        margin={"l": 10, "r": 10, "t": 40, "b": 10},
+        margin={"l": 10, "r": 10, "t": top_margin, "b": 10},
         hovermode="x unified" if legend else "closest",
         showlegend=legend,
         legend={"orientation": "h", "yanchor": "bottom", "y": legend_y, "x": 0},
@@ -302,9 +312,10 @@ def plot(
     height: int = 430,
     legend: bool = True,
     legend_y: float = 1.02,
+    top_margin: int = 40,
 ) -> None:
     """Zeigt ein Diagramm und bietet es als SVG und als HTML zum Download an."""
-    styled = style(figure, height=height, legend=legend, legend_y=legend_y)
+    styled = style(figure, height=height, legend=legend, legend_y=legend_y, top_margin=top_margin)
     config = {
         "displaylogo": False,
         "toImageButtonOptions": {"format": "svg", "filename": filename, "scale": 1},
