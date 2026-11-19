@@ -57,7 +57,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
 | **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe und die daraus folgende theoretische Zinslast in Mrd. €, in % der Einnahmen und in % des BIP |
-| **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, Inflation und Realzins |
+| **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, drei Einkommensgrößen, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
 | **Geld & Kaufkraft** | Geldmenge M3, Inflation und kumulierter Kaufkraftverlust |
@@ -87,6 +87,8 @@ Haushaltssimulator/
 Alle Quellen sind frei verfügbar. Automatische Abrufe funktionieren ohne
 API-Schlüssel; für Destatis GENESIS und FRED sind Schlüssel hinterlegt (siehe
 [Zugangsdaten](#zugangsdaten-und-api-schlüssel)), die App selbst benötigt sie nicht.
+Der Rosstat-Abruf über EMISS benötigt einen kostenlosen Schlüssel; ohne Schlüssel
+nutzt der Datenaufbau die Preisdynamik der Bank of Russia.
 Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abschnitt
 „Quellen & Links“.
 
@@ -109,6 +111,15 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Eurostat `prc_hicp_manr`](https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_manr/default/table) | Inflationsraten (HVPI) der europäischen Länder, monatlich | CC BY 4.0 |
 | [FRED `IRLTLT01USM156N`](https://fred.stlouisfed.org/series/IRLTLT01USM156N) | Langfristige Staatsanleiherendite der USA (OECD MEI) | OECD-Bedingungen |
 | [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |
+| [IWF DataMapper](https://www.imf.org/external/datamapper/api/help) | Schuldenquote, Einnahmen, Zinsausgaben, BIP und Bevölkerung für USA und Russland (WEO, Public Finances in Modern History) | IWF-Bedingungen |
+| [EZB EXR](https://data.ecb.europa.eu/data/datasets/EXR) | Wechselkurs US-Dollar/Euro, Jahresdurchschnitt | Quellenangabe erforderlich |
+| [Rosstat über EMISS](https://fedstat.ru/) | Verbraucherpreise Russlands, monatlich (Rückgriff: Bank of Russia) | Quellenangabe erforderlich |
+| [Weltbank WDI `NY.GNP.PCAP.CD`](https://data.worldbank.org/indicator/NY.GNP.PCAP.CD) | Bruttonationaleinkommen je Einwohner:in Russlands (Ersatzreihe) | CC BY 4.0 |
+| [Eurostat `ilc_di03`](https://ec.europa.eu/eurostat/databrowser/view/ilc_di03/default/table) | Verfügbares Einkommen je Einwohner:in der europäischen Länder | CC BY 4.0 |
+| [Eurostat `nama_10_lp_ulc`](https://ec.europa.eu/eurostat/databrowser/view/nama_10_lp_ulc/default/table) | Arbeitnehmerentgelt je Arbeitnehmer:in der europäischen Länder | CC BY 4.0 |
+| [FRED `A229RC0A052NBEA`](https://fred.stlouisfed.org/series/A229RC0A052NBEA) | Verfügbares Einkommen je Einwohner:in der USA | BEA-Bedingungen |
+| [FRED `CES0500000011`](https://fred.stlouisfed.org/series/CES0500000011) | Wochenverdienst der USA (BLS) | BLS-Bedingungen |
+| [FRED `CPIAUCSL`](https://fred.stlouisfed.org/series/CPIAUCSL) | Verbraucherpreisindex der USA, monatlich | BLS-Bedingungen |
 | [Destatis 52411-0002](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0002) | Beantragte Insolvenzverfahren, Monate | DL-DE-BY-2.0 |
 | [Destatis 52411-0011](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0011) | Insolvenzverfahren von Unternehmen, Monate | DL-DE-BY-2.0 |
 | [Destatis 52411-0017](https://genesis.destatis.de/datenbank/online/table/52411-0017) | Unternehmensinsolvenzen 2003–2026 nach Größenklassen (manueller Export) | DL-DE-BY-2.0 |

@@ -18,10 +18,12 @@ from . import (
     ecb,
     eurostat,
     fred,
+    imf,
     laender,
     oil,
     paths,
     sources,
+    weltbank,
 )
 
 SECTOR_LABELS = {
@@ -61,6 +63,9 @@ MONATSNAMEN = {
 }
 
 LAENDER_CODES = tuple(code for code, _ in laender.EUROPA_LAENDER)
+
+# Länder außerhalb der Europäischen Union, die der IWF-Datensatz abdeckt.
+IMF_LAENDER = {"USA": "Vereinigte Staaten", "RUS": "Russland"}
 
 HOUSEHOLD_ITEMS = {
     "TR": "einnahmen_mio_eur",
@@ -283,8 +288,69 @@ def _laender_population(raw_dir: Path) -> pd.DataFrame:
     return frame[["jahr", "geo", "bevoelkerung"]].dropna(subset=["bevoelkerung"])
 
 
+def _imf_roh(raw_dir: Path) -> pd.DataFrame:
+    return pd.read_csv(raw_dir / "imf_fiskal.csv")
+
+
+def _imf_reihe(raw_dir: Path, indikator: str) -> pd.DataFrame:
+    """Liest eine IWF-Reihe als Tabelle ``iso3, jahr, wert``."""
+    frame = _imf_roh(raw_dir)
+    frame = frame[frame["indikator"] == indikator]
+    return frame.pivot_table(index=["iso3", "jahr"], values="wert", aggfunc="first").reset_index()
+
+
+def _eur_usd(raw_dir: Path) -> pd.DataFrame:
+    """Jahresdurchschnitt des US-Dollars je Euro (EZB)."""
+    frame = ecb.parse_exr_csv((raw_dir / "ecb_eur_usd_jahr.csv").read_bytes())
+    return frame.rename(columns={"wert": "usd_je_eur"})[["jahr", "usd_je_eur"]]
+
+
+def _internationale_finanzen(raw_dir: Path) -> pd.DataFrame:
+    """Jahreswerte für USA und Russland aus IWF-Daten, in Euro umgerechnet.
+
+    Schuldenquote, Einnahmen und Zinsausgaben stammen aus der IWF-Datenbank
+    Public Finances in Modern History, BIP und Bevölkerung aus dem WEO. Die
+    Umrechnung in Euro erfolgt mit dem Jahresdurchschnitt des EZB-Referenzkurses.
+    Schätzjahre des WEO werden ausgelassen.
+    """
+    letztes_ist_jahr = date.today().year - 1
+    reihen = {
+        "schuldenquote_pct": imf.FPP_SCHULDENQUOTE,
+        "einnahmenquote_pct": imf.FPP_EINNAHMEN,
+        "zinsquote_pct": imf.FPP_ZINSEN,
+        "bip_mrd_usd": imf.WEO_BIP_USD,
+        "bevoelkerung_mio": imf.WEO_BEVOELKERUNG,
+        "bip_je_einwohner_usd": imf.WEO_BIP_JE_EINWOHNER,
+    }
+    frame = None
+    for spalte, indikator in reihen.items():
+        reihe = _imf_reihe(raw_dir, indikator).rename(columns={"wert": spalte})
+        frame = reihe if frame is None else frame.merge(reihe, on=["iso3", "jahr"], how="outer")
+    if frame is None:
+        raise ValueError("Keine IWF-Daten für die internationalen Länder gefunden")
+
+    frame = frame[frame["iso3"].isin(IMF_LAENDER)].copy()
+    frame["jahr"] = frame["jahr"].astype(int)
+    frame = frame[frame["jahr"] <= letztes_ist_jahr]
+    frame = frame.merge(_eur_usd(raw_dir), on="jahr", how="left")
+    frame["land"] = frame["iso3"].map(IMF_LAENDER)
+    frame["geo"] = frame["iso3"]
+
+    frame["bip_mio_eur"] = frame["bip_mrd_usd"] * 1000 / frame["usd_je_eur"]
+    frame["schulden_mio_eur"] = frame["schuldenquote_pct"] / 100 * frame["bip_mio_eur"]
+    frame["einnahmen_mio_eur"] = frame["einnahmenquote_pct"] / 100 * frame["bip_mio_eur"]
+    frame["zinsausgaben_mio_eur"] = frame["zinsquote_pct"] / 100 * frame["bip_mio_eur"]
+    frame["bevoelkerung"] = frame["bevoelkerung_mio"] * 1_000_000
+    frame["quelle"] = "IWF WEO/FPP"
+    frame["quelle_key"] = "imf_fiskal"
+    frame = frame.dropna(
+        subset=["schuldenquote_pct", "einnahmenquote_pct", "zinsquote_pct"], how="all"
+    )
+    return frame.dropna(subset=["bip_mio_eur"]).reset_index(drop=True)
+
+
 def build_laender_debt(raw_dir: Path) -> pd.DataFrame:
-    """Maastricht-Schuldenstand je europäischem Land, jährlich (Eurostat)."""
+    """Maastricht-Schuldenstand je Land, jährlich (Eurostat, USA und Russland: IWF)."""
     frame = _laender_eurostat(raw_dir, "eurostat_gov_10dd_edpt1_laender.json", "value")
     wide = frame.pivot_table(
         index=["time", "geo", "land"], columns="unit", values="value", aggfunc="first"
@@ -300,12 +366,27 @@ def build_laender_debt(raw_dir: Path) -> pd.DataFrame:
         }
     )
     wide["jahr"] = wide["jahr"].astype(int)
-    columns = ["jahr", "geo", "land", "schulden_mio_eur", "schuldenquote_pct"]
-    return wide[columns].sort_values(["jahr", "land"]).reset_index(drop=True)
+    wide["quelle"] = "Eurostat gov_10dd_edpt1"
+    wide["quelle_key"] = "eurostat_schulden_laender"
+    columns = [
+        "jahr",
+        "geo",
+        "land",
+        "schulden_mio_eur",
+        "schuldenquote_pct",
+        "quelle",
+        "quelle_key",
+    ]
+    international = _internationale_finanzen(raw_dir)
+    result = pd.concat([wide[columns], international[columns]], ignore_index=True)
+    return result.sort_values(["jahr", "land"]).reset_index(drop=True)
 
 
 def build_laender_budget(raw_dir: Path) -> pd.DataFrame:
-    """Einnahmen, Zinsausgaben und abgeleitete Quoten je europäischem Land."""
+    """Einnahmen, Zinsausgaben und abgeleitete Quoten je Land.
+
+    Europäische Länder aus Eurostat, USA und Russland aus dem IWF-Datensatz.
+    """
     frame = _laender_eurostat(raw_dir, "eurostat_gov_10a_main_laender.json", "value")
     wide = frame.pivot_table(
         index=["time", "geo", "land"], columns="na_item", values="value", aggfunc="first"
@@ -326,6 +407,9 @@ def build_laender_budget(raw_dir: Path) -> pd.DataFrame:
         wide["zinsausgaben_mio_eur"] / wide["einnahmen_mio_eur"] * 100
     )
     wide["zins_je_einwohner_eur"] = wide["zinsausgaben_mio_eur"] * 1_000_000 / wide["bevoelkerung"]
+    wide["quelle"] = "Eurostat gov_10a_main"
+    wide["quelle_key"] = "eurostat_haushalt_laender"
+
     columns = [
         "jahr",
         "geo",
@@ -337,20 +421,209 @@ def build_laender_budget(raw_dir: Path) -> pd.DataFrame:
         "zins_quote_bip_pct",
         "zins_quote_einnahmen_pct",
         "zins_je_einwohner_eur",
+        "quelle",
+        "quelle_key",
     ]
-    return wide[columns].sort_values(["jahr", "land"]).reset_index(drop=True)
+    international = _internationale_finanzen(raw_dir).copy()
+    international["zins_quote_bip_pct"] = (
+        international["zinsausgaben_mio_eur"] / international["bip_mio_eur"] * 100
+    )
+    international["zins_quote_einnahmen_pct"] = (
+        international["zinsausgaben_mio_eur"] / international["einnahmen_mio_eur"] * 100
+    )
+    international["zins_je_einwohner_eur"] = (
+        international["zinsausgaben_mio_eur"] * 1_000_000 / international["bevoelkerung"]
+    )
+    result = pd.concat([wide[columns], international[columns]], ignore_index=True)
+    return result.sort_values(["jahr", "land"]).reset_index(drop=True)
+
+
+def _us_inflation(raw_dir: Path) -> pd.DataFrame:
+    """Vorjahresrate des US-Verbraucherpreisindex (FRED)."""
+    frame = fred.parse_series_csv((raw_dir / "fred_us_cpi.csv").read_bytes())
+    frame = frame.sort_values("datum").reset_index(drop=True)
+    frame["inflation_pct"] = frame["wert"].pct_change(12) * 100
+    frame["monat"] = frame["datum"].dt.strftime("%Y-%m")
+    frame["geo"] = "US"
+    frame["land"] = laender.LAND_NAMEN["US"]
+    frame["quelle"] = "FRED CPIAUCSL"
+    frame["quelle_key"] = "fred_us_cpi"
+    return frame.dropna(subset=["inflation_pct"])[
+        ["monat", "geo", "land", "inflation_pct", "quelle", "quelle_key"]
+    ]
+
+
+def _russland_inflation(raw_dir: Path) -> pd.DataFrame:
+    """Monatliche Inflationsrate Russlands (Rosstat/EMISS bzw. Bank of Russia)."""
+    frame = pd.read_csv(raw_dir / "rosstat_cpi_monatlich.csv", dtype={"monat": str})
+    frame["geo"] = "RU"
+    frame["land"] = laender.LAND_NAMEN["RU"]
+    frame["quelle_key"] = "rosstat_cpi"
+    if "quelle" not in frame.columns:
+        frame["quelle"] = "Rosstat (EMISS)"
+    return frame[["monat", "geo", "land", "inflation_pct", "quelle", "quelle_key"]]
 
 
 def build_laender_inflation(raw_dir: Path) -> pd.DataFrame:
-    """Monatliche HVPI-Inflationsrate je europäischem Land (Eurostat)."""
+    """Monatliche Inflationsraten je Land.
+
+    Europäische Länder: HVPI (Eurostat); USA: CPI (FRED); Russland: Rosstat
+    beziehungsweise die verkettete Rate der Bank of Russia.
+    """
     frame = _laender_eurostat(raw_dir, "eurostat_prc_hicp_manr.json", "inflation_pct")
     frame = frame.rename(columns={"time": "monat"})
-    return (
-        frame[["monat", "geo", "land", "inflation_pct"]]
-        .dropna(subset=["inflation_pct"])
-        .sort_values(["monat", "land"])
-        .reset_index(drop=True)
+    frame["quelle"] = "Eurostat prc_hicp_manr"
+    frame["quelle_key"] = "eurostat_inflation_laender"
+    columns = ["monat", "geo", "land", "inflation_pct", "quelle", "quelle_key"]
+    europe = frame[columns].dropna(subset=["inflation_pct"])
+    result = pd.concat([europe, _us_inflation(raw_dir), _russland_inflation(raw_dir)])
+    return result.sort_values(["monat", "land"]).reset_index(drop=True)
+
+
+def _jahreswerte(raw_dir: Path, filename: str, faktor: float) -> pd.DataFrame:
+    """Aggregiert eine FRED-Reihe zu Jahreswerten (Mittelwert × Faktor)."""
+    frame = fred.parse_series_csv((raw_dir / filename).read_bytes())
+    frame["jahr"] = frame["datum"].dt.year
+    yearly = frame.groupby("jahr", as_index=False)["wert"].mean()
+    yearly["wert"] = yearly["wert"] * faktor
+    return yearly
+
+
+def _einkommen_aus_usd(
+    frame: pd.DataFrame,
+    spalte: str,
+    wechselkurse: pd.Series,
+    *,
+    land: str,
+    geo: str,
+    art: str,
+    quelle: str,
+    quelle_key: str,
+) -> pd.DataFrame:
+    """Rechnet eine US-Dollar-Reihe je Einwohner:in in Euro um."""
+    result = frame[["jahr", spalte]].rename(columns={spalte: "einkommen_usd"}).copy()
+    result["einkommen_eur"] = result["einkommen_usd"] / result["jahr"].map(wechselkurse)
+    result["land"] = land
+    result["geo"] = geo
+    result["einkommensart"] = art
+    result["quelle"] = quelle
+    result["quelle_key"] = quelle_key
+    return result.dropna(subset=["einkommen_eur"])[
+        ["jahr", "geo", "land", "einkommensart", "einkommen_eur", "quelle", "quelle_key"]
+    ]
+
+
+def build_laender_einkommen(raw_dir: Path) -> pd.DataFrame:
+    """Durchschnittseinkommen je Land und Jahr in drei Abgrenzungen.
+
+    * ``bip_pro_kopf``: BIP je Einwohner:in (Eurostat für die EU, IWF-WEO für USA
+      und Russland).
+    * ``verfuegbar_pro_kopf``: verfügbares Einkommen je Einwohner:in (Eurostat,
+      BEA/FRED für die USA); für Russland die BNE-Ersatzreihe der Weltbank.
+    * ``bruttolohn``: Bruttoverdienst je Beschäftigten (Eurostat, BLS/FRED für die
+      USA); für Russland liegt keine frei abrufbare Reihe vor.
+    """
+    frames: list[pd.DataFrame] = []
+
+    gdp = _laender_gdp(raw_dir).merge(_laender_population(raw_dir), on=["jahr", "geo"])
+    gdp["einkommen_eur"] = gdp["bip_mio_eur"] * 1_000_000 / gdp["bevoelkerung"]
+    gdp["einkommensart"] = "bip_pro_kopf"
+    gdp["land"] = gdp["geo"].map(laender.LAND_NAMEN)
+    gdp["quelle"] = "Eurostat nama_10_gdp, demo_pjan"
+    gdp["quelle_key"] = "eurostat_bip_laender"
+    frames.append(
+        gdp[["jahr", "geo", "land", "einkommensart", "einkommen_eur", "quelle", "quelle_key"]]
     )
+
+    verfuegbar = _laender_eurostat(raw_dir, "eurostat_ilc_di03_laender.json", "einkommen_eur")
+    verfuegbar["jahr"] = verfuegbar["time"].astype(int)
+    verfuegbar["einkommensart"] = "verfuegbar_pro_kopf"
+    verfuegbar["quelle"] = "Eurostat ilc_di03"
+    verfuegbar["quelle_key"] = "eurostat_einkommen_laender"
+    frames.append(
+        verfuegbar[
+            ["jahr", "geo", "land", "einkommensart", "einkommen_eur", "quelle", "quelle_key"]
+        ]
+    )
+
+    lohn = _laender_eurostat(raw_dir, "eurostat_nama_10_lp_ulc_laender.json", "einkommen_eur")
+    lohn["jahr"] = lohn["time"].astype(int)
+    lohn["einkommensart"] = "bruttolohn"
+    lohn["quelle"] = "Eurostat nama_10_lp_ulc"
+    lohn["quelle_key"] = "eurostat_arbeitnehmerentgelt_laender"
+    frames.append(
+        lohn[["jahr", "geo", "land", "einkommensart", "einkommen_eur", "quelle", "quelle_key"]]
+    )
+
+    wechselkurse = _eur_usd(raw_dir).set_index("jahr")["usd_je_eur"]
+
+    weo = _imf_reihe(raw_dir, imf.WEO_BIP_JE_EINWOHNER).rename(columns={"wert": "bip_je_kopf_usd"})
+    weo = weo[weo["iso3"].isin(IMF_LAENDER)]
+    weo["jahr"] = weo["jahr"].astype(int)
+    # WEO enthält Schätzungen und Projektionen; nur abgeschlossene Jahre verwenden.
+    weo = weo[weo["jahr"] <= date.today().year - 1]
+    for iso3, land in IMF_LAENDER.items():
+        frames.append(
+            _einkommen_aus_usd(
+                weo[weo["iso3"] == iso3],
+                "bip_je_kopf_usd",
+                wechselkurse,
+                land=land,
+                geo=iso3,
+                art="bip_pro_kopf",
+                quelle="IWF WEO NGDPDPC",
+                quelle_key="imf_fiskal",
+            )
+        )
+
+    usa_einkommen = _jahreswerte(raw_dir, "fred_us_einkommen.csv", 1.0)
+    frames.append(
+        _einkommen_aus_usd(
+            usa_einkommen,
+            "wert",
+            wechselkurse,
+            land=laender.LAND_NAMEN["US"],
+            geo="US",
+            art="verfuegbar_pro_kopf",
+            quelle="BEA/FRED A229RC0A052NBEA",
+            quelle_key="fred_us_einkommen",
+        )
+    )
+
+    usa_lohn = _jahreswerte(raw_dir, "fred_us_lohn.csv", 52.0)
+    frames.append(
+        _einkommen_aus_usd(
+            usa_lohn,
+            "wert",
+            wechselkurse,
+            land=laender.LAND_NAMEN["US"],
+            geo="US",
+            art="bruttolohn",
+            quelle="BLS/FRED CES0500000011 (Wochenverdienst × 52)",
+            quelle_key="fred_us_lohn",
+        )
+    )
+
+    russland_bne = weltbank.parse_indicator_json(
+        (raw_dir / "weltbank_bne_russland.json").read_bytes(), "NY.GNP.PCAP.CD"
+    ).rename(columns={"wert": "bne_je_kopf_usd"})
+    frames.append(
+        _einkommen_aus_usd(
+            russland_bne,
+            "bne_je_kopf_usd",
+            wechselkurse,
+            land=laender.LAND_NAMEN["RU"],
+            geo="RU",
+            art="verfuegbar_pro_kopf",
+            quelle="Weltbank NY.GNP.PCAP.CD (Ersatzreihe)",
+            quelle_key="weltbank_bne_russland",
+        )
+    )
+
+    result = pd.concat(frames, ignore_index=True)
+    return result.dropna(subset=["einkommen_eur"]).sort_values(
+        ["jahr", "land", "einkommensart"]
+    ).reset_index(drop=True)
 
 
 def build_international_yields(raw_dir: Path) -> pd.DataFrame:
@@ -622,6 +895,7 @@ BUILDERS = {
     "laender_schulden_jahr.csv": build_laender_debt,
     "laender_haushalt_jahr.csv": build_laender_budget,
     "laender_inflation_monat.csv": build_laender_inflation,
+    "laender_einkommen_jahr.csv": build_laender_einkommen,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -640,6 +914,7 @@ FLOAT_FORMATS = {
     "laender_schulden_jahr.csv": "%.1f",
     "laender_haushalt_jahr.csv": "%.1f",
     "laender_inflation_monat.csv": "%.2f",
+    "laender_einkommen_jahr.csv": "%.2f",
 }
 
 

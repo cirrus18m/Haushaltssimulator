@@ -1,833 +1,885 @@
-jahr,geo,land,schulden_mio_eur,schuldenquote_pct
-1995,BE,Belgien,288517.1,131.5
-1995,BG,Bulgarien,,76.8
-1995,DE,Deutschland,1082715.0,54.9
-1995,EE,Estland,236.2,7.9
-1995,FI,Finnland,56526.0,55.2
-1995,FR,Frankreich,714688.8,57.8
-1995,EL,Griechenland,100752.8,100.4
-1995,IE,Irland,41333.3,78.6
-1995,IT,Italien,1096649.1,119.1
-1995,HR,Kroatien,4069.9,23.3
-1995,LV,Lettland,561.3,14.3
-1995,LT,Litauen,587.5,11.4
-1995,LU,Luxemburg,1609.9,10.1
-1995,MT,Malta,968.4,34.3
-1995,NL,Niederlande,252353.8,73.2
-1995,PL,Polen,50553.7,47.3
-1995,PT,Portugal,56509.9,62.2
-1995,RO,Rumänien,1487.0,6.6
-1995,SE,Schweden,150615.7,68.8
-1995,SK,Slowakei,3309.0,21.3
-1995,SI,Slowenien,2788.0,18.2
-1995,ES,Spanien,295604.0,61.6
-1995,CZ,Tschechien,6199.8,13.5
-1995,HU,Ungarn,26792.1,83.9
-1995,CY,Zypern,3731.7,49.7
-1995,AT,Österreich,125245.5,68.6
-1996,BE,Belgien,278504.8,129.2
-1996,BG,Bulgarien,8769.7,244.5
-1996,DE,Deutschland,1118506.9,57.7
-1996,EE,Estland,276.7,7.5
-1996,FI,Finnland,57713.4,55.4
-1996,FR,Frankreich,755312.8,60.6
-1996,EL,Griechenland,114954.8,103.7
-1996,IE,Irland,44446.7,69.9
-1996,IT,Italien,1260410.3,118.9
-1996,HR,Kroatien,4756.6,25.3
-1996,LV,Lettland,625.6,13.6
-1996,LT,Litauen,931.1,13.8
-1996,LU,Luxemburg,1606.0,10.0
-1996,MT,Malta,1177.2,38.5
-1996,NL,Niederlande,248591.2,71.4
-1996,PL,Polen,50752.2,42.2
-1996,PT,Portugal,61112.1,63.3
-1996,RO,Rumänien,2334.4,10.6
-1996,SE,Schweden,157291.4,69.3
-1996,SK,Slowakei,5089.8,30.3
-1996,SI,Slowenien,3540.4,21.6
-1996,ES,Spanien,324300.8,65.4
-1996,CZ,Tschechien,6183.8,11.5
-1996,HU,Ungarn,24589.6,71.2
-1996,CY,Zypern,4044.9,51.0
-1996,AT,Österreich,125177.0,68.6
-1997,BE,Belgien,275699.3,124.3
-1997,BG,Bulgarien,9309.9,96.7
-1997,DE,Deutschland,1145211.6,58.8
-1997,EE,Estland,311.2,6.9
-1997,FI,Finnland,57456.7,52.2
-1997,FR,Frankreich,793023.5,62.0
-1997,EL,Griechenland,124579.9,102.6
-1997,IE,Irland,43599.1,61.6
-1997,IT,Italien,1271893.8,116.5
-1997,HR,Kroatien,5274.6,24.7
-1997,LV,Lettland,619.5,10.9
-1997,LT,Litauen,1408.8,15.3
-1997,LU,Luxemburg,1625.1,9.5
-1997,MT,Malta,1568.6,46.5
-1997,NL,Niederlande,240680.5,65.8
-1997,PL,Polen,56877.7,42.1
-1997,PT,Portugal,59592.2,58.7
-1997,RO,Rumänien,4334.8,15.1
-1997,SE,Schweden,156988.9,66.9
-1997,SK,Slowakei,6323.8,32.8
-1997,SI,Slowenien,3915.3,22.1
-1997,ES,Spanien,331630.2,64.3
-1997,CZ,Tschechien,6320.3,12.1
-1997,HU,Ungarn,24505.0,62.2
-1997,CY,Zypern,4633.4,54.9
-1997,AT,Österreich,118774.8,63.9
-1998,BE,Belgien,277597.2,119.3
-1998,BG,Bulgarien,9021.3,66.7
-1998,DE,Deutschland,1202026.4,59.4
-1998,EE,Estland,302.3,5.9
-1998,FI,Finnland,56414.0,46.8
-1998,FR,Frankreich,836059.4,62.1
-1998,EL,Griechenland,126131.3,100.8
-1998,IE,Irland,41352.7,51.4
-1998,IT,Italien,1299741.3,113.9
-1998,HR,Kroatien,5048.8,22.6
-1998,LV,Lettland,574.5,9.3
-1998,LT,Litauen,1593.4,16.5
-1998,LU,Luxemburg,1646.2,9.1
-1998,MT,Malta,1790.2,50.8
-1998,NL,Niederlande,247875.0,62.8
-1998,PL,Polen,56959.0,38.2
-1998,PT,Portugal,61930.0,55.6
-1998,RO,Rumänien,4852.1,16.8
-1998,SE,Schweden,150124.3,66.1
-1998,SK,Slowakei,6324.5,33.9
-1998,SI,Slowenien,4428.9,22.8
-1998,ES,Spanien,346417.0,62.4
-1998,CZ,Tschechien,8551.9,13.9
-1998,HU,Ungarn,25039.9,60.4
-1998,CY,Zypern,5141.2,56.4
-1998,AT,Österreich,125650.2,64.3
-1999,BE,Belgien,279629.8,115.4
-1999,BG,Bulgarien,9708.7,75.8
-1999,DE,Deutschland,1253597.9,60.3
-1999,EE,Estland,348.0,6.4
-1999,FI,Finnland,55913.0,44.1
-1999,FR,Frankreich,856943.5,61.4
-1999,EL,Griechenland,136512.5,102.8
-1999,IE,Irland,43212.9,46.6
-1999,IT,Italien,1331320.6,113.1
-1999,HR,Kroatien,6294.4,28.8
-1999,LV,Lettland,904.6,12.4
-1999,LT,Litauen,2480.4,22.6
-1999,LU,Luxemburg,1659.2,8.1
-1999,MT,Malta,2441.8,61.8
-1999,NL,Niederlande,246600.0,58.7
-1999,PL,Polen,63105.5,38.8
-1999,PT,Portugal,66266.9,55.4
-1999,RO,Rumänien,6527.4,21.7
-1999,SE,Schweden,160834.5,60.8
-1999,SK,Slowakei,9580.6,47.1
-1999,SI,Slowenien,4921.0,23.8
-1999,ES,Spanien,362223.5,60.9
-1999,CZ,Tschechien,9475.2,15.1
-1999,HU,Ungarn,27599.0,60.3
-1999,CY,Zypern,5583.0,56.5
-1999,AT,Österreich,136216.1,67.1
-2000,BE,Belgien,281366.8,109.7
-2000,BG,Bulgarien,10177.1,70.7
-2000,DE,Deutschland,1261584.7,59.2
-2000,DK,Dänemark,95147.9,53.6
-2000,EE,Estland,315.6,5.1
-2000,FI,Finnland,61564.0,45.1
-2000,FR,Frankreich,880004.8,59.7
-2000,EL,Griechenland,148217.0,108.9
-2000,IE,Irland,39505.9,36.4
-2000,IT,Italien,1353569.3,108.7
-2000,HR,Kroatien,8441.0,35.4
-2000,LV,Lettland,1011.0,12.4
-2000,LT,Litauen,2912.1,23.5
-2000,LU,Luxemburg,1722.1,7.5
-2000,MT,Malta,2654.0,61.1
-2000,NL,Niederlande,236233.0,52.2
-2000,PL,Polen,70735.4,36.2
-2000,PT,Portugal,69591.8,54.2
-2000,RO,Rumänien,7532.8,22.5
-2000,SE,Schweden,137660.3,50.5
-2000,SK,Slowakei,10975.3,50.6
-2000,SI,Slowenien,5483.6,26.1
-2000,ES,Spanien,374557.2,57.8
-2000,CZ,Tschechien,11567.8,16.9
-2000,HU,Ungarn,28008.4,55.6
-2000,CY,Zypern,6103.4,56.5
-2000,AT,Österreich,141543.2,66.6
-2001,BE,Belgien,286744.4,108.5
-2001,BG,Bulgarien,10269.8,64.5
-2001,DE,Deutschland,1274759.0,58.1
-2001,DK,Dänemark,92444.3,50.1
-2001,EE,Estland,344.4,4.9
-2001,FI,Finnland,62825.0,43.4
-2001,FR,Frankreich,907672.6,59.3
-2001,EL,Griechenland,162971.0,110.5
-2001,IE,Irland,40994.9,33.6
-2001,IT,Italien,1420026.6,108.5
-2001,HR,Kroatien,9661.3,36.6
-2001,LV,Lettland,1304.4,14.1
-2001,LT,Litauen,3185.2,22.9
-2001,LU,Luxemburg,1819.8,7.6
-2001,MT,Malta,2989.2,65.2
-2001,NL,Niederlande,239037.0,49.5
-2001,PL,Polen,83306.4,37.1
-2001,PT,Portugal,77908.0,57.4
-2001,RO,Rumänien,10917.2,25.9
-2001,SE,Schweden,140134.8,52.0
-2001,SK,Slowakei,12406.1,51.4
-2001,SI,Slowenien,6035.5,26.3
-2001,ES,Spanien,378883.4,54.1
-2001,CZ,Tschechien,18322.2,22.6
-2001,HU,Ungarn,32818.1,52.2
-2001,CY,Zypern,6745.6,58.1
-2001,AT,Österreich,147502.5,67.2
-2002,BE,Belgien,288489.2,105.6
-2002,BG,Bulgarien,8890.3,51.0
-2002,DE,Deutschland,1330083.1,59.8
-2002,DK,Dänemark,95608.1,50.3
-2002,EE,Estland,442.9,5.7
-2002,FI,Finnland,63299.0,42.6
-2002,FR,Frankreich,966822.5,61.3
-2002,EL,Griechenland,171410.0,107.9
-2002,IE,Irland,42009.2,30.9
-2002,IT,Italien,1436141.8,105.9
-2002,HR,Kroatien,10397.5,36.5
-2002,LV,Lettland,1251.5,13.4
-2002,LT,Litauen,3365.7,22.1
-2002,LU,Luxemburg,1862.2,7.4
-2002,MT,Malta,2927.3,63.4
-2002,NL,Niederlande,245253.0,48.8
-2002,PL,Polen,84224.1,41.6
-2002,PT,Portugal,85526.6,60.0
-2002,RO,Rumänien,10757.1,24.8
-2002,SE,Schweden,141954.3,49.9
-2002,SK,Slowakei,12350.2,45.6
-2002,SI,Slowenien,6707.8,27.7
-2002,ES,Spanien,384145.3,51.2
-2002,CZ,Tschechien,22013.9,25.7
-2002,HU,Ungarn,41007.4,55.6
-2002,CY,Zypern,7431.2,61.3
-2002,AT,Österreich,151800.0,67.4
-2003,BE,Belgien,286378.9,101.8
-2003,BG,Bulgarien,8126.5,43.4
-2003,DE,Deutschland,1419426.0,63.3
-2003,DK,Dänemark,93083.1,48.2
-2003,EE,Estland,489.7,5.6
-2003,FI,Finnland,68508.0,45.2
-2003,FR,Frankreich,1060406.4,65.4
-2003,EL,Griechenland,181510.0,104.3
-2003,IE,Irland,43428.6,29.8
-2003,IT,Italien,1470950.9,105.1
-2003,HR,Kroatien,11622.3,37.8
-2003,LV,Lettland,1410.2,14.8
-2003,LT,Litauen,3395.1,20.4
-2003,LU,Luxemburg,1949.4,7.4
-2003,MT,Malta,3267.4,69.0
-2003,NL,Niederlande,256822.0,49.9
-2003,PL,Polen,83894.0,46.4
-2003,PT,Portugal,93320.9,63.9
-2003,RO,Rumänien,10309.5,22.1
-2003,SE,Schweden,147354.8,49.5
-2003,SK,Slowakei,13159.8,43.6
-2003,SI,Slowenien,6943.8,27.0
-2003,ES,Spanien,382775.0,47.7
-2003,CZ,Tschechien,24530.7,28.1
-2003,HU,Ungarn,42348.3,58.2
-2003,CY,Zypern,8280.9,64.6
-2003,AT,Österreich,153106.9,66.4
-2004,BE,Belgien,288541.7,97.2
-2004,BG,Bulgarien,7526.2,35.7
-2004,DE,Deutschland,1489670.9,65.0
-2004,DK,Dänemark,93791.7,46.2
-2004,EE,Estland,504.5,5.2
-2004,FI,Finnland,71335.0,44.9
-2004,FR,Frankreich,1134346.9,66.9
-2004,EL,Griechenland,199282.0,105.5
-2004,IE,Irland,43759.7,28.0
-2004,IT,Italien,1526472.1,104.7
-2004,HR,Kroatien,13210.7,40.0
-2004,LV,Lettland,1628.6,15.2
-2004,LT,Litauen,3404.5,18.6
-2004,LU,Luxemburg,2206.3,7.8
-2004,MT,Malta,3449.6,71.2
-2004,NL,Niederlande,266661.0,50.2
-2004,PL,Polen,103059.1,44.9
-2004,PT,Portugal,102154.6,67.1
-2004,RO,Rumänien,11768.7,18.9
-2004,SE,Schweden,152789.6,48.8
-2004,SK,Slowakei,15020.0,42.0
-2004,SI,Slowenien,7427.5,27.1
-2004,ES,Spanien,389887.9,45.3
-2004,CZ,Tschechien,28673.0,28.3
-2004,HU,Ungarn,50505.1,58.9
-2004,CY,Zypern,9160.3,65.5
-2004,AT,Österreich,158545.7,65.9
-2005,BE,Belgien,295285.0,95.2
-2005,BG,Bulgarien,6388.6,26.6
-2005,DE,Deutschland,1561020.5,67.1
-2005,DK,Dänemark,83889.0,39.4
-2005,EE,Estland,537.0,4.7
-2005,FI,Finnland,69397.0,42.1
-2005,FR,Frankreich,1201470.7,68.2
-2005,EL,Griechenland,213976.0,109.9
-2005,IE,Irland,44381.2,26.1
-2005,IT,Italien,1591674.2,106.2
-2005,HR,Kroatien,15124.7,40.9
-2005,LV,Lettland,1638.8,12.4
-2005,LT,Litauen,3701.9,17.6
-2005,LU,Luxemburg,2406.7,7.9
-2005,MT,Malta,3606.4,70.2
-2005,NL,Niederlande,274598.0,49.6
-2005,PL,Polen,119592.0,46.5
-2005,PT,Portugal,114542.7,72.2
-2005,RO,Rumänien,12397.6,15.9
-2005,SE,Schweden,153147.9,49.1
-2005,SK,Slowakei,13988.4,35.0
-2005,SI,Slowenien,7690.1,26.6
-2005,ES,Spanien,393479.1,42.4
-2005,CZ,Tschechien,31385.6,27.7
-2005,HU,Ungarn,54075.6,60.6
-2005,CY,Zypern,9697.7,64.1
-2005,AT,Österreich,175203.9,69.4
-2006,BE,Belgien,297590.1,91.5
-2006,BG,Bulgarien,5720.9,20.9
-2006,DE,Deutschland,1610903.7,66.4
-2006,DK,Dänemark,75019.9,33.2
-2006,EE,Estland,640.1,4.7
-2006,FI,Finnland,69532.0,40.2
-2006,FR,Frankreich,1207312.7,65.4
-2006,EL,Griechenland,225730.0,105.3
-2006,IE,Irland,43738.6,23.7
-2006,IT,Italien,1657478.6,106.3
-2006,HR,Kroatien,15535.8,38.4
-2006,LV,Lettland,1736.5,10.6
-2006,LT,Litauen,4151.9,17.3
-2006,LU,Luxemburg,2803.4,8.2
-2006,MT,Malta,3472.9,64.5
-2006,NL,Niederlande,264472.0,45.0
-2006,PL,Polen,131958.8,47.1
-2006,PT,Portugal,122467.4,73.7
-2006,RO,Rumänien,12585.6,12.4
-2006,SE,Schweden,151944.6,44.1
-2006,SK,Slowakei,15544.4,31.5
-2006,SI,Slowenien,8201.5,26.2
-2006,ES,Spanien,392132.2,39.0
-2006,CZ,Tschechien,35405.0,27.6
-2006,HU,Ungarn,62298.8,64.5
-2006,CY,Zypern,9716.5,60.0
-2006,AT,Österreich,181304.4,68.2
-2007,BE,Belgien,300599.3,87.5
-2007,BG,Bulgarien,5296.8,16.3
-2007,DE,Deutschland,1619064.6,63.7
-2007,DK,Dänemark,68906.5,29.5
-2007,EE,Estland,641.0,3.9
-2007,FI,Finnland,67340.0,36.0
-2007,FR,Frankreich,1268858.7,65.5
-2007,EL,Griechenland,239915.0,104.6
-2007,IE,Irland,47195.1,24.0
-2007,IT,Italien,1677896.6,103.5
-2007,HR,Kroatien,16489.2,37.1
-2007,LV,Lettland,1935.1,8.9
-2007,LT,Litauen,4609.7,15.9
-2007,LU,Luxemburg,3044.7,8.1
-2007,MT,Malta,3584.6,62.0
-2007,NL,Niederlande,266545.0,42.8
-2007,PL,Polen,147052.7,44.4
-2007,PT,Portugal,127570.8,72.7
-2007,RO,Rumänien,14099.4,11.9
-2007,SE,Schweden,138254.0,39.4
-2007,SK,Slowakei,17214.4,30.4
-2007,SI,Slowenien,8015.7,22.9
-2007,ES,Spanien,384662.0,35.7
-2007,CZ,Tschechien,39606.2,27.3
-2007,HU,Ungarn,66503.3,65.6
-2007,CY,Zypern,9750.1,55.7
-2007,AT,Österreich,185730.0,65.8
-2008,BE,Belgien,327722.7,93.2
-2008,BG,Bulgarien,4848.5,13.0
-2008,DE,Deutschland,1687442.0,65.2
-2008,DK,Dänemark,86323.2,35.5
-2008,EE,Estland,776.6,4.7
-2008,FI,Finnland,67435.0,34.7
-2008,FR,Frankreich,1389401.6,69.8
-2008,EL,Griechenland,264775.0,110.9
-2008,IE,Irland,79621.0,42.5
-2008,IT,Italien,1739108.6,105.8
-2008,HR,Kroatien,18559.5,38.9
-2008,LV,Lettland,4511.3,19.5
-2008,LT,Litauen,4762.1,14.6
-2008,LU,Luxemburg,5851.1,14.6
-2008,MT,Malta,3837.0,61.5
-2008,NL,Niederlande,353866.0,54.3
-2008,PL,Polen,144651.7,46.6
-2008,PT,Portugal,135209.1,75.5
-2008,RO,Rumänien,16549.4,12.3
-2008,SE,Schweden,119147.8,38.2
-2008,SK,Slowakei,19629.8,28.6
-2008,SI,Slowenien,8263.2,21.9
-2008,ES,Spanien,440621.0,39.6
-2008,CZ,Tschechien,42298.6,28.2
-2008,HU,Ungarn,73317.3,71.8
-2008,CY,Zypern,8954.6,47.1
-2008,AT,Österreich,202914.7,69.5
-2009,BE,Belgien,347317.9,99.9
-2009,BG,Bulgarien,5112.4,13.7
-2009,DE,Deutschland,1804696.0,72.4
-2009,DK,Dänemark,100048.6,43.0
-2009,EE,Estland,1127.2,8.0
-2009,FI,Finnland,80200.0,44.1
-2009,FR,Frankreich,1627182.2,84.1
-2009,EL,Griechenland,301062.0,128.5
-2009,IE,Irland,104703.4,61.8
-2009,IT,Italien,1839805.5,116.1
-2009,HR,Kroatien,22099.3,47.9
-2009,LV,Lettland,6957.0,38.0
-2009,LT,Litauen,7528.5,27.9
-2009,LU,Luxemburg,5967.4,15.3
-2009,MT,Malta,4152.7,66.0
-2009,NL,Niederlande,355057.0,56.3
-2009,PL,Polen,166573.8,49.7
-2009,PT,Portugal,153624.4,87.6
-2009,RO,Rumänien,27288.4,21.8
-2009,SE,Schweden,134421.0,41.5
-2009,SK,Slowakei,23320.7,36.4
-2009,SI,Slowenien,12519.3,34.9
-2009,ES,Spanien,569535.4,53.1
-2009,CZ,Tschechien,49824.4,33.4
-2009,HU,Ungarn,76528.1,78.2
-2009,CY,Zypern,10765.3,57.6
-2009,AT,Österreich,231172.7,80.8
-2010,BE,Belgien,364352.5,100.3
-2010,BG,Bulgarien,5856.9,15.3
-2010,DE,Deutschland,2119241.8,81.0
-2010,DK,Dänemark,112184.5,46.1
-2010,EE,Estland,1177.9,8.0
-2010,FI,Finnland,94286.0,50.1
-2010,FR,Frankreich,1722172.2,86.3
-2010,EL,Griechenland,330570.0,147.8
-2010,IE,Irland,144226.6,86.3
-2010,IT,Italien,1921443.5,118.9
-2010,HR,Kroatien,25792.2,56.8
-2010,LV,Lettland,8537.7,48.6
-2010,LT,Litauen,10153.6,36.7
-2010,LU,Luxemburg,8093.3,19.1
-2010,MT,Malta,4462.5,65.0
-2010,NL,Niederlande,379043.0,58.9
-2010,PL,Polen,194931.8,53.7
-2010,PT,Portugal,179652.9,99.9
-2010,RO,Rumänien,36724.9,29.0
-2010,SE,Schweden,154054.9,38.9
-2010,SK,Slowakei,27939.9,40.7
-2010,SI,Slowenien,13918.2,38.6
-2010,ES,Spanien,649152.5,60.3
-2010,CZ,Tschechien,59059.8,36.7
-2010,HU,Ungarn,79114.5,80.2
-2010,CY,Zypern,11692.7,60.1
-2010,AT,Österreich,245985.4,83.7
-2011,BE,Belgien,389535.9,102.8
-2011,BG,Bulgarien,6284.9,15.2
-2011,DE,Deutschland,2155875.7,78.5
-2011,DK,Dänemark,124292.0,50.0
-2011,EE,Estland,1271.8,7.6
-2011,FI,Finnland,102829.0,52.0
-2011,FR,Frankreich,1830136.3,88.7
-2011,EL,Griechenland,356235.0,175.1
-2011,IE,Irland,189723.7,109.7
-2011,IT,Italien,1974407.5,119.3
-2011,HR,Kroatien,28520.3,63.1
-2011,LV,Lettland,8948.5,46.6
-2011,LT,Litauen,11631.7,37.4
-2011,LU,Luxemburg,8199.7,18.5
-2011,MT,Malta,4848.3,68.9
-2011,NL,Niederlande,401579.0,61.2
-2011,PL,Polen,192177.4,54.8
-2011,PT,Portugal,201044.4,114.0
-2011,RO,Rumänien,43934.0,32.3
-2011,SE,Schweden,157868.4,38.0
-2011,SK,Slowakei,30994.2,43.3
-2011,SI,Slowenien,17219.5,46.8
-2011,ES,Spanien,743043.2,69.5
-2011,CZ,Tschechien,62576.1,39.4
-2011,HU,Ungarn,72881.6,80.5
-2011,CY,Zypern,13877.4,69.9
-2011,AT,Österreich,256875.9,83.4
-2012,BE,Belgien,404898.4,104.4
-2012,BG,Bulgarien,7005.6,16.6
-2012,DE,Deutschland,2234802.5,79.8
-2012,DK,Dänemark,123585.7,48.7
-2012,EE,Estland,2016.1,11.1
-2012,FI,Finnland,115931.0,57.9
-2012,FR,Frankreich,1915835.2,91.7
-2012,EL,Griechenland,305085.0,164.1
-2012,IE,Irland,210023.0,119.0
-2012,IT,Italien,2055839.8,126.1
-2012,HR,Kroatien,30747.0,68.9
-2012,LV,Lettland,9364.1,44.0
-2012,LT,Litauen,13266.2,39.9
-2012,LU,Luxemburg,9698.4,20.8
-2012,MT,Malta,4907.4,65.6
-2012,NL,Niederlande,432723.0,65.7
-2012,PL,Polen,216905.0,54.5
-2012,PT,Portugal,216746.7,128.6
-2012,RO,Rumänien,49443.5,35.4
-2012,SE,Schweden,166233.1,38.3
-2012,SK,Slowakei,38108.0,51.7
-2012,SI,Slowenien,19430.7,54.1
-2012,ES,Spanien,927813.3,89.6
-2012,CZ,Tschechien,71778.7,43.8
-2012,HU,Ungarn,77530.7,78.4
-2012,CY,Zypern,16444.5,84.4
-2012,AT,Österreich,262565.4,82.9
-2013,BE,Belgien,414629.8,105.1
-2013,BG,Bulgarien,7147.5,17.0
-2013,DE,Deutschland,2220281.0,77.4
-2013,DK,Dänemark,123954.4,47.8
-2013,EE,Estland,2191.3,11.4
-2013,FI,Finnland,123750.0,60.8
-2013,FR,Frankreich,2004958.2,94.6
-2013,EL,Griechenland,321257.0,180.4
-2013,IE,Irland,215238.5,117.8
-2013,IT,Italien,2137704.9,132.0
-2013,HR,Kroatien,35386.3,79.5
-2013,LV,Lettland,9172.0,41.8
-2013,LT,Litauen,13552.5,38.9
-2013,LU,Luxemburg,11001.5,22.4
-2013,MT,Malta,5279.6,64.9
-2013,NL,Niederlande,447245.0,67.2
-2013,PL,Polen,224157.8,56.9
-2013,PT,Portugal,223313.3,130.8
-2013,RO,Rumänien,53374.9,37.8
-2013,SE,Schweden,177795.1,41.4
-2013,SK,Slowakei,40762.9,54.6
-2013,SI,Slowenien,25530.3,70.8
-2013,ES,Spanien,1025805.2,100.0
-2013,CZ,Tschechien,67096.2,44.1
-2013,HU,Ungarn,78882.3,77.2
-2013,CY,Zypern,19533.1,108.3
-2013,AT,Österreich,264761.0,82.4
-2014,BE,Belgien,431870.8,106.6
-2014,BG,Bulgarien,11619.1,27.0
-2014,DE,Deutschland,2224559.5,74.4
-2014,DK,Dänemark,129562.8,48.7
-2014,EE,Estland,2354.9,11.6
-2014,FI,Finnland,133420.0,64.8
-2014,FR,Frankreich,2071124.5,96.2
-2014,EL,Griechenland,321631.0,182.7
-2014,IE,Irland,203378.2,101.5
-2014,IT,Italien,2205114.1,135.0
-2014,HR,Kroatien,36741.7,83.5
-2014,LV,Lettland,9817.9,43.1
-2014,LT,Litauen,14829.0,40.7
-2014,LU,Luxemburg,11324.6,21.9
-2014,MT,Malta,5435.8,60.7
-2014,NL,Niederlande,456028.0,67.2
-2014,PL,Polen,204628.1,51.1
-2014,PT,Portugal,229391.3,132.5
-2014,RO,Rumänien,58398.2,39.1
-2014,SE,Schweden,195374.4,46.3
-2014,SK,Slowakei,40878.2,53.4
-2014,SI,Slowenien,30239.0,81.1
-2014,ES,Spanien,1085165.4,104.4
-2014,CZ,Tschechien,65581.0,41.5
-2014,HU,Ungarn,79575.8,76.5
-2014,CY,Zypern,19839.9,113.5
-2014,AT,Österreich,281289.2,85.2
-2015,BE,Belgien,439196.7,105.7
-2015,BG,Bulgarien,11871.4,25.9
-2015,DE,Deutschland,2197473.8,71.0
-2015,DK,Dänemark,121199.6,44.6
-2015,EE,Estland,2267.0,10.8
-2015,FI,Finnland,144537.0,68.8
-2015,FR,Frankreich,2134871.0,97.0
-2015,EL,Griechenland,314987.0,179.6
-2015,IE,Irland,201574.8,74.1
-2015,IT,Italien,2242020.3,135.0
-2015,HR,Kroatien,37534.5,83.0
-2015,LV,Lettland,9089.1,38.3
-2015,LT,Litauen,15882.4,42.4
-2015,LU,Luxemburg,11442.7,21.1
-2015,MT,Malta,5626.7,55.0
-2015,NL,Niederlande,446179.0,63.8
-2015,PL,Polen,216678.2,51.1
-2015,PT,Portugal,235046.1,131.0
-2015,RO,Rumänien,59396.8,37.7
-2015,SE,Schweden,207316.5,45.0
-2015,SK,Slowakei,41473.6,51.6
-2015,SI,Slowenien,32110.9,83.4
-2015,ES,Spanien,1114129.0,102.5
-2015,CZ,Tschechien,67943.9,39.5
-2015,HU,Ungarn,83840.4,75.7
-2015,CY,Zypern,20024.9,111.6
-2015,AT,Österreich,292873.7,85.6
-2016,BE,Belgien,453211.9,105.8
-2016,BG,Bulgarien,14187.9,29.1
-2016,DE,Deutschland,2182375.0,68.1
-2016,DK,Dänemark,117852.8,41.7
-2016,EE,Estland,2272.0,10.2
-2016,FI,Finnland,148088.0,68.6
-2016,FR,Frankreich,2190524.6,98.1
-2016,EL,Griechenland,319425.0,183.1
-2016,IE,Irland,200556.9,72.7
-2016,IT,Italien,2288716.4,134.5
-2016,HR,Kroatien,37575.8,79.3
-2016,LV,Lettland,10224.1,41.7
-2016,LT,Litauen,15448.4,39.8
-2016,LU,Luxemburg,11015.8,19.6
-2016,MT,Malta,5774.3,53.1
-2016,NL,Niederlande,438360.0,60.9
-2016,PL,Polen,229014.4,54.1
-2016,PT,Portugal,244494.7,131.2
-2016,RO,Rumänien,62692.1,37.8
-2016,SE,Schweden,199691.9,43.4
-2016,SK,Slowakei,42553.9,52.1
-2016,SI,Slowenien,31782.6,79.4
-2016,ES,Spanien,1145655.0,102.0
-2016,CZ,Tschechien,64939.8,36.2
-2016,HU,Ungarn,87484.5,74.6
-2016,CY,Zypern,20329.8,106.9
-2016,AT,Österreich,296693.1,83.4
-2017,BE,Belgien,455131.9,102.6
-2017,BG,Bulgarien,13182.4,25.1
-2017,DE,Deutschland,2132783.9,63.7
-2017,DK,Dänemark,118091.0,40.2
-2017,EE,Estland,2294.1,9.4
-2017,FI,Finnland,149611.0,66.6
-2017,FR,Frankreich,2263285.8,98.8
-2017,EL,Griechenland,323004.0,182.1
-2017,IE,Irland,201122.1,65.3
-2017,IT,Italien,2333221.6,134.0
-2017,HR,Kroatien,38365.9,76.2
-2017,LV,Lettland,10492.6,40.3
-2017,LT,Litauen,16541.8,39.1
-2017,LU,Luxemburg,12686.7,21.8
-2017,MT,Malta,5711.0,45.6
-2017,NL,Niederlande,420269.0,56.0
-2017,PL,Polen,241151.5,50.4
-2017,PT,Portugal,246398.6,126.0
-2017,RO,Rumänien,64462.9,35.3
-2017,SE,Schweden,195976.5,42.2
-2017,SK,Slowakei,43653.9,51.4
-2017,SI,Slowenien,31922.2,74.9
-2017,ES,Spanien,1184148.3,101.2
-2017,CZ,Tschechien,68520.7,33.8
-2017,HU,Ungarn,91265.8,72.0
-2017,CY,Zypern,19597.2,96.5
-2017,AT,Österreich,290372.8,79.1
-2018,BE,Belgien,460276.8,100.2
-2018,BG,Bulgarien,12427.0,22.2
-2018,DE,Deutschland,2086432.0,60.5
-2018,DK,Dänemark,115789.3,38.5
-2018,EE,Estland,2249.1,8.5
-2018,FI,Finnland,151569.0,65.4
-2018,FR,Frankreich,2320737.1,98.5
-2018,EL,Griechenland,341416.0,189.0
-2018,IE,Irland,205565.6,61.4
-2018,IT,Italien,2385769.6,134.5
-2018,HR,Kroatien,38664.6,72.6
-2018,LV,Lettland,10784.0,38.3
-2018,LT,Litauen,15322.6,33.4
-2018,LU,Luxemburg,12563.0,20.9
-2018,MT,Malta,5668.8,41.4
-2018,NL,Niederlande,405870.0,51.6
-2018,PL,Polen,240819.0,48.2
-2018,PT,Portugal,248277.2,121.1
-2018,RO,Rumänien,70738.2,34.6
-2018,SE,Schweden,188397.9,40.4
-2018,SK,Slowakei,44479.2,49.4
-2018,SI,Slowenien,32281.3,71.0
-2018,ES,Spanien,1209741.8,99.8
-2018,CZ,Tschechien,67431.3,31.7
-2018,HU,Ungarn,93377.1,68.8
-2018,CY,Zypern,21964.6,100.7
-2018,AT,Österreich,285840.2,74.6
-2019,BE,Belgien,468404.8,97.7
-2019,BG,Bulgarien,12310.9,20.1
-2019,DE,Deutschland,2075789.9,58.3
-2019,DK,Dänemark,118194.6,38.3
-2019,EE,Estland,2575.8,9.0
-2019,FI,Finnland,155819.0,65.3
-2019,FR,Frankreich,2387399.0,98.2
-2019,EL,Griechenland,339201.0,183.2
-2019,IE,Irland,202935.7,55.8
-2019,IT,Italien,2415545.9,134.2
-2019,HR,Kroatien,39415.7,70.6
-2019,LV,Lettland,11209.1,37.9
-2019,LT,Litauen,17526.1,35.3
-2019,LU,Luxemburg,13942.6,22.3
-2019,MT,Malta,5724.1,39.2
-2019,NL,Niederlande,395401.0,47.7
-2019,PL,Polen,245760.4,45.2
-2019,PT,Portugal,249043.6,116.1
-2019,RO,Rumänien,77964.2,35.4
-2019,SE,Schweden,174441.1,36.3
-2019,SK,Slowakei,45391.9,48.1
-2019,SI,Slowenien,31793.1,66.0
-2019,ES,Spanien,1224363.8,97.7
-2019,CZ,Tschechien,68492.7,29.6
-2019,HU,Ungarn,94260.1,65.0
-2019,CY,Zypern,21597.5,92.3
-2019,AT,Österreich,280975.3,71.0
-2020,BE,Belgien,516493.7,111.4
-2020,BG,Bulgarien,15131.5,24.4
-2020,DE,Deutschland,2347992.2,67.5
-2020,DK,Dänemark,141319.7,45.2
-2020,EE,Estland,5320.6,19.1
-2020,FI,Finnland,178040.0,75.3
-2020,FR,Frankreich,2663852.0,114.9
-2020,EL,Griechenland,350798.0,209.4
-2020,IE,Irland,217205.9,57.1
-2020,IT,Italien,2578064.8,154.7
-2020,HR,Kroatien,43780.8,86.4
-2020,LV,Lettland,12869.5,44.1
-2020,LT,Litauen,23062.5,44.9
-2020,LU,Luxemburg,15825.3,24.5
-2020,MT,Malta,7007.9,48.8
-2020,NL,Niederlande,436093.0,53.4
-2020,PL,Polen,293230.7,56.6
-2020,PT,Portugal,269577.7,134.1
-2020,RO,Rumänien,102411.8,47.2
-2020,SE,Schweden,203721.7,40.8
-2020,SK,Slowakei,55090.9,58.3
-2020,SI,Slowenien,37470.3,80.2
-2020,ES,Spanien,1346916.4,119.3
-2020,CZ,Tschechien,81916.6,36.9
-2020,HU,Ungarn,105540.6,78.7
-2020,CY,Zypern,25417.3,113.6
-2020,AT,Österreich,316359.8,83.2
-2021,BE,Belgien,550321.6,108.7
-2021,BG,Bulgarien,17015.3,23.8
-2021,DE,Deutschland,2501742.5,67.4
-2021,DK,Dänemark,136060.0,39.6
-2021,EE,Estland,5795.3,18.4
-2021,FI,Finnland,181911.0,73.1
-2021,FR,Frankreich,2828781.0,112.8
-2021,EL,Griechenland,364141.0,197.3
-2021,IE,Irland,235181.5,52.4
-2021,IT,Italien,2686753.0,146.1
-2021,HR,Kroatien,45743.6,77.6
-2021,LV,Lettland,14809.8,45.9
-2021,LT,Litauen,24570.1,43.3
-2021,LU,Luxemburg,17670.2,24.2
-2021,MT,Malta,8297.6,49.7
-2021,NL,Niederlande,450255.0,50.5
-2021,PL,Polen,306938.6,53.0
-2021,PT,Portugal,268188.5,123.9
-2021,RO,Rumänien,116455.6,48.8
-2021,SE,Schweden,198351.4,37.5
-2021,SK,Slowakei,61355.9,60.2
-2021,SI,Slowenien,38929.5,74.8
-2021,ES,Spanien,1429403.6,115.7
-2021,CZ,Tschechien,103256.6,40.7
-2021,HU,Ungarn,114698.7,76.2
-2021,CY,Zypern,24778.0,96.5
-2021,AT,Österreich,334730.6,82.4
-2022,BE,Belgien,580379.2,103.3
-2022,BG,Bulgarien,19354.9,22.4
-2022,DE,Deutschland,2569654.6,64.1
-2022,DK,Dänemark,127041.8,33.4
-2022,EE,Estland,6965.1,19.1
-2022,FI,Finnland,196844.0,74.1
-2022,FR,Frankreich,2955639.1,111.4
-2022,EL,Griechenland,368005.0,177.8
-2022,IE,Irland,223696.1,42.8
-2022,IT,Italien,2764638.2,138.4
-2022,HR,Kroatien,46335.0,68.0
-2022,LV,Lettland,16024.3,44.5
-2022,LT,Litauen,25855.4,39.4
-2022,LU,Luxemburg,19133.5,24.9
-2022,MT,Malta,9040.4,50.1
-2022,NL,Niederlande,481198.0,48.4
-2022,PL,Polen,323195.2,48.8
-2022,PT,Portugal,271357.6,111.2
-2022,RO,Rumänien,134456.2,48.3
-2022,SE,Schweden,179996.8,34.4
-2022,SK,Slowakei,63508.4,57.7
-2022,SI,Slowenien,41394.7,72.7
-2022,ES,Spanien,1504105.1,109.3
-2022,CZ,Tschechien,124300.6,42.5
-2022,HU,Ungarn,121872.0,74.1
-2022,CY,Zypern,23744.8,80.0
-2022,AT,Österreich,351144.0,78.1
-2023,BE,Belgien,617214.9,102.3
-2023,BG,Bulgarien,21675.0,22.8
-2023,DE,Deutschland,2630764.7,61.8
-2023,DK,Dänemark,123087.5,33.0
-2023,EE,Estland,7736.3,20.3
-2023,FI,Finnland,210542.0,77.2
-2023,FR,Frankreich,3103248.0,109.5
-2023,EL,Griechenland,369110.0,164.0
-2023,IE,Irland,219261.1,42.1
-2023,IT,Italien,2870272.5,134.0
-2023,HR,Kroatien,48263.9,60.5
-2023,LV,Lettland,17570.3,44.5
-2023,LT,Litauen,27716.0,36.7
-2023,LU,Luxemburg,20283.6,24.7
-2023,MT,Malta,9817.9,46.9
-2023,NL,Niederlande,481635.0,45.9
-2023,PL,Polen,389736.4,49.5
-2023,PT,Portugal,261889.1,96.9
-2023,RO,Rumänien,157616.2,49.4
-2023,SE,Schweden,178684.9,32.3
-2023,SK,Slowakei,68881.9,55.5
-2023,SI,Slowenien,43738.9,68.2
-2023,ES,Spanien,1575376.7,105.3
-2023,CZ,Tschechien,130808.2,42.2
-2023,HU,Ungarn,144025.0,73.2
-2023,CY,Zypern,23056.3,69.6
-2023,AT,Österreich,371618.1,77.4
-2024,BE,Belgien,644027.4,104.0
-2024,BG,Bulgarien,24976.9,23.7
-2024,DE,Deutschland,2694319.5,61.4
-2024,DK,Dänemark,119709.9,29.9
-2024,EE,Estland,9358.8,23.5
-2024,FI,Finnland,227752.0,82.5
-2024,FR,Frankreich,3306096.7,112.6
-2024,EL,Griechenland,364960.0,153.5
-2024,IE,Irland,215570.7,38.4
-2024,IT,Italien,2967832.9,134.3
-2024,HR,Kroatien,49284.9,56.5
-2024,LV,Lettland,18795.9,45.7
-2024,LT,Litauen,30122.8,37.8
-2024,LU,Luxemburg,22642.6,25.9
-2024,MT,Malta,10621.1,46.0
-2024,NL,Niederlande,491251.0,44.0
-2024,PL,Polen,470788.3,54.8
-2024,PT,Portugal,270859.1,93.0
-2024,RO,Rumänien,193958.5,54.6
-2024,SE,Schweden,191185.6,34.0
-2024,SK,Slowakei,77728.2,58.9
-2024,SI,Slowenien,44755.1,66.3
-2024,ES,Spanien,1620577.8,101.4
-2024,CZ,Tschechien,138515.0,43.2
-2024,HU,Ungarn,145536.9,73.5
-2024,CY,Zypern,21813.6,60.1
-2024,AT,Österreich,395046.5,79.0
-2025,BE,Belgien,692831.9,108.1
-2025,BG,Bulgarien,34797.0,29.9
-2025,DE,Deutschland,2845970.1,62.8
-2025,DK,Dänemark,113491.1,27.2
-2025,EE,Estland,10046.5,24.0
-2025,FI,Finnland,249225.0,88.4
-2025,FR,Frankreich,3460111.0,115.7
-2025,EL,Griechenland,362995.0,145.4
-2025,IE,Irland,209922.6,34.8
-2025,IT,Italien,3097093.3,136.7
-2025,HR,Kroatien,52371.3,55.7
-2025,LV,Lettland,20153.4,46.2
-2025,LT,Litauen,33455.1,39.3
-2025,LU,Luxemburg,23748.9,26.0
-2025,MT,Malta,11410.1,46.3
-2025,NL,Niederlande,523720.0,44.7
-2025,PL,Polen,553218.9,59.6
-2025,PT,Portugal,275075.1,89.2
-2025,RO,Rumänien,223196.4,58.9
-2025,SE,Schweden,215382.6,35.1
-2025,SK,Slowakei,83957.0,60.5
-2025,SI,Slowenien,46332.0,65.1
-2025,ES,Spanien,1698354.8,100.5
-2025,CZ,Tschechien,156259.2,44.2
-2025,HU,Ungarn,168565.7,74.4
-2025,CY,Zypern,20053.2,52.3
-2025,AT,Österreich,418373.5,80.7
+jahr,geo,land,schulden_mio_eur,schuldenquote_pct,quelle,quelle_key
+1995,BE,Belgien,288517.1,131.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,BG,Bulgarien,,76.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,DE,Deutschland,1082715.0,54.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,EE,Estland,236.2,7.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,FI,Finnland,56526.0,55.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,FR,Frankreich,714688.8,57.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,EL,Griechenland,100752.8,100.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,IE,Irland,41333.3,78.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,IT,Italien,1096649.1,119.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,HR,Kroatien,4069.9,23.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,LV,Lettland,561.3,14.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,LT,Litauen,587.5,11.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,LU,Luxemburg,1609.9,10.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,MT,Malta,968.4,34.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,NL,Niederlande,252353.8,73.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,PL,Polen,50553.7,47.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,PT,Portugal,56509.9,62.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,RO,Rumänien,1487.0,6.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,SE,Schweden,150615.7,68.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,SK,Slowakei,3309.0,21.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,SI,Slowenien,2788.0,18.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,ES,Spanien,295604.0,61.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,CZ,Tschechien,6199.8,13.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,HU,Ungarn,26792.1,83.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,CY,Zypern,3731.7,49.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1995,AT,Österreich,125245.5,68.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,BE,Belgien,278504.8,129.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,BG,Bulgarien,8769.7,244.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,DE,Deutschland,1118506.9,57.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,EE,Estland,276.7,7.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,FI,Finnland,57713.4,55.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,FR,Frankreich,755312.8,60.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,EL,Griechenland,114954.8,103.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,IE,Irland,44446.7,69.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,IT,Italien,1260410.3,118.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,HR,Kroatien,4756.6,25.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,LV,Lettland,625.6,13.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,LT,Litauen,931.1,13.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,LU,Luxemburg,1606.0,10.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,MT,Malta,1177.2,38.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,NL,Niederlande,248591.2,71.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,PL,Polen,50752.2,42.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,PT,Portugal,61112.1,63.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,RO,Rumänien,2334.4,10.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,SE,Schweden,157291.4,69.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,SK,Slowakei,5089.8,30.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,SI,Slowenien,3540.4,21.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,ES,Spanien,324300.8,65.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,CZ,Tschechien,6183.8,11.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,HU,Ungarn,24589.6,71.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,CY,Zypern,4044.9,51.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1996,AT,Österreich,125177.0,68.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,BE,Belgien,275699.3,124.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,BG,Bulgarien,9309.9,96.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,DE,Deutschland,1145211.6,58.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,EE,Estland,311.2,6.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,FI,Finnland,57456.7,52.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,FR,Frankreich,793023.5,62.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,EL,Griechenland,124579.9,102.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,IE,Irland,43599.1,61.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,IT,Italien,1271893.8,116.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,HR,Kroatien,5274.6,24.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,LV,Lettland,619.5,10.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,LT,Litauen,1408.8,15.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,LU,Luxemburg,1625.1,9.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,MT,Malta,1568.6,46.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,NL,Niederlande,240680.5,65.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,PL,Polen,56877.7,42.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,PT,Portugal,59592.2,58.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,RO,Rumänien,4334.8,15.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,SE,Schweden,156988.9,66.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,SK,Slowakei,6323.8,32.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,SI,Slowenien,3915.3,22.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,ES,Spanien,331630.2,64.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,CZ,Tschechien,6320.3,12.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,HU,Ungarn,24505.0,62.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,CY,Zypern,4633.4,54.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1997,AT,Österreich,118774.8,63.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,BE,Belgien,277597.2,119.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,BG,Bulgarien,9021.3,66.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,DE,Deutschland,1202026.4,59.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,EE,Estland,302.3,5.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,FI,Finnland,56414.0,46.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,FR,Frankreich,836059.4,62.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,EL,Griechenland,126131.3,100.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,IE,Irland,41352.7,51.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,IT,Italien,1299741.3,113.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,HR,Kroatien,5048.8,22.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,LV,Lettland,574.5,9.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,LT,Litauen,1593.4,16.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,LU,Luxemburg,1646.2,9.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,MT,Malta,1790.2,50.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,NL,Niederlande,247875.0,62.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,PL,Polen,56959.0,38.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,PT,Portugal,61930.0,55.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,RO,Rumänien,4852.1,16.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,SE,Schweden,150124.3,66.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,SK,Slowakei,6324.5,33.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,SI,Slowenien,4428.9,22.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,ES,Spanien,346417.0,62.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,CZ,Tschechien,8551.9,13.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,HU,Ungarn,25039.9,60.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,CY,Zypern,5141.2,56.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1998,AT,Österreich,125650.2,64.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,BE,Belgien,279629.8,115.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,BG,Bulgarien,9708.7,75.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,DE,Deutschland,1253597.9,60.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,EE,Estland,348.0,6.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,FI,Finnland,55913.0,44.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,FR,Frankreich,856943.5,61.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,EL,Griechenland,136512.5,102.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,IE,Irland,43212.9,46.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,IT,Italien,1331320.6,113.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,HR,Kroatien,6294.4,28.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,LV,Lettland,904.6,12.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,LT,Litauen,2480.4,22.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,LU,Luxemburg,1659.2,8.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,MT,Malta,2441.8,61.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,NL,Niederlande,246600.0,58.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,PL,Polen,63105.5,38.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,PT,Portugal,66266.9,55.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,RO,Rumänien,6527.4,21.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,RUS,Russland,181726.5,92.4,IWF WEO/FPP,imf_fiskal
+1999,SE,Schweden,160834.5,60.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,SK,Slowakei,9580.6,47.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,SI,Slowenien,4921.0,23.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,ES,Spanien,362223.5,60.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,CZ,Tschechien,9475.2,15.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,HU,Ungarn,27599.0,60.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,USA,Vereinigte Staaten,5467506.9,60.5,IWF WEO/FPP,imf_fiskal
+1999,CY,Zypern,5583.0,56.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+1999,AT,Österreich,136216.1,67.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,BE,Belgien,281366.8,109.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,BG,Bulgarien,10177.1,70.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,DE,Deutschland,1261584.7,59.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,DK,Dänemark,95147.9,53.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,EE,Estland,315.6,5.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,FI,Finnland,61564.0,45.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,FR,Frankreich,880004.8,59.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,EL,Griechenland,148217.0,108.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,IE,Irland,39505.9,36.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,IT,Italien,1353569.3,108.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,HR,Kroatien,8441.0,35.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,LV,Lettland,1011.0,12.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,LT,Litauen,2912.1,23.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,LU,Luxemburg,1722.1,7.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,MT,Malta,2654.0,61.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,NL,Niederlande,236233.0,52.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,PL,Polen,70735.4,36.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,PT,Portugal,69591.8,54.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,RO,Rumänien,7532.8,22.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,RUS,Russland,168319.0,55.9,IWF WEO/FPP,imf_fiskal
+2000,SE,Schweden,137660.3,50.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,SK,Slowakei,10975.3,50.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,SI,Slowenien,5483.6,26.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,ES,Spanien,374557.2,57.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,CZ,Tschechien,11567.8,16.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,HU,Ungarn,28008.4,55.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,USA,Vereinigte Staaten,6051329.9,54.5,IWF WEO/FPP,imf_fiskal
+2000,CY,Zypern,6103.4,56.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2000,AT,Österreich,141543.2,66.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,BE,Belgien,286744.4,108.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,BG,Bulgarien,10269.8,64.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,DE,Deutschland,1274759.0,58.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,DK,Dänemark,92444.3,50.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,EE,Estland,344.4,4.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,FI,Finnland,62825.0,43.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,FR,Frankreich,907672.6,59.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,EL,Griechenland,162971.0,110.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,IE,Irland,40994.9,33.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,IT,Italien,1420026.6,108.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,HR,Kroatien,9661.3,36.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,LV,Lettland,1304.4,14.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,LT,Litauen,3185.2,22.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,LU,Luxemburg,1819.8,7.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,MT,Malta,2989.2,65.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,NL,Niederlande,239037.0,49.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,PL,Polen,83306.4,37.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,PT,Portugal,77908.0,57.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,RO,Rumänien,10917.2,25.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,RUS,Russland,162978.4,44.4,IWF WEO/FPP,imf_fiskal
+2001,SE,Schweden,140134.8,52.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,SK,Slowakei,12406.1,51.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,SI,Slowenien,6035.5,26.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,ES,Spanien,378883.4,54.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,CZ,Tschechien,18322.2,22.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,HU,Ungarn,32818.1,52.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,USA,Vereinigte Staaten,6319307.1,53.5,IWF WEO/FPP,imf_fiskal
+2001,CY,Zypern,6745.6,58.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2001,AT,Österreich,147502.5,67.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,BE,Belgien,288489.2,105.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,BG,Bulgarien,8890.3,51.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,DE,Deutschland,1330083.1,59.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,DK,Dänemark,95608.1,50.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,EE,Estland,442.9,5.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,FI,Finnland,63299.0,42.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,FR,Frankreich,966822.5,61.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,EL,Griechenland,171410.0,107.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,IE,Irland,42009.2,30.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,IT,Italien,1436141.8,105.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,HR,Kroatien,10397.5,36.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,LV,Lettland,1251.5,13.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,LT,Litauen,3365.7,22.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,LU,Luxemburg,1862.2,7.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,MT,Malta,2927.3,63.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,NL,Niederlande,245253.0,48.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,PL,Polen,84224.1,41.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,PT,Portugal,85526.6,60.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,RO,Rumänien,10757.1,24.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,RUS,Russland,147063.0,37.6,IWF WEO/FPP,imf_fiskal
+2002,SE,Schweden,141954.3,49.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,SK,Slowakei,12350.2,45.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,SI,Slowenien,6707.8,27.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,ES,Spanien,384145.3,51.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,CZ,Tschechien,22013.9,25.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,HU,Ungarn,41007.4,55.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,USA,Vereinigte Staaten,6456334.2,55.9,IWF WEO/FPP,imf_fiskal
+2002,CY,Zypern,7431.2,61.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2002,AT,Österreich,151800.0,67.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,BE,Belgien,286378.9,101.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,BG,Bulgarien,8126.5,43.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,DE,Deutschland,1419426.0,63.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,DK,Dänemark,93083.1,48.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,EE,Estland,489.7,5.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,FI,Finnland,68508.0,45.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,FR,Frankreich,1060406.4,65.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,EL,Griechenland,181510.0,104.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,IE,Irland,43428.6,29.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,IT,Italien,1470950.9,105.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,HR,Kroatien,11622.3,37.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,LV,Lettland,1410.2,14.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,LT,Litauen,3395.1,20.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,LU,Luxemburg,1949.4,7.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,MT,Malta,3267.4,69.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,NL,Niederlande,256822.0,49.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,PL,Polen,83894.0,46.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,PT,Portugal,93320.9,63.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,RO,Rumänien,10309.5,22.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,RUS,Russland,115604.7,28.3,IWF WEO/FPP,imf_fiskal
+2003,SE,Schweden,147354.8,49.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,SK,Slowakei,13159.8,43.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,SI,Slowenien,6943.8,27.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,ES,Spanien,382775.0,47.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,CZ,Tschechien,24530.7,28.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,HU,Ungarn,42348.3,58.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,USA,Vereinigte Staaten,5971105.4,59.0,IWF WEO/FPP,imf_fiskal
+2003,CY,Zypern,8280.9,64.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2003,AT,Österreich,153106.9,66.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,BE,Belgien,288541.7,97.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,BG,Bulgarien,7526.2,35.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,DE,Deutschland,1489670.9,65.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,DK,Dänemark,93791.7,46.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,EE,Estland,504.5,5.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,FI,Finnland,71335.0,44.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,FR,Frankreich,1134346.9,66.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,EL,Griechenland,199282.0,105.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,IE,Irland,43759.7,28.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,IT,Italien,1526472.1,104.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,HR,Kroatien,13210.7,40.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,LV,Lettland,1628.6,15.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,LT,Litauen,3404.5,18.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,LU,Luxemburg,2206.3,7.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,MT,Malta,3449.6,71.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,NL,Niederlande,266661.0,50.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,PL,Polen,103059.1,44.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,PT,Portugal,102154.6,67.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,RO,Rumänien,11768.7,18.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,RUS,Russland,106038.7,20.8,IWF WEO/FPP,imf_fiskal
+2004,SE,Schweden,152789.6,48.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,SK,Slowakei,15020.0,42.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,SI,Slowenien,7427.5,27.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,ES,Spanien,389887.9,45.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,CZ,Tschechien,28673.0,28.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,HU,Ungarn,50505.1,58.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,USA,Vereinigte Staaten,6525391.8,66.4,IWF WEO/FPP,imf_fiskal
+2004,CY,Zypern,9160.3,65.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2004,AT,Österreich,158545.7,65.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,BE,Belgien,295285.0,95.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,BG,Bulgarien,6388.6,26.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,DE,Deutschland,1561020.5,67.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,DK,Dänemark,83889.0,39.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,EE,Estland,537.0,4.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,FI,Finnland,69397.0,42.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,FR,Frankreich,1201470.7,68.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,EL,Griechenland,213976.0,109.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,IE,Irland,44381.2,26.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,IT,Italien,1591674.2,106.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,HR,Kroatien,15124.7,40.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,LV,Lettland,1638.8,12.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,LT,Litauen,3701.9,17.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,LU,Luxemburg,2406.7,7.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,MT,Malta,3606.4,70.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,NL,Niederlande,274598.0,49.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,PL,Polen,119592.0,46.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,PT,Portugal,114542.7,72.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,RO,Rumänien,12397.6,15.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,RUS,Russland,97610.4,14.9,IWF WEO/FPP,imf_fiskal
+2005,SE,Schweden,153147.9,49.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,SK,Slowakei,13988.4,35.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,SI,Slowenien,7690.1,26.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,ES,Spanien,393479.1,42.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,CZ,Tschechien,31385.6,27.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,HU,Ungarn,54075.6,60.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,USA,Vereinigte Staaten,6894099.4,65.8,IWF WEO/FPP,imf_fiskal
+2005,CY,Zypern,9697.7,64.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2005,AT,Österreich,175203.9,69.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,BE,Belgien,297590.1,91.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,BG,Bulgarien,5720.9,20.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,DE,Deutschland,1610903.7,66.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,DK,Dänemark,75019.9,33.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,EE,Estland,640.1,4.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,FI,Finnland,69532.0,40.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,FR,Frankreich,1207312.7,65.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,EL,Griechenland,225730.0,105.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,IE,Irland,43738.6,23.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,IT,Italien,1657478.6,106.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,HR,Kroatien,15535.8,38.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,LV,Lettland,1736.5,10.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,LT,Litauen,4151.9,17.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,LU,Luxemburg,2803.4,8.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,MT,Malta,3472.9,64.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,NL,Niederlande,264472.0,45.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,PL,Polen,131958.8,47.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,PT,Portugal,122467.4,73.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,RO,Rumänien,12585.6,12.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,RUS,Russland,82836.7,9.8,IWF WEO/FPP,imf_fiskal
+2006,SE,Schweden,151944.6,44.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,SK,Slowakei,15544.4,31.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,SI,Slowenien,8201.5,26.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,ES,Spanien,392132.2,39.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,CZ,Tschechien,35405.0,27.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,HU,Ungarn,62298.8,64.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,USA,Vereinigte Staaten,7100471.0,64.5,IWF WEO/FPP,imf_fiskal
+2006,CY,Zypern,9716.5,60.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2006,AT,Österreich,181304.4,68.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,BE,Belgien,300599.3,87.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,BG,Bulgarien,5296.8,16.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,DE,Deutschland,1619064.6,63.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,DK,Dänemark,68906.5,29.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,EE,Estland,641.0,3.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,FI,Finnland,67340.0,36.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,FR,Frankreich,1268858.7,65.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,EL,Griechenland,239915.0,104.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,IE,Irland,47195.1,24.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,IT,Italien,1677896.6,103.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,HR,Kroatien,16489.2,37.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,LV,Lettland,1935.1,8.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,LT,Litauen,4609.7,15.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,LU,Luxemburg,3044.7,8.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,MT,Malta,3584.6,62.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,NL,Niederlande,266545.0,42.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,PL,Polen,147052.7,44.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,PT,Portugal,127570.8,72.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,RO,Rumänien,14099.4,11.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,RUS,Russland,81671.4,8.0,IWF WEO/FPP,imf_fiskal
+2007,SE,Schweden,138254.0,39.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,SK,Slowakei,17214.4,30.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,SI,Slowenien,8015.7,22.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,ES,Spanien,384662.0,35.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,CZ,Tschechien,39606.2,27.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,HU,Ungarn,66503.3,65.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,USA,Vereinigte Staaten,6859499.2,64.9,IWF WEO/FPP,imf_fiskal
+2007,CY,Zypern,9750.1,55.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2007,AT,Österreich,185730.0,65.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,BE,Belgien,327722.7,93.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,BG,Bulgarien,4848.5,13.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,DE,Deutschland,1687442.0,65.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,DK,Dänemark,86323.2,35.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,EE,Estland,776.6,4.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,FI,Finnland,67435.0,34.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,FR,Frankreich,1389401.6,69.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,EL,Griechenland,264775.0,110.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,IE,Irland,79621.0,42.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,IT,Italien,1739108.6,105.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,HR,Kroatien,18559.5,38.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,LV,Lettland,4511.3,19.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,LT,Litauen,4762.1,14.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,LU,Luxemburg,5851.1,14.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,MT,Malta,3837.0,61.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,NL,Niederlande,353866.0,54.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,PL,Polen,144651.7,46.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,PT,Portugal,135209.1,75.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,RO,Rumänien,16549.4,12.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,RUS,Russland,90074.0,7.4,IWF WEO/FPP,imf_fiskal
+2008,SE,Schweden,119147.8,38.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,SK,Slowakei,19629.8,28.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,SI,Slowenien,8263.2,21.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,ES,Spanien,440621.0,39.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,CZ,Tschechien,42298.6,28.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,HU,Ungarn,73317.3,71.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,USA,Vereinigte Staaten,7415739.9,73.8,IWF WEO/FPP,imf_fiskal
+2008,CY,Zypern,8954.6,47.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2008,AT,Österreich,202914.7,69.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,BE,Belgien,347317.9,99.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,BG,Bulgarien,5112.4,13.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,DE,Deutschland,1804696.0,72.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,DK,Dänemark,100048.6,43.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,EE,Estland,1127.2,8.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,FI,Finnland,80200.0,44.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,FR,Frankreich,1627182.2,84.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,EL,Griechenland,301062.0,128.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,IE,Irland,104703.4,61.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,IT,Italien,1839805.5,116.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,HR,Kroatien,22099.3,47.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,LV,Lettland,6957.0,38.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,LT,Litauen,7528.5,27.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,LU,Luxemburg,5967.4,15.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,MT,Malta,4152.7,66.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,NL,Niederlande,355057.0,56.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,PL,Polen,166573.8,49.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,PT,Portugal,153624.4,87.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,RO,Rumänien,27288.4,21.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,RUS,Russland,93005.7,9.9,IWF WEO/FPP,imf_fiskal
+2009,SE,Schweden,134421.0,41.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,SK,Slowakei,23320.7,36.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,SI,Slowenien,12519.3,34.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,ES,Spanien,569535.4,53.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,CZ,Tschechien,49824.4,33.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,HU,Ungarn,76528.1,78.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,USA,Vereinigte Staaten,9038027.6,87.1,IWF WEO/FPP,imf_fiskal
+2009,CY,Zypern,10765.3,57.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2009,AT,Österreich,231172.7,80.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,BE,Belgien,364352.5,100.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,BG,Bulgarien,5856.9,15.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,DE,Deutschland,2119241.8,81.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,DK,Dänemark,112184.5,46.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,EE,Estland,1177.9,8.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,FI,Finnland,94286.0,50.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,FR,Frankreich,1722172.2,86.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,EL,Griechenland,330570.0,147.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,IE,Irland,144226.6,86.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,IT,Italien,1921443.5,118.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,HR,Kroatien,25792.2,56.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,LV,Lettland,8537.7,48.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,LT,Litauen,10153.6,36.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,LU,Luxemburg,8093.3,19.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,MT,Malta,4462.5,65.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,NL,Niederlande,379043.0,58.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,PL,Polen,194931.8,53.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,PT,Portugal,179652.9,99.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,RO,Rumänien,36724.9,29.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,RUS,Russland,124483.7,10.1,IWF WEO/FPP,imf_fiskal
+2010,SE,Schweden,154054.9,38.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,SK,Slowakei,27939.9,40.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,SI,Slowenien,13918.2,38.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,ES,Spanien,649152.5,60.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,CZ,Tschechien,59059.8,36.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,HU,Ungarn,79114.5,80.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,USA,Vereinigte Staaten,10857119.3,95.6,IWF WEO/FPP,imf_fiskal
+2010,CY,Zypern,11692.7,60.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2010,AT,Österreich,245985.4,83.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,BE,Belgien,389535.9,102.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,BG,Bulgarien,6284.9,15.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,DE,Deutschland,2155875.7,78.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,DK,Dänemark,124292.0,50.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,EE,Estland,1271.8,7.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,FI,Finnland,102829.0,52.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,FR,Frankreich,1830136.3,88.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,EL,Griechenland,356235.0,175.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,IE,Irland,189723.7,109.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,IT,Italien,1974407.5,119.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,HR,Kroatien,28520.3,63.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,LV,Lettland,8948.5,46.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,LT,Litauen,11631.7,37.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,LU,Luxemburg,8199.7,18.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,MT,Malta,4848.3,68.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,NL,Niederlande,401579.0,61.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,PL,Polen,192177.4,54.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,PT,Portugal,201044.4,114.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,RO,Rumänien,43934.0,32.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,RUS,Russland,152033.5,10.3,IWF WEO/FPP,imf_fiskal
+2011,SE,Schweden,157868.4,38.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,SK,Slowakei,30994.2,43.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,SI,Slowenien,17219.5,46.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,ES,Spanien,743043.2,69.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,CZ,Tschechien,62576.1,39.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,HU,Ungarn,72881.6,80.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,USA,Vereinigte Staaten,11209309.3,100.0,IWF WEO/FPP,imf_fiskal
+2011,CY,Zypern,13877.4,69.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2011,AT,Österreich,256875.9,83.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,BE,Belgien,404898.4,104.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,BG,Bulgarien,7005.6,16.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,DE,Deutschland,2234802.5,79.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,DK,Dänemark,123585.7,48.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,EE,Estland,2016.1,11.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,FI,Finnland,115931.0,57.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,FR,Frankreich,1915835.2,91.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,EL,Griechenland,305085.0,164.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,IE,Irland,210023.0,119.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,IT,Italien,2055839.8,126.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,HR,Kroatien,30747.0,68.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,LV,Lettland,9364.1,44.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,LT,Litauen,13266.2,39.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,LU,Luxemburg,9698.4,20.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,MT,Malta,4907.4,65.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,NL,Niederlande,432723.0,65.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,PL,Polen,216905.0,54.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,PT,Portugal,216746.7,128.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,RO,Rumänien,49443.5,35.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,RUS,Russland,190484.8,11.2,IWF WEO/FPP,imf_fiskal
+2012,SE,Schweden,166233.1,38.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,SK,Slowakei,38108.0,51.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,SI,Slowenien,19430.7,54.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,ES,Spanien,927813.3,89.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,CZ,Tschechien,71778.7,43.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,HU,Ungarn,77530.7,78.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,USA,Vereinigte Staaten,13114021.3,103.7,IWF WEO/FPP,imf_fiskal
+2012,CY,Zypern,16444.5,84.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2012,AT,Österreich,262565.4,82.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,BE,Belgien,414629.8,105.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,BG,Bulgarien,7147.5,17.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,DE,Deutschland,2220281.0,77.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,DK,Dänemark,123954.4,47.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,EE,Estland,2191.3,11.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,FI,Finnland,123750.0,60.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,FR,Frankreich,2004958.2,94.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,EL,Griechenland,321257.0,180.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,IE,Irland,215238.5,117.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,IT,Italien,2137704.9,132.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,HR,Kroatien,35386.3,79.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,LV,Lettland,9172.0,41.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,LT,Litauen,13552.5,38.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,LU,Luxemburg,11001.5,22.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,MT,Malta,5279.6,64.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,NL,Niederlande,447245.0,67.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,PL,Polen,224157.8,56.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,PT,Portugal,223313.3,130.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,RO,Rumänien,53374.9,37.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,RUS,Russland,212764.6,12.3,IWF WEO/FPP,imf_fiskal
+2013,SE,Schweden,177795.1,41.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,SK,Slowakei,40762.9,54.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,SI,Slowenien,25530.3,70.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,ES,Spanien,1025805.2,100.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,CZ,Tschechien,67096.2,44.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,HU,Ungarn,78882.3,77.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,USA,Vereinigte Staaten,13346154.9,105.0,IWF WEO/FPP,imf_fiskal
+2013,CY,Zypern,19533.1,108.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2013,AT,Österreich,264761.0,82.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,BE,Belgien,431870.8,106.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,BG,Bulgarien,11619.1,27.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,DE,Deutschland,2224559.5,74.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,DK,Dänemark,129562.8,48.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,EE,Estland,2354.9,11.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,FI,Finnland,133420.0,64.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,FR,Frankreich,2071124.5,96.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,EL,Griechenland,321631.0,182.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,IE,Irland,203378.2,101.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,IT,Italien,2205114.1,135.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,HR,Kroatien,36741.7,83.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,LV,Lettland,9817.9,43.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,LT,Litauen,14829.0,40.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,LU,Luxemburg,11324.6,21.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,MT,Malta,5435.8,60.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,NL,Niederlande,456028.0,67.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,PL,Polen,204628.1,51.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,PT,Portugal,229391.3,132.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,RO,Rumänien,58398.2,39.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,RUS,Russland,233427.3,15.1,IWF WEO/FPP,imf_fiskal
+2014,SE,Schweden,195374.4,46.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,SK,Slowakei,40878.2,53.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,SI,Slowenien,30239.0,81.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,ES,Spanien,1085165.4,104.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,CZ,Tschechien,65581.0,41.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,HU,Ungarn,79575.8,76.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,USA,Vereinigte Staaten,13907528.2,104.9,IWF WEO/FPP,imf_fiskal
+2014,CY,Zypern,19839.9,113.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2014,AT,Österreich,281289.2,85.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,BE,Belgien,439196.7,105.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,BG,Bulgarien,11871.4,25.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,DE,Deutschland,2197473.8,71.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,DK,Dänemark,121199.6,44.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,EE,Estland,2267.0,10.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,FI,Finnland,144537.0,68.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,FR,Frankreich,2134871.0,97.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,EL,Griechenland,314987.0,179.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,IE,Irland,201574.8,74.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,IT,Italien,2242020.3,135.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,HR,Kroatien,37534.5,83.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,LV,Lettland,9089.1,38.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,LT,Litauen,15882.4,42.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,LU,Luxemburg,11442.7,21.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,MT,Malta,5626.7,55.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,NL,Niederlande,446179.0,63.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,PL,Polen,216678.2,51.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,PT,Portugal,235046.1,131.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,RO,Rumänien,59396.8,37.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,RUS,Russland,186921.1,15.3,IWF WEO/FPP,imf_fiskal
+2015,SE,Schweden,207316.5,45.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,SK,Slowakei,41473.6,51.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,SI,Slowenien,32110.9,83.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,ES,Spanien,1114129.0,102.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,CZ,Tschechien,67943.9,39.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,HU,Ungarn,83840.4,75.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,USA,Vereinigte Staaten,17383552.0,105.4,IWF WEO/FPP,imf_fiskal
+2015,CY,Zypern,20024.9,111.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2015,AT,Österreich,292873.7,85.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,BE,Belgien,453211.9,105.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,BG,Bulgarien,14187.9,29.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,DE,Deutschland,2182375.0,68.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,DK,Dänemark,117852.8,41.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,EE,Estland,2272.0,10.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,FI,Finnland,148088.0,68.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,FR,Frankreich,2190524.6,98.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,EL,Griechenland,319425.0,183.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,IE,Irland,200556.9,72.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,IT,Italien,2288716.4,134.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,HR,Kroatien,37575.8,79.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,LV,Lettland,10224.1,41.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,LT,Litauen,15448.4,39.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,LU,Luxemburg,11015.8,19.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,MT,Malta,5774.3,53.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,NL,Niederlande,438360.0,60.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,PL,Polen,229014.4,54.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,PT,Portugal,244494.7,131.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,RO,Rumänien,62692.1,37.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,RUS,Russland,171801.4,14.8,IWF WEO/FPP,imf_fiskal
+2016,SE,Schweden,199691.9,43.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,SK,Slowakei,42553.9,52.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,SI,Slowenien,31782.6,79.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,ES,Spanien,1145655.0,102.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,CZ,Tschechien,64939.8,36.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,HU,Ungarn,87484.5,74.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,USA,Vereinigte Staaten,18242600.2,107.4,IWF WEO/FPP,imf_fiskal
+2016,CY,Zypern,20329.8,106.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2016,AT,Österreich,296693.1,83.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,BE,Belgien,455131.9,102.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,BG,Bulgarien,13182.4,25.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,DE,Deutschland,2132783.9,63.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,DK,Dänemark,118091.0,40.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,EE,Estland,2294.1,9.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,FI,Finnland,149611.0,66.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,FR,Frankreich,2263285.8,98.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,EL,Griechenland,323004.0,182.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,IE,Irland,201122.1,65.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,IT,Italien,2333221.6,134.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,HR,Kroatien,38365.9,76.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,LV,Lettland,10492.6,40.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,LT,Litauen,16541.8,39.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,LU,Luxemburg,12686.7,21.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,MT,Malta,5711.0,45.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,NL,Niederlande,420269.0,56.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,PL,Polen,241151.5,50.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,PT,Portugal,246398.6,126.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,RO,Rumänien,64462.9,35.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,RUS,Russland,199542.5,14.3,IWF WEO/FPP,imf_fiskal
+2017,SE,Schweden,195976.5,42.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,SK,Slowakei,43653.9,51.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,SI,Slowenien,31922.2,74.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,ES,Spanien,1184148.3,101.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,CZ,Tschechien,68520.7,33.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,HU,Ungarn,91265.8,72.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,USA,Vereinigte Staaten,18467322.9,106.4,IWF WEO/FPP,imf_fiskal
+2017,CY,Zypern,19597.2,96.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2017,AT,Österreich,290372.8,79.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,BE,Belgien,460276.8,100.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,BG,Bulgarien,12427.0,22.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,DE,Deutschland,2086432.0,60.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,DK,Dänemark,115789.3,38.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,EE,Estland,2249.1,8.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,FI,Finnland,151569.0,65.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,FR,Frankreich,2320737.1,98.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,EL,Griechenland,341416.0,189.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,IE,Irland,205565.6,61.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,IT,Italien,2385769.6,134.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,HR,Kroatien,38664.6,72.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,LV,Lettland,10784.0,38.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,LT,Litauen,15322.6,33.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,LU,Luxemburg,12563.0,20.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,MT,Malta,5668.8,41.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,NL,Niederlande,405870.0,51.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,PL,Polen,240819.0,48.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,PT,Portugal,248277.2,121.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,RO,Rumänien,70738.2,34.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,RUS,Russland,190636.4,13.6,IWF WEO/FPP,imf_fiskal
+2018,SE,Schweden,188397.9,40.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,SK,Slowakei,44479.2,49.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,SI,Slowenien,32281.3,71.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,ES,Spanien,1209741.8,99.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,CZ,Tschechien,67431.3,31.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,HU,Ungarn,93377.1,68.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,USA,Vereinigte Staaten,18825113.8,107.6,IWF WEO/FPP,imf_fiskal
+2018,CY,Zypern,21964.6,100.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2018,AT,Österreich,285840.2,74.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,BE,Belgien,468404.8,97.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,BG,Bulgarien,12310.9,20.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,DE,Deutschland,2075789.9,58.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,DK,Dänemark,118194.6,38.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,EE,Estland,2575.8,9.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,FI,Finnland,155819.0,65.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,FR,Frankreich,2387399.0,98.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,EL,Griechenland,339201.0,183.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,IE,Irland,202935.7,55.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,IT,Italien,2415545.9,134.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,HR,Kroatien,39415.7,70.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,LV,Lettland,11209.1,37.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,LT,Litauen,17526.1,35.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,LU,Luxemburg,13942.6,22.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,MT,Malta,5724.1,39.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,NL,Niederlande,395401.0,47.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,PL,Polen,245760.4,45.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,PT,Portugal,249043.6,116.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,RO,Rumänien,77964.2,35.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,RUS,Russland,208240.5,13.7,IWF WEO/FPP,imf_fiskal
+2019,SE,Schweden,174441.1,36.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,SK,Slowakei,45391.9,48.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,SI,Slowenien,31793.1,66.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,ES,Spanien,1224363.8,97.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,CZ,Tschechien,68492.7,29.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,HU,Ungarn,94260.1,65.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,USA,Vereinigte Staaten,20924899.8,108.8,IWF WEO/FPP,imf_fiskal
+2019,CY,Zypern,21597.5,92.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2019,AT,Österreich,280975.3,71.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,BE,Belgien,516493.7,111.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,BG,Bulgarien,15131.5,24.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,DE,Deutschland,2347992.2,67.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,DK,Dänemark,141319.7,45.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,EE,Estland,5320.6,19.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,FI,Finnland,178040.0,75.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,FR,Frankreich,2663852.0,114.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,EL,Griechenland,350798.0,209.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,IE,Irland,217205.9,57.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,IT,Italien,2578064.8,154.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,HR,Kroatien,43780.8,86.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,LV,Lettland,12869.5,44.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,LT,Litauen,23062.5,44.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,LU,Luxemburg,15825.3,24.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,MT,Malta,7007.9,48.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,NL,Niederlande,436093.0,53.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,PL,Polen,293230.7,56.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,PT,Portugal,269577.7,134.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,RO,Rumänien,102411.8,47.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,RUS,Russland,249576.9,19.2,IWF WEO/FPP,imf_fiskal
+2020,SE,Schweden,203721.7,40.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,SK,Slowakei,55090.9,58.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,SI,Slowenien,37470.3,80.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,ES,Spanien,1346916.4,119.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,CZ,Tschechien,81916.6,36.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,HU,Ungarn,105540.6,78.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,USA,Vereinigte Staaten,24798750.1,132.5,IWF WEO/FPP,imf_fiskal
+2020,CY,Zypern,25417.3,113.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2020,AT,Österreich,316359.8,83.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,BE,Belgien,550321.6,108.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,BG,Bulgarien,17015.3,23.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,DE,Deutschland,2501742.5,67.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,DK,Dänemark,136060.0,39.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,EE,Estland,5795.3,18.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,FI,Finnland,181911.0,73.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,FR,Frankreich,2828781.0,112.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,EL,Griechenland,364141.0,197.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,IE,Irland,235181.5,52.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,IT,Italien,2686753.0,146.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,HR,Kroatien,45743.6,77.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,LV,Lettland,14809.8,45.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,LT,Litauen,24570.1,43.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,LU,Luxemburg,17670.2,24.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,MT,Malta,8297.6,49.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,NL,Niederlande,450255.0,50.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,PL,Polen,306938.6,53.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,PT,Portugal,268188.5,123.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,RO,Rumänien,116455.6,48.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,RUS,Russland,255523.7,16.5,IWF WEO/FPP,imf_fiskal
+2021,SE,Schweden,198351.4,37.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,SK,Slowakei,61355.9,60.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,SI,Slowenien,38929.5,74.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,ES,Spanien,1429403.6,115.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,CZ,Tschechien,103256.6,40.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,HU,Ungarn,114698.7,76.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,USA,Vereinigte Staaten,25097947.9,125.0,IWF WEO/FPP,imf_fiskal
+2021,CY,Zypern,24778.0,96.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2021,AT,Österreich,334730.6,82.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,BE,Belgien,580379.2,103.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,BG,Bulgarien,19354.9,22.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,DE,Deutschland,2569654.6,64.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,DK,Dänemark,127041.8,33.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,EE,Estland,6965.1,19.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,FI,Finnland,196844.0,74.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,FR,Frankreich,2955639.1,111.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,EL,Griechenland,368005.0,177.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,IE,Irland,223696.1,42.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,IT,Italien,2764638.2,138.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,HR,Kroatien,46335.0,68.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,LV,Lettland,16024.3,44.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,LT,Litauen,25855.4,39.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,LU,Luxemburg,19133.5,24.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,MT,Malta,9040.4,50.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,NL,Niederlande,481198.0,48.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,PL,Polen,323195.2,48.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,PT,Portugal,271357.6,111.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,RO,Rumänien,134456.2,48.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,RUS,Russland,403005.5,18.5,IWF WEO/FPP,imf_fiskal
+2022,SE,Schweden,179996.8,34.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,SK,Slowakei,63508.4,57.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,SI,Slowenien,41394.7,72.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,ES,Spanien,1504105.1,109.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,CZ,Tschechien,124300.6,42.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,HU,Ungarn,121872.0,74.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,USA,Vereinigte Staaten,29474698.5,119.1,IWF WEO/FPP,imf_fiskal
+2022,CY,Zypern,23744.8,80.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2022,AT,Österreich,351144.0,78.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,BE,Belgien,617214.9,102.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,BG,Bulgarien,21675.0,22.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,DE,Deutschland,2630764.7,61.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,DK,Dänemark,123087.5,33.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,EE,Estland,7736.3,20.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,FI,Finnland,210542.0,77.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,FR,Frankreich,3103248.0,109.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,EL,Griechenland,369110.0,164.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,IE,Irland,219261.1,42.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,IT,Italien,2870272.5,134.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,HR,Kroatien,48263.9,60.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,LV,Lettland,17570.3,44.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,LT,Litauen,27716.0,36.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,LU,Luxemburg,20283.6,24.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,MT,Malta,9817.9,46.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,NL,Niederlande,481635.0,45.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,PL,Polen,389736.4,49.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,PT,Portugal,261889.1,96.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,RO,Rumänien,157616.2,49.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,RUS,Russland,366690.2,19.5,IWF WEO/FPP,imf_fiskal
+2023,SE,Schweden,178684.9,32.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,SK,Slowakei,68881.9,55.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,SI,Slowenien,43738.9,68.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,ES,Spanien,1575376.7,105.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,CZ,Tschechien,130808.2,42.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,HU,Ungarn,144025.0,73.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,USA,Vereinigte Staaten,30839048.2,119.8,IWF WEO/FPP,imf_fiskal
+2023,CY,Zypern,23056.3,69.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2023,AT,Österreich,371618.1,77.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,BE,Belgien,644027.4,104.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,BG,Bulgarien,24976.9,23.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,DE,Deutschland,2694319.5,61.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,DK,Dänemark,119709.9,29.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,EE,Estland,9358.8,23.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,FI,Finnland,227752.0,82.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,FR,Frankreich,3306096.7,112.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,EL,Griechenland,364960.0,153.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,IE,Irland,215570.7,38.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,IT,Italien,2967832.9,134.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,HR,Kroatien,49284.9,56.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,LV,Lettland,18795.9,45.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,LT,Litauen,30122.8,37.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,LU,Luxemburg,22642.6,25.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,MT,Malta,10621.1,46.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,NL,Niederlande,491251.0,44.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,PL,Polen,470788.3,54.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,PT,Portugal,270859.1,93.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,RO,Rumänien,193958.5,54.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,RUS,Russland,410007.2,20.3,IWF WEO/FPP,imf_fiskal
+2024,SE,Schweden,191185.6,34.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,SK,Slowakei,77728.2,58.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,SI,Slowenien,44755.1,66.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,ES,Spanien,1620577.8,101.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,CZ,Tschechien,138515.0,43.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,HU,Ungarn,145536.9,73.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,USA,Vereinigte Staaten,33204022.5,122.3,IWF WEO/FPP,imf_fiskal
+2024,CY,Zypern,21813.6,60.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2024,AT,Österreich,395046.5,79.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,BE,Belgien,692831.9,108.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,BG,Bulgarien,34797.0,29.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,DE,Deutschland,2845970.1,62.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,DK,Dänemark,113491.1,27.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,EE,Estland,10046.5,24.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,FI,Finnland,249225.0,88.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,FR,Frankreich,3460111.0,115.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,EL,Griechenland,362995.0,145.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,IE,Irland,209922.6,34.8,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,IT,Italien,3097093.3,136.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,HR,Kroatien,52371.3,55.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,LV,Lettland,20153.4,46.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,LT,Litauen,33455.1,39.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,LU,Luxemburg,23748.9,26.0,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,MT,Malta,11410.1,46.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,NL,Niederlande,523720.0,44.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,PL,Polen,553218.9,59.6,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,PT,Portugal,275075.1,89.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,RO,Rumänien,223196.4,58.9,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,SE,Schweden,215382.6,35.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,SK,Slowakei,83957.0,60.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,SI,Slowenien,46332.0,65.1,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,ES,Spanien,1698354.8,100.5,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,CZ,Tschechien,156259.2,44.2,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,HU,Ungarn,168565.7,74.4,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,CY,Zypern,20053.2,52.3,Eurostat gov_10dd_edpt1,eurostat_schulden_laender
+2025,AT,Österreich,418373.5,80.7,Eurostat gov_10dd_edpt1,eurostat_schulden_laender

@@ -105,13 +105,25 @@ Ausbau derselben Seite um Schulden, Zinsausgaben und Preise:
   des BIP, in Prozent der Einnahmen und je Einwohner:in (`analysis.theoretical_interest_by_country`).
 * ✅ **Inflation (HVPI) und Realzins** je Land, monatlich; der Realzins ist die
   Rendite minus Inflationsrate (`analysis.real_interest_rate`).
-* ⬜ Für die USA und Russland fehlen in der Quellenbibliothek vergleichbare
-  Schulden- und Zinsreihen; die Abschnitte zeigen deshalb nur europäische Länder.
+* ✅ **USA und Russland** in allen Abschnitten: Schuldenquote, Einnahmen und
+  Zinsausgaben aus der IWF-Datenbank *Public Finances in Modern History*, BIP und
+  Bevölkerung aus dem *World Economic Outlook*, umgerechnet mit dem
+  EZB-Jahresdurchschnitt des Dollar-Euro-Kurses. Monatliche Inflation: CPI über
+  FRED für die USA, Rosstat/EMISS für Russland (ohne Schlüssel: verkettete
+  12-Monats-Rate der Bank of Russia).
+* ✅ **Durchschnittseinkommen** in drei Abgrenzungen (BIP je Einwohner:in,
+  verfügbares Einkommen je Einwohner:in, Bruttoverdienst je Beschäftigten), in der
+  App umschaltbar. Die theoretische Zinslast je Einwohner:in wird zusätzlich als
+  Prozentsatz der gewählten Einkommensgröße ausgewiesen.
+* ⬜ Für Russland liegt weder das verfügbare Haushaltseinkommen (derzeit ersatzweise
+  BNE je Einwohner:in der Weltbank) noch der Bruttoverdienst automatisch abrufbar
+  vor; dafür wäre ein Rosstat-Abruf mit API-Key beziehungsweise ein manueller
+  Export nötig.
 
 Abnahmekriterien: Mindestens Deutschland, Frankreich, Italien, Spanien, USA und
 Russland sind auswählbar; Herkunft und Datenstand jeder Reihe sind sichtbar; für
-europäische Länder liegen Schuldenquote, Zinsquote, Zins je Einwohner:in,
-theoretische Zinslast, Inflation und Realzins vor.
+alle Länder liegen Schuldenquote, Zinsquote, Zins je Einwohner:in, theoretische
+Zinslast, Inflation und Realzins vor.
 
 ## Stufe 4 – Wirtschafts- und Geldindikatoren ✅
 
