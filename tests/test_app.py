@@ -202,3 +202,15 @@ def test_streamlit_pages_run_without_exception(script: str) -> None:
     test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=180)
     test.run()
     assert not test.exception, [str(exception.value) for exception in test.exception]
+
+
+def test_bund_yield_chart_can_hide_inflation_axis() -> None:
+    from streamlit.testing.v1 import AppTest
+
+    test = AppTest.from_file(
+        str(Path(APP_DIR) / "pages/6_Haushalt_und_Zinsen.py"), default_timeout=180
+    )
+    test.run()
+    assert test.toggle, "Inflations-Schalter fehlt"
+    test.toggle[0].set_value(False).run()
+    assert not test.exception, [str(exception.value) for exception in test.exception]

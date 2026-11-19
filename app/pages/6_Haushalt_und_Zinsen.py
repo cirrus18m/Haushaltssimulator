@@ -24,6 +24,7 @@ total = household[household["sector"] == "S13"].dropna(subset=["einnahmen_mio_eu
 total = total.sort_values("jahr").reset_index(drop=True)
 zinslast = ui.interest_burden()
 daily_yield = ui.bund_yield()
+inflation = ui.purchasing_power()
 
 if total.empty or zinslast.empty:
     st.warning("Keine Daten gefunden. Bitte `uv run scripts/build_data.py` ausführen.")
@@ -174,21 +175,46 @@ st.markdown(
 
 monatsrendite = daily_yield.groupby("monat", as_index=False)["rendite_pct"].mean()
 monatsrendite["datum"] = pd.to_datetime(monatsrendite["monat"])
+inflation = inflation[inflation["monat"] >= daily_yield["monat"].min()]
 
 st.subheader("Rendite der 10-jährigen Bundesanleihe (Monatsmittel)")
-figure = go.Figure(
-    go.Scatter(
-        x=monatsrendite["datum"],
-        y=monatsrendite["rendite_pct"],
-        name="Monatsmittel der Tagesrendite",
-        line={"color": "#1f4e79", "width": 2},
-        hovertemplate="%{x|%m.%Y}: %{y:.2f} %<extra></extra>",
-    )
+zeige_inflation = st.toggle(
+    "Inflation (HVPI) auf zweiter Achse anzeigen",
+    value=not inflation.empty,
+    disabled=inflation.empty,
+    key="zins_bund_inflation",
 )
+
+rendite = go.Scatter(
+    x=monatsrendite["datum"],
+    y=monatsrendite["rendite_pct"],
+    name="Monatsmittel der Tagesrendite",
+    line={"color": "#1f4e79", "width": 2},
+    hovertemplate="%{x|%m.%Y}: %{y:.2f} %<extra></extra>",
+)
+if zeige_inflation:
+    figure = make_subplots(specs=[[{"secondary_y": True}]])
+    figure.add_trace(rendite, secondary_y=False)
+    figure.add_trace(
+        go.Scatter(
+            x=pd.to_datetime(inflation["monat"]),
+            y=inflation["inflation_de_pct"],
+            name="Inflation Deutschland (HVPI)",
+            line={"color": "#c9a227", "width": 2},
+            hovertemplate="%{x|%m.%Y}: %{y:.1f} %<extra>Inflation</extra>",
+        ),
+        secondary_y=True,
+    )
+    figure.update_yaxes(title_text="Rendite in %", secondary_y=False)
+    figure.update_yaxes(title_text="Inflation in %", secondary_y=True)
+else:
+    figure = go.Figure(rendite)
+    figure.update_yaxes(title_text="Rendite in %")
+
 for label, datum, hoehe, anker in (
     ("Lehman-Pleite", "2008-09-15", 0.02, "left"),
     ("Corona", "2020-03-16", 0.02, "left"),
-    ("Russland", "2022-03-02", 0.02, "left"),
+    ("Russland Sanktionen", "2022-03-02", 0.14, "left"),
     ("Hormus", "2026-02-28", 0.02, "right"),
 ):
     figure.add_vline(
@@ -204,16 +230,19 @@ for label, datum, hoehe, anker in (
         textangle=-90,
         xanchor=anker,
         yanchor="bottom",
-        font={"size": 10, "color": "#b03a2e"},
+        font={"size": 9, "color": "#b03a2e"},
+        bgcolor="rgba(255,255,255,0.85)",
+        borderpad=1,
     )
 figure.add_hline(y=0, line={"color": "#999", "width": 1})
-figure.update_yaxes(title_text="Rendite in %")
 ui.plot(figure, filename="zins_bund_10j_monatlich", height=480)
 st.caption(
-    "Monatsmittel der Tagesrenditen (Deutsche Bundesbank). Die gestrichelten Linien "
-    "markieren: Lehman-Pleite (15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), "
-    "Beginn der Russland-Sanktionen (02.03.2022) und die Schließung der Straße von "
-    "Hormus nach dem Angriff der USA und Israels auf den Iran (28.02.2026)."
+    "Monatsmittel der Tagesrenditen (Deutsche Bundesbank), Inflation als "
+    "Vorjahresrate des HVPI für Deutschland (EZB ICP, bis Dezember 2025). Die "
+    "gestrichelten Linien markieren: Lehman-Pleite (15.09.2008), Beginn der "
+    "Corona-Shutdowns (16.03.2020), Beginn der Russland-Sanktionen (02.03.2022) und "
+    "die Schließung der Straße von Hormus nach dem Angriff der USA und Israels auf "
+    "den Iran (28.02.2026)."
 )
 
 latest_yield = daily_yield.iloc[-1]
