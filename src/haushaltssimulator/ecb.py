@@ -20,6 +20,19 @@ def parse_exr_csv(raw: bytes) -> pd.DataFrame:
     return result.dropna().drop_duplicates(subset="jahr", keep="last").sort_values("jahr")
 
 
+def parse_exr_daily_csv(raw: bytes) -> pd.DataFrame:
+    """Liest Tageskurse eines Wechselkurses aus dem EZB-Export."""
+    frame = pd.read_csv(io.BytesIO(raw))
+    if not {"TIME_PERIOD", "OBS_VALUE"}.issubset(frame.columns):
+        raise ValueError("EZB-Export enthält TIME_PERIOD oder OBS_VALUE nicht")
+    result = frame[["TIME_PERIOD", "OBS_VALUE"]].rename(
+        columns={"TIME_PERIOD": "datum", "OBS_VALUE": "usd_je_eur"}
+    )
+    result["datum"] = pd.to_datetime(result["datum"], errors="coerce")
+    result["usd_je_eur"] = pd.to_numeric(result["usd_je_eur"], errors="coerce")
+    return result.dropna().drop_duplicates(subset="datum", keep="last").sort_values("datum")
+
+
 def parse_csv(raw: bytes) -> pd.DataFrame:
     """Liest Zeitreihen aus dem CSV-Export des ECB Data Portals.
 

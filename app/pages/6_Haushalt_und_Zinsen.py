@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
@@ -169,6 +170,50 @@ st.header("3. Zinslast")
 st.markdown(
     "Die 10-jährige Bundesanleihe ist der Referenzzins für die Refinanzierung des Bundes. "
     "Multipliziert mit dem gesamten Schuldenstand ergibt sie die theoretische Zinslast."
+)
+
+monatsrendite = daily_yield.groupby("monat", as_index=False)["rendite_pct"].mean()
+monatsrendite["datum"] = pd.to_datetime(monatsrendite["monat"])
+
+st.subheader("Rendite der 10-jährigen Bundesanleihe (Monatsmittel)")
+figure = go.Figure(
+    go.Scatter(
+        x=monatsrendite["datum"],
+        y=monatsrendite["rendite_pct"],
+        name="Monatsmittel der Tagesrendite",
+        line={"color": "#1f4e79", "width": 2},
+        hovertemplate="%{x|%m.%Y}: %{y:.2f} %<extra></extra>",
+    )
+)
+for label, datum, hoehe, anker in (
+    ("Lehman-Pleite", "2008-09-15", 0.02, "left"),
+    ("Corona", "2020-03-16", 0.02, "left"),
+    ("Russland", "2022-03-02", 0.02, "left"),
+    ("Hormus", "2026-02-28", 0.02, "right"),
+):
+    figure.add_vline(
+        x=pd.Timestamp(datum),
+        line={"color": "#b03a2e", "width": 1, "dash": "dot"},
+    )
+    figure.add_annotation(
+        x=pd.Timestamp(datum),
+        y=hoehe,
+        yref="paper",
+        text=label,
+        showarrow=False,
+        textangle=-90,
+        xanchor=anker,
+        yanchor="bottom",
+        font={"size": 10, "color": "#b03a2e"},
+    )
+figure.add_hline(y=0, line={"color": "#999", "width": 1})
+figure.update_yaxes(title_text="Rendite in %")
+ui.plot(figure, filename="zins_bund_10j_monatlich", height=480)
+st.caption(
+    "Monatsmittel der Tagesrenditen (Deutsche Bundesbank). Die gestrichelten Linien "
+    "markieren: Lehman-Pleite (15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), "
+    "Beginn der Russland-Sanktionen (02.03.2022) und die Schließung der Straße von "
+    "Hormus nach dem Angriff der USA und Israels auf den Iran (28.02.2026)."
 )
 
 latest_yield = daily_yield.iloc[-1]

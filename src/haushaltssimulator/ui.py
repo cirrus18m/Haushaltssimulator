@@ -176,6 +176,36 @@ def laender_income() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def gdp_germany() -> pd.DataFrame:
+    return dataset.load_gdp_germany()
+
+
+@st.cache_data(show_spinner=False)
+def gdp_growth() -> pd.DataFrame:
+    return dataset.load_gdp_growth()
+
+
+@st.cache_data(show_spinner=False)
+def investments() -> pd.DataFrame:
+    return dataset.load_investments()
+
+
+@st.cache_data(show_spinner=False)
+def production_germany() -> pd.DataFrame:
+    return dataset.load_production_germany()
+
+
+@st.cache_data(show_spinner=False)
+def production_comparison() -> pd.DataFrame:
+    return dataset.load_production_comparison()
+
+
+@st.cache_data(show_spinner=False)
+def energy_markets() -> pd.DataFrame:
+    return dataset.load_energy_markets()
+
+
+@st.cache_data(show_spinner=False)
 def sources_library() -> dict:
     """Quellenbibliothek mit URLs, Lizenzen, Prüfsummen und Abrufzeitpunkten."""
     return sources.read_library()
@@ -194,6 +224,27 @@ def format_timestamp(value: str | None) -> str:
     if not value:
         return "unbekannt"
     return datetime.fromisoformat(value).astimezone().strftime("%d.%m.%Y, %H:%M Uhr")
+
+
+MONATSNAMEN = (
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
+)
+
+
+def format_month(value: str) -> str:
+    """Formatiert einen Monat ``JJJJ-MM`` in deutscher Schreibweise."""
+    return f"{MONATSNAMEN[int(value[5:7]) - 1]} {value[:4]}"
 
 
 def format_number(value: float, decimals: int = 1, unit: str = "") -> str:

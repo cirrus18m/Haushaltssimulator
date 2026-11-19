@@ -31,6 +31,12 @@ LAENDER_DEBT = "laender_schulden_jahr.csv"
 LAENDER_BUDGET = "laender_haushalt_jahr.csv"
 LAENDER_INFLATION = "laender_inflation_monat.csv"
 LAENDER_INCOME = "laender_einkommen_jahr.csv"
+GDP_GERMANY = "bip_deutschland_jahr.csv"
+GDP_GROWTH = "bip_wachstum_jahr.csv"
+INVESTMENTS = "investitionen_jahr.csv"
+PRODUCTION_GERMANY = "produktion_deutschland_monat.csv"
+PRODUCTION_COMPARISON = "produktion_vergleich_monat.csv"
+ENERGY_MARKETS = "energie_maerkte_monat.csv"
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -57,6 +63,12 @@ DATASET_LABELS = {
     LAENDER_BUDGET: "Einnahmen und Zinsausgaben im Ländervergleich",
     LAENDER_INFLATION: "Inflationsraten im Ländervergleich",
     LAENDER_INCOME: "Durchschnittseinkommen im Ländervergleich",
+    GDP_GERMANY: "BIP, realer Index und Wachstum Deutschlands",
+    GDP_GROWTH: "Reales BIP-Wachstum im Ländervergleich",
+    INVESTMENTS: "Private und staatliche Investitionen",
+    PRODUCTION_GERMANY: "Produktionsindex des Verarbeitenden Gewerbes",
+    PRODUCTION_COMPARISON: "Produktionsindex im Ländervergleich",
+    ENERGY_MARKETS: "Heizöl, Gas und Brent-Rohöl im Monatsvergleich",
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -197,3 +209,33 @@ def load_laender_income(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 def load_bund_interest(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     """Zinsausgaben des Bundes am Kreditmarkt je Haushaltsjahr."""
     return _read(BUND_INTEREST, processed_dir)
+
+
+def load_gdp_germany(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """BIP, realer Kettenindex und Wachstumsraten Deutschlands je Jahr (Destatis)."""
+    return _read(GDP_GERMANY, processed_dir)
+
+
+def load_gdp_growth(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Reales BIP-Wachstum je Land und Jahr (Eurostat, USA und Russland: IWF)."""
+    return _read(GDP_GROWTH, processed_dir)
+
+
+def load_investments(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Bruttoanlageinvestitionen von Staat und nichtstaatlichen Sektoren (Destatis)."""
+    return _read(INVESTMENTS, processed_dir)
+
+
+def load_production_germany(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Monatlicher Produktionsindex des Verarbeitenden Gewerbes (Destatis)."""
+    return _read(PRODUCTION_GERMANY, processed_dir)
+
+
+def load_production_comparison(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Monatlicher Produktionsindex des Verarbeitenden Gewerbes je Land (Eurostat)."""
+    return _read(PRODUCTION_COMPARISON, processed_dir)
+
+
+def load_energy_markets(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Monatspreise für Heizöl, Gas und Brent-Rohöl, jeweils auch in ct/kWh."""
+    return _read(ENERGY_MARKETS, processed_dir)
