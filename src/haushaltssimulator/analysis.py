@@ -165,3 +165,28 @@ def simulate_debt_ratio(
         schulden *= 1 + schuldenwachstum_pct / 100
         bip *= 1 + bip_wachstum_pct / 100
     return pd.DataFrame.from_records(records)
+
+
+def linear_trend(
+    frame: pd.DataFrame,
+    value_column: str,
+    *,
+    fit_end: str,
+    date_column: str = "monat",
+) -> pd.Series:
+    """Lineare Regression bis ``fit_end``, für alle Zeilen fortgeschrieben.
+
+    Die Regressionsgerade wird über die Monatswerte bis einschließlich ``fit_end``
+    geschätzt und anschließend über den gesamten Zeitraum extrapoliert. Die Steigung
+    entspricht dem durchschnittlichen Zuwachs je Jahr in Einheiten der Wertspalte.
+    """
+    dates = pd.to_datetime(frame[date_column])
+    x = (dates - dates.min()).dt.days / 365.25
+    fit = dates <= pd.Timestamp(fit_end)
+    x_fit = x[fit]
+    y_fit = frame.loc[fit, value_column]
+    if len(x_fit) < 2 or x_fit.var() == 0:
+        raise ValueError("Für den Trend sind mindestens zwei verschiedene Zeitpunkte nötig")
+    slope = x_fit.cov(y_fit) / x_fit.var()
+    intercept = y_fit.mean() - slope * x_fit.mean()
+    return intercept + slope * x

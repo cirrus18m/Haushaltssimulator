@@ -196,6 +196,11 @@ def production_germany() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def production_germany_long() -> pd.DataFrame:
+    return dataset.load_production_germany_long()
+
+
+@st.cache_data(show_spinner=False)
 def production_comparison() -> pd.DataFrame:
     return dataset.load_production_comparison()
 

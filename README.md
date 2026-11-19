@@ -64,7 +64,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Energiepreise** | Strom- und Gaspreise für Haushalte, Börsenstrompreis, Kraftstoffe im EU-Vergleich, Heizöl sowie regionale Gas- und Öl-Benchmarks (TTF, JKM, Henry Hub; Brent, WTI, Dubai) |
 | **Preisniveau & Wohnen** | Big-Mac-Index und Eigentumsquote in Europa |
 | **Bund & Schuldendienst** | Zinsausgaben und Schuldenstand des Bundes, Planwerte aus dem Bundeshaushalt |
-| **Wirtschaft** | Reales BIP-Wachstum, Produktion im Verarbeitenden Gewerbe und private/staatliche Investitionen, jeweils mit Ländervergleich |
+| **Wirtschaft** | Reales BIP-Wachstum, Produktion im Verarbeitenden Gewerbe, Industrieproduktion im langfristigen Trend sowie private/staatliche Investitionen |
 
 ## Projektstruktur
 
@@ -130,7 +130,7 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Destatis 81000-0025](https://www-genesis.destatis.de/datenbank/online/statistic/81000/table/81000-0025) | Bruttoanlageinvestitionen des Staates und der nichtstaatlichen Sektoren | DL-DE-BY-2.0 |
 | [Destatis 42153-0001](https://www-genesis.destatis.de/datenbank/online/statistic/42153/table/42153-0001) | Produktionsindex des Verarbeitenden Gewerbes, Monate | DL-DE-BY-2.0 |
 | [Eurostat `nama_10_gdp`](https://ec.europa.eu/eurostat/databrowser/view/nama_10_gdp/default/table) | Reales BIP-Wachstum der europäischen Länder, jährlich | CC BY 4.0 |
-| [Eurostat `sts_inpr_m`](https://ec.europa.eu/eurostat/databrowser/view/sts_inpr_m/default/table) | Produktionsindex des Verarbeitenden Gewerbes, monatlich | CC BY 4.0 |
+| [Eurostat `sts_inpr_m`](https://ec.europa.eu/eurostat/databrowser/view/sts_inpr_m/default/table) | Produktionsindex des Verarbeitenden Gewerbes und der Industrie (NACE B-D), monatlich ab 1993 | CC BY 4.0 |
 | [EZB BSI](https://data.ecb.europa.eu/data/datasets/BSI) | Geldmenge M3, monatlich | Quellenangabe erforderlich |
 | [EZB ICP](https://data.ecb.europa.eu/data/datasets/ICP) | Harmonisierter Verbraucherpreisindex, monatlich | Quellenangabe erforderlich |
 | [Destatis 61243-0002](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0002) | Strompreise für Haushalte, Jahre | DL-DE-BY-2.0 |

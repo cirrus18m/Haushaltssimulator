@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-19T21:05:33+00:00",
+  "aktualisiert_am": "2026-11-19T21:53:17+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -746,6 +746,21 @@
       "abgerufen_am": "2026-11-19T20:13:20+00:00",
       "sha256": "fdf997cbc6509adb99372354e619ae5ab4d605906c2b3b00330e7b1f44c9e62c",
       "bytes": 138085
+    },
+    {
+      "key": "eurostat_produktion_deutschland",
+      "titel": "Produktionsindex der Industrie: Deutschland, monatlich",
+      "herausgeber": "Eurostat, Datensatz sts_inpr_m",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sts_inpr_m?format=JSON&lang=EN&geo=DE&nace_r2=B-D&s_adj=SCA&unit=I21&sinceTimePeriod=1993-01",
+      "beschreibung": "Eurostat sts_inpr_m: Produktionsindex der Industrie ohne Baugewerbe (NACE B-D), kalender- und saisonbereinigt, Index 2021=100, monatlich ab 1993; der Datenaufbau rechnet auf 2015=100 um",
+      "datei": "eurostat_sts_inpr_m_deutschland.json",
+      "datensaetze": [
+        "produktion_deutschland_lang.csv"
+      ],
+      "abgerufen_am": "2026-11-19T21:51:58+00:00",
+      "sha256": "1005dbbc3d32b723ac0ba4846782fadfcd2bf1c084c5ea822a6db3ebaee793ce",
+      "bytes": 21945
     },
     {
       "key": "bmf_zinsausgaben",

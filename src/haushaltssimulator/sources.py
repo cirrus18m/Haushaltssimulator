@@ -972,6 +972,29 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="eurostat_produktion_deutschland",
+        filename="eurostat_sts_inpr_m_deutschland.json",
+        url=_eurostat(
+            "sts_inpr_m",
+            format="JSON",
+            lang="EN",
+            geo="DE",
+            nace_r2="B-D",
+            s_adj="SCA",
+            unit="I21",
+            sinceTimePeriod="1993-01",
+        ),
+        title="Produktionsindex der Industrie: Deutschland, monatlich",
+        publisher="Eurostat, Datensatz sts_inpr_m",
+        license="CC BY 4.0",
+        datasets=("produktion_deutschland_lang.csv",),
+        description=(
+            "Eurostat sts_inpr_m: Produktionsindex der Industrie ohne Baugewerbe "
+            "(NACE B-D), kalender- und saisonbereinigt, Index 2021=100, monatlich "
+            "ab 1993; der Datenaufbau rechnet auf 2015=100 um"
+        ),
+    ),
+    Source(
         key="bmf_zinsausgaben",
         filename="bmf_zinsausgaben_kreditmarkt.csv",
         url=BMF_INTEREST_URL,

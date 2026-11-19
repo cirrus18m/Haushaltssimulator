@@ -1,4 +1,4 @@
-"""Wirtschaft: BIP-Wachstum, Produktion im Verarbeitenden Gewerbe und Investitionen."""
+"""Wirtschaft: BIP-Wachstum, Produktion, Industrieproduktion und Investitionen."""
 
 from __future__ import annotations
 
@@ -10,16 +10,17 @@ from haushaltssimulator import ui
 
 st.title("Wirtschaft")
 st.markdown(
-    "Reales Wirtschaftswachstum, die Produktion im Verarbeitenden Gewerbe und die "
-    "Investitionen von Staat und privaten Sektoren. Die deutschen Werte stammen vom "
-    "Statistischen Bundesamt, der Ländervergleich von Eurostat; für die USA und "
-    "Russland ergänzt der IWF die Reihen."
+    "Reales Wirtschaftswachstum, die Produktion im Verarbeitenden Gewerbe, die "
+    "Industrieproduktion im langfristigen Trend und die Investitionen von Staat und "
+    "privaten Sektoren. Die deutschen Werte stammen vom Statistischen Bundesamt, der "
+    "Ländervergleich von Eurostat; für die USA und Russland ergänzt der IWF die Reihen."
 )
 
 bip_deutschland = ui.gdp_germany()
 bip_wachstum = ui.gdp_growth()
 investitionen = ui.investments()
 produktion = ui.production_germany()
+produktion_lang = ui.production_germany_long()
 produktion_vergleich = ui.production_comparison()
 retrieved = ui.data_retrieved_at()
 
@@ -242,7 +243,119 @@ else:
             "saisonbereinigt, 2021 = 100 (Eurostat `sts_inpr_m`)."
         )
 
-st.header("3. Private und staatliche Investitionen")
+st.header("3. Industrieproduktion und langfristiger Trend")
+st.markdown(
+    "Der Produktionsindex der Industrie ohne Baugewerbe in Deutschland, kalender- und "
+    "saisonbereinigt, 2015 = 100. Die gestrichelte Linie ist der lineare Langfristtrend "
+    "aus dem Zeitraum 1993–2017, fortgeschrieben bis Februar 2026. Die rote Fläche "
+    "zeigt, wie weit die tatsächliche Produktion hinter diesem Trend zurückbleibt."
+)
+
+lang = produktion_lang[produktion_lang["monat"] <= "2026-02"].reset_index(drop=True)
+if lang.empty:
+    st.info("Für die Industrieproduktion liegen keine Daten vor.")
+else:
+    letzte_lang = lang.iloc[-1]
+    columns = st.columns(3)
+    columns[0].metric(
+        "Industrieproduktion Feb 2026",
+        ui.format_number(letzte_lang["index_2015"], 1),
+        "2015 = 100",
+        delta_color="off",
+    )
+    columns[1].metric(
+        "Langfristtrend",
+        ui.format_number(letzte_lang["trend_2015"], 1),
+        "Wachstum 1993–2017",
+        delta_color="off",
+    )
+    columns[2].metric(
+        "Abweichung vom Trend",
+        f"{ui.format_number(letzte_lang['abweichung_pct'], 1)} %",
+        "unter dem Trend",
+        delta_color="inverse",
+    )
+
+    figure = go.Figure()
+    figure.add_trace(
+        go.Scatter(
+            x=pd.to_datetime(lang["monat"]),
+            y=lang["trend_2015"],
+            name="Langfristtrend (1993–2017)",
+            line={"color": "#7f7f7f", "width": 2, "dash": "dash"},
+            hovertemplate="%{x|%m.%Y}: %{y:.1f}<extra>Trend</extra>",
+        )
+    )
+    figure.add_trace(
+        go.Scatter(
+            x=pd.to_datetime(lang["monat"]),
+            y=lang["index_2015"],
+            name="Tatsächliche Produktion",
+            line={"color": "#1f4e79", "width": 3},
+            hovertemplate="%{x|%m.%Y}: %{y:.1f}<extra>Produktion</extra>",
+        )
+    )
+    schatten = lang.copy()
+    schatten["luecke"] = lang["index_2015"].where(
+        (lang["monat"] < "2018-01") | (lang["index_2015"] >= lang["trend_2015"]),
+        lang["trend_2015"],
+    )
+    figure.add_trace(
+        go.Scatter(
+            x=pd.to_datetime(schatten["monat"]),
+            y=schatten["luecke"],
+            name="Abweichung vom Trend",
+            line={"width": 0},
+            fill="tonexty",
+            fillcolor="rgba(176,58,46,0.15)",
+            hoverinfo="skip",
+            showlegend=False,
+        )
+    )
+    figure.add_annotation(
+        x=pd.to_datetime(letzte_lang["monat"]),
+        y=letzte_lang["index_2015"],
+        text=(
+            f"<b>Feb 2026</b><br>"
+            f"{ui.format_number(abs(letzte_lang['abweichung_pct']), 0)} % unter dem Trend"
+        ),
+        showarrow=True,
+        arrowhead=2,
+        ax=-10,
+        ay=-70,
+        xanchor="right",
+        align="right",
+        font={"color": "#b03a2e", "size": 12},
+        bgcolor="rgba(255,255,255,0.9)",
+        bordercolor="#b03a2e",
+        borderwidth=1,
+    )
+    figure.update_yaxes(title_text="Index 2015 = 100")
+    figure.update_xaxes(title_text="Jahr")
+    ui.plot(figure, filename="industrieproduktion_langfristtrend", height=480)
+    st.caption(
+        "Produktionsindex der Industrie ohne Baugewerbe (NACE B-D), kalender- und "
+        "saisonbereinigt, 2015 = 100 (Eurostat `sts_inpr_m`, auf 2015 = 100 umbasiert). "
+        "Der Trend ist eine lineare Regression über Januar 1993 bis Dezember 2017, "
+        "fortgeschrieben bis Februar 2026. Die rote Fläche markiert die Unterschreitung "
+        "des Trends."
+    )
+
+    with st.expander("Datenlage und Trendberechnung"):
+        st.markdown(
+            "Die im Bild genannte FRED-Serie `IPG101DEUQ` ist bei FRED nicht abrufbar "
+            "(HTTP 404). Die App nutzt deshalb den amtlichen monatlichen "
+            "Produktionsindex der Industrie aus Eurostat `sts_inpr_m` (NACE B-D, "
+            "kalender- und saisonbereinigt). Eurostat liefert die Reihe als Index "
+            "2021 = 100; der Datenaufbau rechnet sie mit dem Jahresmittel 2015 auf "
+            "2015 = 100 um.\n\n"
+            "Der Trend ist eine lineare Regression über die Monatswerte von Januar "
+            "1993 bis Dezember 2017, fortgeschrieben bis Februar 2026. Die Abweichung "
+            "ist die Differenz zwischen tatsächlichem Index und Trend in Prozent des "
+            "Trends."
+        )
+
+st.header("4. Private und staatliche Investitionen")
 letztes_jahr = int(investitionen["jahr"].max())
 staat = investitionen[
     (investitionen["jahr"] == letztes_jahr) & (investitionen["sektor"] == "Staat")
@@ -383,7 +496,8 @@ with st.expander("Datenlage und Abgrenzung"):
 st.caption(
     "Quellen: Statistisches Bundesamt, GENESIS-Online 81000-0001 (BIP), 81000-0025 "
     "(Investitionen) und 42153-0001 (Produktionsindex); Eurostat `nama_10_gdp` "
-    "(BIP-Wachstum) und `sts_inpr_m` (Produktionsindex im Ländervergleich); IWF "
+    "(BIP-Wachstum) und `sts_inpr_m` (Produktionsindizes im Ländervergleich und "
+    "langfristige Industrieproduktion); IWF "
     "World Economic Outlook für USA und Russland."
     + (f" Datenabruf: {retrieved:%d.%m.%Y}. " if retrieved else "")
 )

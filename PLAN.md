@@ -142,8 +142,10 @@ Ideen aus [TODO.md](TODO.md), umgesetzt als sechs Seiten mit eigenen Quellen:
   BMF-Zinsausgaben am Kreditmarkt.
 * ✅ **Wirtschaft** – reales BIP-Wachstum (Destatis 81000-0001, Eurostat `nama_10_gdp`,
   IWF-WEO für USA und Russland), Produktionsindex des Verarbeitenden Gewerbes
-  (Destatis 42153-0001, Eurostat `sts_inpr_m`) sowie private und staatliche
-  Bruttoanlageinvestitionen (Destatis 81000-0025) mit Investitionsquote zum BIP.
+  (Destatis 42153-0001, Eurostat `sts_inpr_m`), langfristige Industrieproduktion
+  mit Trend 1993–2017 (Eurostat `sts_inpr_m`, NACE B-D) sowie private und
+  staatliche Bruttoanlageinvestitionen (Destatis 81000-0025) mit Investitionsquote
+  zum BIP.
 
 Offene Punkte dieser Stufe:
 

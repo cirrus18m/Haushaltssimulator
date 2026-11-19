@@ -35,6 +35,7 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `bip_wachstum_jahr.csv` | Reales BIP-Wachstum im Ländervergleich | Eurostat `nama_10_gdp`; IWF WEO für USA und Russland | 1995–2025 |
 | `investitionen_jahr.csv` | Private und staatliche Bruttoanlageinvestitionen | Destatis 81000-0025, 81000-0001 | 2016–2025 |
 | `produktion_deutschland_monat.csv` | Produktionsindex des Verarbeitenden Gewerbes | Destatis 42153-0001 | 2025-01–2026-09 |
+| `produktion_deutschland_lang.csv` | Industrieproduktion mit Langfristtrend | Eurostat `sts_inpr_m` | 1993-01–2026-09 |
 | `produktion_vergleich_monat.csv` | Produktionsindex im Ländervergleich | Eurostat `sts_inpr_m` | 1995-01–2026-09 |
 | `energie_maerkte_monat.csv` | Heizöl sowie regionale Gas- und Öl-Benchmarks | EU Weekly Oil Bulletin; IWF und EIA über FRED; EZB | 1999-01–2026-11 |
 
@@ -252,6 +253,20 @@ Die Reihe enthält nur Ist-Jahre; Prognosejahre des IWF werden nicht übernommen
 | `index_2021_saisonbereinigt` | kalender- und saisonbereinigt (X13 JDemetra+) |
 | `index_2021_bv4_saisonbereinigt` | kalender- und saisonbereinigt (BV4.1), soweit berichtet |
 | `index_2021_trend` | BV4.1-Trend |
+
+**`produktion_deutschland_lang.csv`**
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat (`JJJJ-MM`) |
+| `jahr` | Berichtsjahr |
+| `index_2015` | Produktionsindex der Industrie ohne Baugewerbe (NACE B-D), kalender- und saisonbereinigt, 2015 = 100 |
+| `trend_2015` | linearer Langfristtrend aus Januar 1993 bis Dezember 2017, fortgeschrieben |
+| `abweichung_pct` | Abweichung des Index vom Trend in Prozent des Trends |
+
+Die Reihe stammt aus Eurostat `sts_inpr_m` (Index 2021 = 100) und wird mit dem
+Jahresmittel 2015 auf 2015 = 100 umbasiert. Der Trend ist eine lineare Regression
+über die Monatswerte bis Dezember 2017.
 
 **`produktion_vergleich_monat.csv`** – `monat`, `geo`, `land`, `index_2021`
 (kalender- und saisonbereinigt, 2021 = 100), `quelle`, `quelle_key`.

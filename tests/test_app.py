@@ -130,6 +130,19 @@ def test_investments_split_state_and_private() -> None:
     assert frame["anteil_bip_pct"].between(0, 30).all()
 
 
+def test_long_production_index_has_trend_and_gap() -> None:
+    frame = dataset.load_production_germany_long()
+    assert frame["monat"].min() <= "1993-01"
+    assert frame["monat"].max() >= "2026-02"
+    assert frame.loc[frame["jahr"] == 2015, "index_2015"].mean() == pytest.approx(
+        100, abs=0.1
+    )
+    latest = frame[frame["monat"] == "2026-02"].iloc[0]
+    assert 80 < latest["index_2015"] < 95
+    assert latest["trend_2015"] > latest["index_2015"]
+    assert -30 < latest["abweichung_pct"] < -20
+
+
 def test_energy_markets_cover_heizoel_gas_and_brent() -> None:
     frame = dataset.load_energy_markets()
     assert {

@@ -1130,6 +1130,24 @@ def build_produktion_deutschland(raw_dir: Path) -> pd.DataFrame:
     return frame[columns].sort_values("monat").reset_index(drop=True)
 
 
+def build_produktion_deutschland_lang(raw_dir: Path) -> pd.DataFrame:
+    """Langfristiger Produktionsindex der Industrie, 2015=100 (Eurostat)."""
+    frame = eurostat.jsonstat_to_frame(
+        _load_json(raw_dir, "eurostat_sts_inpr_m_deutschland.json")
+    )
+    frame = frame.rename(columns={"time": "monat", "value": "index_2021"})
+    frame["jahr"] = frame["monat"].str[:4].astype(int)
+    basis = frame.loc[frame["jahr"] == 2015, "index_2021"].mean()
+    if pd.isna(basis) or basis <= 0:
+        raise ValueError("Basisfahr 2015 fehlt im Produktionsindex")
+    frame["index_2015"] = frame["index_2021"] / basis * 100
+    frame = frame.sort_values("monat").reset_index(drop=True)
+    frame["trend_2015"] = analysis.linear_trend(frame, "index_2015", fit_end="2017-12")
+    frame["abweichung_pct"] = (frame["index_2015"] / frame["trend_2015"] - 1) * 100
+    columns = ["monat", "jahr", "index_2015", "trend_2015", "abweichung_pct"]
+    return frame[columns]
+
+
 def build_produktion_vergleich(raw_dir: Path) -> pd.DataFrame:
     """Produktionsindex des Verarbeitenden Gewerbes im Ländervergleich (Eurostat)."""
     frame = _laender_eurostat(raw_dir, "eurostat_sts_inpr_m.json", "index_2021")
@@ -1170,6 +1188,7 @@ BUILDERS = {
     "bip_wachstum_jahr.csv": build_bip_wachstum,
     "investitionen_jahr.csv": build_investitionen,
     "produktion_deutschland_monat.csv": build_produktion_deutschland,
+    "produktion_deutschland_lang.csv": build_produktion_deutschland_lang,
     "produktion_vergleich_monat.csv": build_produktion_vergleich,
     "energie_maerkte_monat.csv": build_energy_markets,
 }
@@ -1195,6 +1214,7 @@ FLOAT_FORMATS = {
     "bip_wachstum_jahr.csv": "%.2f",
     "investitionen_jahr.csv": "%.2f",
     "produktion_deutschland_monat.csv": "%.2f",
+    "produktion_deutschland_lang.csv": "%.2f",
     "produktion_vergleich_monat.csv": "%.2f",
     "energie_maerkte_monat.csv": "%.2f",
 }
