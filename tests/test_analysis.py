@@ -57,8 +57,21 @@ def test_monthly_interest_burden_interpolates_and_extrapolates_debt() -> None:
     erwartet = 1_000_000.0 + 200_000.0 * 152 / 365
     assert result.loc["2021-06", "schulden_mio_eur"] == pytest.approx(erwartet)
     assert result.loc["2021-06", "zins_theoretisch_mio_eur"] == pytest.approx(erwartet * 0.02)
-    # Nach dem letzten Jahresende wird der Bestand unverändert fortgeschrieben.
-    assert result.loc["2022-03", "schulden_mio_eur"] == pytest.approx(1_200_000.0)
+    # Nach dem letzten Jahresende wird der Bestand mit dem Trend der letzten beiden
+    # Jahresenden fortgeschrieben: 1.3.2022 liegt 60 Tage nach dem 31.12.2021.
+    assert result.loc["2022-03", "schulden_mio_eur"] == pytest.approx(
+        1_200_000.0 + 200_000.0 * 60 / 365
+    )
+
+
+def test_monthly_interest_burden_keeps_value_without_second_stichtag() -> None:
+    debt = pd.DataFrame({"jahr": [2021], "schulden_mio_eur": [1_000_000.0]})
+    yields = pd.DataFrame({"monat": ["2021-06", "2022-03"], "rendite_pct": [2.0, 3.0]})
+
+    result = analysis.monthly_interest_burden(debt, yields).set_index("monat")
+
+    # Ohne zwei Stichtage gibt es keinen Trend; der Bestand bleibt stehen.
+    assert result.loc["2022-03", "schulden_mio_eur"] == pytest.approx(1_000_000.0)
 
 
 def test_monthly_interest_burden_uses_monthly_mean_yield() -> None:

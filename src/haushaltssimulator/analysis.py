@@ -43,12 +43,14 @@ def with_interest_burden(frame: pd.DataFrame) -> pd.DataFrame:
 def monthly_interest_burden(debt: pd.DataFrame, yields: pd.DataFrame) -> pd.DataFrame:
     """Theoretische Zinslast je Monat aus Schuldenstand und Monatsrendite.
 
-    Der Schuldenstand liegt nur als Jahresendbestand vor. Er wird linear zwischen den
-    Jahresenden interpoliert, über den letzten bekannten Stichtag hinaus unverändert
-    fortgeschrieben und mit dem Monatsmittel der Rendite verzinst. Jeder Monatswert
-    ist damit die auf ein Jahr hochgerechnete Last, die der Schuldenstand beim
-    Monatsmittel der Rendite kosten würde. Das Ergebnis ist eine Modellrechnung und
-    nicht mit den tatsächlich gebuchten Zinsausgaben gleichzusetzen.
+    Der Schuldenstand liegt nur als Jahresendbestand vor und wird linear zwischen den
+    Jahresenden interpoliert. Über den letzten Stichtag hinaus wird er mit dem Trend
+    der letzten beiden Jahresenden bis zum letzten Renditemonat fortgeschrieben – eine
+    konstante Festschreibung würde einen ganzen Jahresverlauf mit dem Vorjahreswert
+    belegen. Verzinst wird mit dem Monatsmittel der Rendite; jeder Monatswert ist damit
+    die auf ein Jahr hochgerechnete Last, die der Schuldenstand beim damaligen
+    Marktzins kosten würde. Das Ergebnis ist eine Modellrechnung und nicht mit den
+    tatsächlich gebuchten Zinsausgaben gleichzusetzen.
     """
     monatsrendite = (
         yields.dropna(subset=["rendite_pct"])
@@ -64,9 +66,20 @@ def monthly_interest_burden(debt: pd.DataFrame, yields: pd.DataFrame) -> pd.Data
         index=jahresende.to_numpy(),
     ).sort_index()
 
-    monate = pd.to_datetime(monatsrendite["monat"] + "-01")
+    monate = pd.DatetimeIndex(monatsrendite["monat"] + "-01")
     reihe = bestand.reindex(bestand.index.union(monate)).interpolate(method="time")
     reihe = reihe.ffill().bfill()
+
+    if len(bestand) >= 2:
+        letzter_stichtag = bestand.index[-1]
+        steigung = (bestand.iloc[-1] - bestand.iloc[-2]) / (
+            (bestand.index[-1] - bestand.index[-2]).days
+        )
+        fortschreibung = monate[monate > letzter_stichtag]
+        if len(fortschreibung):
+            reihe.loc[fortschreibung] = bestand.iloc[-1] + steigung * (
+                fortschreibung - letzter_stichtag
+            ).days
 
     result = monatsrendite.assign(
         datum=monate.to_numpy(),

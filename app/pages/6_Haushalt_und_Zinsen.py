@@ -59,8 +59,8 @@ st.markdown(
     "Die 10-jährige Bundesanleihe ist der Referenzzins für die Refinanzierung des Bundes. "
     "Multipliziert mit dem gesamten Schuldenstand ergibt sie die theoretische Zinslast. "
     "Der Schuldenstand ist nur zum Jahresende verfügbar; für die Monatsrechnung wird er "
-    "zwischen den Jahresenden interpoliert und ab dem letzten Jahresende unverändert "
-    "fortgeschrieben."
+    "zwischen den Jahresenden interpoliert und ab dem letzten Jahresende mit dem Trend "
+    "der letzten beiden Stichtage bis zum letzten Renditemonat fortgeschrieben."
 )
 
 monatsrendite = daily_yield.groupby("monat", as_index=False)["rendite_pct"].mean()
@@ -189,7 +189,7 @@ figure.add_trace(
     go.Scatter(
         x=monatszinslast["datum"],
         y=monatszinslast["schulden_mio_eur"] / 1000,
-        name="Schuldenstand im Monatsraster (interpoliert)",
+        name="Schuldenstand im Monatsraster (interpoliert, danach fortgeschrieben)",
         line={"color": "#0f766e", "width": 2},
         hovertemplate="%{x|%m.%Y}: %{y:,.0f} Mrd. €<extra></extra>",
     ),
@@ -208,9 +208,10 @@ figure.add_trace(
     row=3,
     col=1,
 )
+# Der schattierte Bereich markiert die Fortschreibung hinter dem letzten Stichtag.
 figure.add_vrect(
     x0=letzter_stichtag,
-    x1=achse_ende,
+    x1=monatszinslast["datum"].max(),
     fillcolor="#1f4e79",
     opacity=0.08,
     line_width=0,
@@ -287,8 +288,9 @@ st.caption(
     "fortschreibt und nicht die höheren des Gesamtstaats. Unten: der Schuldenstand, aus "
     "dem die Zinslast stammt – die Jahresendbestände des Maastricht-Schuldenstands "
     "(Eurostat, VGR) als Rauten und die daraus linear interpolierte Monatsreihe; der "
-    "schattierte Bereich nach dem letzten Jahresende ist die unveränderte "
-    "Fortschreibung. Alle Teilbilder teilen die Jahresachse, die gestrichelten Marken "
+    "schattierte Bereich nach dem letzten Jahresende ist die Fortschreibung mit dem "
+    "Trend der letzten beiden Stichtage bis zum letzten Renditemonat. Alle Teilbilder "
+    "teilen die Jahresachse, die gestrichelten Marken "
     "gelten in allen Teilbildern: Start der Agenda 2010 (14.03.2003), Lehman-Pleite "
     "(15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), Beginn der "
     "Russland-Sanktionen (02.03.2022) und die Schließung der Straße von Hormus nach dem "
@@ -335,7 +337,8 @@ with st.expander("Berechnung und Abgrenzung"):
         "**Theoretische Zinslast** = interpolierter Schuldenstand × Monatsmittel der "
         "Tagesrendite der aktuellen 10-jährigen Bundesanleihe / 100. Der Schuldenstand ist "
         "nur zum Jahresende verfügbar und wird zwischen den Jahresenden linear "
-        "interpoliert; nach dem letzten Jahresende wird er unverändert fortgeschrieben. "
+        "interpoliert; ab dem letzten Jahresende wird er mit dem Trend der letzten "
+        "beiden Jahresenden bis zum letzten Renditemonat fortgeschrieben. "
         "Jeder Monatswert ist die auf ein Jahr hochgerechnete Last beim damaligen "
         "Marktzins.\n\n"
         "**Effektivzins** = tatsächliche Zinsausgaben / Schuldenstand × 100. Er liegt "

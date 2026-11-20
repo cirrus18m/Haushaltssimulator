@@ -83,9 +83,10 @@ Ziel: Die 10-jährige Bundesanleihe mit dem Schuldenstand verknüpfen.
   Zinsausgaben des Bundes (Drucksache 21/7301, Tabelle 9; manuelle Quelle
   `bund_finanzplan_zinsausgaben`). Die theoretische Zinslast wird monatlich aus dem
   zwischen den Jahresenden interpolierten Schuldenstand und dem Monatsmittel der
-  Rendite gerechnet; der letzte Jahresendbestand wird bis zum letzten Renditemonat
-  fortgeschrieben. Das dritte Teilbild zeigt diesen Recheninput: die Jahresendbestände
-  und die daraus interpolierte Monatsreihe samt schraffierter Fortschreibung.
+  Rendite gerechnet; ab dem letzten Jahresendbestand wird der Trend der letzten beiden
+  Stichtage bis zum letzten Renditemonat fortgeschrieben. Das dritte Teilbild zeigt
+  diesen Recheninput: die Jahresendbestände und die daraus interpolierte Monatsreihe
+  samt schraffierter Fortschreibung.
 
 Abnahmekriterien: Für das letzte Datenjahr existieren theoretische Zinslast in
 Mrd. Euro, in Prozent der Einnahmen und in Prozent des BIP; die Rechenwege sind im
@@ -233,5 +234,6 @@ Ziel: Weitere Datenquellen anbindbar machen, ohne Geheimnisse zu versionieren.
   die Tagesdaten der Bank of Russia (Monatsendwerte). Eine dauerhafte Lösung ist offen.
 * Hinweis: Die theoretische Zinslast ist eine Modellrechnung (gesamter Schuldenstand zur
   aktuellen Rendite) und keine Prognose der tatsächlichen Zinsausgaben. Für die
-  Monatsreihe wird der jahresweise Schuldenstand interpoliert und nach dem letzten
-  Jahresende unverändert fortgeschrieben.
+  Monatsreihe wird der jahresweise Schuldenstand interpoliert und ab dem letzten
+  Jahresende mit dem Trend der letzten beiden Stichtage bis zum letzten Renditemonat
+  fortgeschrieben.
