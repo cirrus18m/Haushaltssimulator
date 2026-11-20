@@ -6,7 +6,7 @@ from datetime import date
 
 import pytest
 
-from haushaltssimulator import bundesbank, cbr, dataset, fred, sources
+from haushaltssimulator import bundesbank, cbr, dataset, ecb, fred, sources
 
 BUNDESBANK_CSV = (
     b'''\xef\xbb\xbf"",BBSSY.D.REN.EUR.A630.000000WT1010.A,'''
@@ -134,3 +134,23 @@ def test_finanzplan_areas_follow_drucksache() -> None:
     digital = frame[frame["einzelplan"] == 24].set_index("jahr")["ausgaben_mrd_eur"]
     assert pytest.approx(1.360) == digital.loc[2026]
     assert digital.loc[2025] != digital.loc[2025]  # NaN
+
+
+ECB_KEY_RATES_CSV = b"""KEY,FREQ,PROVIDER_FM_ID,TIME_PERIOD,OBS_VALUE
+FM.B.U2.EUR.4F.KR.MRR_FR.LEV,B,MRR_FR,2000-06-09,4.25
+FM.B.U2.EUR.4F.KR.MRR_MBR.LEV,B,MRR_MBR,2000-06-28,4.25
+FM.B.U2.EUR.4F.KR.MRR_MBR.LEV,B,MRR_MBR,2008-10-15,
+FM.B.U2.EUR.4F.KR.DFR.LEV,B,DFR,2019-09-18,-0.5
+"""
+
+
+def test_ecb_key_rates_parse_rates_and_skip_missing() -> None:
+    frame = ecb.parse_key_rates_csv(ECB_KEY_RATES_CSV)
+    assert list(frame.columns) == ["satz", "datum", "zins_pct"]
+    assert frame["satz"].tolist() == ["DFR", "MRR_FR", "MRR_MBR"]
+    assert frame["zins_pct"].tolist() == [-0.5, 4.25, 4.25]
+
+
+def test_ecb_key_rates_require_rate_id() -> None:
+    with pytest.raises(ValueError):
+        ecb.parse_key_rates_csv(b"TIME_PERIOD,OBS_VALUE\n2024-01-01,4\n")

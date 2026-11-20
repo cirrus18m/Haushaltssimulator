@@ -590,6 +590,42 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="fred_fed_zielsatz",
+        filename="fred_fed_zielsatz_bis_2008.csv",
+        url=FRED_SERIES_URL.format(series="DFEDTAR"),
+        title="Leitzins der Fed: Federal Funds Target Rate bis 2008, täglich",
+        publisher=(
+            "Board of Governors of the Federal Reserve System über Federal Reserve Bank "
+            "of St. Louis, Serie DFEDTAR"
+        ),
+        license="Federal Reserve, Quellenangabe erforderlich",
+        datasets=("leitzinsen.csv",),
+        fetch_mode="fred_api",
+        api_series="DFEDTAR",
+        description=(
+            "FRED DFEDTAR: Federal Funds Target Rate (eingestellt), täglich in Prozent, "
+            "bis 15.12.2008; danach gilt eine Zielspanne"
+        ),
+    ),
+    Source(
+        key="fred_fed_zielspanne",
+        filename="fred_fed_zielspanne_obergrenze.csv",
+        url=FRED_SERIES_URL.format(series="DFEDTARU"),
+        title="Leitzins der Fed: Obergrenze der Federal-Funds-Zielspanne, täglich",
+        publisher=(
+            "Board of Governors of the Federal Reserve System über Federal Reserve Bank "
+            "of St. Louis, Serie DFEDTARU"
+        ),
+        license="Federal Reserve, Quellenangabe erforderlich",
+        datasets=("leitzinsen.csv",),
+        fetch_mode="fred_api",
+        api_series="DFEDTARU",
+        description=(
+            "FRED DFEDTARU: Federal Funds Target Range – Upper Limit, täglich in Prozent, "
+            "ab 16.12.2008"
+        ),
+    ),
+    Source(
         key="destatis_insolvenzen",
         filename="destatis_52411-0002_insolvenzen.csv",
         url=DESTATIS_TABLE_URL.format(code="52411-0002"),
@@ -656,6 +692,23 @@ SOURCES: tuple[Source, ...] = (
         description=(
             "EZB ICP: HVPI-Gesamtindex, Veränderung gegenüber dem Vorjahr in Prozent, "
             "Deutschland und Euro-Raum, monatlich ab 1997"
+        ),
+    ),
+    Source(
+        key="ecb_leitzinsen",
+        filename="ecb_leitzinsen.csv",
+        url=ECB_SERIES_URL.format(
+            dataset="FM", key="B.U2.EUR.4F.KR.MRR_FR+MRR_MBR+DFR.LEV", start="1999"
+        ),
+        title="Leitzinsen der EZB: Hauptrefinanzierungssatz und Einlagesatz",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz FM",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=("leitzinsen.csv",),
+        description=(
+            "EZB FM: Leitzinsen des Euro-Raums an den Tagen ihrer Änderung, in Prozent – "
+            "Festzins der Hauptrefinanzierungsgeschäfte (MRR_FR), Mindestbietungssatz "
+            "der Zinstender Juni 2000 bis Oktober 2008 (MRR_MBR) und Einlagefazilität "
+            "(DFR), ab 1999"
         ),
     ),
     Source(
@@ -1076,7 +1129,8 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     {
         "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
         "daten": (
-            "US-Staatsanleiherendite, Brent und WTI, Gaspreise Europa, Japan und USA"
+            "US-Staatsanleiherendite, Leitzins der Fed, Brent und WTI, Gaspreise "
+            "Europa, Japan und USA"
         ),
         "portal": "https://fred.stlouisfed.org/",
         "api": "https://fred.stlouisfed.org/docs/api/fred/",
@@ -1091,7 +1145,9 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     },
     {
         "anbieter": "EZB – Data Portal",
-        "daten": "Geldmenge M3, Verbraucherpreisindex, Wechselkurs US-Dollar/Euro",
+        "daten": (
+            "Geldmenge M3, Verbraucherpreisindex, Leitzinsen, Wechselkurs US-Dollar/Euro"
+        ),
         "portal": "https://data.ecb.europa.eu/",
         "api": "https://data.ecb.europa.eu/help/api/overview",
         "zugang": "kostenlos, ohne API-Key",

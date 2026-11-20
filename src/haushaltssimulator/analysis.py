@@ -317,3 +317,35 @@ def share_change(
         result[f"anteil_{end_year}_pct"] - result[f"anteil_{start_year}_pct"]
     )
     return result.sort_values(f"anteil_{end_year}_pct", ascending=False).reset_index()
+
+
+def rate_changes(frame: pd.DataFrame, value_column: str = "zins_pct") -> pd.DataFrame:
+    """Reduziert eine Zinsreihe auf die Tage, an denen sich der Satz ändert.
+
+    Der erste und der letzte Beobachtungstag bleiben erhalten, damit die Stufenlinie bis
+    zum Ende der Reihe reicht.
+    """
+    ordered = frame.sort_values("datum").reset_index(drop=True)
+    if ordered.empty:
+        return ordered
+    changed = ordered[value_column].ne(ordered[value_column].shift())
+    changed.iloc[-1] = True
+    return ordered[changed].reset_index(drop=True)
+
+
+def extend_steps(frame: pd.DataFrame, end: pd.Timestamp, group_column: str) -> pd.DataFrame:
+    """Verlängert Stufenreihen (z. B. Leitzinsen) je Gruppe mit dem letzten Wert bis ``end``.
+
+    Leitzinsen werden nur an Änderungstagen gemeldet; ohne diesen Schritt endete die
+    Linie am Tag der letzten Zinsänderung.
+    """
+    parts = []
+    for _, group in frame.sort_values("datum").groupby(group_column, sort=False):
+        parts.append(group)
+        last = group.iloc[-1]
+        if last["datum"] < end:
+            parts.append(last.to_frame().T.assign(datum=end))
+    if not parts:
+        return frame
+    result = pd.concat(parts, ignore_index=True)
+    return result.astype(frame.dtypes.to_dict())

@@ -191,3 +191,35 @@ def test_share_change_reports_percentage_points() -> None:
     assert wechsel.loc["B", "anteil_veraenderung_pp"] == pytest.approx(20.0)
     assert wechsel.loc["B", "ausgaben_2030_mrd_eur"] == pytest.approx(70.0)
     assert wechsel.index[0] == "B", "größter Anteil im Endjahr steht oben"
+
+
+def test_rate_changes_keeps_change_days_and_last_day() -> None:
+    frame = pd.DataFrame(
+        {
+            "datum": pd.to_datetime(
+                ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05"]
+            ),
+            "zins_pct": [5.5, 5.5, 5.25, 5.25, 5.25],
+        }
+    )
+    result = analysis.rate_changes(frame)
+    assert result["datum"].dt.day.tolist() == [1, 3, 5]
+    assert result["zins_pct"].tolist() == [5.5, 5.25, 5.25]
+
+
+def test_extend_steps_carries_last_value_per_group() -> None:
+    frame = pd.DataFrame(
+        {
+            "datum": pd.to_datetime(["2024-01-01", "2024-06-01", "2024-03-01"]),
+            "leitzins": ["A", "A", "B"],
+            "zins_pct": [4.0, 3.5, 2.0],
+        }
+    )
+    ende = pd.Timestamp("2024-12-31")
+    result = analysis.extend_steps(frame, ende, "leitzins")
+    letzte = result.sort_values("datum").groupby("leitzins").last()
+    assert (letzte["datum"] == ende).all()
+    assert letzte.loc["A", "zins_pct"] == 3.5
+    assert letzte.loc["B", "zins_pct"] == 2.0
+    assert len(result) == 5
+    assert result["zins_pct"].dtype == float

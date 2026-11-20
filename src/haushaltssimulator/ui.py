@@ -221,6 +221,11 @@ def energy_markets() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def key_rates() -> pd.DataFrame:
+    return dataset.load_key_rates()
+
+
+@st.cache_data(show_spinner=False)
 def sources_library() -> dict:
     """Quellenbibliothek mit URLs, Lizenzen, Prüfsummen und Abrufzeitpunkten."""
     return sources.read_library()

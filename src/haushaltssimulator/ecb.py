@@ -54,3 +54,22 @@ def parse_csv(raw: bytes) -> pd.DataFrame:
 
     sort_columns = ["gebiet", "monat"] if "gebiet" in result.columns else ["monat"]
     return result.sort_values(sort_columns).reset_index(drop=True)
+
+
+def parse_key_rates_csv(raw: bytes) -> pd.DataFrame:
+    """Liest die Leitzinsen der EZB (Datensatz FM, Änderungsdaten) aus dem CSV-Export.
+
+    Die Spalte ``satz`` enthält die Kennung des Zinssatzes, z. B. ``MRR_FR`` für den
+    Festzins der Hauptrefinanzierungsgeschäfte oder ``DFR`` für die Einlagefazilität.
+    """
+    frame = pd.read_csv(io.BytesIO(raw))
+    required = {"PROVIDER_FM_ID", "TIME_PERIOD", "OBS_VALUE"}
+    if not required.issubset(frame.columns):
+        raise ValueError("EZB-Export enthält PROVIDER_FM_ID, TIME_PERIOD oder OBS_VALUE nicht")
+    result = frame[["PROVIDER_FM_ID", "TIME_PERIOD", "OBS_VALUE"]].rename(
+        columns={"PROVIDER_FM_ID": "satz", "TIME_PERIOD": "datum", "OBS_VALUE": "zins_pct"}
+    )
+    result["datum"] = pd.to_datetime(result["datum"], errors="coerce")
+    result["zins_pct"] = pd.to_numeric(result["zins_pct"], errors="coerce")
+    result = result.dropna(subset=["datum", "zins_pct"])
+    return result.sort_values(["satz", "datum"]).reset_index(drop=True)

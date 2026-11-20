@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-20T13:23:22+00:00",
+  "aktualisiert_am": "2026-11-20T18:50:44+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -401,6 +401,36 @@
       "bytes": 16657
     },
     {
+      "key": "fred_fed_zielsatz",
+      "titel": "Leitzins der Fed: Federal Funds Target Rate bis 2008, täglich",
+      "herausgeber": "Board of Governors of the Federal Reserve System über Federal Reserve Bank of St. Louis, Serie DFEDTAR",
+      "lizenz": "Federal Reserve, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTAR",
+      "beschreibung": "FRED DFEDTAR: Federal Funds Target Rate (eingestellt), täglich in Prozent, bis 15.12.2008; danach gilt eine Zielspanne",
+      "datei": "fred_fed_zielsatz_bis_2008.csv",
+      "datensaetze": [
+        "leitzinsen.csv"
+      ],
+      "abgerufen_am": "2026-11-20T18:50:40+00:00",
+      "sha256": "6e918f0df2715b31049da758add1ea4ae496f6e2e1ed53066067ab60b75200f3",
+      "bytes": 145735
+    },
+    {
+      "key": "fred_fed_zielspanne",
+      "titel": "Leitzins der Fed: Obergrenze der Federal-Funds-Zielspanne, täglich",
+      "herausgeber": "Board of Governors of the Federal Reserve System über Federal Reserve Bank of St. Louis, Serie DFEDTARU",
+      "lizenz": "Federal Reserve, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARU",
+      "beschreibung": "FRED DFEDTARU: Federal Funds Target Range – Upper Limit, täglich in Prozent, ab 16.12.2008",
+      "datei": "fred_fed_zielspanne_obergrenze.csv",
+      "datensaetze": [
+        "leitzinsen.csv"
+      ],
+      "abgerufen_am": "2026-11-20T18:50:41+00:00",
+      "sha256": "95f94dd07aca77e353ffeb4c0e0e08603c0b51d4a44e01f8f0d8ab834b0cdf49",
+      "bytes": 104573
+    },
+    {
       "key": "destatis_insolvenzen",
       "titel": "Insolvenzverfahren: Deutschland, Monate",
       "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0002",
@@ -474,6 +504,21 @@
       "abgerufen_am": "2026-11-17T19:01:40+00:00",
       "sha256": "6c7d7dccf81f946f7a6cb157ee19720a2f62045418e302768b5ba00a9121450b",
       "bytes": 188509
+    },
+    {
+      "key": "ecb_leitzinsen",
+      "titel": "Leitzinsen der EZB: Hauptrefinanzierungssatz und Einlagesatz",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz FM",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR+MRR_MBR+DFR.LEV?format=csvdata&startPeriod=1999",
+      "beschreibung": "EZB FM: Leitzinsen des Euro-Raums an den Tagen ihrer Änderung, in Prozent – Festzins der Hauptrefinanzierungsgeschäfte (MRR_FR), Mindestbietungssatz der Zinstender Juni 2000 bis Oktober 2008 (MRR_MBR) und Einlagefazilität (DFR), ab 1999",
+      "datei": "ecb_leitzinsen.csv",
+      "datensaetze": [
+        "leitzinsen.csv"
+      ],
+      "abgerufen_am": "2026-11-20T18:50:44+00:00",
+      "sha256": "7d9b0eeb9866d000a2fc1bbfaf4f51eca73148a67ba881a57e99709598bcb681",
+      "bytes": 47068
     },
     {
       "key": "destatis_strompreise",
@@ -832,7 +877,7 @@
     },
     {
       "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
-      "daten": "US-Staatsanleiherendite, Brent und WTI, Gaspreise Europa, Japan und USA",
+      "daten": "US-Staatsanleiherendite, Leitzins der Fed, Brent und WTI, Gaspreise Europa, Japan und USA",
       "portal": "https://fred.stlouisfed.org/",
       "api": "https://fred.stlouisfed.org/docs/api/fred/",
       "zugang": "kostenlos, API-Key erforderlich"
@@ -846,7 +891,7 @@
     },
     {
       "anbieter": "EZB – Data Portal",
-      "daten": "Geldmenge M3, Verbraucherpreisindex, Wechselkurs US-Dollar/Euro",
+      "daten": "Geldmenge M3, Verbraucherpreisindex, Leitzinsen, Wechselkurs US-Dollar/Euro",
       "portal": "https://data.ecb.europa.eu/",
       "api": "https://data.ecb.europa.eu/help/api/overview",
       "zugang": "kostenlos, ohne API-Key"

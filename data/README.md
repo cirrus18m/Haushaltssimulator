@@ -38,6 +38,7 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `produktion_deutschland_lang.csv` | Industrieproduktion mit Langfristtrend | Eurostat `sts_inpr_m` | 1993-01–2026-09 |
 | `produktion_vergleich_monat.csv` | Produktionsindex im Ländervergleich | Eurostat `sts_inpr_m` | 1995-01–2026-09 |
 | `energie_maerkte_monat.csv` | Heizöl sowie regionale Gas- und Öl-Benchmarks | EU Weekly Oil Bulletin; IWF und EIA über FRED; EZB | 1999-01–2026-11 |
+| `leitzinsen.csv` | Leitzinsen von EZB und Fed an den Tagen ihrer Änderung | EZB FM; Federal Reserve über FRED (`DFEDTAR`, `DFEDTARU`) | 1982–2026 |
 
 ### Spalten
 
@@ -154,6 +155,16 @@ Verfügung.
 | `monat` | Berichtsmonat |
 | `inflation_de_pct`, `inflation_ea_pct` | HVPI-Veränderung gegenüber dem Vorjahr |
 | `kaufkraft_index` | Kaufkraft eines Euro, Startmonat = 100 |
+
+**`leitzinsen.csv`** – eine Zeile je Zinsänderung (Stufenreihe; der letzte
+Beobachtungstag der Fed-Reihe ist als Endpunkt enthalten).
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `datum` | Tag, ab dem der Satz gilt |
+| `leitzins` | `EZB Hauptrefinanzierungssatz` (Festzins; Juni 2000 bis Oktober 2008 Mindestbietungssatz der Zinstender), `EZB Einlagesatz`, `Fed Funds Zielsatz (ab 16.12.2008 Obergrenze)` |
+| `zins_pct` | Zinssatz in Prozent |
+| `quelle` | Kurzangabe der Quelle |
 
 **`energiepreise_jahr.csv`** – `jahr`, `verbrauchsklasse`, `strompreis_eur_kwh`,
 `gaspreis_eur_kwh` (jeweils inklusive Steuern, Abgaben und Umlagen; Summe der

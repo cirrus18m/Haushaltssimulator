@@ -1190,6 +1190,51 @@ def build_produktion_vergleich(raw_dir: Path) -> pd.DataFrame:
     ).reset_index(drop=True)
 
 
+# Leitzinsen: Bezeichnung in der App und Kennung im EZB-Export.
+LEITZINS_EZB_HAUPTREFI = "EZB Hauptrefinanzierungssatz"
+LEITZINS_EZB_EINLAGE = "EZB Einlagesatz"
+LEITZINS_FED = "Fed Funds Zielsatz (ab 16.12.2008 Obergrenze)"
+
+
+def build_leitzinsen(raw_dir: Path) -> pd.DataFrame:
+    """Leitzinsen von EZB und Fed als Stufenreihen an den Tagen ihrer Änderung.
+
+    Der Hauptrefinanzierungssatz ist von Juni 2000 bis Oktober 2008 der
+    Mindestbietungssatz der Zinstender, sonst der Festzins. Für die Fed gilt bis
+    15.12.2008 der Zielsatz, danach die Obergrenze der Zielspanne.
+    """
+    ezb = ecb.parse_key_rates_csv((raw_dir / "ecb_leitzinsen.csv").read_bytes())
+    missing = {"MRR_FR", "MRR_MBR", "DFR"} - set(ezb["satz"])
+    if missing:
+        raise ValueError(f"Leitzinsen fehlen im EZB-Export: {sorted(missing)}")
+    # Festzins und Mindestbietungssatz decken getrennte Zeiträume ab; bei gleichem Datum
+    # gilt der Festzins.
+    hauptrefi = ezb[ezb["satz"].isin(["MRR_FR", "MRR_MBR"])].copy()
+    hauptrefi["rang"] = (hauptrefi["satz"] != "MRR_FR").astype(int)
+    hauptrefi = hauptrefi.sort_values(["datum", "rang"]).drop_duplicates("datum")
+    einlage = ezb[ezb["satz"] == "DFR"]
+
+    fed_alt = fred.parse_series_csv((raw_dir / "fred_fed_zielsatz_bis_2008.csv").read_bytes())
+    fed_neu = fred.parse_series_csv(
+        (raw_dir / "fred_fed_zielspanne_obergrenze.csv").read_bytes()
+    )
+    fed_neu = fed_neu[fed_neu["datum"] > fed_alt["datum"].max()]
+    fed_reihe = pd.concat([fed_alt, fed_neu]).rename(columns={"wert": "zins_pct"})
+
+    teile = [
+        (LEITZINS_EZB_HAUPTREFI, hauptrefi, "EZB FM"),
+        (LEITZINS_EZB_EINLAGE, einlage, "EZB FM"),
+        (LEITZINS_FED, fed_reihe, "FRED DFEDTAR/DFEDTARU"),
+    ]
+    frames = []
+    for leitzins, reihe, quelle in teile:
+        stufen = analysis.rate_changes(reihe[["datum", "zins_pct"]])
+        frames.append(stufen.assign(leitzins=leitzins, quelle=quelle))
+    frame = pd.concat(frames, ignore_index=True)
+    columns = ["datum", "leitzins", "zins_pct", "quelle"]
+    return frame[columns].sort_values(["leitzins", "datum"]).reset_index(drop=True)
+
+
 BUILDERS = {
     "schulden_jahresreihe.csv": build_annual_debt,
     "schulden_quartalsreihe.csv": build_quarterly_debt,
@@ -1223,6 +1268,7 @@ BUILDERS = {
     "produktion_deutschland_lang.csv": build_produktion_deutschland_lang,
     "produktion_vergleich_monat.csv": build_produktion_vergleich,
     "energie_maerkte_monat.csv": build_energy_markets,
+    "leitzinsen.csv": build_leitzinsen,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -1251,6 +1297,7 @@ FLOAT_FORMATS = {
     "produktion_deutschland_lang.csv": "%.2f",
     "produktion_vergleich_monat.csv": "%.2f",
     "energie_maerkte_monat.csv": "%.2f",
+    "leitzinsen.csv": "%.2f",
 }
 
 

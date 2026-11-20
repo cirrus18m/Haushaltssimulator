@@ -18,13 +18,22 @@ ZEITMARKEN = (
     ("Hormus", "2026-02-28", 0.02, "right"),
 )
 
-# Achsen der drei Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
+# Achsen der vier Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
+# Nur das Zinslast-Teilbild (Zeile 3) hat eine zweite y-Achse (y4).
 # Die Zeitmarken werden in allen Zeilen an derselben Stelle der Achsenhöhe beschriftet.
 TEILBILD_ACHSEN = (
     ("x", "y domain"),
-    ("x2", "y3 domain"),
-    ("x3", "y5 domain"),
+    ("x2", "y2 domain"),
+    ("x3", "y3 domain"),
+    ("x4", "y5 domain"),
 )
+
+# Farben der Leitzinsen: EZB in Blautönen, Fed in Grün.
+LEITZINS_FARBEN = {
+    "EZB Hauptrefinanzierungssatz": ("#2c7fb8", "solid"),
+    "EZB Einlagesatz": ("#7fcdbb", "dot"),
+    "Fed Funds Zielsatz (ab 16.12.2008 Obergrenze)": ("#2ca02c", "dash"),
+}
 
 st.title("Haushalt, Schulden und Zinslast")
 st.markdown(
@@ -43,6 +52,7 @@ zinslast = ui.interest_burden()
 bund_plan = ui.bund_interest_plan()
 daily_yield = ui.bund_yield()
 inflation = ui.purchasing_power()
+leitzinsen = ui.key_rates()
 
 if total.empty or zinslast.empty:
     st.warning("Keine Daten gefunden. Bitte `uv run scripts/build_data.py` ausführen.")
@@ -66,33 +76,34 @@ st.markdown(
 monatsrendite = daily_yield.groupby("monat", as_index=False)["rendite_pct"].mean()
 monatsrendite["datum"] = pd.to_datetime(monatsrendite["monat"])
 monatszinslast = analysis.monthly_interest_burden(zinslast, monatsrendite)
-inflation = inflation[inflation["monat"] >= daily_yield["monat"].min()]
+# Leitzinsen sind Stufen an Änderungstagen; bis zum letzten Renditemonat verlängern.
+leitzinsen = analysis.extend_steps(leitzinsen, daily_yield["datum"].max(), "leitzins")
 
 st.subheader("Rendite der 10-jährigen Bundesanleihe (Monatsmittel)")
 st.markdown(
-    "Das obere Teilbild zeigt das Monatsmittel der Tagesrendite und – zuschaltbar – die "
-    "Inflationsrate. Das mittlere Teilbild stellt die daraus folgende **theoretische "
-    "Zinslast** den **tatsächlich gebuchten Zinsausgaben** gegenüber, ergänzt um den "
-    "**Effektivzins** auf den Schuldenstand und um die im Finanzplan veranschlagten "
-    "Zinsausgaben des Bundes. Das untere Teilbild zeigt den **Schuldenstand im "
-    "Monatsraster**, der in die Rechnung eingeht: die Jahresendbestände und die daraus "
-    "interpolierte Monatsreihe."
-)
-zeige_inflation = st.toggle(
-    "Inflation (HVPI) auf zweiter Achse anzeigen",
-    value=not inflation.empty,
-    disabled=inflation.empty,
-    key="zins_bund_inflation",
+    "Das obere Teilbild zeigt das Monatsmittel der Tagesrendite. Darunter stehen die "
+    "**Inflationsrate** und die **Leitzinsen von EZB und Fed**, an denen sich die "
+    "Marktzinsen orientieren. Das dritte Teilbild stellt die daraus folgende "
+    "**theoretische Zinslast** den **tatsächlich gebuchten Zinsausgaben** gegenüber, "
+    "ergänzt um den **Effektivzins** auf den Schuldenstand und um die im Finanzplan "
+    "veranschlagten Zinsausgaben des Bundes. Das untere Teilbild zeigt den "
+    "**Schuldenstand im Monatsraster**, der in die Rechnung eingeht: die "
+    "Jahresendbestände und die daraus interpolierte Monatsreihe."
 )
 
 plan = bund_plan.dropna(subset=["zinsausgaben_mrd_eur"]).sort_values("jahr")
 
 figure = make_subplots(
-    rows=3,
+    rows=4,
     cols=1,
-    row_heights=[0.33, 0.37, 0.30],
-    vertical_spacing=0.09,
-    specs=[[{"secondary_y": True}], [{"secondary_y": True}], [{"secondary_y": False}]],
+    row_heights=[0.22, 0.24, 0.30, 0.24],
+    vertical_spacing=0.06,
+    specs=[
+        [{"secondary_y": False}],
+        [{"secondary_y": False}],
+        [{"secondary_y": True}],
+        [{"secondary_y": False}],
+    ],
     shared_xaxes=True,
 )
 figure.add_trace(
@@ -105,24 +116,36 @@ figure.add_trace(
     ),
     row=1,
     col=1,
-    secondary_y=False,
 )
-if zeige_inflation:
+
+# Teilbild 2: Inflation und Leitzinsen von EZB und Fed, alle in Prozent auf einer Achse.
+figure.add_trace(
+    go.Scatter(
+        x=pd.to_datetime(inflation["monat"]),
+        y=inflation["inflation_de_pct"],
+        name="Inflation Deutschland (HVPI)",
+        line={"color": "#c9a227", "width": 2},
+        hovertemplate="%{x|%m.%Y}: %{y:.1f} %<extra>Inflation</extra>",
+    ),
+    row=2,
+    col=1,
+)
+for leitzins, (farbe, strich) in LEITZINS_FARBEN.items():
+    reihe = leitzinsen[leitzinsen["leitzins"] == leitzins]
     figure.add_trace(
         go.Scatter(
-            x=pd.to_datetime(inflation["monat"]),
-            y=inflation["inflation_de_pct"],
-            name="Inflation (HVPI)",
-            line={"color": "#c9a227", "width": 2},
-            hovertemplate="%{x|%m.%Y}: %{y:.1f} %<extra>Inflation</extra>",
+            x=reihe["datum"],
+            y=reihe["zins_pct"],
+            name=leitzins,
+            line={"color": farbe, "width": 2, "dash": strich, "shape": "hv"},
+            hovertemplate="%{x|%d.%m.%Y}: %{y:.2f} %<extra>" + leitzins + "</extra>",
         ),
-        row=1,
+        row=2,
         col=1,
-        secondary_y=True,
     )
 
 jahresmitte = pd.to_datetime(zinslast["jahr"].astype(str) + "-07-01")
-# Gemeinsame Zeitachse beider Teilbilder: Jahresraster von der ersten Jahresreihe
+# Gemeinsame Zeitachse aller Teilbilder: Jahresraster von der ersten Jahresreihe
 # bis kurz hinter das letzte Finanzplanjahr.
 achse_start = pd.Timestamp(f"{int(zinslast['jahr'].min())}-01-01")
 achse_ende = pd.Timestamp(f"{int(plan['jahr'].max())}-12-01")
@@ -135,7 +158,7 @@ figure.add_trace(
         line={"color": "#1f4e79", "width": 2.5},
         hovertemplate="%{x|%m.%Y}: %{y:,.1f} Mrd. €<extra></extra>",
     ),
-    row=2,
+    row=3,
     col=1,
     secondary_y=False,
 )
@@ -149,7 +172,7 @@ figure.add_trace(
         marker={"size": 6},
         hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. €<extra></extra>",
     ),
-    row=2,
+    row=3,
     col=1,
     secondary_y=False,
 )
@@ -164,7 +187,7 @@ figure.add_trace(
         customdata=plan["art"],
         hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. € (%{customdata})<extra></extra>",
     ),
-    row=2,
+    row=3,
     col=1,
     secondary_y=False,
 )
@@ -176,13 +199,13 @@ figure.add_trace(
         line={"color": "#8c564b", "width": 2, "dash": "dashdot"},
         hovertemplate="%{x|%Y}: %{y:.2f} %<extra></extra>",
     ),
-    row=2,
+    row=3,
     col=1,
     secondary_y=True,
 )
 
 # Schuldenstand im Monatsraster: die Jahresendbestände und die daraus interpolierte
-# Reihe, mit der die theoretische Zinslast im mittleren Teilbild gerechnet wird.
+# Reihe, mit der die theoretische Zinslast im dritten Teilbild gerechnet wird.
 jahresende = pd.to_datetime(debt["jahr"].astype(int).astype(str) + "-12-31")
 letzter_stichtag = jahresende.iloc[-1]
 figure.add_trace(
@@ -193,7 +216,7 @@ figure.add_trace(
         line={"color": "#0f766e", "width": 2},
         hovertemplate="%{x|%m.%Y}: %{y:,.0f} Mrd. €<extra></extra>",
     ),
-    row=3,
+    row=4,
     col=1,
 )
 figure.add_trace(
@@ -205,7 +228,7 @@ figure.add_trace(
         marker={"color": "#b03a2e", "size": 7, "symbol": "diamond"},
         hovertemplate="%{x|%d.%m.%Y}: %{y:,.0f} Mrd. €<extra></extra>",
     ),
-    row=3,
+    row=4,
     col=1,
 )
 # Der schattierte Bereich markiert die Fortschreibung hinter dem letzten Stichtag.
@@ -216,7 +239,7 @@ figure.add_vrect(
     opacity=0.08,
     line_width=0,
     layer="below",
-    row=3,
+    row=4,
     col=1,
 )
 
@@ -243,28 +266,19 @@ for label, datum, hoehe, anker in ZEITMARKEN:
             borderpad=1,
         )
 
-figure.update_yaxes(title_text="Rendite in %", row=1, col=1, secondary_y=False)
-figure.update_yaxes(
-    title_text="Inflation in %" if zeige_inflation else None,
-    visible=zeige_inflation,
-    showgrid=False,
-    dtick=2,
-    tickformat=".0f",
-    row=1,
-    col=1,
-    secondary_y=True,
-)
-figure.update_yaxes(title_text="Mrd. €", row=2, col=1, secondary_y=False)
+figure.update_yaxes(title_text="Rendite in %", row=1, col=1)
+figure.update_yaxes(title_text="Inflation / Leitzins in %", row=2, col=1)
+figure.update_yaxes(title_text="Mrd. €", row=3, col=1, secondary_y=False)
 figure.update_yaxes(
     title_text="Effektivzins in %",
     showgrid=False,
     dtick=1,
     tickformat=".1f",
-    row=2,
+    row=3,
     col=1,
     secondary_y=True,
 )
-figure.update_yaxes(title_text="Schuldenstand in Mrd. €", row=3, col=1)
+figure.update_yaxes(title_text="Schuldenstand in Mrd. €", row=4, col=1)
 figure.update_xaxes(
     range=[achse_start, achse_ende],
     dtick="M12",
@@ -272,16 +286,19 @@ figure.update_xaxes(
     tickformat="%Y",
     tickfont={"size": 11},
 )
-figure.update_xaxes(showticklabels=False, row=1, col=1)
-figure.update_xaxes(showticklabels=False, row=2, col=1)
-figure.add_hline(y=0, line={"color": "#999", "width": 1}, row=1, col=1)
-figure.add_hline(y=0, line={"color": "#999", "width": 1}, row=2, col=1)
-ui.plot(figure, filename="zins_bund_10j_und_zinslast", height=1010, top_margin=150)
+for zeile in (1, 2, 3):
+    figure.update_xaxes(showticklabels=False, row=zeile, col=1)
+    figure.add_hline(y=0, line={"color": "#999", "width": 1}, row=zeile, col=1)
+ui.plot(figure, filename="zins_bund_10j_und_zinslast", height=1300, top_margin=170)
 st.caption(
-    "Oben: Monatsmittel der Tagesrenditen (Deutsche Bundesbank) und Inflation als "
-    "Vorjahresrate des HVPI für Deutschland (EZB ICP, bis Dezember 2025). Mitte: "
-    "theoretische Zinslast (Monatsmodell aus interpoliertem Schuldenstand und "
-    "Monatsmittel der Rendite), Zinsausgaben des Gesamtstaats (Eurostat, VGR), "
+    "Oben: Monatsmittel der Tagesrenditen (Deutsche Bundesbank). Darunter: Inflation als "
+    "Vorjahresrate des HVPI für Deutschland (EZB ICP, bis Dezember 2025) und die "
+    "Leitzinsen an den Tagen ihrer Änderung, bis zum letzten Renditemonat fortgeführt – "
+    "EZB-Hauptrefinanzierungssatz (Juni 2000 bis Oktober 2008 Mindestbietungssatz der "
+    "Zinstender) und Einlagesatz (EZB FM) sowie der Federal-Funds-Zielsatz der Fed, ab "
+    "16.12.2008 die Obergrenze der Zielspanne (Federal Reserve über FRED, DFEDTAR und "
+    "DFEDTARU). Drittes Teilbild: theoretische Zinslast (Monatsmodell aus interpoliertem "
+    "Schuldenstand und Monatsmittel der Rendite), Zinsausgaben des Gesamtstaats (Eurostat, VGR), "
     "Effektivzins (Zinsausgaben / Schuldenstand) sowie die im Finanzplan des Bundes 2026 "
     "bis 2030 veranschlagten Zinsausgaben des Bundes im Kernhaushalt (Drucksache 21/7301, "
     "Tabelle 9) – eine engere Abgrenzung als die VGR, die die Zinsausgaben des Bundes "
