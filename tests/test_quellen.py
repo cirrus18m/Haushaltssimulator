@@ -161,3 +161,45 @@ def test_fred_source_writes_csv_that_the_parser_reads(monkeypatch, tmp_path) -> 
     frame = fred.parse_series_csv(path.read_bytes())
 
     assert frame.iloc[0].tolist() == [pd.Timestamp("2024-01-01"), 2.5]
+
+
+def _destatis_api_source() -> sources.Source:
+    return next(source for source in sources.SOURCES if source.key == "destatis_vpi")
+
+
+def test_destatis_source_uses_api_long_series_when_token_is_configured(monkeypatch) -> None:
+    import io
+    import zipfile
+
+    from haushaltssimulator import destatis_api
+
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w") as zipped:
+        zipped.writestr("61111-0002_de.csv", "1991;Januar;60,5;.;.\n")
+    calls = []
+
+    class FakeApi:
+        def tablefile(self, name: str, **params: object) -> bytes:
+            calls.append((name, params))
+            return archive.getvalue()
+
+    monkeypatch.setattr(
+        destatis_api.DestatisApi, "from_env", classmethod(lambda cls: FakeApi())
+    )
+
+    assert sources._fetch(_destatis_api_source()) == b"1991;Januar;60,5;.;.\n"
+    assert calls == [
+        ("61111-0002", {"startyear": sources.DESTATIS_API_START_YEAR, "format": "csv"})
+    ]
+
+
+def test_destatis_source_falls_back_to_public_export_without_token(monkeypatch) -> None:
+    from haushaltssimulator import destatis_api
+
+    def without_token(cls):
+        raise destatis_api.DestatisApiError("kein Token")
+
+    monkeypatch.setattr(destatis_api.DestatisApi, "from_env", classmethod(without_token))
+    monkeypatch.setattr(sources, "_read_url", lambda url: b"export")
+
+    assert sources._fetch(_destatis_api_source()) == b"export"

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 from haushaltssimulator import dataset, paths
@@ -198,19 +199,44 @@ def test_app_does_not_import_api_clients() -> None:
 def test_streamlit_pages_run_without_exception(script: str) -> None:
     from streamlit.testing.v1 import AppTest
 
-    # Großzügiges Timeout: Die Seiten rendern Diagramme nach SVG und sind unter Last langsam.
-    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=180)
+    # SVG und HTML entstehen erst beim Klick auf den Download-Button, die Seiten laufen
+    # daher in ein bis zwei Sekunden; das Timeout lässt Reserve für langsame Rechner.
+    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=60)
     test.run()
     assert not test.exception, [str(exception.value) for exception in test.exception]
 
 
-def test_bund_yield_chart_can_hide_inflation_axis() -> None:
-    from streamlit.testing.v1 import AppTest
+def test_inflation_germany_has_three_measures() -> None:
+    frame = dataset.load_inflation_germany()
+    assert list(frame.columns) == ["monat", "hvpi_pct", "hvpi_kern_pct", "vpi_pct"]
+    assert frame["monat"].is_monotonic_increasing
+    for column in ("hvpi_pct", "hvpi_kern_pct", "vpi_pct"):
+        assert frame[column].dropna().between(-3, 15).all()
+    oktober_2022 = frame[frame["monat"] == "2022-10"].iloc[0]
+    # Der HVPI enthält kein selbst genutztes Wohneigentum und stieg 2022 stärker als der VPI.
+    assert oktober_2022["hvpi_pct"] > oktober_2022["vpi_pct"] > oktober_2022["hvpi_kern_pct"]
 
-    test = AppTest.from_file(
-        str(Path(APP_DIR) / "pages/6_Haushalt_und_Zinsen.py"), default_timeout=180
-    )
-    test.run()
-    assert test.toggle, "Inflations-Schalter fehlt"
-    test.toggle[0].set_value(False).run()
-    assert not test.exception, [str(exception.value) for exception in test.exception]
+
+def test_co2_price_follows_behg() -> None:
+    preise = dataset.load_co2_price().set_index("jahr")
+    assert preise.loc[2021, "preis_min_eur_t"] == 25
+    assert preise.loc[2025, "preis_max_eur_t"] == 55
+    assert (preise.loc[2026, ["preis_min_eur_t", "preis_max_eur_t"]] == [55, 65]).all()
+    aufschlag = dataset.load_co2_surcharge()
+    assert set(aufschlag["brennstoff"]) == {"Heizöl EL", "Diesel", "Benzin", "Erdgas"}
+    assert set(aufschlag["jahr"]) == set(preise.index)
+
+
+def test_key_rates_cover_ecb_and_fed() -> None:
+    frame = dataset.load_key_rates()
+    assert set(frame["leitzins"]) == {
+        "EZB Hauptrefinanzierungssatz",
+        "EZB Einlagesatz",
+        "Fed Funds Zielsatz (ab 16.12.2008 Obergrenze)",
+    }
+    assert frame["zins_pct"].between(-1, 12).all()
+    hauptrefi = frame[frame["leitzins"] == "EZB Hauptrefinanzierungssatz"]
+    # Ohne Mindestbietungssatz fehlten die Zinsschritte zwischen Juni 2000 und Oktober 2008.
+    zinstender = hauptrefi[hauptrefi["datum"].between("2000-07-01", "2008-10-01")]
+    assert len(zinstender) >= 15
+    assert frame["datum"].max() >= pd.Timestamp("2025-01-01")

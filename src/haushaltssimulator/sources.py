@@ -31,7 +31,7 @@ from typing import Literal
 
 import pandas as pd
 
-from . import cbr, config, fred_api, imf, laender, paths, rosstat
+from . import cbr, config, destatis_api, fred_api, imf, laender, paths, rosstat
 
 DESTATIS_TABLE_URL = "https://genesis.destatis.de/genesisWS/downloads/00/tables/{code}_00.csv"
 EUROSTAT_DATA_URL = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/{dataset}"
@@ -81,12 +81,26 @@ ROSSTAT_CPI_INDICATOR = 31074
 
 # Ab diesem Jahr liefert die Bank of Russia die Zinskurve in der genutzten Form.
 CBR_START_YEAR = 2015
+# Altersgruppen von 20 bis unter 60 Jahren im Eurostat-Datensatz demo_pjangroup.
+BEVOELKERUNG_20_59_GRUPPEN = (
+    "Y20-24", "Y25-29", "Y30-34", "Y35-39", "Y40-44", "Y45-49", "Y50-54", "Y55-59",
+)
+# Erstes Jahr für Destatis-Tabellen über die API; der öffentliche Export enthält nur
+# die letzten Jahre.
+DESTATIS_API_START_YEAR = 1991
 CBR_MAX_FALLBACK_DAYS = 8
 
 USER_AGENT = "Haushaltssimulator/0.1 (+https://github.com/cirrus18m/Haushaltssimulator)"
 
 FetchMode = Literal[
-    "http", "cbr_zcyc", "energy_charts", "manual", "fred_api", "imf_datamapper", "emiss_api"
+    "http",
+    "cbr_zcyc",
+    "energy_charts",
+    "manual",
+    "fred_api",
+    "destatis_api",
+    "imf_datamapper",
+    "emiss_api",
 ]
 
 
@@ -360,6 +374,27 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="eurostat_bevoelkerung_20_59",
+        filename="eurostat_demo_pjangroup_20_59.json",
+        url=_eurostat(
+            "demo_pjangroup",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            sex="T",
+            age=list(BEVOELKERUNG_20_59_GRUPPEN),
+            sinceTimePeriod="2015",
+        ),
+        title="Bevölkerung von 20 bis unter 60 Jahren: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz demo_pjangroup",
+        license="CC BY 4.0",
+        datasets=("bevoelkerung_20_59_jahr.csv",),
+        description=(
+            "Eurostat demo_pjangroup: Bevölkerung am 1. Januar nach Fünf-Jahres-"
+            "Altersgruppen 20–24 bis 55–59, je Land, ab 2015"
+        ),
+    ),
+    Source(
         key="eurostat_inflation_laender",
         filename="eurostat_prc_hicp_manr.json",
         url=_eurostat(
@@ -590,6 +625,42 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="fred_fed_zielsatz",
+        filename="fred_fed_zielsatz_bis_2008.csv",
+        url=FRED_SERIES_URL.format(series="DFEDTAR"),
+        title="Leitzins der Fed: Federal Funds Target Rate bis 2008, täglich",
+        publisher=(
+            "Board of Governors of the Federal Reserve System über Federal Reserve Bank "
+            "of St. Louis, Serie DFEDTAR"
+        ),
+        license="Federal Reserve, Quellenangabe erforderlich",
+        datasets=("leitzinsen.csv",),
+        fetch_mode="fred_api",
+        api_series="DFEDTAR",
+        description=(
+            "FRED DFEDTAR: Federal Funds Target Rate (eingestellt), täglich in Prozent, "
+            "bis 15.12.2008; danach gilt eine Zielspanne"
+        ),
+    ),
+    Source(
+        key="fred_fed_zielspanne",
+        filename="fred_fed_zielspanne_obergrenze.csv",
+        url=FRED_SERIES_URL.format(series="DFEDTARU"),
+        title="Leitzins der Fed: Obergrenze der Federal-Funds-Zielspanne, täglich",
+        publisher=(
+            "Board of Governors of the Federal Reserve System über Federal Reserve Bank "
+            "of St. Louis, Serie DFEDTARU"
+        ),
+        license="Federal Reserve, Quellenangabe erforderlich",
+        datasets=("leitzinsen.csv",),
+        fetch_mode="fred_api",
+        api_series="DFEDTARU",
+        description=(
+            "FRED DFEDTARU: Federal Funds Target Range – Upper Limit, täglich in Prozent, "
+            "ab 16.12.2008"
+        ),
+    ),
+    Source(
         key="destatis_insolvenzen",
         filename="destatis_52411-0002_insolvenzen.csv",
         url=DESTATIS_TABLE_URL.format(code="52411-0002"),
@@ -656,6 +727,53 @@ SOURCES: tuple[Source, ...] = (
         description=(
             "EZB ICP: HVPI-Gesamtindex, Veränderung gegenüber dem Vorjahr in Prozent, "
             "Deutschland und Euro-Raum, monatlich ab 1997"
+        ),
+    ),
+    Source(
+        key="ecb_hicp_kern",
+        filename="ecb_hicp_kern_de.csv",
+        url=ECB_SERIES_URL.format(dataset="ICP", key="M.DE.N.XEF000.4.ANR", start="1997"),
+        title="Kerninflation: HVPI ohne Energie, Lebensmittel, Alkohol und Tabak, Deutschland",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz ICP",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=("inflation_de_monat.csv",),
+        description=(
+            "EZB ICP: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak (XEF000), "
+            "Veränderung gegenüber dem Vorjahr in Prozent, Deutschland, monatlich ab 1997"
+        ),
+    ),
+    Source(
+        key="destatis_vpi",
+        filename="destatis_61111-0002_vpi.csv",
+        url=DESTATIS_TABLE_URL.format(code="61111-0002"),
+        title="Verbraucherpreisindex für Deutschland, Monate",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online, Tabelle 61111-0002",
+        license="DL-DE-BY-2.0",
+        datasets=("inflation_de_monat.csv",),
+        fetch_mode="destatis_api",
+        api_series="61111-0002",
+        description=(
+            "Destatis 61111-0002: Verbraucherpreisindex (2020 = 100) und Veränderung zum "
+            "Vorjahresmonat in Prozent, monatlich. Mit DESTATIS_API_TOKEN über die "
+            "GENESIS-API ab 1991, ohne Token über den öffentlichen Export (nur die letzten "
+            "Jahre)"
+        ),
+    ),
+    Source(
+        key="ecb_leitzinsen",
+        filename="ecb_leitzinsen.csv",
+        url=ECB_SERIES_URL.format(
+            dataset="FM", key="B.U2.EUR.4F.KR.MRR_FR+MRR_MBR+DFR.LEV", start="1999"
+        ),
+        title="Leitzinsen der EZB: Hauptrefinanzierungssatz und Einlagesatz",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz FM",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=("leitzinsen.csv",),
+        description=(
+            "EZB FM: Leitzinsen des Euro-Raums an den Tagen ihrer Änderung, in Prozent – "
+            "Festzins der Hauptrefinanzierungsgeschäfte (MRR_FR), Mindestbietungssatz "
+            "der Zinstender Juni 2000 bis Oktober 2008 (MRR_MBR) und Einlagefazilität "
+            "(DFR), ab 1999"
         ),
     ),
     Source(
@@ -1038,6 +1156,42 @@ SOURCES: tuple[Source, ...] = (
             "2028 bis 2030"
         ),
     ),
+    Source(
+        key="behg_co2_preis",
+        filename="manual/behg_co2_preise.csv",
+        url="https://www.gesetze-im-internet.de/behg/__10.html",
+        title="CO₂-Preis im nationalen Emissionshandel (§ 10 Abs. 2 BEHG)",
+        publisher=(
+            "Brennstoffemissionshandelsgesetz (BEHG), Bundesamt für Justiz; für 2027 "
+            "Deutscher Bundestag, Drucksache 21/7869"
+        ),
+        license="Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+        datasets=("co2_preis_jahr.csv", "co2_aufschlag_jahr.csv"),
+        fetch_mode="manual",
+        description=(
+            "Manuell aus § 10 Abs. 2 BEHG übernommen: Festpreise je Emissionszertifikat "
+            "(1 t CO₂) 2021 bis 2025 und Preiskorridor 55 bis 65 Euro für 2026. Für 2027 "
+            "der vom Bundestag am 15.10.2026 beschlossene Korridor von 55 bis 65 Euro "
+            "(Drittes Gesetz zur Änderung des BEHG, Drucksache 21/7869; "
+            "https://www.bundestag.de/dokumente/textarchiv/2026/"
+            "kw39-de-brennstoffemissionshandelsgesetz-1211312), Verkündung ausstehend"
+        ),
+    ),
+    Source(
+        key="ebev_standardwerte",
+        filename="manual/ebev_2030_standardwerte.csv",
+        url="https://www.gesetze-im-internet.de/ebev_2030/anlage_2.html",
+        title="Standardwerte zur Berechnung von Brennstoffemissionen (EBeV 2030, Anlage 2)",
+        publisher="Emissionsberichterstattungsverordnung 2030, Bundesamt für Justiz",
+        license="Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+        datasets=("co2_aufschlag_jahr.csv",),
+        fetch_mode="manual",
+        description=(
+            "Manuell aus Anlage 2 Teil 4 EBeV 2030 übernommen: Dichte, Heizwert und "
+            "heizwertbezogener Emissionsfaktor für Heizöl EL (Nr. 3b), Diesel (Nr. 3a), "
+            "Benzin (Nr. 1) und Erdgas (Nr. 6, Umrechnungsfaktor 3,2508 GJ/MWh)"
+        ),
+    ),
 )
 
 # Portale und API-Dokumentation der Anbieter – erscheint als "Quellen & Links"
@@ -1076,7 +1230,8 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     {
         "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
         "daten": (
-            "US-Staatsanleiherendite, Brent und WTI, Gaspreise Europa, Japan und USA"
+            "US-Staatsanleiherendite, Leitzins der Fed, Brent und WTI, Gaspreise "
+            "Europa, Japan und USA"
         ),
         "portal": "https://fred.stlouisfed.org/",
         "api": "https://fred.stlouisfed.org/docs/api/fred/",
@@ -1091,7 +1246,9 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
     },
     {
         "anbieter": "EZB – Data Portal",
-        "daten": "Geldmenge M3, Verbraucherpreisindex, Wechselkurs US-Dollar/Euro",
+        "daten": (
+            "Geldmenge M3, Verbraucherpreisindex, Leitzinsen, Wechselkurs US-Dollar/Euro"
+        ),
         "portal": "https://data.ecb.europa.eu/",
         "api": "https://data.ecb.europa.eu/help/api/overview",
         "zugang": "kostenlos, ohne API-Key",
@@ -1220,6 +1377,23 @@ def _fetch_fred_api(source: Source) -> bytes:
     return ("\n".join(lines) + "\n").encode("utf-8")
 
 
+def _fetch_destatis_api(source: Source) -> bytes:
+    """Lädt eine Destatis-Tabelle als Langreihe über die API; ohne Token den Export.
+
+    Das API-Format ``csv`` entspricht dem Aufbau der Exportdatei, reicht aber bis
+    ``DESTATIS_API_START_YEAR`` zurück. Der öffentliche Export enthält nur die letzten
+    Jahre.
+    """
+    try:
+        client = destatis_api.DestatisApi.from_env()
+    except destatis_api.DestatisApiError:
+        return _read_url(source.url)
+    payload = client.tablefile(
+        source.api_series or "", startyear=DESTATIS_API_START_YEAR, format="csv"
+    )
+    return destatis_api.extract_csv(payload)
+
+
 def _csv_bytes(frame: pd.DataFrame, float_format: str = "%.4f") -> bytes:
     buffer = io.StringIO()
     frame.to_csv(buffer, index=False, float_format=float_format)
@@ -1266,6 +1440,8 @@ def _fetch(source: Source) -> bytes:
         return _fetch_energy_charts(source)
     if source.fetch_mode == "fred_api":
         return _fetch_fred_api(source)
+    if source.fetch_mode == "destatis_api":
+        return _fetch_destatis_api(source)
     if source.fetch_mode == "imf_datamapper":
         return _fetch_imf_datamapper(source)
     if source.fetch_mode == "emiss_api":

@@ -288,6 +288,28 @@ def _laender_population(raw_dir: Path) -> pd.DataFrame:
     return frame[["jahr", "geo", "bevoelkerung"]].dropna(subset=["bevoelkerung"])
 
 
+def build_bevoelkerung_20_59(raw_dir: Path) -> pd.DataFrame:
+    """Bevölkerung von 20 bis unter 60 Jahren je Land und Jahr (Eurostat demo_pjangroup).
+
+    Summe der acht Fünf-Jahres-Gruppen; Jahre, in denen eine Gruppe fehlt, entfallen.
+    """
+    frame = eurostat.jsonstat_to_frame(
+        _load_json(raw_dir, "eurostat_demo_pjangroup_20_59.json")
+    ).dropna(subset=["value"])
+    gruppen = frame.groupby(["geo", "time"]).agg(
+        bevoelkerung_20_59=("value", "sum"), gruppen=("age", "nunique")
+    )
+    gruppen = gruppen[gruppen["gruppen"] == len(sources.BEVOELKERUNG_20_59_GRUPPEN)]
+    gruppen = gruppen.reset_index()
+    gruppen["jahr"] = gruppen["time"].astype(int)
+    namen = dict(laender.EUROPA_LAENDER)
+    gruppen["land"] = gruppen["geo"].map(namen)
+    columns = ["jahr", "geo", "land", "bevoelkerung_20_59"]
+    return gruppen.dropna(subset=["land"])[columns].sort_values(["land", "jahr"]).reset_index(
+        drop=True
+    )
+
+
 def _imf_roh(raw_dir: Path) -> pd.DataFrame:
     return pd.read_csv(raw_dir / "imf_fiskal.csv")
 
@@ -1190,6 +1212,92 @@ def build_produktion_vergleich(raw_dir: Path) -> pd.DataFrame:
     ).reset_index(drop=True)
 
 
+def build_inflation_de(raw_dir: Path) -> pd.DataFrame:
+    """Drei Inflationsmaße für Deutschland: HVPI, Kerninflation und nationaler VPI."""
+    hvpi = ecb.parse_csv((raw_dir / "ecb_hicp_de_ea.csv").read_bytes())
+    hvpi = hvpi[hvpi["gebiet"] == "DE"][["monat", "wert"]].rename(columns={"wert": "hvpi_pct"})
+    kern = ecb.parse_csv((raw_dir / "ecb_hicp_kern_de.csv").read_bytes())
+    kern = kern[["monat", "wert"]].rename(columns={"wert": "hvpi_kern_pct"})
+
+    vpi = destatis.parse_fixed_columns(
+        destatis.decode((raw_dir / "destatis_61111-0002_vpi.csv").read_bytes()),
+        ["jahr", "monat_name"],
+        ["vpi_index_2020", "vpi_pct", "vpi_vormonat_pct"],
+        fill_down=("jahr",),
+    )
+    vpi["monat_nummer"] = vpi["monat_name"].map(MONATSNAMEN)
+    vpi = vpi.dropna(subset=["monat_nummer", "vpi_pct"])
+    vpi["monat"] = vpi["jahr"] + "-" + vpi["monat_nummer"].map(lambda monat: f"{int(monat):02d}")
+    vpi = vpi[["monat", "vpi_pct"]]
+
+    frame = hvpi.merge(kern, on="monat", how="outer").merge(vpi, on="monat", how="outer")
+    columns = ["monat", "hvpi_pct", "hvpi_kern_pct", "vpi_pct"]
+    return frame[columns].sort_values("monat").reset_index(drop=True)
+
+
+def _co2_preise(raw_dir: Path) -> pd.DataFrame:
+    frame = pd.read_csv(raw_dir / "manual" / "behg_co2_preise.csv")
+    if (frame["preis_min_eur_t"] > frame["preis_max_eur_t"]).any():
+        raise ValueError("CO₂-Preis: Mindestpreis über Höchstpreis")
+    return frame.sort_values("jahr").reset_index(drop=True)
+
+
+def build_co2_preis(raw_dir: Path) -> pd.DataFrame:
+    """CO₂-Preis je Tonne nach § 10 Abs. 2 BEHG: Festpreise und Preiskorridore."""
+    return _co2_preise(raw_dir)
+
+
+def build_co2_aufschlag(raw_dir: Path) -> pd.DataFrame:
+    """Aufschlag des CO₂-Preises auf Heizöl, Diesel, Benzin und Erdgas (BEHG, EBeV 2030)."""
+    faktoren = pd.read_csv(raw_dir / "manual" / "ebev_2030_standardwerte.csv")
+    return analysis.co2_surcharge(_co2_preise(raw_dir), faktoren)
+
+
+# Leitzinsen: Bezeichnung in der App und Kennung im EZB-Export.
+LEITZINS_EZB_HAUPTREFI = "EZB Hauptrefinanzierungssatz"
+LEITZINS_EZB_EINLAGE = "EZB Einlagesatz"
+LEITZINS_FED = "Fed Funds Zielsatz (ab 16.12.2008 Obergrenze)"
+
+
+def build_leitzinsen(raw_dir: Path) -> pd.DataFrame:
+    """Leitzinsen von EZB und Fed als Stufenreihen an den Tagen ihrer Änderung.
+
+    Der Hauptrefinanzierungssatz ist von Juni 2000 bis Oktober 2008 der
+    Mindestbietungssatz der Zinstender, sonst der Festzins. Für die Fed gilt bis
+    15.12.2008 der Zielsatz, danach die Obergrenze der Zielspanne.
+    """
+    ezb = ecb.parse_key_rates_csv((raw_dir / "ecb_leitzinsen.csv").read_bytes())
+    missing = {"MRR_FR", "MRR_MBR", "DFR"} - set(ezb["satz"])
+    if missing:
+        raise ValueError(f"Leitzinsen fehlen im EZB-Export: {sorted(missing)}")
+    # Festzins und Mindestbietungssatz decken getrennte Zeiträume ab; bei gleichem Datum
+    # gilt der Festzins.
+    hauptrefi = ezb[ezb["satz"].isin(["MRR_FR", "MRR_MBR"])].copy()
+    hauptrefi["rang"] = (hauptrefi["satz"] != "MRR_FR").astype(int)
+    hauptrefi = hauptrefi.sort_values(["datum", "rang"]).drop_duplicates("datum")
+    einlage = ezb[ezb["satz"] == "DFR"]
+
+    fed_alt = fred.parse_series_csv((raw_dir / "fred_fed_zielsatz_bis_2008.csv").read_bytes())
+    fed_neu = fred.parse_series_csv(
+        (raw_dir / "fred_fed_zielspanne_obergrenze.csv").read_bytes()
+    )
+    fed_neu = fed_neu[fed_neu["datum"] > fed_alt["datum"].max()]
+    fed_reihe = pd.concat([fed_alt, fed_neu]).rename(columns={"wert": "zins_pct"})
+
+    teile = [
+        (LEITZINS_EZB_HAUPTREFI, hauptrefi, "EZB FM"),
+        (LEITZINS_EZB_EINLAGE, einlage, "EZB FM"),
+        (LEITZINS_FED, fed_reihe, "FRED DFEDTAR/DFEDTARU"),
+    ]
+    frames = []
+    for leitzins, reihe, quelle in teile:
+        stufen = analysis.rate_changes(reihe[["datum", "zins_pct"]])
+        frames.append(stufen.assign(leitzins=leitzins, quelle=quelle))
+    frame = pd.concat(frames, ignore_index=True)
+    columns = ["datum", "leitzins", "zins_pct", "quelle"]
+    return frame[columns].sort_values(["leitzins", "datum"]).reset_index(drop=True)
+
+
 BUILDERS = {
     "schulden_jahresreihe.csv": build_annual_debt,
     "schulden_quartalsreihe.csv": build_quarterly_debt,
@@ -1223,6 +1331,11 @@ BUILDERS = {
     "produktion_deutschland_lang.csv": build_produktion_deutschland_lang,
     "produktion_vergleich_monat.csv": build_produktion_vergleich,
     "energie_maerkte_monat.csv": build_energy_markets,
+    "leitzinsen.csv": build_leitzinsen,
+    "inflation_de_monat.csv": build_inflation_de,
+    "co2_preis_jahr.csv": build_co2_preis,
+    "co2_aufschlag_jahr.csv": build_co2_aufschlag,
+    "bevoelkerung_20_59_jahr.csv": build_bevoelkerung_20_59,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -1251,6 +1364,10 @@ FLOAT_FORMATS = {
     "produktion_deutschland_lang.csv": "%.2f",
     "produktion_vergleich_monat.csv": "%.2f",
     "energie_maerkte_monat.csv": "%.2f",
+    "leitzinsen.csv": "%.2f",
+    "co2_preis_jahr.csv": "%.0f",
+    "co2_aufschlag_jahr.csv": "%.4f",
+    "bevoelkerung_20_59_jahr.csv": "%.0f",
 }
 
 

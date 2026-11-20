@@ -56,7 +56,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Bundesländer** | Ranking und Entwicklung der 16 Länder, Anteile, Veränderung seit 2024 |
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
-| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe mit Inflation sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben, den Schuldenstand im Monatsraster und der Haushaltsplan des Bundes nach Aufgabenbereichen – in Mrd. €, in % der Einnahmen und in % des BIP |
+| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe, Inflation (HVPI, Kerninflation, VPI), Leitzinsen von EZB und Fed und der CO₂-Preis nach BEHG mit einer aufklappbaren Erläuterung der Mehrkosten je Liter – jedes Teilbild mit eigener Legende –, sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben, den Schuldenstand im Monatsraster und der Haushaltsplan des Bundes nach Aufgabenbereichen – in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, drei Einkommensgrößen, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
@@ -77,6 +77,7 @@ Haushaltssimulator/
 │   ├── raw/                  # automatisch geladene Rohdaten (nicht versioniert)
 │   │   └── manual/           # von Hand geladene Rohdaten (versioniert)
 │   └── processed/            # aufbereitete CSVs für die App
+├── insights/                 # Datengeschichten als Reveal.js-Präsentationen (Hochformat 9:16)
 ├── scripts/
 │   └── build_data.py         # Datenabruf und -aufbereitung
 ├── src/haushaltssimulator/   # Datenlogik (Parsing, Aufbereitung, Analysen)
@@ -109,6 +110,7 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Eurostat `gov_10a_main`](https://ec.europa.eu/eurostat/databrowser/view/gov_10a_main/default/table) | Einnahmen und Zinsausgaben der europäischen Länder, jährlich | CC BY 4.0 |
 | [Eurostat `nama_10_gdp`](https://ec.europa.eu/eurostat/databrowser/view/nama_10_gdp/default/table) | BIP der europäischen Länder, jährlich | CC BY 4.0 |
 | [Eurostat `demo_pjan`](https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table) | Bevölkerung der europäischen Länder, jährlich | CC BY 4.0 |
+| [Eurostat `demo_pjangroup`](https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table) | Bevölkerung von 20 bis unter 60 Jahren je Land (Fünf-Jahres-Gruppen) | CC BY 4.0 |
 | [Eurostat `prc_hicp_manr`](https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_manr/default/table) | Inflationsraten (HVPI) der europäischen Länder, monatlich | CC BY 4.0 |
 | [FRED `IRLTLT01USM156N`](https://fred.stlouisfed.org/series/IRLTLT01USM156N) | Langfristige Staatsanleiherendite der USA (OECD MEI) | OECD-Bedingungen |
 | [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |
@@ -134,6 +136,10 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Eurostat `sts_inpr_m`](https://ec.europa.eu/eurostat/databrowser/view/sts_inpr_m/default/table) | Produktionsindex des Verarbeitenden Gewerbes und der Industrie (NACE B-D), monatlich ab 1993 | CC BY 4.0 |
 | [EZB BSI](https://data.ecb.europa.eu/data/datasets/BSI) | Geldmenge M3, monatlich | Quellenangabe erforderlich |
 | [EZB ICP](https://data.ecb.europa.eu/data/datasets/ICP) | Harmonisierter Verbraucherpreisindex, monatlich | Quellenangabe erforderlich |
+| [EZB ICP `XEF000`](https://data.ecb.europa.eu/data/datasets/ICP) | Kerninflation Deutschland: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak | Quellenangabe erforderlich |
+| [Destatis 61111-0002](https://www-genesis.destatis.de/datenbank/online/statistic/61111/table/61111-0002) | Verbraucherpreisindex für Deutschland, Monate (mit Token ab 1991 über die GENESIS-API) | DL-DE-BY-2.0 |
+| [EZB FM](https://data.ecb.europa.eu/data/datasets/FM) | Leitzinsen: Hauptrefinanzierungssatz (inkl. Mindestbietungssatz 2000–2008) und Einlagesatz | Quellenangabe erforderlich |
+| [FRED `DFEDTAR`](https://fred.stlouisfed.org/series/DFEDTAR), [`DFEDTARU`](https://fred.stlouisfed.org/series/DFEDTARU) | Leitzins der Fed: Federal-Funds-Zielsatz bis 2008, danach Obergrenze der Zielspanne | Federal Reserve, Quellenangabe erforderlich |
 | [Destatis 61243-0002](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0002) | Strompreise für Haushalte, Jahre | DL-DE-BY-2.0 |
 | [Destatis 61243-0011](https://www-genesis.destatis.de/datenbank/online/statistic/61243/table/61243-0011) | Erdgaspreise für Haushalte, Jahre | DL-DE-BY-2.0 |
 | [energy-charts.info](https://api.energy-charts.info/) | Börsenstrompreis Day-Ahead (Bundesnetzagentur \| SMARD.de) | CC BY 4.0 |
@@ -144,6 +150,8 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [FRED `DHHNGSP`](https://fred.stlouisfed.org/series/DHHNGSP) | Henry-Hub-Gaspreis, täglich (EIA) | EIA-Bedingungen |
 | [The Economist Big-Mac-Data](https://github.com/TheEconomist/big-mac-data) | Big-Mac-Index je Land | Quellenangabe erforderlich |
 | [Eurostat `ilc_lvho02`](https://ec.europa.eu/eurostat/databrowser/view/ilc_lvho02/default/table) | Eigentums- und Mietquote | CC BY 4.0 |
+| [BEHG § 10](https://www.gesetze-im-internet.de/behg/__10.html) | CO₂-Preis je Tonne 2021–2026 (Festpreise, Preiskorridor); 2027 nach Bundestagsbeschluss vom 15.10.2026 (Drucksache 21/7869), manuell übernommen | Amtliches Werk, gemeinfrei |
+| [EBeV 2030, Anlage 2](https://www.gesetze-im-internet.de/ebev_2030/anlage_2.html) | Standardwerte für Dichte, Heizwert und Emissionsfaktor von Heizöl, Diesel, Benzin und Erdgas, manuell übernommen | Amtliches Werk, gemeinfrei |
 | [BMF Bundeshaushalt](https://www.bundeshaushalt.de/) | Zinsausgaben des Bundes am Kreditmarkt | Quellenangabe erforderlich |
 
 Details zu Dateien und Spalten: [data/README.md](data/README.md).
@@ -181,10 +189,12 @@ Schnittstellen ohne Schlüssel; sie sind bereits über öffentliche Export-URLs 
 
 Genutzt werden die Clients derzeit im Datenaufbau für die US-Staatsanleiherendite
 (Quelle `fred_us_zins`, Modus `fred_api`): Mit `FRED_API_KEY` läuft der Abruf über die
-FRED-API, ohne Schlüssel automatisch über den öffentlichen CSV-Export. Die
-Destatis-Tabellen kommen weiterhin über die Export-URLs, weil das API-CSV-Format
-(`transpose`/`ffcsv`) nicht dem Aufbau der Exportdateien entspricht und eigene Parser
-braucht.
+FRED-API, ohne Schlüssel automatisch über den öffentlichen CSV-Export. Der
+Verbraucherpreisindex (Quelle `destatis_vpi`, Modus `destatis_api`) kommt mit
+`DESTATIS_API_TOKEN` als Langreihe ab 1991 aus der GENESIS-API (`data/tablefile`,
+`format=csv` – gleicher Aufbau wie die Exportdatei), ohne Token aus dem öffentlichen
+Export, der nur die letzten Jahre enthält. Die übrigen Destatis-Tabellen kommen
+weiterhin über die Export-URLs.
 
 Die Streamlit-App macht **keine** API-Aufrufe. Der Datenfluss bleibt:
 API/Download → `data/raw/` → `build.py` → `data/processed/` → App. Die Clients

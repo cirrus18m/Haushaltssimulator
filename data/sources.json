@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-20T13:23:22+00:00",
+  "aktualisiert_am": "2026-11-20T23:34:10+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -198,6 +198,21 @@
       "abgerufen_am": "2026-11-17T22:30:05+00:00",
       "sha256": "a68bd1606ad4aeffad0c26dda3f9e59bc97f0b037ea90b03188153a1405300dd",
       "bytes": 16725
+    },
+    {
+      "key": "eurostat_bevoelkerung_20_59",
+      "titel": "Bevölkerung von 20 bis unter 60 Jahren: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz demo_pjangroup",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjangroup?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&sex=T&age=Y20-24&age=Y25-29&age=Y30-34&age=Y35-39&age=Y40-44&age=Y45-49&age=Y50-54&age=Y55-59&sinceTimePeriod=2015",
+      "beschreibung": "Eurostat demo_pjangroup: Bevölkerung am 1. Januar nach Fünf-Jahres-Altersgruppen 20–24 bis 55–59, je Land, ab 2015",
+      "datei": "eurostat_demo_pjangroup_20_59.json",
+      "datensaetze": [
+        "bevoelkerung_20_59_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-20T23:34:09+00:00",
+      "sha256": "73f306c44f33228876248d108c7ebfff9c40a8d5d40217335a7001581f6b3b19",
+      "bytes": 38692
     },
     {
       "key": "eurostat_inflation_laender",
@@ -401,6 +416,36 @@
       "bytes": 16657
     },
     {
+      "key": "fred_fed_zielsatz",
+      "titel": "Leitzins der Fed: Federal Funds Target Rate bis 2008, täglich",
+      "herausgeber": "Board of Governors of the Federal Reserve System über Federal Reserve Bank of St. Louis, Serie DFEDTAR",
+      "lizenz": "Federal Reserve, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTAR",
+      "beschreibung": "FRED DFEDTAR: Federal Funds Target Rate (eingestellt), täglich in Prozent, bis 15.12.2008; danach gilt eine Zielspanne",
+      "datei": "fred_fed_zielsatz_bis_2008.csv",
+      "datensaetze": [
+        "leitzinsen.csv"
+      ],
+      "abgerufen_am": "2026-11-20T18:50:40+00:00",
+      "sha256": "6e918f0df2715b31049da758add1ea4ae496f6e2e1ed53066067ab60b75200f3",
+      "bytes": 145735
+    },
+    {
+      "key": "fred_fed_zielspanne",
+      "titel": "Leitzins der Fed: Obergrenze der Federal-Funds-Zielspanne, täglich",
+      "herausgeber": "Board of Governors of the Federal Reserve System über Federal Reserve Bank of St. Louis, Serie DFEDTARU",
+      "lizenz": "Federal Reserve, Quellenangabe erforderlich",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARU",
+      "beschreibung": "FRED DFEDTARU: Federal Funds Target Range – Upper Limit, täglich in Prozent, ab 16.12.2008",
+      "datei": "fred_fed_zielspanne_obergrenze.csv",
+      "datensaetze": [
+        "leitzinsen.csv"
+      ],
+      "abgerufen_am": "2026-11-20T18:50:41+00:00",
+      "sha256": "95f94dd07aca77e353ffeb4c0e0e08603c0b51d4a44e01f8f0d8ab834b0cdf49",
+      "bytes": 104573
+    },
+    {
       "key": "destatis_insolvenzen",
       "titel": "Insolvenzverfahren: Deutschland, Monate",
       "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online 52411-0002",
@@ -474,6 +519,51 @@
       "abgerufen_am": "2026-11-17T19:01:40+00:00",
       "sha256": "6c7d7dccf81f946f7a6cb157ee19720a2f62045418e302768b5ba00a9121450b",
       "bytes": 188509
+    },
+    {
+      "key": "ecb_hicp_kern",
+      "titel": "Kerninflation: HVPI ohne Energie, Lebensmittel, Alkohol und Tabak, Deutschland",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz ICP",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/ICP/M.DE.N.XEF000.4.ANR?format=csvdata&startPeriod=1997",
+      "beschreibung": "EZB ICP: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak (XEF000), Veränderung gegenüber dem Vorjahr in Prozent, Deutschland, monatlich ab 1997",
+      "datei": "ecb_hicp_kern_de.csv",
+      "datensaetze": [
+        "inflation_de_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-20T19:21:31+00:00",
+      "sha256": "f47b917f9d71f7415f16e9906ffd67f2d75bd8c373c74c771ef8e1dc1abf2698",
+      "bytes": 117822
+    },
+    {
+      "key": "destatis_vpi",
+      "titel": "Verbraucherpreisindex für Deutschland, Monate",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online, Tabelle 61111-0002",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/61111-0002_00.csv",
+      "beschreibung": "Destatis 61111-0002: Verbraucherpreisindex (2020 = 100) und Veränderung zum Vorjahresmonat in Prozent, monatlich. Mit DESTATIS_API_TOKEN über die GENESIS-API ab 1991, ohne Token über den öffentlichen Export (nur die letzten Jahre)",
+      "datei": "destatis_61111-0002_vpi.csv",
+      "datensaetze": [
+        "inflation_de_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-20T19:21:40+00:00",
+      "sha256": "c8b159491a2966d063307684c013ca6074f3248b8c21494d3740cff7274baf2b",
+      "bytes": 10443
+    },
+    {
+      "key": "ecb_leitzinsen",
+      "titel": "Leitzinsen der EZB: Hauptrefinanzierungssatz und Einlagesatz",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz FM",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR+MRR_MBR+DFR.LEV?format=csvdata&startPeriod=1999",
+      "beschreibung": "EZB FM: Leitzinsen des Euro-Raums an den Tagen ihrer Änderung, in Prozent – Festzins der Hauptrefinanzierungsgeschäfte (MRR_FR), Mindestbietungssatz der Zinstender Juni 2000 bis Oktober 2008 (MRR_MBR) und Einlagefazilität (DFR), ab 1999",
+      "datei": "ecb_leitzinsen.csv",
+      "datensaetze": [
+        "leitzinsen.csv"
+      ],
+      "abgerufen_am": "2026-11-20T18:50:44+00:00",
+      "sha256": "7d9b0eeb9866d000a2fc1bbfaf4f51eca73148a67ba881a57e99709598bcb681",
+      "bytes": 47068
     },
     {
       "key": "destatis_strompreise",
@@ -806,6 +896,37 @@
       "abgerufen_am": "2026-11-20T12:59:57+00:00",
       "sha256": "c0bf78b4b4603e7059f20e3389ec01d9e963591f7917ed3f27fc253ed46e3619",
       "bytes": 2209
+    },
+    {
+      "key": "behg_co2_preis",
+      "titel": "CO₂-Preis im nationalen Emissionshandel (§ 10 Abs. 2 BEHG)",
+      "herausgeber": "Brennstoffemissionshandelsgesetz (BEHG), Bundesamt für Justiz; für 2027 Deutscher Bundestag, Drucksache 21/7869",
+      "lizenz": "Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+      "url": "https://www.gesetze-im-internet.de/behg/__10.html",
+      "beschreibung": "Manuell aus § 10 Abs. 2 BEHG übernommen: Festpreise je Emissionszertifikat (1 t CO₂) 2021 bis 2025 und Preiskorridor 55 bis 65 Euro für 2026. Für 2027 der vom Bundestag am 15.10.2026 beschlossene Korridor von 55 bis 65 Euro (Drittes Gesetz zur Änderung des BEHG, Drucksache 21/7869; https://www.bundestag.de/dokumente/textarchiv/2026/kw39-de-brennstoffemissionshandelsgesetz-1211312), Verkündung ausstehend",
+      "datei": "manual/behg_co2_preise.csv",
+      "datensaetze": [
+        "co2_preis_jahr.csv",
+        "co2_aufschlag_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-20T21:25:05+00:00",
+      "sha256": "edd61b258366e17401b4d79197cc44017f996cd660192a20687441b5c10649a9",
+      "bytes": 402
+    },
+    {
+      "key": "ebev_standardwerte",
+      "titel": "Standardwerte zur Berechnung von Brennstoffemissionen (EBeV 2030, Anlage 2)",
+      "herausgeber": "Emissionsberichterstattungsverordnung 2030, Bundesamt für Justiz",
+      "lizenz": "Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+      "url": "https://www.gesetze-im-internet.de/ebev_2030/anlage_2.html",
+      "beschreibung": "Manuell aus Anlage 2 Teil 4 EBeV 2030 übernommen: Dichte, Heizwert und heizwertbezogener Emissionsfaktor für Heizöl EL (Nr. 3b), Diesel (Nr. 3a), Benzin (Nr. 1) und Erdgas (Nr. 6, Umrechnungsfaktor 3,2508 GJ/MWh)",
+      "datei": "manual/ebev_2030_standardwerte.csv",
+      "datensaetze": [
+        "co2_aufschlag_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-20T21:25:05+00:00",
+      "sha256": "1ce2cc7674684e55bfcaf346eee2079a99f0891118820124b98dc3a4f39b591d",
+      "bytes": 249
     }
   ],
   "anbieter": [
@@ -832,7 +953,7 @@
     },
     {
       "anbieter": "FRED (Federal Reserve Bank of St. Louis)",
-      "daten": "US-Staatsanleiherendite, Brent und WTI, Gaspreise Europa, Japan und USA",
+      "daten": "US-Staatsanleiherendite, Leitzins der Fed, Brent und WTI, Gaspreise Europa, Japan und USA",
       "portal": "https://fred.stlouisfed.org/",
       "api": "https://fred.stlouisfed.org/docs/api/fred/",
       "zugang": "kostenlos, API-Key erforderlich"
@@ -846,7 +967,7 @@
     },
     {
       "anbieter": "EZB – Data Portal",
-      "daten": "Geldmenge M3, Verbraucherpreisindex, Wechselkurs US-Dollar/Euro",
+      "daten": "Geldmenge M3, Verbraucherpreisindex, Leitzinsen, Wechselkurs US-Dollar/Euro",
       "portal": "https://data.ecb.europa.eu/",
       "api": "https://data.ecb.europa.eu/help/api/overview",
       "zugang": "kostenlos, ohne API-Key"

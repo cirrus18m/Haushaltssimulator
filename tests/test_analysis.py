@@ -191,3 +191,116 @@ def test_share_change_reports_percentage_points() -> None:
     assert wechsel.loc["B", "anteil_veraenderung_pp"] == pytest.approx(20.0)
     assert wechsel.loc["B", "ausgaben_2030_mrd_eur"] == pytest.approx(70.0)
     assert wechsel.index[0] == "B", "größter Anteil im Endjahr steht oben"
+
+
+def test_rate_changes_keeps_change_days_and_last_day() -> None:
+    frame = pd.DataFrame(
+        {
+            "datum": pd.to_datetime(
+                ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05"]
+            ),
+            "zins_pct": [5.5, 5.5, 5.25, 5.25, 5.25],
+        }
+    )
+    result = analysis.rate_changes(frame)
+    assert result["datum"].dt.day.tolist() == [1, 3, 5]
+    assert result["zins_pct"].tolist() == [5.5, 5.25, 5.25]
+
+
+def test_extend_steps_carries_last_value_per_group() -> None:
+    frame = pd.DataFrame(
+        {
+            "datum": pd.to_datetime(["2024-01-01", "2024-06-01", "2024-03-01"]),
+            "leitzins": ["A", "A", "B"],
+            "zins_pct": [4.0, 3.5, 2.0],
+        }
+    )
+    ende = pd.Timestamp("2024-12-31")
+    result = analysis.extend_steps(frame, ende, "leitzins")
+    letzte = result.sort_values("datum").groupby("leitzins").last()
+    assert (letzte["datum"] == ende).all()
+    assert letzte.loc["A", "zins_pct"] == 3.5
+    assert letzte.loc["B", "zins_pct"] == 2.0
+    assert len(result) == 5
+    assert result["zins_pct"].dtype == float
+
+
+EBEV_STANDARDWERTE = pd.DataFrame(
+    {
+        "brennstoff": ["Heizöl EL", "Benzin", "Erdgas"],
+        "einheit": ["1000 l", "1000 l", "MWh"],
+        "dichte_t_je_1000l": [0.845, 0.755, None],
+        "heizwert_gj_je_t": [42.8, 43.5, 1.0],
+        "umrechnung_gj_je_mwh": [None, None, 3.2508],
+        "emissionsfaktor_t_co2_je_gj": [0.074, 0.0729, 0.0558],
+    }
+)
+
+
+def test_co2_emissions_follow_ebev_standard_values() -> None:
+    frame = analysis.co2_emissions_per_unit(EBEV_STANDARDWERTE).set_index("brennstoff")
+    # 0,845 t/1000 l × 42,8 GJ/t × 0,074 t CO₂/GJ
+    assert frame.loc["Heizöl EL", "kg_co2_je_einheit"] == pytest.approx(2.6763, abs=1e-4)
+    assert frame.loc["Benzin", "kg_co2_je_einheit"] == pytest.approx(2.3942, abs=1e-4)
+    assert frame.loc["Erdgas", "kg_co2_je_einheit"] == pytest.approx(0.1814, abs=1e-4)
+    assert frame.loc["Erdgas", "einheit_verbrauch"] == "kWh"
+
+
+def test_co2_surcharge_in_cent_with_corridor_and_vat() -> None:
+    preise = pd.DataFrame(
+        {
+            "jahr": [2021, 2026],
+            "preis_min_eur_t": [25, 55],
+            "preis_max_eur_t": [25, 65],
+            "art": ["Festpreis", "Preiskorridor"],
+        }
+    )
+    frame = analysis.co2_surcharge(preise, EBEV_STANDARDWERTE)
+    heizoel = frame[frame["brennstoff"] == "Heizöl EL"].set_index("jahr")
+    # 25 €/t × 2,6763 kg/l = 6,69 ct/l netto, mit 19 % Umsatzsteuer 7,96 ct/l
+    assert heizoel.loc[2021, "aufschlag_min_netto_ct"] == pytest.approx(6.691, abs=1e-3)
+    assert heizoel.loc[2021, "aufschlag_min_brutto_ct"] == pytest.approx(7.962, abs=1e-3)
+    assert heizoel.loc[2026, "aufschlag_max_brutto_ct"] == pytest.approx(20.701, abs=1e-3)
+    korridor = heizoel.loc[2026]
+    assert korridor["aufschlag_min_brutto_ct"] < korridor["aufschlag_max_brutto_ct"]
+
+
+def test_co2_share_of_consumer_price_uses_yearly_means() -> None:
+    preise = pd.DataFrame(
+        {"jahr": [2021], "preis_min_eur_t": [25], "preis_max_eur_t": [25], "art": ["Festpreis"]}
+    )
+    faktoren = pd.concat(
+        [EBEV_STANDARDWERTE, EBEV_STANDARDWERTE.iloc[[0]].assign(brennstoff="Diesel")]
+    )
+    aufschlag = analysis.co2_surcharge(preise, faktoren)
+    heizoel = pd.DataFrame(
+        {"monat": ["2021-01", "2021-02", "2022-01"], "heizoel_ct_l": [70, 90, 150]}
+    )
+    kraftstoffe = pd.DataFrame(
+        {
+            "monat": ["2021-01", "2021-01", "2021-01"],
+            "land": ["Deutschland", "Deutschland", "Frankreich"],
+            "produkt": ["Diesel", "Superbenzin (Euro 95)", "Diesel"],
+            "preis_eur_l": [1.40, 1.60, 9.99],
+        }
+    )
+    frame = analysis.co2_share_of_consumer_price(aufschlag, heizoel, kraftstoffe, 2021)
+    frame = frame.set_index("brennstoff")
+    assert frame.loc["Heizöl EL", "preis_ct_l"] == 80
+    assert frame.loc["Diesel", "preis_ct_l"] == pytest.approx(140)
+    assert frame.loc["Heizöl EL", "anteil_pct"] == pytest.approx(7.962 / 80 * 100, abs=0.01)
+
+
+def test_interest_per_working_age_uses_latest_population() -> None:
+    zinslast = pd.DataFrame({"land": ["A", "B"], "zins_theoretisch_mio_eur": [100_000, 50]})
+    bevoelkerung = pd.DataFrame(
+        {
+            "land": ["A", "A", "B"],
+            "jahr": [2024, 2025, 2025],
+            "bevoelkerung_20_59": [50_000_000, 40_000_000, 1_000_000],
+        }
+    )
+    frame = analysis.interest_per_working_age(zinslast, bevoelkerung).set_index("land")
+    assert frame.loc["A", "bevoelkerung_jahr"] == 2025
+    assert frame.loc["A", "zins_je_person_20_59_eur"] == pytest.approx(2500)
+    assert frame.loc["B", "zins_je_person_20_59_eur"] == pytest.approx(50)

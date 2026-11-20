@@ -317,3 +317,138 @@ def share_change(
         result[f"anteil_{end_year}_pct"] - result[f"anteil_{start_year}_pct"]
     )
     return result.sort_values(f"anteil_{end_year}_pct", ascending=False).reset_index()
+
+
+def rate_changes(frame: pd.DataFrame, value_column: str = "zins_pct") -> pd.DataFrame:
+    """Reduziert eine Zinsreihe auf die Tage, an denen sich der Satz ändert.
+
+    Der erste und der letzte Beobachtungstag bleiben erhalten, damit die Stufenlinie bis
+    zum Ende der Reihe reicht.
+    """
+    ordered = frame.sort_values("datum").reset_index(drop=True)
+    if ordered.empty:
+        return ordered
+    changed = ordered[value_column].ne(ordered[value_column].shift())
+    changed.iloc[-1] = True
+    return ordered[changed].reset_index(drop=True)
+
+
+def extend_steps(frame: pd.DataFrame, end: pd.Timestamp, group_column: str) -> pd.DataFrame:
+    """Verlängert Stufenreihen (z. B. Leitzinsen) je Gruppe mit dem letzten Wert bis ``end``.
+
+    Leitzinsen werden nur an Änderungstagen gemeldet; ohne diesen Schritt endete die
+    Linie am Tag der letzten Zinsänderung.
+    """
+    parts = []
+    for _, group in frame.sort_values("datum").groupby(group_column, sort=False):
+        parts.append(group)
+        last = group.iloc[-1]
+        if last["datum"] < end:
+            parts.append(last.to_frame().T.assign(datum=end))
+    if not parts:
+        return frame
+    result = pd.concat(parts, ignore_index=True)
+    return result.astype(frame.dtypes.to_dict())
+
+
+# Regelsatz der Umsatzsteuer (§ 12 Abs. 1 UStG); der CO₂-Preis ist Teil des Entgelts.
+UMSATZSTEUER_PCT = 19.0
+
+
+def co2_emissions_per_unit(factors: pd.DataFrame) -> pd.DataFrame:
+    """CO₂ je Liter bzw. je kWh aus den Standardwerten der EBeV 2030.
+
+    Flüssige Brennstoffe: Dichte (t/1000 l) × Heizwert (GJ/t) × Emissionsfaktor
+    (t CO₂/GJ) ergibt t CO₂ je 1000 l = kg CO₂ je Liter. Erdgas: Umrechnungsfaktor
+    (GJ/MWh) × Emissionsfaktor ergibt t CO₂ je MWh = kg CO₂ je kWh.
+    """
+    frame = factors.copy()
+    fluessig = frame["einheit"] == "1000 l"
+    energie_gj = frame["dichte_t_je_1000l"] * frame["heizwert_gj_je_t"]
+    energie_gj = energie_gj.where(fluessig, frame["umrechnung_gj_je_mwh"])
+    frame["kg_co2_je_einheit"] = energie_gj * frame["emissionsfaktor_t_co2_je_gj"]
+    frame["einheit_verbrauch"] = frame["einheit"].map({"1000 l": "l", "MWh": "kWh"})
+    return frame[["brennstoff", "einheit_verbrauch", "kg_co2_je_einheit"]]
+
+
+def co2_surcharge(prices: pd.DataFrame, factors: pd.DataFrame) -> pd.DataFrame:
+    """Aufschlag des CO₂-Preises je Liter bzw. kWh in Cent, netto und mit Umsatzsteuer.
+
+    ``prices`` enthält je Jahr ``preis_min_eur_t`` und ``preis_max_eur_t`` (beim
+    Festpreis gleich). Euro je Tonne × kg CO₂ je Einheit / 1000 × 100 ergibt Cent.
+    """
+    emissionen = co2_emissions_per_unit(factors)
+    frame = prices[["jahr", "preis_min_eur_t", "preis_max_eur_t", "art"]].merge(
+        emissionen, how="cross"
+    )
+    for grenze in ("min", "max"):
+        netto = frame[f"preis_{grenze}_eur_t"] * frame["kg_co2_je_einheit"] / 10
+        frame[f"aufschlag_{grenze}_netto_ct"] = netto
+        frame[f"aufschlag_{grenze}_brutto_ct"] = netto * (1 + UMSATZSTEUER_PCT / 100)
+    columns = [
+        "jahr",
+        "brennstoff",
+        "einheit_verbrauch",
+        "kg_co2_je_einheit",
+        "art",
+        "aufschlag_min_netto_ct",
+        "aufschlag_max_netto_ct",
+        "aufschlag_min_brutto_ct",
+        "aufschlag_max_brutto_ct",
+    ]
+    return frame[columns].sort_values(["brennstoff", "jahr"]).reset_index(drop=True)
+
+
+def co2_share_of_consumer_price(
+    surcharge: pd.DataFrame,
+    energy_markets: pd.DataFrame,
+    fuel_prices: pd.DataFrame,
+    jahr: int,
+) -> pd.DataFrame:
+    """Anteil des CO₂-Aufschlags (mit Umsatzsteuer) am mittleren Verbraucherpreis.
+
+    Heizöl kommt aus ``energy_markets`` (``heizoel_ct_l``), Diesel und Benzin aus
+    ``fuel_prices`` (Deutschland). Alle Preise enthalten Steuern. Bei einem
+    Preiskorridor wird die Obergrenze verwendet.
+    """
+    def jahresmittel(frame: pd.DataFrame, column: str) -> float:
+        return frame.loc[frame["monat"].str[:4] == str(jahr), column].mean()
+
+    deutschland = fuel_prices[fuel_prices["land"] == "Deutschland"]
+    preise = {
+        "Heizöl EL": jahresmittel(energy_markets, "heizoel_ct_l"),
+        "Diesel": jahresmittel(deutschland[deutschland["produkt"] == "Diesel"], "preis_eur_l")
+        * 100,
+        "Benzin": jahresmittel(
+            deutschland[deutschland["produkt"] == "Superbenzin (Euro 95)"], "preis_eur_l"
+        )
+        * 100,
+    }
+    frame = surcharge[(surcharge["jahr"] == jahr) & surcharge["brennstoff"].isin(preise)]
+    frame = frame[["brennstoff", "aufschlag_max_brutto_ct"]].copy()
+    frame["preis_ct_l"] = frame["brennstoff"].map(preise)
+    frame["anteil_pct"] = frame["aufschlag_max_brutto_ct"] / frame["preis_ct_l"] * 100
+    return frame.reset_index(drop=True)
+
+
+def interest_per_working_age(burden: pd.DataFrame, population: pd.DataFrame) -> pd.DataFrame:
+    """Zinslast je Person von 20 bis unter 60 Jahren in Euro pro Jahr.
+
+    ``burden`` enthält je ``land`` die Spalte ``zins_theoretisch_mio_eur`` (z. B. aus
+    ``theoretical_interest_by_country``), ``population`` je Land und Jahr
+    ``bevoelkerung_20_59``. Verwendet wird das jüngste Jahr der Bevölkerung.
+    """
+    neueste = (
+        population.dropna(subset=["bevoelkerung_20_59"])
+        .sort_values(["land", "jahr"])
+        .groupby("land", as_index=False)
+        .tail(1)
+        .rename(columns={"jahr": "bevoelkerung_jahr"})
+    )
+    frame = burden[["land", "zins_theoretisch_mio_eur"]].merge(
+        neueste[["land", "bevoelkerung_jahr", "bevoelkerung_20_59"]], on="land", how="inner"
+    )
+    frame["zins_je_person_20_59_eur"] = (
+        frame["zins_theoretisch_mio_eur"] * 1_000_000 / frame["bevoelkerung_20_59"]
+    )
+    return frame.reset_index(drop=True)

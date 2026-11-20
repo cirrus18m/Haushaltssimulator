@@ -14,17 +14,64 @@ ZEITMARKEN = (
     ("Start Agenda 2010", "2003-03-14", 0.02, "left"),
     ("Lehman-Pleite", "2008-09-15", 0.02, "left"),
     ("Corona", "2020-03-16", 0.02, "left"),
+    ("CO₂-Preis: 25 €/t", "2021-01-01", 0.02, "left"),
     ("Russland Sanktionen", "2022-03-02", 0.14, "left"),
     ("Hormus", "2026-02-28", 0.02, "right"),
 )
 
-# Achsen der drei Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
+# Reihenfolge der fünf Teilbilder von oben nach unten.
+ZEILE_SCHULDEN = 1
+ZEILE_RENDITE = 2
+ZEILE_ZINSLAST = 3
+ZEILE_INFLATION = 4
+ZEILE_CO2 = 5
+
+# Achsen der fünf Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
+# Nur das Zinslast-Teilbild (Zeile 3) hat eine zweite y-Achse (y4), daher heißen die
+# Hauptachsen der Zeilen 4 und 5 y5 und y6.
 # Die Zeitmarken werden in allen Zeilen an derselben Stelle der Achsenhöhe beschriftet.
 TEILBILD_ACHSEN = (
     ("x", "y domain"),
-    ("x2", "y3 domain"),
-    ("x3", "y5 domain"),
+    ("x2", "y2 domain"),
+    ("x3", "y3 domain"),
+    ("x4", "y5 domain"),
+    ("x5", "y6 domain"),
 )
+
+# Inflationsmaße im unteren Teilbild: Spalte, Bezeichnung, Farbe, Strichart.
+INFLATION_REIHEN = (
+    ("hvpi_pct", "Inflation (HVPI)", "#c9a227", "solid"),
+    ("hvpi_kern_pct", "Kerninflation (HVPI)", "#e6550d", "dot"),
+    ("vpi_pct", "Verbraucherpreisindex (VPI)", "#8c6d31", "dash"),
+)
+
+# Leitzinsen: Bezeichnung in den Daten → Bezeichnung im Diagramm, Farbe, Strichart.
+# EZB in Blautönen, Fed in Grün.
+LEITZINS_REIHEN = {
+    "EZB Hauptrefinanzierungssatz": ("EZB Hauptrefinanzierungssatz", "#2c7fb8", "solid"),
+    "EZB Einlagesatz": ("EZB Einlagesatz", "#7fcdbb", "dot"),
+    "Fed Funds Zielsatz (ab 16.12.2008 Obergrenze)": (
+        "Fed Funds Zielsatz (Obergrenze)",
+        "#2ca02c",
+        "dash",
+    ),
+}
+
+# Eine waagerechte Legende je Teilbild direkt über der Zeichenfläche, ihr Titel dient
+# als Überschrift des Teilbilds. Jeder Eintrag ist die halbe Zeichenfläche breit: zwei
+# Spalten, das Inflations-Teilbild mit sechs Einträgen braucht drei Zeilen. Die breiten
+# Spalten lassen auch lange Bezeichnungen ungekürzt.
+LEGENDE_EINTRAGSBREITE = 1 / 2
+LEGENDEN = (
+    ("legend", "y", "Schuldenstand"),
+    ("legend2", "y2", "Rendite"),
+    ("legend3", "y3", "Zinslast"),
+    ("legend4", "y5", "Inflation und Leitzinsen"),
+    ("legend5", "y6", "CO₂-Preis auf Heizöl, Erdgas und Kraftstoffe (BEHG)"),
+)
+# Zuordnung der y-Achsen zu den Legenden; y4 ist die zweite Achse von Teilbild 3.
+LEGENDE_JE_ACHSE = {"y": "legend", "y2": "legend2", "y3": "legend3", "y4": "legend3"}
+LEGENDE_JE_ACHSE.update({"y5": "legend4", "y6": "legend5"})
 
 st.title("Haushalt, Schulden und Zinslast")
 st.markdown(
@@ -42,7 +89,10 @@ total = total.sort_values("jahr").reset_index(drop=True)
 zinslast = ui.interest_burden()
 bund_plan = ui.bund_interest_plan()
 daily_yield = ui.bund_yield()
-inflation = ui.purchasing_power()
+inflation = ui.inflation_germany()
+leitzinsen = ui.key_rates()
+co2_preis = ui.co2_price()
+co2_aufschlag = ui.co2_surcharge()
 
 if total.empty or zinslast.empty:
     st.warning("Keine Daten gefunden. Bitte `uv run scripts/build_data.py` ausführen.")
@@ -66,33 +116,37 @@ st.markdown(
 monatsrendite = daily_yield.groupby("monat", as_index=False)["rendite_pct"].mean()
 monatsrendite["datum"] = pd.to_datetime(monatsrendite["monat"])
 monatszinslast = analysis.monthly_interest_burden(zinslast, monatsrendite)
-inflation = inflation[inflation["monat"] >= daily_yield["monat"].min()]
+# Leitzinsen sind Stufen an Änderungstagen; bis zum letzten Renditemonat verlängern.
+leitzinsen = analysis.extend_steps(leitzinsen, daily_yield["datum"].max(), "leitzins")
 
 st.subheader("Rendite der 10-jährigen Bundesanleihe (Monatsmittel)")
 st.markdown(
-    "Das obere Teilbild zeigt das Monatsmittel der Tagesrendite und – zuschaltbar – die "
-    "Inflationsrate. Das mittlere Teilbild stellt die daraus folgende **theoretische "
-    "Zinslast** den **tatsächlich gebuchten Zinsausgaben** gegenüber, ergänzt um den "
-    "**Effektivzins** auf den Schuldenstand und um die im Finanzplan veranschlagten "
-    "Zinsausgaben des Bundes. Das untere Teilbild zeigt den **Schuldenstand im "
-    "Monatsraster**, der in die Rechnung eingeht: die Jahresendbestände und die daraus "
-    "interpolierte Monatsreihe."
-)
-zeige_inflation = st.toggle(
-    "Inflation (HVPI) auf zweiter Achse anzeigen",
-    value=not inflation.empty,
-    disabled=inflation.empty,
-    key="zins_bund_inflation",
+    "Das obere Teilbild zeigt den **Schuldenstand im Monatsraster**, der in die "
+    "Rechnung eingeht: die Jahresendbestände und die daraus interpolierte Monatsreihe. "
+    "Darunter folgt das Monatsmittel der Tagesrendite. Das dritte Teilbild stellt die "
+    "daraus folgende **theoretische Zinslast** den **tatsächlich gebuchten "
+    "Zinsausgaben** gegenüber, ergänzt um den **Effektivzins** auf den Schuldenstand und "
+    "um die im Finanzplan veranschlagten Zinsausgaben des Bundes. Das untere Teilbild "
+    "zeigt drei **Inflationsmaße** – HVPI, Kerninflation und nationaler VPI – und die "
+    "**Leitzinsen von EZB und Fed**, an denen sich die Marktzinsen orientieren. Ganz "
+    "unten steht der **CO₂-Preis** auf Heizöl, Erdgas und Kraftstoffe seit 2021."
 )
 
 plan = bund_plan.dropna(subset=["zinsausgaben_mrd_eur"]).sort_values("jahr")
 
 figure = make_subplots(
-    rows=3,
+    rows=5,
     cols=1,
-    row_heights=[0.33, 0.37, 0.30],
-    vertical_spacing=0.09,
-    specs=[[{"secondary_y": True}], [{"secondary_y": True}], [{"secondary_y": False}]],
+    row_heights=[0.19, 0.19, 0.25, 0.22, 0.15],
+    vertical_spacing=0.08,
+    # Nur die Zinslast (ZEILE_ZINSLAST) hat eine zweite y-Achse.
+    specs=[
+        [{"secondary_y": False}],
+        [{"secondary_y": False}],
+        [{"secondary_y": True}],
+        [{"secondary_y": False}],
+        [{"secondary_y": False}],
+    ],
     shared_xaxes=True,
 )
 figure.add_trace(
@@ -101,28 +155,42 @@ figure.add_trace(
         y=monatsrendite["rendite_pct"],
         name="Monatsmittel der Tagesrendite",
         line={"color": "#1f4e79", "width": 2},
-        hovertemplate="%{x|%m.%Y}: %{y:.2f} %<extra></extra>",
+        hovertemplate="%{x|%m.%Y}: %{y:.2f} %<extra>%{fullData.name}</extra>",
     ),
-    row=1,
+    row=ZEILE_RENDITE,
     col=1,
-    secondary_y=False,
 )
-if zeige_inflation:
+
+# Unteres Teilbild: Inflation und Leitzinsen von EZB und Fed, alle in Prozent auf einer Achse.
+for spalte, name, farbe, strich in INFLATION_REIHEN:
+    reihe = inflation.dropna(subset=[spalte])
     figure.add_trace(
         go.Scatter(
-            x=pd.to_datetime(inflation["monat"]),
-            y=inflation["inflation_de_pct"],
-            name="Inflation (HVPI)",
-            line={"color": "#c9a227", "width": 2},
-            hovertemplate="%{x|%m.%Y}: %{y:.1f} %<extra>Inflation</extra>",
+            x=pd.to_datetime(reihe["monat"]),
+            y=reihe[spalte],
+            name=name,
+            line={"color": farbe, "width": 2, "dash": strich},
+            hovertemplate="%{x|%m.%Y}: %{y:.1f} %<extra>%{fullData.name}</extra>",
         ),
-        row=1,
+        row=ZEILE_INFLATION,
         col=1,
-        secondary_y=True,
+    )
+for leitzins, (name, farbe, strich) in LEITZINS_REIHEN.items():
+    reihe = leitzinsen[leitzinsen["leitzins"] == leitzins]
+    figure.add_trace(
+        go.Scatter(
+            x=reihe["datum"],
+            y=reihe["zins_pct"],
+            name=name,
+            line={"color": farbe, "width": 2, "dash": strich, "shape": "hv"},
+            hovertemplate="%{x|%d.%m.%Y}: %{y:.2f} %<extra>%{fullData.name}</extra>",
+        ),
+        row=ZEILE_INFLATION,
+        col=1,
     )
 
 jahresmitte = pd.to_datetime(zinslast["jahr"].astype(str) + "-07-01")
-# Gemeinsame Zeitachse beider Teilbilder: Jahresraster von der ersten Jahresreihe
+# Gemeinsame Zeitachse aller Teilbilder: Jahresraster von der ersten Jahresreihe
 # bis kurz hinter das letzte Finanzplanjahr.
 achse_start = pd.Timestamp(f"{int(zinslast['jahr'].min())}-01-01")
 achse_ende = pd.Timestamp(f"{int(plan['jahr'].max())}-12-01")
@@ -133,9 +201,9 @@ figure.add_trace(
         y=monatszinslast["zins_theoretisch_mio_eur"] / 1000,
         name="theoretische Zinslast (Modell)",
         line={"color": "#1f4e79", "width": 2.5},
-        hovertemplate="%{x|%m.%Y}: %{y:,.1f} Mrd. €<extra></extra>",
+        hovertemplate="%{x|%m.%Y}: %{y:,.1f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=2,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=False,
 )
@@ -147,9 +215,9 @@ figure.add_trace(
         mode="lines+markers",
         line={"color": "#b03a2e", "width": 2.5},
         marker={"size": 6},
-        hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. €<extra></extra>",
+        hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=2,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=False,
 )
@@ -162,9 +230,9 @@ figure.add_trace(
         line={"color": "#6a3d9a", "width": 2.5, "dash": "dash"},
         marker={"size": 6},
         customdata=plan["art"],
-        hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. € (%{customdata})<extra></extra>",
+        hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. € (%{customdata})<extra>%{fullData.name}</extra>",
     ),
-    row=2,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=False,
 )
@@ -172,28 +240,60 @@ figure.add_trace(
     go.Scatter(
         x=jahresmitte,
         y=zinslast["effektivzins_pct"],
-        name="Effektivzins auf den Schuldenstand",
+        name="Effektivzins (rechte Achse)",
         line={"color": "#8c564b", "width": 2, "dash": "dashdot"},
-        hovertemplate="%{x|%Y}: %{y:.2f} %<extra></extra>",
+        hovertemplate="%{x|%Y}: %{y:.2f} %<extra>%{fullData.name}</extra>",
     ),
-    row=2,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=True,
 )
 
+# CO₂-Preis nach BEHG: je Jahr ein Festpreis oder ein Korridor aus Mindest- und
+# Höchstpreis. Als Stufenlinie bis zum Ende des letzten Jahres; die Fläche zwischen
+# den beiden Linien ist der Preiskorridor.
+co2_stufen = co2_preis.assign(
+    datum=pd.to_datetime(co2_preis["jahr"].astype(str) + "-01-01"), reihe="co2"
+)
+co2_stufen = analysis.extend_steps(
+    co2_stufen, pd.Timestamp(f"{int(co2_preis['jahr'].max())}-12-31"), "reihe"
+)
+for spalte, name, fuellung in (
+    ("preis_min_eur_t", "Festpreis bzw. Mindestpreis", None),
+    ("preis_max_eur_t", "Höchstpreis im Preiskorridor", "tonexty"),
+):
+    figure.add_trace(
+        go.Scatter(
+            x=co2_stufen["datum"],
+            y=co2_stufen[spalte],
+            name=name,
+            mode="lines",
+            line={"color": "#2e7d32", "width": 2, "shape": "hv"},
+            fill=fuellung,
+            fillcolor="rgba(46, 125, 50, 0.15)",
+            customdata=co2_stufen[["art", "rechtsgrundlage"]],
+            hovertemplate=(
+                "%{x|%Y}: %{y:.0f} €/t (%{customdata[0]}, %{customdata[1]})"
+                "<extra>%{fullData.name}</extra>"
+            ),
+        ),
+        row=ZEILE_CO2,
+        col=1,
+    )
+
 # Schuldenstand im Monatsraster: die Jahresendbestände und die daraus interpolierte
-# Reihe, mit der die theoretische Zinslast im mittleren Teilbild gerechnet wird.
+# Reihe, mit der die theoretische Zinslast gerechnet wird.
 jahresende = pd.to_datetime(debt["jahr"].astype(int).astype(str) + "-12-31")
 letzter_stichtag = jahresende.iloc[-1]
 figure.add_trace(
     go.Scatter(
         x=monatszinslast["datum"],
         y=monatszinslast["schulden_mio_eur"] / 1000,
-        name="Schuldenstand im Monatsraster (interpoliert, danach fortgeschrieben)",
+        name="Schuldenstand im Monatsraster",
         line={"color": "#0f766e", "width": 2},
-        hovertemplate="%{x|%m.%Y}: %{y:,.0f} Mrd. €<extra></extra>",
+        hovertemplate="%{x|%m.%Y}: %{y:,.0f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=3,
+    row=ZEILE_SCHULDEN,
     col=1,
 )
 figure.add_trace(
@@ -203,9 +303,9 @@ figure.add_trace(
         name="Schuldenstand am Jahresende",
         mode="markers",
         marker={"color": "#b03a2e", "size": 7, "symbol": "diamond"},
-        hovertemplate="%{x|%d.%m.%Y}: %{y:,.0f} Mrd. €<extra></extra>",
+        hovertemplate="%{x|%d.%m.%Y}: %{y:,.0f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=3,
+    row=ZEILE_SCHULDEN,
     col=1,
 )
 # Der schattierte Bereich markiert die Fortschreibung hinter dem letzten Stichtag.
@@ -216,7 +316,7 @@ figure.add_vrect(
     opacity=0.08,
     line_width=0,
     layer="below",
-    row=3,
+    row=ZEILE_SCHULDEN,
     col=1,
 )
 
@@ -243,59 +343,190 @@ for label, datum, hoehe, anker in ZEITMARKEN:
             borderpad=1,
         )
 
-figure.update_yaxes(title_text="Rendite in %", row=1, col=1, secondary_y=False)
-figure.update_yaxes(
-    title_text="Inflation in %" if zeige_inflation else None,
-    visible=zeige_inflation,
-    showgrid=False,
-    dtick=2,
-    tickformat=".0f",
-    row=1,
-    col=1,
-    secondary_y=True,
-)
-figure.update_yaxes(title_text="Mrd. €", row=2, col=1, secondary_y=False)
+figure.update_yaxes(title_text="Schuldenstand in Mrd. €", row=ZEILE_SCHULDEN, col=1)
+figure.update_yaxes(title_text="Rendite in %", row=ZEILE_RENDITE, col=1)
+figure.update_yaxes(title_text="Inflation / Leitzins in %", row=ZEILE_INFLATION, col=1)
+figure.update_yaxes(title_text="Mrd. €", row=ZEILE_ZINSLAST, col=1, secondary_y=False)
+figure.update_yaxes(title_text="€ je t CO₂", rangemode="tozero", row=ZEILE_CO2, col=1)
 figure.update_yaxes(
     title_text="Effektivzins in %",
     showgrid=False,
     dtick=1,
     tickformat=".1f",
-    row=2,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=True,
 )
-figure.update_yaxes(title_text="Schuldenstand in Mrd. €", row=3, col=1)
+# Jedes Teilbild hat eine beschriftete Zeitachse. Plotly wählt den Abstand der
+# Teilstriche selbst (höchstens ``nticks``): über den ganzen Zeitraum Jahre, beim
+# Hineinzoomen Quartale, Monate oder Tage – das Gitter folgt den Teilstrichen.
 figure.update_xaxes(
     range=[achse_start, achse_ende],
-    dtick="M12",
-    tick0=achse_start.strftime("%Y-%m-%d"),
-    tickformat="%Y",
+    showticklabels=True,
+    nticks=40,
+    # Die Bereiche schließen ihre Grenzen ein und dürfen sich daher nicht berühren:
+    # Tagesabstände (in Millisekunden) zeigen das Datum, Monats- und Quartalsabstände
+    # Monat und Jahr, Jahresabstände nur das Jahr.
+    tickformatstops=[
+        {"dtickrange": [None, 27 * 86_400_000], "value": "%d.%m.%Y"},
+        {"dtickrange": ["M1", "M11"], "value": "%m.%Y"},
+        {"dtickrange": ["M12", None], "value": "%Y"},
+    ],
     tickfont={"size": 11},
 )
-figure.update_xaxes(showticklabels=False, row=1, col=1)
-figure.update_xaxes(showticklabels=False, row=2, col=1)
-figure.add_hline(y=0, line={"color": "#999", "width": 1}, row=1, col=1)
-figure.add_hline(y=0, line={"color": "#999", "width": 1}, row=2, col=1)
-ui.plot(figure, filename="zins_bund_10j_und_zinslast", height=1010, top_margin=150)
+for zeile in (ZEILE_RENDITE, ZEILE_ZINSLAST, ZEILE_INFLATION):
+    figure.add_hline(y=0, line={"color": "#999", "width": 1}, row=zeile, col=1)
+
+# Legenden je Teilbild: Ein Klick blendet nur die angeklickte Reihe aus.
+for trace in figure.data:
+    trace.legend = LEGENDE_JE_ACHSE[trace.yaxis]
+for legende, achse, titel in LEGENDEN:
+    oberkante = figure.layout["yaxis" + achse[1:]].domain[1]
+    figure.update_layout(
+        {
+            legende: {
+                "title": {"text": f"<b>{titel}</b>", "side": "top", "font": {"size": 12}},
+                "orientation": "h",
+                "entrywidth": LEGENDE_EINTRAGSBREITE,
+                "entrywidthmode": "fraction",
+                "x": 0,
+                "xanchor": "left",
+                "y": oberkante + 0.005,
+                "yanchor": "bottom",
+                "font": {"size": 10},
+                # Gefüllte Flächen kehren die Legende sonst um (Höchst- vor Mindestpreis).
+                "traceorder": "normal",
+            }
+        }
+    )
+ui.plot(
+    figure,
+    filename="zins_bund_10j_und_zinslast",
+    height=1850,
+    top_margin=80,
+    own_legends=True,
+)
 st.caption(
-    "Oben: Monatsmittel der Tagesrenditen (Deutsche Bundesbank) und Inflation als "
-    "Vorjahresrate des HVPI für Deutschland (EZB ICP, bis Dezember 2025). Mitte: "
-    "theoretische Zinslast (Monatsmodell aus interpoliertem Schuldenstand und "
-    "Monatsmittel der Rendite), Zinsausgaben des Gesamtstaats (Eurostat, VGR), "
-    "Effektivzins (Zinsausgaben / Schuldenstand) sowie die im Finanzplan des Bundes 2026 "
-    "bis 2030 veranschlagten Zinsausgaben des Bundes im Kernhaushalt (Drucksache 21/7301, "
-    "Tabelle 9) – eine engere Abgrenzung als die VGR, die die Zinsausgaben des Bundes "
-    "fortschreibt und nicht die höheren des Gesamtstaats. Unten: der Schuldenstand, aus "
-    "dem die Zinslast stammt – die Jahresendbestände des Maastricht-Schuldenstands "
-    "(Eurostat, VGR) als Rauten und die daraus linear interpolierte Monatsreihe; der "
-    "schattierte Bereich nach dem letzten Jahresende ist die Fortschreibung mit dem "
-    "Trend der letzten beiden Stichtage bis zum letzten Renditemonat. Alle Teilbilder "
+    "Oben: der Schuldenstand, aus dem die Zinslast stammt – die Jahresendbestände des "
+    "Maastricht-Schuldenstands (Eurostat, VGR) als Rauten und die daraus linear "
+    "interpolierte Monatsreihe; der schattierte Bereich nach dem letzten Jahresende ist "
+    "die Fortschreibung mit dem Trend der letzten beiden Stichtage bis zum letzten "
+    "Renditemonat. Darunter: Monatsmittel der Tagesrenditen (Deutsche Bundesbank). "
+    "Drittes Teilbild: theoretische Zinslast (Monatsmodell aus interpoliertem "
+    "Schuldenstand und Monatsmittel der Rendite), Zinsausgaben des Gesamtstaats "
+    "(Eurostat, VGR), Effektivzins (Zinsausgaben / Schuldenstand) sowie die im "
+    "Finanzplan des Bundes 2026 bis 2030 veranschlagten Zinsausgaben des Bundes im "
+    "Kernhaushalt (Drucksache 21/7301, Tabelle 9) – eine engere Abgrenzung als die VGR, "
+    "die die Zinsausgaben des Bundes fortschreibt und nicht die höheren des "
+    "Gesamtstaats. Unten: drei Inflationsmaße für Deutschland als Vorjahresrate – der "
+    "harmonisierte HVPI und die Kerninflation ohne Energie, Nahrungsmittel, Alkohol und "
+    "Tabak (EZB ICP, bis Dezember 2025) sowie der nationale Verbraucherpreisindex, der "
+    "anders als der HVPI das selbst genutzte Wohneigentum enthält (Destatis 61111-0002) "
+    "– und die Leitzinsen an den Tagen ihrer Änderung, bis zum letzten Renditemonat "
+    "fortgeführt – EZB-Hauptrefinanzierungssatz (Juni 2000 bis Oktober 2008 "
+    "Mindestbietungssatz der Zinstender) und Einlagesatz (EZB FM) sowie der "
+    "Federal-Funds-Zielsatz der Fed, ab 16.12.2008 die Obergrenze der Zielspanne "
+    "(Federal Reserve über FRED, DFEDTAR und DFEDTARU). Ganz unten: CO₂-Preis je "
+    "Tonne nach § 10 Abs. 2 BEHG – Festpreise 2021 bis 2025, Preiskorridor 2026; für "
+    "2027 der vom Bundestag am 15.10.2026 beschlossene Korridor (Drucksache 21/7869, "
+    "Verkündung ausstehend). Alle Teilbilder "
     "teilen die Jahresachse, die gestrichelten Marken "
     "gelten in allen Teilbildern: Start der Agenda 2010 (14.03.2003), Lehman-Pleite "
-    "(15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), Beginn der "
+    "(15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), Einführung des CO₂-Preises "
+    "von 25 €/t auf Heizöl, Erdgas und Kraftstoffe (01.01.2021), Beginn der "
     "Russland-Sanktionen (02.03.2022) und die Schließung der Straße von Hormus nach dem "
     "Angriff der USA und Israels auf den Iran (28.02.2026)."
 )
+
+
+def _ct(zeile: pd.Series, art: str, nachkommastellen: int = 1) -> str:
+    """Aufschlag in Cent; beim Preiskorridor als Spanne."""
+    unten = ui.format_number(zeile[f"aufschlag_min_{art}_ct"], nachkommastellen)
+    oben = ui.format_number(zeile[f"aufschlag_max_{art}_ct"], nachkommastellen)
+    return unten if unten == oben else f"{unten}–{oben}"
+
+
+with st.expander("CO₂-Preis: Was er je Liter und je Kilowattstunde ausmacht"):
+    emission = co2_aufschlag.drop_duplicates("brennstoff").set_index("brennstoff")
+    kg = emission["kg_co2_je_einheit"]
+    st.markdown(
+        "Seit dem 1. Januar 2021 gilt in Deutschland nach dem "
+        "Brennstoffemissionshandelsgesetz (BEHG) ein **CO₂-Preis auf Heizöl, Erdgas, "
+        "Benzin und Diesel**. Wer die Brennstoffe in Verkehr bringt, muss je Tonne CO₂ "
+        "ein Emissionszertifikat kaufen und gibt die Kosten über den Preis weiter. Bis "
+        "2025 galten Festpreise, 2026 gilt ein Preiskorridor von 55 bis 65 €/t. Für "
+        "2027 hat der Bundestag am 15.10.2026 denselben Korridor beschlossen; die "
+        "Verkündung steht noch aus. Danach soll der europäische Emissionshandel für "
+        "Gebäude und Verkehr (ETS 2) den nationalen Preis ablösen – nach seiner "
+        "Verschiebung frühestens 2028. Der Preis bildet sich dann am Markt.\n\n"
+        "**Rechnung:** Die Emissionsberichterstattungsverordnung (EBeV 2030, Anlage 2) "
+        "legt je Brennstoff Dichte, Heizwert und Emissionsfaktor fest. Daraus folgen "
+        f"**{ui.format_number(kg['Heizöl EL'], 2)} kg CO₂ je Liter** Heizöl EL und "
+        f"Diesel, {ui.format_number(kg['Benzin'], 2)} kg je Liter Benzin (rund "
+        f"{ui.format_number((1 - kg['Benzin'] / kg['Diesel']) * 100, 0)} % weniger als "
+        f"Diesel) und {ui.format_number(kg['Erdgas'], 3)} kg je Kilowattstunde Erdgas. "
+        "Ein Euro je Tonne CO₂ kostet je Liter Heizöl also "
+        f"{ui.format_number(kg['Heizöl EL'] / 10, 3)} Cent. Auf den CO₂-Preis kommt "
+        f"die Umsatzsteuer von {ui.format_number(analysis.UMSATZSTEUER_PCT, 0)} %."
+    )
+
+    tabelle = co2_preis[["jahr", "preis_min_eur_t", "preis_max_eur_t"]].copy()
+    tabelle["CO₂-Preis (€/t)"] = [
+        f"{unten:.0f}" if unten == oben else f"{unten:.0f}–{oben:.0f}"
+        for unten, oben in zip(
+            tabelle["preis_min_eur_t"], tabelle["preis_max_eur_t"], strict=True
+        )
+    ]
+    spalten = {
+        "Heizöl EL": ("Heizöl / Diesel, ct/l mit USt.", "brutto", 1),
+        "Benzin": ("Benzin, ct/l mit USt.", "brutto", 1),
+        "Erdgas": ("Erdgas, ct/kWh ohne USt.", "netto", 2),
+    }
+    for brennstoff, (titel, art, stellen) in spalten.items():
+        werte = co2_aufschlag[co2_aufschlag["brennstoff"] == brennstoff].set_index("jahr")
+        tabelle[titel] = [_ct(werte.loc[jahr], art, stellen) for jahr in tabelle["jahr"]]
+    tabelle["Jahr"] = [
+        f"{jahr}*" if jahr == tabelle["jahr"].max() else str(jahr) for jahr in tabelle["jahr"]
+    ]
+    st.dataframe(
+        tabelle[["Jahr", "CO₂-Preis (€/t)", *[titel for titel, _, _ in spalten.values()]]],
+        hide_index=True,
+        width="stretch",
+    )
+    st.caption(
+        "Cent je Liter entspricht Euro je 100 Liter. * 2027: vom Bundestag beschlossen, "
+        "Verkündung ausstehend."
+    )
+
+    erstes_jahr = int(co2_preis["jahr"].min())
+    anteil = analysis.co2_share_of_consumer_price(
+        co2_aufschlag, ui.energy_markets(), ui.fuel_prices(), erstes_jahr
+    ).set_index("brennstoff")
+    st.markdown(
+        "**Hinweise**\n\n"
+        f"* **Inflation {erstes_jahr}:** Der Aufschlag von "
+        f"{ui.format_number(anteil.loc['Heizöl EL', 'aufschlag_max_brutto_ct'], 1)} Cent "
+        f"je Liter Heizöl entsprach rund "
+        f"{ui.format_number(anteil.loc['Heizöl EL', 'anteil_pct'], 0)} % des mittleren "
+        f"Heizölpreises {erstes_jahr} "
+        f"({ui.format_number(anteil.loc['Heizöl EL', 'preis_ct_l'], 1)} ct/l), bei "
+        f"Diesel rund {ui.format_number(anteil.loc['Diesel', 'anteil_pct'], 0)} % und "
+        f"bei Benzin rund {ui.format_number(anteil.loc['Benzin', 'anteil_pct'], 0)} %. "
+        "Zum Jahreswechsel 2020/21 endete außerdem die befristete Senkung der "
+        "Umsatzsteuer aus dem zweiten Halbjahr 2020; beides hob die Inflationsrate im "
+        "Januar 2021 sprunghaft an.\n"
+        "* **Biokraftstoffe:** Die Werte gelten für rein fossile Brennstoffe. "
+        "Beimischungen wie im Diesel (B7) oder Benzin (E10) sind nicht berücksichtigt; "
+        "der tatsächliche Aufschlag an der Tankstelle kann daher etwas niedriger liegen.\n"
+        "* **Erdgas** ist ohne Umsatzsteuer angegeben, je Kilowattstunde bezogen auf "
+        "den Brennwert, wie er auf Gasrechnungen steht."
+    )
+    st.caption(
+        "Quellen: § 10 Abs. 2 BEHG (gesetze-im-internet.de/behg/__10.html); Deutscher "
+        "Bundestag, Drucksache 21/7869, Beschluss vom 15.10.2026; EBeV 2030, Anlage 2 "
+        "Teil 4 (gesetze-im-internet.de/ebev_2030/anlage_2.html); Preise: EU Weekly Oil "
+        "Bulletin (Heizöl, Diesel, Benzin, jeweils mit Steuern)."
+    )
 
 aktuell = monatszinslast.iloc[-1]
 latest_debt = debt.iloc[-1]

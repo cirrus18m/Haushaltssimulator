@@ -1,0 +1,5 @@
+brennstoff,nummer,einheit,dichte_t_je_1000l,heizwert_gj_je_t,umrechnung_gj_je_mwh,emissionsfaktor_t_co2_je_gj
+Heizöl EL,3b,1000 l,0.845,42.8,,0.074
+Diesel,3a,1000 l,0.845,42.8,,0.074
+Benzin,1,1000 l,0.755,43.5,,0.0729
+Erdgas,6,MWh,,1,3.2508,0.0558

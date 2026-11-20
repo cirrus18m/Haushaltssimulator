@@ -38,6 +38,11 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `produktion_deutschland_lang.csv` | Industrieproduktion mit Langfristtrend | Eurostat `sts_inpr_m` | 1993-01–2026-09 |
 | `produktion_vergleich_monat.csv` | Produktionsindex im Ländervergleich | Eurostat `sts_inpr_m` | 1995-01–2026-09 |
 | `energie_maerkte_monat.csv` | Heizöl sowie regionale Gas- und Öl-Benchmarks | EU Weekly Oil Bulletin; IWF und EIA über FRED; EZB | 1999-01–2026-11 |
+| `inflation_de_monat.csv` | Inflation Deutschland: HVPI, Kerninflation, VPI | EZB ICP; Destatis 61111-0002 | 1992-01–2026-10 |
+| `bevoelkerung_20_59_jahr.csv` | Bevölkerung von 20 bis unter 60 Jahren je Land (Summe der Gruppen 20–24 bis 55–59) | Eurostat `demo_pjangroup` | 2015–2025 |
+| `co2_preis_jahr.csv` | CO₂-Preis je Tonne nach BEHG (Festpreis bzw. Preiskorridor) | BEHG § 10 Abs. 2; Bundestag, Drucksache 21/7869 | 2021–2027 |
+| `co2_aufschlag_jahr.csv` | CO₂-Aufschlag je Liter bzw. kWh, netto und mit Umsatzsteuer | BEHG; EBeV 2030, Anlage 2 | 2021–2027 |
+| `leitzinsen.csv` | Leitzinsen von EZB und Fed an den Tagen ihrer Änderung | EZB FM; Federal Reserve über FRED (`DFEDTAR`, `DFEDTARU`) | 1982–2026 |
 
 ### Spalten
 
@@ -154,6 +159,37 @@ Verfügung.
 | `monat` | Berichtsmonat |
 | `inflation_de_pct`, `inflation_ea_pct` | HVPI-Veränderung gegenüber dem Vorjahr |
 | `kaufkraft_index` | Kaufkraft eines Euro, Startmonat = 100 |
+
+**`inflation_de_monat.csv`** – Vorjahresraten in Prozent; die Reihen reichen
+unterschiedlich weit (HVPI und Kerninflation bei der EZB bis Dezember 2025, VPI ab 1992).
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat |
+| `hvpi_pct` | Harmonisierter Verbraucherpreisindex (EZB ICP `000000`) |
+| `hvpi_kern_pct` | Kerninflation: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak (EZB ICP `XEF000`) |
+| `vpi_pct` | Nationaler Verbraucherpreisindex mit selbst genutztem Wohneigentum (Destatis 61111-0002) |
+
+**`co2_preis_jahr.csv`** – `jahr`, `preis_min_eur_t`, `preis_max_eur_t` (beim Festpreis
+gleich, sonst Preiskorridor), `art`, `rechtsgrundlage`. Rohdaten:
+`raw/manual/behg_co2_preise.csv`, von Hand aus § 10 Abs. 2 BEHG übernommen; 2027 nach
+dem Bundestagsbeschluss vom 15.10.2026, Verkündung ausstehend.
+
+**`co2_aufschlag_jahr.csv`** – je Jahr und Brennstoff (`Heizöl EL`, `Diesel`, `Benzin`,
+`Erdgas`): `einheit_verbrauch` (l bzw. kWh), `kg_co2_je_einheit` (Dichte × Heizwert ×
+Emissionsfaktor aus `raw/manual/ebev_2030_standardwerte.csv`),
+`aufschlag_min_netto_ct`, `aufschlag_max_netto_ct` und dieselben Werte `_brutto_ct`
+mit 19 % Umsatzsteuer, jeweils in Cent je Liter bzw. kWh.
+
+**`leitzinsen.csv`** – eine Zeile je Zinsänderung (Stufenreihe; der letzte
+Beobachtungstag der Fed-Reihe ist als Endpunkt enthalten).
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `datum` | Tag, ab dem der Satz gilt |
+| `leitzins` | `EZB Hauptrefinanzierungssatz` (Festzins; Juni 2000 bis Oktober 2008 Mindestbietungssatz der Zinstender), `EZB Einlagesatz`, `Fed Funds Zielsatz (ab 16.12.2008 Obergrenze)` |
+| `zins_pct` | Zinssatz in Prozent |
+| `quelle` | Kurzangabe der Quelle |
 
 **`energiepreise_jahr.csv`** – `jahr`, `verbrauchsklasse`, `strompreis_eur_kwh`,
 `gaspreis_eur_kwh` (jeweils inklusive Steuern, Abgaben und Umlagen; Summe der
@@ -331,8 +367,12 @@ und macht keine eigenen API-Aufrufe.
 Im Datenaufbau aktiv ist derzeit `fred_api`: Die US-Rendite
 (`fred_us_10j_rendite.csv`) wird mit `FRED_API_KEY` über die FRED-API geholt und ohne
 Schlüssel über den öffentlichen CSV-Export. Beide Wege erzeugen dieselbe Tabelle.
-Die Destatis-Tabellen nutzen weiterhin die Export-URLs, weil das API-Format
-(`ffcsv` bzw. `csv` mit `transpose`) anders aufgebaut ist als die Exportdateien.
+
+`destatis_api` lädt den Verbraucherpreisindex 61111-0002 mit `DESTATIS_API_TOKEN` über
+`data/tablefile` mit `format=csv` ab 1991. Dieses Format entspricht der Exportdatei
+(nur das Jahr steht lediglich beim Januar und wird beim Einlesen nach unten
+aufgefüllt). Ohne Token wird der öffentliche Export geladen, der nur die letzten Jahre
+enthält. Die übrigen Destatis-Tabellen nutzen weiterhin die Export-URLs.
 
 ## Aktualisieren
 

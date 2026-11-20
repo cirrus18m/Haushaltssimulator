@@ -107,6 +107,7 @@ def parse_fixed_columns(
     value_columns: Sequence[str],
     *,
     year_column: int = 0,
+    fill_down: Sequence[str] = (),
 ) -> pd.DataFrame:
     """Liest Tabellen mit festen Merkmals- und Wertspalten.
 
@@ -114,6 +115,10 @@ def parse_fixed_columns(
     (z. B. ``2026;Januar;Insgesamt;9418;3611659``). Kopfzeilen werden übersprungen,
     bis in ``year_column`` eine Jahreszahl steht. Bei ``year_column=1`` beginnt die
     Tabelle mit einem Merkmal, etwa ``Verarbeitendes Gewerbe;2026;Januar;...``.
+
+    Merkmale in ``fill_down`` werden aus der vorigen Zeile übernommen, wenn die Zelle
+    leer ist – lange Monatsreihen nennen das Jahr oft nur beim Januar
+    (``1991;Januar;...`` gefolgt von ``;Februar;...``).
     """
     rows = list(csv.reader(io.StringIO(raw), delimiter=";"))
     start = next(
@@ -128,10 +133,15 @@ def parse_fixed_columns(
         raise ValueError("Keine Datenzeilen in der Tabelle gefunden")
 
     records = []
+    previous: dict[str, str] = {}
     for row in rows[start:]:
         if len(row) < len(label_columns) + len(value_columns):
             continue
         labels = [cell.strip() for cell in row[: len(label_columns)]]
+        for index, column in enumerate(label_columns):
+            if column in fill_down:
+                labels[index] = labels[index] or previous.get(column, "")
+                previous[column] = labels[index]
         if not all(labels):
             continue
         record: dict[str, object] = dict(zip(label_columns, labels, strict=True))

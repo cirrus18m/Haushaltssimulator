@@ -79,7 +79,7 @@ app/pages/        Streamlit-Seiten, nur Darstellung
 * Zugangsdaten liest `config.py`; API-Clients (z. B. `destatis_api.py`) werden nur von
   Skripten und `build.py` verwendet, nie von der App.
 * Quellen mit API-Anbindung nutzen einen eigenen `fetch_mode` in `sources.py`
-  (bisher `fred_api`) und fallen ohne Zugangsdaten auf den öffentlichen Export
+  (bisher `fred_api` und `destatis_api`) und fallen ohne Zugangsdaten auf den öffentlichen Export
   zurück. Neue Modi immer mit Test und Fallback ergänzen.
 * Berechnungen gehören nach `analysis.py` und müssen ohne Streamlit testbar sein.
 * Die Streamlit-Seiten enthalten keine Fachlogik: laden, filtern, darstellen.

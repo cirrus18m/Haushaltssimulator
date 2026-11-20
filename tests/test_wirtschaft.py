@@ -240,3 +240,19 @@ def test_ecb_daily_parser_keeps_dates() -> None:
     assert list(frame.columns) == ["datum", "usd_je_eur"]
     assert frame.iloc[0]["datum"] == pd.Timestamp("2024-01-02")
     assert frame["usd_je_eur"].tolist() == [1.095, 1.0921]
+
+
+def test_parse_fixed_columns_fills_year_down() -> None:
+    raw = (
+        ";;Verbraucherpreisindex;Veränderung zum Vorjahresmonat;Veränderung zum Vormonat\n"
+        "1992;Januar;63,8;+5,6;+0,9\n"
+        ";Februar;64,2;+5,8;+0,6\n"
+        "1993;Januar;66,6;+4,4;+1,1\n"
+    )
+    frame = destatis.parse_fixed_columns(
+        raw, ["jahr", "monat_name"], ["index", "vj_pct", "vm_pct"], fill_down=("jahr",)
+    )
+    assert frame["jahr"].tolist() == ["1992", "1992", "1993"]
+    assert frame["vj_pct"].tolist() == [5.6, 5.8, 4.4]
+    ohne = destatis.parse_fixed_columns(raw, ["jahr", "monat_name"], ["index", "vj", "vm"])
+    assert len(ohne) == 2
