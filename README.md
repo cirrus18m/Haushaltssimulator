@@ -77,6 +77,7 @@ Haushaltssimulator/
 │   ├── raw/                  # automatisch geladene Rohdaten (nicht versioniert)
 │   │   └── manual/           # von Hand geladene Rohdaten (versioniert)
 │   └── processed/            # aufbereitete CSVs für die App
+├── insights/                 # Datengeschichten als Reveal.js-Präsentationen (Hochformat 9:16)
 ├── scripts/
 │   └── build_data.py         # Datenabruf und -aufbereitung
 ├── src/haushaltssimulator/   # Datenlogik (Parsing, Aufbereitung, Analysen)
@@ -109,6 +110,7 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [Eurostat `gov_10a_main`](https://ec.europa.eu/eurostat/databrowser/view/gov_10a_main/default/table) | Einnahmen und Zinsausgaben der europäischen Länder, jährlich | CC BY 4.0 |
 | [Eurostat `nama_10_gdp`](https://ec.europa.eu/eurostat/databrowser/view/nama_10_gdp/default/table) | BIP der europäischen Länder, jährlich | CC BY 4.0 |
 | [Eurostat `demo_pjan`](https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table) | Bevölkerung der europäischen Länder, jährlich | CC BY 4.0 |
+| [Eurostat `demo_pjangroup`](https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table) | Bevölkerung von 20 bis unter 60 Jahren je Land (Fünf-Jahres-Gruppen) | CC BY 4.0 |
 | [Eurostat `prc_hicp_manr`](https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_manr/default/table) | Inflationsraten (HVPI) der europäischen Länder, monatlich | CC BY 4.0 |
 | [FRED `IRLTLT01USM156N`](https://fred.stlouisfed.org/series/IRLTLT01USM156N) | Langfristige Staatsanleiherendite der USA (OECD MEI) | OECD-Bedingungen |
 | [Bank of Russia](https://www.cbr.ru/eng/hd_base/zcyc_params/) | Zero-Coupon-Yield-Curve, 10-jährige OFZ-Rendite | Quellenangabe erforderlich |

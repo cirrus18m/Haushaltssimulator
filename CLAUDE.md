@@ -55,6 +55,11 @@ Paket `src/haushaltssimulator/`:
 | `ui.py` | Gecachte Lader für die Seiten, Farbpaletten (`EBENE_COLORS`, `CHART_COLORS`), deutsche Zahlenformatierung (`format_number`, `format_mrd`, `format_eur`, `format_month`), `style()` und `plot()`. |
 | `paths.py` | `PROJECT_ROOT`, `RAW_DIR`, `PROCESSED_DIR`, `SOURCES_FILE`. |
 
+Insights: `insights/<thema>/` enthält je eine Reveal.js-Präsentation (`index.html`,
+Hochformat 1080 × 1920) mit `diagramme.py`, das Diagramme (`bilder/*.svg`) und
+`kennzahlen.json` aus `data/processed/` erzeugt. `tests/test_insights.py` prüft, dass die
+Zahlen im Foliensatz zu `kennzahlen.json` passen. Details: `insights/README.md`.
+
 App: `app/main.py` definiert die Navigation explizit mit `st.Page(...)`; die Nummern in
 den Dateinamen unter `app/pages/` bestimmen **nicht** die Reihenfolge. Seiten enthalten
 nur Laden, Filtern, Darstellen – Fachlogik gehört nach `analysis.py` oder `build.py`.

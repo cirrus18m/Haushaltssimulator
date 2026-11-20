@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Fast 100 Milliarden Euro Zinsen – woher kommt das?</title>
+  <meta name="description" content="Datenanalyse zur Zinslast Deutschlands: Schuldenstand, Bundeshaushalt, Rendite der Bundesanleihe, Inflation, Leitzinsen und CO₂-Preis.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/theme/white.css">
+  <link rel="stylesheet" href="stil.css">
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- 1 Titel -->
+    <section class="titel" data-background-color="#1f4e79">
+      <div style="margin-top: 260px">
+        <span class="kicker">Haushaltssimulator · Insights</span>
+        <div class="gross">≈ 98 Mrd. €</div>
+        <h1>Zinsen pro Jahr – woher kommt das?</h1>
+        <p>Und stimmt die Erklärung der Bundesregierung, der Iran-Krieg habe die Zinsen getrieben?</p>
+        <p class="klein" style="color:#dbe7f3; margin-top: 80px">
+          Eine Spurensuche in öffentlichen Daten.<br>Datenstand: 17. November 2026
+        </p>
+      </div>
+    </section>
+
+    <!-- 2 Schuldenstand -->
+    <section>
+      <span class="kicker">1 · Der Schuldenstand</span>
+      <h2>Knapp 3 Billionen Euro Schulden</h2>
+      <img class="diagramm" src="bilder/schuldenstand.svg" alt="Schuldenstand des Staates 1995 bis 2025">
+      <div class="kern">
+        1995: <span class="zahl">1,08 Bio. €</span> · 2025: <span class="zahl">2,85 Bio. €</span><br>
+        – das <b>2,6-Fache</b>. Bis November 2026 fortgeschrieben: <b>≈ 2,97 Bio. €</b>.
+      </div>
+      <div class="quelle">Maastricht-Schuldenstand des Gesamtstaats, Eurostat gov_10dd_edpt1; Fortschreibung: eigener Trend der letzten beiden Jahresenden.</div>
+    </section>
+
+    <!-- 3 Haushalt -->
+    <section>
+      <span class="kicker">2 · Der Bundeshaushalt</span>
+      <h2>Mehr Ausgaben als Einnahmen</h2>
+      <img class="diagramm" src="bilder/haushalt.svg" alt="Gestapelte Ausgaben des Bundes 2027 und 2030 mit Verteidigung oben und der Lücke zu den Einnahmen ohne neue Schulden">
+      <div class="kern rot">
+        2030: <b>635,4 Mrd. €</b> Ausgaben, aber nur <b>468,1 Mrd. €</b> Einnahmen ohne neue Schulden – <span class="zahl rot">167,3 Mrd. € nicht gedeckt</span>, fast so viel wie der Verteidigungsetat (183,7 Mrd. €).
+      </div>
+      <p class="klein">Zinsen (80,6 Mrd. €) und Rente (164,5 Mrd. €) beanspruchen 2030 zusammen <b>56 %</b> der Steuereinnahmen des Bundes.</p>
+      <div class="quelle">Finanzplan des Bundes 2026–2030, Drs. 21/7301: Tab. 3, Tab. 8 (Epl. 14), Tab. 9, Rentenversicherungsleistungen.</div>
+    </section>
+
+    <!-- 4 Begründung der Regierung -->
+    <section>
+      <span class="kicker">3 · Die offizielle Begründung</span>
+      <h2>Was die Bundesregierung schreibt</h2>
+      <blockquote class="zitat">
+        „Der Anstieg der Zinsausgaben ist wesentlich auf den erhöhten Schuldenstand sowie auf gestiegene Renditen für Bundeswertpapiere zurückzuführen, die sich aufgrund des Irankriegs und der damit gestiegenen Inflation bzw. Inflationserwartung erhöht haben.“
+      </blockquote>
+      <p class="klein">Finanzplan des Bundes 2026–2030, Abschnitt 4.4.1 Zinsausgaben</p>
+      <div class="kern gold" style="margin-top: 70px">
+        Stimmt das? Haben sich die Kosten der Schulden <b>wirklich durch den Iran-Krieg</b> so stark erhöht?<br><br>Schauen wir in die Daten.
+      </div>
+      <div class="quelle">Deutscher Bundestag, Drucksache 21/7301, S. 40.</div>
+    </section>
+
+    <!-- 5 Rendite -->
+    <section>
+      <span class="kicker">4 · Die Kosten der Schulden</span>
+      <h2>Der große Sprung kam 2022</h2>
+      <img class="diagramm" src="bilder/rendite.svg" alt="Rendite der 10-jährigen Bundesanleihe 2015 bis 2026">
+      <div class="kern rot">
+        2022: von <b>−0,33 %</b> auf <b>2,10 %</b> = <span class="zahl rot">+2,4 Prozentpunkte</span>
+      </div>
+      <div class="kern gold">
+        Seit dem Iran-Krieg: von <b>2,78 %</b> auf <b>3,30 %</b> = <span class="zahl gold">+0,5 Prozentpunkte</span>
+      </div>
+      <div class="quelle">Monatsmittel der Tagesrendite der aktuellen 10-jährigen Bundesanleihe, Deutsche Bundesbank; Dez. 2021 → Dez. 2022 und Feb. 2026 → Nov. 2026.</div>
+    </section>
+
+    <!-- 6 International -->
+    <section>
+      <span class="kicker">5 · Schon vor den Sanktionen</span>
+      <h2>Die Rendite stieg vorher – überall gleichzeitig</h2>
+      <img class="diagramm" src="bilder/rendite_international.svg" alt="Renditen 10-jähriger Staatsanleihen Deutschland, Frankreich, Italien, USA">
+      <div class="kern">
+        Dez. 2021 → Feb. 2022: Deutschland <b>+0,53</b> · Frankreich <b>+0,63</b> · Italien <b>+0,74</b> · USA <b>+0,46</b> Prozentpunkte
+      </div>
+      <p>Der frühe Anstieg war kein deutscher Sonderweg: Weltweit stieg die Inflation, die Märkte erwarteten die Zinswende der Notenbanken.</p>
+      <div class="quelle">Eurostat irt_lt_mcby_m (EU-Konvergenzrenditen), FRED IRLTLT01USM156N (USA).</div>
+    </section>
+
+    <!-- 7 Inflation und Leitzins -->
+    <section>
+      <span class="kicker">6 · Inflation und Zinswende</span>
+      <h2>Erst die Inflation, dann die Zinswende</h2>
+      <img class="diagramm" src="bilder/inflation_leitzins.svg" alt="Inflation in Deutschland und Einlagesatz der EZB 2019 bis 2026">
+      <div class="kern">
+        Januar 2021: Inflation springt von <b>−0,7 %</b> auf <b>1,6 %</b> – CO₂-Preis und das Ende der befristeten Mehrwertsteuersenkung.
+      </div>
+      <div class="kern rot">
+        Oktober 2022: <span class="zahl rot">11,6 %</span>. Ab Juli 2022 erhöht die EZB den Leitzins, der Einlagesatz steigt bis <b>4 %</b>.
+      </div>
+      <div class="quelle">HVPI Deutschland, EZB ICP; EZB-Leitzinsen, EZB FM.</div>
+    </section>
+
+    <!-- 8 CO2-Preis -->
+    <section>
+      <span class="kicker">7 · Der CO₂-Preis</span>
+      <h2>Der CO₂-Preis heizte die Inflation mit an</h2>
+      <img class="diagramm" src="bilder/co2_preis.svg" alt="CO₂-Preis nach BEHG 2021 bis 2027">
+      <div class="kern gruen">
+        2021 kosteten 25 €/t rund <b>8 Cent je Liter Heizöl</b> – etwa <b>11 %</b> des Heizölpreises, bei Diesel 6 %, bei Benzin 5 %. 2026 sind es bis zu <b>20,7 Cent</b>.
+      </div>
+      <p class="klein">Auf die Zinsen wirkt der CO₂-Preis nur indirekt – über die Inflation und damit über die Erwartungen an die EZB. Den weltweiten Renditeanstieg Anfang 2022 erklärt er nicht.</p>
+      <div class="quelle">§ 10 Abs. 2 BEHG; EBeV 2030 Anlage 2 (2,68 kg CO₂ je Liter); Preise mit Steuern: EU Weekly Oil Bulletin, Jahresmittel 2021.</div>
+    </section>
+
+    <!-- 9 Theoretische Zinslast -->
+    <section>
+      <span class="kicker">8 · Die Zinslast</span>
+      <h2>+65 Milliarden in zehn Monaten</h2>
+      <img class="diagramm" src="bilder/zinslast.svg" alt="Theoretische, tatsächliche und geplante Zinslast 2019 bis 2030">
+      <div class="kern rot">
+        Schulden × aktuelle Rendite: von <b>−8 Mrd. €</b> (Dez. 2021) auf <b>56 Mrd. €</b> (Okt. 2022). Heute: <span class="zahl rot">≈ 98 Mrd. € pro Jahr</span>.
+      </div>
+      <div class="quelle">Modellrechnung: monatlicher Schuldenstand × Monatsmittel der Rendite. So viel kostete der gesamte Schuldenstand, wenn er komplett zum heutigen Marktzins finanziert wäre.</div>
+    </section>
+
+    <!-- 10 Verzögerung -->
+    <section>
+      <span class="kicker">9 · Die Rechnung kommt später</span>
+      <h2>Warum wir es erst jetzt spüren</h2>
+      <p>Der Staat leiht sich über Anleihen mit 10, 20 oder 30 Jahren Laufzeit. Erst wenn alte, billige Anleihen auslaufen, muss er sie zum neuen, höheren Zins ersetzen.</p>
+      <div class="stufen">
+        <div class="stufe"><span class="klein">Tatsächlich gezahlte Zinsen des Staates</span><b>21,8 → 49,0 Mrd. €</b><span class="klein">2021 → 2025</span></div>
+        <div class="stufe"><span class="klein">Durchschnittszins auf alle Schulden</span><b>0,87 % → 1,72 %</b><span class="klein">2021 → 2025 – und weiter steigend</span></div>
+        <div class="stufe"><span class="klein">Zinsen im Bundeshaushalt (Plan)</span><b style="color: var(--rot)">41,8 → 80,6 Mrd. €</b><span class="klein">2027 → 2030</span></div>
+      </div>
+      <p style="margin-top: 36px"><b>Das Problem holt uns ein</b> – und belastet künftige Haushalte und Generationen.</p>
+      <div class="quelle">Zinsausgaben und Schuldenstand des Gesamtstaats: Eurostat gov_10a_main, gov_10dd_edpt1. Bund: Finanzplan 2026–2030, Tabelle 9.</div>
+    </section>
+
+    <!-- 11 Zerlegung -->
+    <section>
+      <span class="kicker">10 · Was treibt die Zinslast?</span>
+      <h2>2022 wiegt fast fünfmal so schwer wie der Iran-Krieg</h2>
+      <img class="diagramm" src="bilder/zerlegung.svg" alt="Zerlegung der Zinslast: Renditeanstieg 2022, Renditeanstieg seit Iran-Krieg, Schuldenzuwachs">
+      <div class="kern">
+        Gerechnet auf den heutigen Schuldenstand von 2,97 Bio. €: Der Renditeanstieg 2022 kostet <span class="zahl rot">≈ 72 Mrd. €</span> pro Jahr, der seit dem Iran-Krieg <span class="zahl gold">≈ 15 Mrd. €</span>. Die neuen Schulden seit 2021 (+484 Mrd. €) kosten weitere ≈ 16 Mrd. €.
+      </div>
+      <div class="quelle">Eigene Rechnung: Renditeanstieg × heutiger Schuldenstand bzw. Schuldenzuwachs × heutige Rendite (3,30 %). Modell, keine Prognose.</div>
+    </section>
+
+    <!-- 12 Fazit -->
+    <section>
+      <span class="kicker">Fazit</span>
+      <h2>Was die Daten zeigen</h2>
+      <ul>
+        <li>Der Staat hat <b>knapp 3 Billionen Euro</b> Schulden – das 2,6-Fache von 1995.</li>
+        <li>Die Kosten neuer Schulden sind <b>2022 um 2,4 Prozentpunkte</b> gestiegen, in allen großen Volkswirtschaften gleichzeitig. Seit Februar 2026 kamen <b>0,5 Prozentpunkte</b> hinzu.</li>
+        <li>Zu heutigen Marktzinsen kostet der Schuldenstand <b>≈ 98 Mrd. € pro Jahr</b>. Gezahlt wird mit Verzögerung: 2025 waren es 49 Mrd. €, der Bund plant für 2030 80,6 Mrd. €.</li>
+        <li>2030 kann der Bund <b>167 Mrd. €</b> seiner Ausgaben nicht aus Einnahmen decken; Zinsen und Rente binden <b>56 %</b> seiner Steuereinnahmen.</li>
+        <li>Die höheren Zinsen von heute belasten die <b>Haushalte der kommenden Jahrzehnte</b>.</li>
+      </ul>
+    </section>
+
+    <!-- 13 Quellen -->
+    <section>
+      <span class="kicker">Quellen und Methode</span>
+      <h2>Woher die Zahlen kommen</h2>
+      <ul class="klein" style="font-size: var(--min-schrift)">
+        <li>Schuldenstand, Zinsausgaben, Einnahmen des Staates: Eurostat gov_10dd_edpt1, gov_10a_main (CC BY 4.0)</li>
+        <li>Rendite der 10-jährigen Bundesanleihe: Deutsche Bundesbank, Reihe BBSSY.D.REN.EUR.A630.000000WT1010.A</li>
+        <li>Renditen im Vergleich: Eurostat irt_lt_mcby_m; USA: FRED IRLTLT01USM156N</li>
+        <li>Inflation: EZB ICP (HVPI); Leitzinsen: EZB FM</li>
+        <li>CO₂-Preis: § 10 Abs. 2 BEHG; 2026/2027 Preiskorridor (2027 vom Bundestag am 15.10.2026 beschlossen, Verkündung ausstehend); Emissionsfaktoren: EBeV 2030 Anlage 2</li>
+        <li>Bundeshaushalt: Finanzplan des Bundes 2026–2030, Drucksache 21/7301</li>
+        <li>Theoretische Zinslast: Modell aus Schuldenstand × Marktrendite – keine Prognose der tatsächlichen Zinsausgaben</li>
+      </ul>
+      <p class="klein" style="margin-top: 40px">Interaktiv: App „Haushaltssimulator“, Seite Haushalt &amp; Zinsen.</p>
+    </section>
+
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+<script>
+  // Hochformat 9:16 (1080 × 1920) für Smartphones, YouTube Shorts und Facebook.
+  Reveal.initialize({
+    width: 1080,
+    height: 1920,
+    margin: 0,
+    minScale: 0.1,
+    maxScale: 2.0,
+    center: false,
+    hash: true,
+    controls: true,
+    progress: true,
+    slideNumber: "c/t",
+    transition: "slide",
+  });
+</script>
+</body>
+</html>
