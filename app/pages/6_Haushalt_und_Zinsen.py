@@ -18,6 +18,14 @@ ZEITMARKEN = (
     ("Hormus", "2026-02-28", 0.02, "right"),
 )
 
+# Achsen der drei Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
+# Die Zeitmarken werden in allen Zeilen an derselben Stelle der Achsenhöhe beschriftet.
+TEILBILD_ACHSEN = (
+    ("x", "y domain"),
+    ("x2", "y3 domain"),
+    ("x3", "y5 domain"),
+)
+
 st.title("Haushalt, Schulden und Zinslast")
 st.markdown(
     "Die Seite beginnt bei der **Zinslast**: Sie ist der gesamte Schuldenstand "
@@ -212,27 +220,27 @@ figure.add_vrect(
 )
 
 for label, datum, hoehe, anker in ZEITMARKEN:
-    for zeile in (1, 2, 3):
+    for zeile, (xref, yref) in enumerate(TEILBILD_ACHSEN, start=1):
         figure.add_vline(
             x=pd.Timestamp(datum),
             line={"color": "#b03a2e", "width": 1, "dash": "dot"},
             row=zeile,
             col=1,
         )
-    figure.add_annotation(
-        x=pd.Timestamp(datum),
-        y=hoehe,
-        xref="x",
-        yref="y domain",
-        text=label,
-        showarrow=False,
-        textangle=-90,
-        xanchor=anker,
-        yanchor="bottom",
-        font={"size": 9, "color": "#b03a2e"},
-        bgcolor="rgba(255,255,255,0.85)",
-        borderpad=1,
-    )
+        figure.add_annotation(
+            x=pd.Timestamp(datum),
+            y=hoehe,
+            xref=xref,
+            yref=yref,
+            text=label,
+            showarrow=False,
+            textangle=-90,
+            xanchor=anker,
+            yanchor="bottom",
+            font={"size": 9, "color": "#b03a2e"},
+            bgcolor="rgba(255,255,255,0.85)",
+            borderpad=1,
+        )
 
 figure.update_yaxes(title_text="Rendite in %", row=1, col=1, secondary_y=False)
 figure.update_yaxes(
