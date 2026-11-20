@@ -18,8 +18,15 @@ ZEITMARKEN = (
     ("Hormus", "2026-02-28", 0.02, "right"),
 )
 
+# Reihenfolge der vier Teilbilder von oben nach unten.
+ZEILE_SCHULDEN = 1
+ZEILE_RENDITE = 2
+ZEILE_ZINSLAST = 3
+ZEILE_INFLATION = 4
+
 # Achsen der vier Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
-# Nur das Zinslast-Teilbild (Zeile 3) hat eine zweite y-Achse (y4).
+# Nur das Zinslast-Teilbild (Zeile 3) hat eine zweite y-Achse (y4), daher heißt die
+# Hauptachse der vierten Zeile y5.
 # Die Zeitmarken werden in allen Zeilen an derselben Stelle der Achsenhöhe beschriftet.
 TEILBILD_ACHSEN = (
     ("x", "y domain"),
@@ -28,7 +35,7 @@ TEILBILD_ACHSEN = (
     ("x4", "y5 domain"),
 )
 
-# Inflationsmaße im zweiten Teilbild: Spalte, Bezeichnung, Farbe, Strichart.
+# Inflationsmaße im unteren Teilbild: Spalte, Bezeichnung, Farbe, Strichart.
 INFLATION_REIHEN = (
     ("hvpi_pct", "Inflation (HVPI)", "#c9a227", "solid"),
     ("hvpi_kern_pct", "Kerninflation (HVPI)", "#e6550d", "dot"),
@@ -47,17 +54,16 @@ LEITZINS_REIHEN = {
     ),
 }
 
-# Eine Legende je Teilbild rechts neben der Zeichenfläche. LEGENDE_X liegt knapp
-# rechts der Zeichenfläche (Anteil ihrer Breite), dazwischen stehen die Beschriftungen
-# der zweiten y-Achse des Zinslast-Teilbilds. Plotly erweitert den rechten Rand
-# automatisch auf die Breite der Legenden; zusätzliche Bildschirmbreite kommt damit
-# vollständig der Zeichenfläche zugute.
-LEGENDE_X = 1.06
+# Eine waagerechte Legende je Teilbild direkt über der Zeichenfläche, ihr Titel dient
+# als Überschrift des Teilbilds. Jeder Eintrag ist die halbe Zeichenfläche breit: zwei
+# Spalten, das Inflations-Teilbild mit sechs Einträgen braucht drei Zeilen. Die breiten
+# Spalten lassen auch lange Bezeichnungen ungekürzt.
+LEGENDE_EINTRAGSBREITE = 1 / 2
 LEGENDEN = (
-    ("legend", "y", "Rendite"),
-    ("legend2", "y2", "Inflation und Leitzinsen"),
+    ("legend", "y", "Schuldenstand"),
+    ("legend2", "y2", "Rendite"),
     ("legend3", "y3", "Zinslast"),
-    ("legend4", "y5", "Schuldenstand"),
+    ("legend4", "y5", "Inflation und Leitzinsen"),
 )
 # Zuordnung der y-Achsen zu den Legenden; y4 ist die zweite Achse von Teilbild 3.
 LEGENDE_JE_ACHSE = {"y": "legend", "y2": "legend2", "y3": "legend3", "y4": "legend3"}
@@ -109,15 +115,14 @@ leitzinsen = analysis.extend_steps(leitzinsen, daily_yield["datum"].max(), "leit
 
 st.subheader("Rendite der 10-jährigen Bundesanleihe (Monatsmittel)")
 st.markdown(
-    "Das obere Teilbild zeigt das Monatsmittel der Tagesrendite. Darunter stehen drei "
-    "**Inflationsmaße** – HVPI, Kerninflation und nationaler VPI – und die "
-    "**Leitzinsen von EZB und Fed**, an denen sich die Marktzinsen orientieren. Das "
-    "dritte Teilbild stellt die daraus folgende "
-    "**theoretische Zinslast** den **tatsächlich gebuchten Zinsausgaben** gegenüber, "
-    "ergänzt um den **Effektivzins** auf den Schuldenstand und um die im Finanzplan "
-    "veranschlagten Zinsausgaben des Bundes. Das untere Teilbild zeigt den "
-    "**Schuldenstand im Monatsraster**, der in die Rechnung eingeht: die "
-    "Jahresendbestände und die daraus interpolierte Monatsreihe."
+    "Das obere Teilbild zeigt den **Schuldenstand im Monatsraster**, der in die "
+    "Rechnung eingeht: die Jahresendbestände und die daraus interpolierte Monatsreihe. "
+    "Darunter folgt das Monatsmittel der Tagesrendite. Das dritte Teilbild stellt die "
+    "daraus folgende **theoretische Zinslast** den **tatsächlich gebuchten "
+    "Zinsausgaben** gegenüber, ergänzt um den **Effektivzins** auf den Schuldenstand und "
+    "um die im Finanzplan veranschlagten Zinsausgaben des Bundes. Das untere Teilbild "
+    "zeigt drei **Inflationsmaße** – HVPI, Kerninflation und nationaler VPI – und die "
+    "**Leitzinsen von EZB und Fed**, an denen sich die Marktzinsen orientieren."
 )
 
 plan = bund_plan.dropna(subset=["zinsausgaben_mrd_eur"]).sort_values("jahr")
@@ -125,8 +130,9 @@ plan = bund_plan.dropna(subset=["zinsausgaben_mrd_eur"]).sort_values("jahr")
 figure = make_subplots(
     rows=4,
     cols=1,
-    row_heights=[0.22, 0.24, 0.30, 0.24],
-    vertical_spacing=0.07,
+    row_heights=[0.22, 0.22, 0.30, 0.26],
+    vertical_spacing=0.1,
+    # Nur die Zinslast (ZEILE_ZINSLAST) hat eine zweite y-Achse.
     specs=[
         [{"secondary_y": False}],
         [{"secondary_y": False}],
@@ -143,11 +149,11 @@ figure.add_trace(
         line={"color": "#1f4e79", "width": 2},
         hovertemplate="%{x|%m.%Y}: %{y:.2f} %<extra>%{fullData.name}</extra>",
     ),
-    row=1,
+    row=ZEILE_RENDITE,
     col=1,
 )
 
-# Teilbild 2: Inflation und Leitzinsen von EZB und Fed, alle in Prozent auf einer Achse.
+# Unteres Teilbild: Inflation und Leitzinsen von EZB und Fed, alle in Prozent auf einer Achse.
 for spalte, name, farbe, strich in INFLATION_REIHEN:
     reihe = inflation.dropna(subset=[spalte])
     figure.add_trace(
@@ -158,7 +164,7 @@ for spalte, name, farbe, strich in INFLATION_REIHEN:
             line={"color": farbe, "width": 2, "dash": strich},
             hovertemplate="%{x|%m.%Y}: %{y:.1f} %<extra>%{fullData.name}</extra>",
         ),
-        row=2,
+        row=ZEILE_INFLATION,
         col=1,
     )
 for leitzins, (name, farbe, strich) in LEITZINS_REIHEN.items():
@@ -171,7 +177,7 @@ for leitzins, (name, farbe, strich) in LEITZINS_REIHEN.items():
             line={"color": farbe, "width": 2, "dash": strich, "shape": "hv"},
             hovertemplate="%{x|%d.%m.%Y}: %{y:.2f} %<extra>%{fullData.name}</extra>",
         ),
-        row=2,
+        row=ZEILE_INFLATION,
         col=1,
     )
 
@@ -189,7 +195,7 @@ figure.add_trace(
         line={"color": "#1f4e79", "width": 2.5},
         hovertemplate="%{x|%m.%Y}: %{y:,.1f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=3,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=False,
 )
@@ -203,7 +209,7 @@ figure.add_trace(
         marker={"size": 6},
         hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=3,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=False,
 )
@@ -218,7 +224,7 @@ figure.add_trace(
         customdata=plan["art"],
         hovertemplate="%{x|%Y}: %{y:,.1f} Mrd. € (%{customdata})<extra>%{fullData.name}</extra>",
     ),
-    row=3,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=False,
 )
@@ -230,13 +236,13 @@ figure.add_trace(
         line={"color": "#8c564b", "width": 2, "dash": "dashdot"},
         hovertemplate="%{x|%Y}: %{y:.2f} %<extra>%{fullData.name}</extra>",
     ),
-    row=3,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=True,
 )
 
 # Schuldenstand im Monatsraster: die Jahresendbestände und die daraus interpolierte
-# Reihe, mit der die theoretische Zinslast im dritten Teilbild gerechnet wird.
+# Reihe, mit der die theoretische Zinslast gerechnet wird.
 jahresende = pd.to_datetime(debt["jahr"].astype(int).astype(str) + "-12-31")
 letzter_stichtag = jahresende.iloc[-1]
 figure.add_trace(
@@ -247,7 +253,7 @@ figure.add_trace(
         line={"color": "#0f766e", "width": 2},
         hovertemplate="%{x|%m.%Y}: %{y:,.0f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=4,
+    row=ZEILE_SCHULDEN,
     col=1,
 )
 figure.add_trace(
@@ -259,7 +265,7 @@ figure.add_trace(
         marker={"color": "#b03a2e", "size": 7, "symbol": "diamond"},
         hovertemplate="%{x|%d.%m.%Y}: %{y:,.0f} Mrd. €<extra>%{fullData.name}</extra>",
     ),
-    row=4,
+    row=ZEILE_SCHULDEN,
     col=1,
 )
 # Der schattierte Bereich markiert die Fortschreibung hinter dem letzten Stichtag.
@@ -270,7 +276,7 @@ figure.add_vrect(
     opacity=0.08,
     line_width=0,
     layer="below",
-    row=4,
+    row=ZEILE_SCHULDEN,
     col=1,
 )
 
@@ -297,21 +303,19 @@ for label, datum, hoehe, anker in ZEITMARKEN:
             borderpad=1,
         )
 
-figure.update_yaxes(title_text="Rendite in %", row=1, col=1)
-figure.update_yaxes(title_text="Inflation / Leitzins in %", row=2, col=1)
-figure.update_yaxes(title_text="Mrd. €", row=3, col=1, secondary_y=False)
-# Die Einheit steht an den Teilstrichen statt im Achsentitel, damit rechts neben der
-# Achse Platz für die Legenden bleibt.
+figure.update_yaxes(title_text="Schuldenstand in Mrd. €", row=ZEILE_SCHULDEN, col=1)
+figure.update_yaxes(title_text="Rendite in %", row=ZEILE_RENDITE, col=1)
+figure.update_yaxes(title_text="Inflation / Leitzins in %", row=ZEILE_INFLATION, col=1)
+figure.update_yaxes(title_text="Mrd. €", row=ZEILE_ZINSLAST, col=1, secondary_y=False)
 figure.update_yaxes(
+    title_text="Effektivzins in %",
     showgrid=False,
     dtick=1,
     tickformat=".1f",
-    ticksuffix=" %",
-    row=3,
+    row=ZEILE_ZINSLAST,
     col=1,
     secondary_y=True,
 )
-figure.update_yaxes(title_text="Schuldenstand in Mrd. €", row=4, col=1)
 # Jedes Teilbild hat eine beschriftete Zeitachse. Plotly wählt den Abstand der
 # Teilstriche selbst (höchstens ``nticks``): über den ganzen Zeitraum Jahre, beim
 # Hineinzoomen Quartale, Monate oder Tage – das Gitter folgt den Teilstrichen.
@@ -329,7 +333,7 @@ figure.update_xaxes(
     ],
     tickfont={"size": 11},
 )
-for zeile in (1, 2, 3):
+for zeile in (ZEILE_RENDITE, ZEILE_ZINSLAST, ZEILE_INFLATION):
     figure.add_hline(y=0, line={"color": "#999", "width": 1}, row=zeile, col=1)
 
 # Legenden je Teilbild: Ein Klick blendet nur die angeklickte Reihe aus.
@@ -340,43 +344,46 @@ for legende, achse, titel in LEGENDEN:
     figure.update_layout(
         {
             legende: {
-                "title": {"text": f"<b>{titel}</b>"},
-                "x": LEGENDE_X,
+                "title": {"text": f"<b>{titel}</b>", "side": "top", "font": {"size": 12}},
+                "orientation": "h",
+                "entrywidth": LEGENDE_EINTRAGSBREITE,
+                "entrywidthmode": "fraction",
+                "x": 0,
                 "xanchor": "left",
-                "y": oberkante,
-                "yanchor": "top",
-                "font": {"size": 12},
-                "tracegroupgap": 2,
+                "y": oberkante + 0.005,
+                "yanchor": "bottom",
+                "font": {"size": 10},
             }
         }
     )
 ui.plot(
     figure,
     filename="zins_bund_10j_und_zinslast",
-    height=1300,
-    top_margin=30,
+    height=1500,
+    top_margin=80,
     own_legends=True,
 )
 st.caption(
-    "Oben: Monatsmittel der Tagesrenditen (Deutsche Bundesbank). Darunter: drei "
-    "Inflationsmaße für Deutschland als Vorjahresrate – der harmonisierte HVPI und die "
-    "Kerninflation ohne Energie, Nahrungsmittel, Alkohol und Tabak (EZB ICP, bis "
-    "Dezember 2025) sowie der nationale Verbraucherpreisindex, der anders als der HVPI "
-    "das selbst genutzte Wohneigentum enthält (Destatis 61111-0002) – und die "
-    "Leitzinsen an den Tagen ihrer Änderung, bis zum letzten Renditemonat fortgeführt – "
-    "EZB-Hauptrefinanzierungssatz (Juni 2000 bis Oktober 2008 Mindestbietungssatz der "
-    "Zinstender) und Einlagesatz (EZB FM) sowie der Federal-Funds-Zielsatz der Fed, ab "
-    "16.12.2008 die Obergrenze der Zielspanne (Federal Reserve über FRED, DFEDTAR und "
-    "DFEDTARU). Drittes Teilbild: theoretische Zinslast (Monatsmodell aus interpoliertem "
-    "Schuldenstand und Monatsmittel der Rendite), Zinsausgaben des Gesamtstaats (Eurostat, VGR), "
-    "Effektivzins (Zinsausgaben / Schuldenstand) sowie die im Finanzplan des Bundes 2026 "
-    "bis 2030 veranschlagten Zinsausgaben des Bundes im Kernhaushalt (Drucksache 21/7301, "
-    "Tabelle 9) – eine engere Abgrenzung als die VGR, die die Zinsausgaben des Bundes "
-    "fortschreibt und nicht die höheren des Gesamtstaats. Unten: der Schuldenstand, aus "
-    "dem die Zinslast stammt – die Jahresendbestände des Maastricht-Schuldenstands "
-    "(Eurostat, VGR) als Rauten und die daraus linear interpolierte Monatsreihe; der "
-    "schattierte Bereich nach dem letzten Jahresende ist die Fortschreibung mit dem "
-    "Trend der letzten beiden Stichtage bis zum letzten Renditemonat. Alle Teilbilder "
+    "Oben: der Schuldenstand, aus dem die Zinslast stammt – die Jahresendbestände des "
+    "Maastricht-Schuldenstands (Eurostat, VGR) als Rauten und die daraus linear "
+    "interpolierte Monatsreihe; der schattierte Bereich nach dem letzten Jahresende ist "
+    "die Fortschreibung mit dem Trend der letzten beiden Stichtage bis zum letzten "
+    "Renditemonat. Darunter: Monatsmittel der Tagesrenditen (Deutsche Bundesbank). "
+    "Drittes Teilbild: theoretische Zinslast (Monatsmodell aus interpoliertem "
+    "Schuldenstand und Monatsmittel der Rendite), Zinsausgaben des Gesamtstaats "
+    "(Eurostat, VGR), Effektivzins (Zinsausgaben / Schuldenstand) sowie die im "
+    "Finanzplan des Bundes 2026 bis 2030 veranschlagten Zinsausgaben des Bundes im "
+    "Kernhaushalt (Drucksache 21/7301, Tabelle 9) – eine engere Abgrenzung als die VGR, "
+    "die die Zinsausgaben des Bundes fortschreibt und nicht die höheren des "
+    "Gesamtstaats. Unten: drei Inflationsmaße für Deutschland als Vorjahresrate – der "
+    "harmonisierte HVPI und die Kerninflation ohne Energie, Nahrungsmittel, Alkohol und "
+    "Tabak (EZB ICP, bis Dezember 2025) sowie der nationale Verbraucherpreisindex, der "
+    "anders als der HVPI das selbst genutzte Wohneigentum enthält (Destatis 61111-0002) "
+    "– und die Leitzinsen an den Tagen ihrer Änderung, bis zum letzten Renditemonat "
+    "fortgeführt – EZB-Hauptrefinanzierungssatz (Juni 2000 bis Oktober 2008 "
+    "Mindestbietungssatz der Zinstender) und Einlagesatz (EZB FM) sowie der "
+    "Federal-Funds-Zielsatz der Fed, ab 16.12.2008 die Obergrenze der Zielspanne "
+    "(Federal Reserve über FRED, DFEDTAR und DFEDTARU). Alle Teilbilder "
     "teilen die Jahresachse, die gestrichelten Marken "
     "gelten in allen Teilbildern: Start der Agenda 2010 (14.03.2003), Lehman-Pleite "
     "(15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), Beginn der "
