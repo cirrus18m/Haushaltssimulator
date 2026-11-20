@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-20T18:50:44+00:00",
+  "aktualisiert_am": "2026-11-20T19:21:40+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -504,6 +504,36 @@
       "abgerufen_am": "2026-11-17T19:01:40+00:00",
       "sha256": "6c7d7dccf81f946f7a6cb157ee19720a2f62045418e302768b5ba00a9121450b",
       "bytes": 188509
+    },
+    {
+      "key": "ecb_hicp_kern",
+      "titel": "Kerninflation: HVPI ohne Energie, Lebensmittel, Alkohol und Tabak, Deutschland",
+      "herausgeber": "Europäische Zentralbank, Data Portal, Datensatz ICP",
+      "lizenz": "EZB, Quellenangabe erforderlich",
+      "url": "https://data-api.ecb.europa.eu/service/data/ICP/M.DE.N.XEF000.4.ANR?format=csvdata&startPeriod=1997",
+      "beschreibung": "EZB ICP: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak (XEF000), Veränderung gegenüber dem Vorjahr in Prozent, Deutschland, monatlich ab 1997",
+      "datei": "ecb_hicp_kern_de.csv",
+      "datensaetze": [
+        "inflation_de_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-20T19:21:31+00:00",
+      "sha256": "f47b917f9d71f7415f16e9906ffd67f2d75bd8c373c74c771ef8e1dc1abf2698",
+      "bytes": 117822
+    },
+    {
+      "key": "destatis_vpi",
+      "titel": "Verbraucherpreisindex für Deutschland, Monate",
+      "herausgeber": "Statistisches Bundesamt (Destatis), GENESIS-Online, Tabelle 61111-0002",
+      "lizenz": "DL-DE-BY-2.0",
+      "url": "https://genesis.destatis.de/genesisWS/downloads/00/tables/61111-0002_00.csv",
+      "beschreibung": "Destatis 61111-0002: Verbraucherpreisindex (2020 = 100) und Veränderung zum Vorjahresmonat in Prozent, monatlich. Mit DESTATIS_API_TOKEN über die GENESIS-API ab 1991, ohne Token über den öffentlichen Export (nur die letzten Jahre)",
+      "datei": "destatis_61111-0002_vpi.csv",
+      "datensaetze": [
+        "inflation_de_monat.csv"
+      ],
+      "abgerufen_am": "2026-11-20T19:21:40+00:00",
+      "sha256": "c8b159491a2966d063307684c013ca6074f3248b8c21494d3740cff7274baf2b",
+      "bytes": 10443
     },
     {
       "key": "ecb_leitzinsen",

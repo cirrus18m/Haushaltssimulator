@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import functools
 from datetime import datetime
 
 import pandas as pd
@@ -226,6 +227,11 @@ def key_rates() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def inflation_germany() -> pd.DataFrame:
+    return dataset.load_inflation_germany()
+
+
+@st.cache_data(show_spinner=False)
 def sources_library() -> dict:
     """Quellenbibliothek mit URLs, Lizenzen, Prüfsummen und Abrufzeitpunkten."""
     return sources.read_library()
@@ -292,27 +298,48 @@ def style(
     legend: bool = True,
     legend_y: float = 1.02,
     top_margin: int = 40,
+    own_legends: bool = False,
 ) -> go.Figure:
-    """Einheitliches Layout für alle Diagramme."""
+    """Einheitliches Layout für alle Diagramme.
+
+    Mit ``own_legends=True`` bleibt das Legenden-Layout der Figur erhalten, etwa eine
+    eigene Legende je Teilbild (``legend``, ``legend2``, …).
+    """
     fig.update_layout(
         template="plotly_white",
         height=height,
         margin={"l": 10, "r": 10, "t": top_margin, "b": 10},
         hovermode="x unified" if legend else "closest",
         showlegend=legend,
-        legend={"orientation": "h", "yanchor": "bottom", "y": legend_y, "x": 0},
         font={"family": "Inter, Segoe UI, sans-serif", "size": 13},
     )
+    if not own_legends:
+        fig.update_layout(
+            legend={"orientation": "h", "yanchor": "bottom", "y": legend_y, "x": 0}
+        )
     return fig
 
 
-@st.cache_data(show_spinner=False, max_entries=64)
-def _svg_bytes(figure_json: str) -> bytes | None:
-    """Rendert ein Diagramm als SVG; ohne funktionierendes Kaleido bleibt es leer."""
+# Ersatzgrafik, falls Kaleido bzw. Chrome in der Umgebung fehlt.
+SVG_NICHT_VERFUEGBAR = (
+    b'<svg xmlns="http://www.w3.org/2000/svg" width="640" height="60">'
+    b'<text x="10" y="35" font-family="sans-serif" font-size="14">'
+    b"SVG-Export hier nicht verf\xc3\xbcgbar \xe2\x80\x93 bitte das Kamera-Symbol des "
+    b"Diagramms nutzen.</text></svg>"
+)
+
+
+@functools.lru_cache(maxsize=64)
+def _svg_bytes(figure_json: str) -> bytes:
+    """Rendert ein Diagramm als SVG (Kaleido); ohne Kaleido eine Ersatzgrafik.
+
+    Läuft erst beim Klick auf den Download-Button in einem eigenen Thread, daher
+    ``functools.lru_cache`` statt ``st.cache_data``.
+    """
     try:
         return pio.from_json(figure_json).to_image(format="svg")
     except Exception:  # Kaleido bzw. Chrome kann in manchen Umgebungen fehlen
-        return None
+        return SVG_NICHT_VERFUEGBAR
 
 
 def plot(
@@ -323,33 +350,41 @@ def plot(
     legend: bool = True,
     legend_y: float = 1.02,
     top_margin: int = 40,
+    own_legends: bool = False,
 ) -> None:
-    """Zeigt ein Diagramm und bietet es als SVG und als HTML zum Download an."""
-    styled = style(figure, height=height, legend=legend, legend_y=legend_y, top_margin=top_margin)
+    """Zeigt ein Diagramm und bietet es als SVG und als HTML zum Download an.
+
+    Beide Dateien entstehen erst beim Klick auf den jeweiligen Button. Das SVG-Rendern
+    mit Kaleido dauert pro Diagramm etwa eine Sekunde und würde sonst jeden Seitenaufruf
+    (und jeden Seitentest) ausbremsen.
+    """
+    styled = style(
+        figure,
+        height=height,
+        legend=legend,
+        legend_y=legend_y,
+        top_margin=top_margin,
+        own_legends=own_legends,
+    )
     config = {
         "displaylogo": False,
         "toImageButtonOptions": {"format": "svg", "filename": filename, "scale": 1},
     }
     st.plotly_chart(styled, width="stretch", config=config)
 
-    svg = _svg_bytes(styled.to_json())
-    html = styled.to_html(full_html=True, include_plotlyjs="cdn", config=config)
     svg_column, html_column, _ = st.columns([1, 1, 5])
-    if svg is not None:
-        svg_column.download_button(
-            "SVG",
-            svg,
-            file_name=f"{filename}.svg",
-            mime="image/svg+xml",
-            key=f"{filename}-svg",
-            type="tertiary",
-            help="Vektorgrafik zum Weiterverarbeiten oder Drucken",
-        )
-    else:
-        svg_column.caption("SVG über das Kamera-Symbol")
+    svg_column.download_button(
+        "SVG",
+        lambda: _svg_bytes(styled.to_json()),
+        file_name=f"{filename}.svg",
+        mime="image/svg+xml",
+        key=f"{filename}-svg",
+        type="tertiary",
+        help="Vektorgrafik zum Weiterverarbeiten oder Drucken",
+    )
     html_column.download_button(
         "HTML",
-        html,
+        lambda: styled.to_html(full_html=True, include_plotlyjs="cdn", config=config),
         file_name=f"{filename}.html",
         mime="text/html",
         key=f"{filename}-html",

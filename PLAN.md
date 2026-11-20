@@ -16,7 +16,7 @@ Legende: ✅ umgesetzt · 🟡 teilweise umgesetzt · ⬜ offen
 | 3 | Internationaler Zinsvergleich | ✅ umgesetzt |
 | 4 | Wirtschafts- und Geldindikatoren | ✅ umgesetzt (Sondervermögen ⬜) |
 | 5 | Haushaltspläne im Vergleich | ⬜ offen |
-| 6 | Zugangsdaten und API-Struktur | 🟡 umgesetzt (FRED im Datenaufbau ✅, Destatis-Tabellen ⬜) |
+| 6 | Zugangsdaten und API-Struktur | 🟡 umgesetzt (FRED im Datenaufbau ✅, Destatis-VPI ✅, übrige Destatis-Tabellen ⬜) |
 
 ## Leitplanken
 
@@ -215,7 +215,13 @@ Ziel: Weitere Datenquellen anbindbar machen, ohne Geheimnisse zu versionieren.
 * ✅ FRED ist im Datenaufbau aktiv: Die US-Rendite (`fred_us_zins`, Modus
   `fred_api`) kommt mit `FRED_API_KEY` aus der FRED-API, ohne Schlüssel aus dem
   öffentlichen CSV-Export. Beide Wege liefern identische aufbereitete Daten.
-* ⬜ Die Destatis-Tabellen nutzen weiterhin die Export-URLs. Grund: Das API-Format
+* ✅ `fetch_mode="destatis_api"`: Der Verbraucherpreisindex 61111-0002 kommt mit
+  `DESTATIS_API_TOKEN` über `data/tablefile` mit `format=csv` (ohne `transpose`) ab
+  1991. Dieses Format hat denselben Aufbau wie die Exportdatei; ohne Token greift der
+  öffentliche Export (nur die letzten Jahre).
+* ⬜ Die übrigen Destatis-Tabellen nutzen weiterhin die Export-URLs. Mit `format=csv`
+  ohne `transpose` ließen sie sich vermutlich ebenso umstellen. Ursprünglicher Grund:
+  Das API-Format
   (`format=csv` mit `transpose`) hat eine andere Kopfstruktur als die Exportdateien
   (`{code}_00.csv`), und `ffcsv` liefert eine Zeile je Wert – die vorhandenen Parser
   erwarten die Exportspalten. Nächster Schritt: generischer `parse_ffcsv`-Parser

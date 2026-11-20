@@ -1190,6 +1190,29 @@ def build_produktion_vergleich(raw_dir: Path) -> pd.DataFrame:
     ).reset_index(drop=True)
 
 
+def build_inflation_de(raw_dir: Path) -> pd.DataFrame:
+    """Drei Inflationsmaße für Deutschland: HVPI, Kerninflation und nationaler VPI."""
+    hvpi = ecb.parse_csv((raw_dir / "ecb_hicp_de_ea.csv").read_bytes())
+    hvpi = hvpi[hvpi["gebiet"] == "DE"][["monat", "wert"]].rename(columns={"wert": "hvpi_pct"})
+    kern = ecb.parse_csv((raw_dir / "ecb_hicp_kern_de.csv").read_bytes())
+    kern = kern[["monat", "wert"]].rename(columns={"wert": "hvpi_kern_pct"})
+
+    vpi = destatis.parse_fixed_columns(
+        destatis.decode((raw_dir / "destatis_61111-0002_vpi.csv").read_bytes()),
+        ["jahr", "monat_name"],
+        ["vpi_index_2020", "vpi_pct", "vpi_vormonat_pct"],
+        fill_down=("jahr",),
+    )
+    vpi["monat_nummer"] = vpi["monat_name"].map(MONATSNAMEN)
+    vpi = vpi.dropna(subset=["monat_nummer", "vpi_pct"])
+    vpi["monat"] = vpi["jahr"] + "-" + vpi["monat_nummer"].map(lambda monat: f"{int(monat):02d}")
+    vpi = vpi[["monat", "vpi_pct"]]
+
+    frame = hvpi.merge(kern, on="monat", how="outer").merge(vpi, on="monat", how="outer")
+    columns = ["monat", "hvpi_pct", "hvpi_kern_pct", "vpi_pct"]
+    return frame[columns].sort_values("monat").reset_index(drop=True)
+
+
 # Leitzinsen: Bezeichnung in der App und Kennung im EZB-Export.
 LEITZINS_EZB_HAUPTREFI = "EZB Hauptrefinanzierungssatz"
 LEITZINS_EZB_EINLAGE = "EZB Einlagesatz"
@@ -1269,6 +1292,7 @@ BUILDERS = {
     "produktion_vergleich_monat.csv": build_produktion_vergleich,
     "energie_maerkte_monat.csv": build_energy_markets,
     "leitzinsen.csv": build_leitzinsen,
+    "inflation_de_monat.csv": build_inflation_de,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.

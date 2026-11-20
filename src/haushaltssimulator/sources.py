@@ -31,7 +31,7 @@ from typing import Literal
 
 import pandas as pd
 
-from . import cbr, config, fred_api, imf, laender, paths, rosstat
+from . import cbr, config, destatis_api, fred_api, imf, laender, paths, rosstat
 
 DESTATIS_TABLE_URL = "https://genesis.destatis.de/genesisWS/downloads/00/tables/{code}_00.csv"
 EUROSTAT_DATA_URL = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/{dataset}"
@@ -81,12 +81,22 @@ ROSSTAT_CPI_INDICATOR = 31074
 
 # Ab diesem Jahr liefert die Bank of Russia die Zinskurve in der genutzten Form.
 CBR_START_YEAR = 2015
+# Erstes Jahr für Destatis-Tabellen über die API; der öffentliche Export enthält nur
+# die letzten Jahre.
+DESTATIS_API_START_YEAR = 1991
 CBR_MAX_FALLBACK_DAYS = 8
 
 USER_AGENT = "Haushaltssimulator/0.1 (+https://github.com/cirrus18m/Haushaltssimulator)"
 
 FetchMode = Literal[
-    "http", "cbr_zcyc", "energy_charts", "manual", "fred_api", "imf_datamapper", "emiss_api"
+    "http",
+    "cbr_zcyc",
+    "energy_charts",
+    "manual",
+    "fred_api",
+    "destatis_api",
+    "imf_datamapper",
+    "emiss_api",
 ]
 
 
@@ -695,6 +705,36 @@ SOURCES: tuple[Source, ...] = (
         ),
     ),
     Source(
+        key="ecb_hicp_kern",
+        filename="ecb_hicp_kern_de.csv",
+        url=ECB_SERIES_URL.format(dataset="ICP", key="M.DE.N.XEF000.4.ANR", start="1997"),
+        title="Kerninflation: HVPI ohne Energie, Lebensmittel, Alkohol und Tabak, Deutschland",
+        publisher="Europäische Zentralbank, Data Portal, Datensatz ICP",
+        license="EZB, Quellenangabe erforderlich",
+        datasets=("inflation_de_monat.csv",),
+        description=(
+            "EZB ICP: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak (XEF000), "
+            "Veränderung gegenüber dem Vorjahr in Prozent, Deutschland, monatlich ab 1997"
+        ),
+    ),
+    Source(
+        key="destatis_vpi",
+        filename="destatis_61111-0002_vpi.csv",
+        url=DESTATIS_TABLE_URL.format(code="61111-0002"),
+        title="Verbraucherpreisindex für Deutschland, Monate",
+        publisher="Statistisches Bundesamt (Destatis), GENESIS-Online, Tabelle 61111-0002",
+        license="DL-DE-BY-2.0",
+        datasets=("inflation_de_monat.csv",),
+        fetch_mode="destatis_api",
+        api_series="61111-0002",
+        description=(
+            "Destatis 61111-0002: Verbraucherpreisindex (2020 = 100) und Veränderung zum "
+            "Vorjahresmonat in Prozent, monatlich. Mit DESTATIS_API_TOKEN über die "
+            "GENESIS-API ab 1991, ohne Token über den öffentlichen Export (nur die letzten "
+            "Jahre)"
+        ),
+    ),
+    Source(
         key="ecb_leitzinsen",
         filename="ecb_leitzinsen.csv",
         url=ECB_SERIES_URL.format(
@@ -1276,6 +1316,23 @@ def _fetch_fred_api(source: Source) -> bytes:
     return ("\n".join(lines) + "\n").encode("utf-8")
 
 
+def _fetch_destatis_api(source: Source) -> bytes:
+    """Lädt eine Destatis-Tabelle als Langreihe über die API; ohne Token den Export.
+
+    Das API-Format ``csv`` entspricht dem Aufbau der Exportdatei, reicht aber bis
+    ``DESTATIS_API_START_YEAR`` zurück. Der öffentliche Export enthält nur die letzten
+    Jahre.
+    """
+    try:
+        client = destatis_api.DestatisApi.from_env()
+    except destatis_api.DestatisApiError:
+        return _read_url(source.url)
+    payload = client.tablefile(
+        source.api_series or "", startyear=DESTATIS_API_START_YEAR, format="csv"
+    )
+    return destatis_api.extract_csv(payload)
+
+
 def _csv_bytes(frame: pd.DataFrame, float_format: str = "%.4f") -> bytes:
     buffer = io.StringIO()
     frame.to_csv(buffer, index=False, float_format=float_format)
@@ -1322,6 +1379,8 @@ def _fetch(source: Source) -> bytes:
         return _fetch_energy_charts(source)
     if source.fetch_mode == "fred_api":
         return _fetch_fred_api(source)
+    if source.fetch_mode == "destatis_api":
+        return _fetch_destatis_api(source)
     if source.fetch_mode == "imf_datamapper":
         return _fetch_imf_datamapper(source)
     if source.fetch_mode == "emiss_api":

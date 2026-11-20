@@ -199,10 +199,22 @@ def test_app_does_not_import_api_clients() -> None:
 def test_streamlit_pages_run_without_exception(script: str) -> None:
     from streamlit.testing.v1 import AppTest
 
-    # Großzügiges Timeout: Die Seiten rendern Diagramme nach SVG und sind unter Last langsam.
-    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=180)
+    # SVG und HTML entstehen erst beim Klick auf den Download-Button, die Seiten laufen
+    # daher in ein bis zwei Sekunden; das Timeout lässt Reserve für langsame Rechner.
+    test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=60)
     test.run()
     assert not test.exception, [str(exception.value) for exception in test.exception]
+
+
+def test_inflation_germany_has_three_measures() -> None:
+    frame = dataset.load_inflation_germany()
+    assert list(frame.columns) == ["monat", "hvpi_pct", "hvpi_kern_pct", "vpi_pct"]
+    assert frame["monat"].is_monotonic_increasing
+    for column in ("hvpi_pct", "hvpi_kern_pct", "vpi_pct"):
+        assert frame[column].dropna().between(-3, 15).all()
+    oktober_2022 = frame[frame["monat"] == "2022-10"].iloc[0]
+    # Der HVPI enthält kein selbst genutztes Wohneigentum und stieg 2022 stärker als der VPI.
+    assert oktober_2022["hvpi_pct"] > oktober_2022["vpi_pct"] > oktober_2022["hvpi_kern_pct"]
 
 
 def test_key_rates_cover_ecb_and_fed() -> None:

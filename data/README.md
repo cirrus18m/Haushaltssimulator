@@ -38,6 +38,7 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `produktion_deutschland_lang.csv` | Industrieproduktion mit Langfristtrend | Eurostat `sts_inpr_m` | 1993-01–2026-09 |
 | `produktion_vergleich_monat.csv` | Produktionsindex im Ländervergleich | Eurostat `sts_inpr_m` | 1995-01–2026-09 |
 | `energie_maerkte_monat.csv` | Heizöl sowie regionale Gas- und Öl-Benchmarks | EU Weekly Oil Bulletin; IWF und EIA über FRED; EZB | 1999-01–2026-11 |
+| `inflation_de_monat.csv` | Inflation Deutschland: HVPI, Kerninflation, VPI | EZB ICP; Destatis 61111-0002 | 1992-01–2026-10 |
 | `leitzinsen.csv` | Leitzinsen von EZB und Fed an den Tagen ihrer Änderung | EZB FM; Federal Reserve über FRED (`DFEDTAR`, `DFEDTARU`) | 1982–2026 |
 
 ### Spalten
@@ -155,6 +156,16 @@ Verfügung.
 | `monat` | Berichtsmonat |
 | `inflation_de_pct`, `inflation_ea_pct` | HVPI-Veränderung gegenüber dem Vorjahr |
 | `kaufkraft_index` | Kaufkraft eines Euro, Startmonat = 100 |
+
+**`inflation_de_monat.csv`** – Vorjahresraten in Prozent; die Reihen reichen
+unterschiedlich weit (HVPI und Kerninflation bei der EZB bis Dezember 2025, VPI ab 1992).
+
+| Spalte | Bedeutung |
+| --- | --- |
+| `monat` | Berichtsmonat |
+| `hvpi_pct` | Harmonisierter Verbraucherpreisindex (EZB ICP `000000`) |
+| `hvpi_kern_pct` | Kerninflation: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak (EZB ICP `XEF000`) |
+| `vpi_pct` | Nationaler Verbraucherpreisindex mit selbst genutztem Wohneigentum (Destatis 61111-0002) |
 
 **`leitzinsen.csv`** – eine Zeile je Zinsänderung (Stufenreihe; der letzte
 Beobachtungstag der Fed-Reihe ist als Endpunkt enthalten).
@@ -342,8 +353,12 @@ und macht keine eigenen API-Aufrufe.
 Im Datenaufbau aktiv ist derzeit `fred_api`: Die US-Rendite
 (`fred_us_10j_rendite.csv`) wird mit `FRED_API_KEY` über die FRED-API geholt und ohne
 Schlüssel über den öffentlichen CSV-Export. Beide Wege erzeugen dieselbe Tabelle.
-Die Destatis-Tabellen nutzen weiterhin die Export-URLs, weil das API-Format
-(`ffcsv` bzw. `csv` mit `transpose`) anders aufgebaut ist als die Exportdateien.
+
+`destatis_api` lädt den Verbraucherpreisindex 61111-0002 mit `DESTATIS_API_TOKEN` über
+`data/tablefile` mit `format=csv` ab 1991. Dieses Format entspricht der Exportdatei
+(nur das Jahr steht lediglich beim Januar und wird beim Einlesen nach unten
+aufgefüllt). Ohne Token wird der öffentliche Export geladen, der nur die letzten Jahre
+enthält. Die übrigen Destatis-Tabellen nutzen weiterhin die Export-URLs.
 
 ## Aktualisieren
 

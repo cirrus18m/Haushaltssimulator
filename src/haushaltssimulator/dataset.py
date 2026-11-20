@@ -41,6 +41,7 @@ PRODUCTION_GERMANY_LONG = "produktion_deutschland_lang.csv"
 PRODUCTION_COMPARISON = "produktion_vergleich_monat.csv"
 ENERGY_MARKETS = "energie_maerkte_monat.csv"
 KEY_RATES = "leitzinsen.csv"
+INFLATION_GERMANY = "inflation_de_monat.csv"
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -77,6 +78,7 @@ DATASET_LABELS = {
     PRODUCTION_COMPARISON: "Produktionsindex im Ländervergleich",
     ENERGY_MARKETS: "Heizöl, Gas und Brent-Rohöl im Monatsvergleich",
     KEY_RATES: "Leitzinsen von EZB und Fed",
+    INFLATION_GERMANY: "Inflation in Deutschland: HVPI, Kerninflation und VPI",
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -266,3 +268,7 @@ def load_energy_markets(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 
 def load_key_rates(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     return _read(KEY_RATES, processed_dir)
+
+
+def load_inflation_germany(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    return _read(INFLATION_GERMANY, processed_dir)

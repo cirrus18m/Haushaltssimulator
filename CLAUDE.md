@@ -79,6 +79,11 @@ nur Laden, Filtern, Darstellen – Fachlogik gehört nach `analysis.py` oder `bu
    `tests/test_app.py` aufnehmen.
 3. README-Tabelle „Seiten der App“ ergänzen.
 
+**Legende je Teilbild**: `trace.legend = "legend2"` usw. setzen, die Legenden in
+`layout.legend2` … positionieren und `ui.plot(..., own_legends=True)` übergeben –
+sonst überschreibt `ui.style()` die Legende mit der Standardlegende oben. Beispiel:
+erstes Diagramm in `app/pages/6_Haushalt_und_Zinsen.py`.
+
 **Diagramme**: immer `ui.plot(fig, filename="…")` (eindeutiger `filename`, er wird auch
 als Widget-Key der Download-Buttons genutzt), nie `st.plotly_chart` direkt. Titel,
 Achsen mit Einheit und Quellen-Caption gehören dazu.
@@ -89,10 +94,11 @@ Achsen mit Einheit und Quellen-Caption gehören dazu.
   bleiben importierte Module im Speicher, neue Funktionen fehlen sonst
   (`AttributeError: module 'haushaltssimulator.ui' has no attribute …`). Außerdem
   cacht `ui.py` die Daten per `st.cache_data`.
-* **Langsame Seitentests**: `AppTest` rendert jedes Diagramm auch als SVG (Kaleido),
-  Timeout 180 s pro Seite. Für schnelle Iteration gezielt einzelne Testdateien laufen
-  lassen. Fehlt Kaleido/Chrome, liefert `ui._svg_bytes` `None` und die App zeigt einen
-  Hinweis statt des SVG-Buttons.
+* **SVG/HTML-Downloads entstehen erst beim Klick**: `ui.plot()` übergibt
+  `download_button` eine Funktion statt fertiger Bytes. Vorher renderte Kaleido jedes
+  Diagramm bei jedem Seitenaufruf – die 16 Seitentests brauchten 173 s statt 7 s.
+  Keine Bytes mehr vorab erzeugen; den Export prüft `tests/test_ui.py`. Fehlt
+  Kaleido/Chrome, liefert `ui._svg_bytes` die Ersatzgrafik `SVG_NICHT_VERFUEGBAR`.
 * `tests/test_app.py` wird übersprungen, wenn `data/processed/` fehlt.
 * `test_app_does_not_import_api_clients` schlägt fehl, sobald eine Datei unter `app/`
   `destatis_api` oder `urllib.request` enthält.
@@ -100,7 +106,9 @@ Achsen mit Einheit und Quellen-Caption gehören dazu.
   Netz funktioniert nur mit bereits vorhandenen Rohdaten; manuelle Quellen ohne Datei
   brechen mit `RuntimeError` ab.
 * Ohne `FRED_API_KEY` fällt `fetch_mode="fred_api"` auf den öffentlichen CSV-Export
-  zurück; die App selbst braucht keine Schlüssel. `.env` nie committen oder ausgeben.
+  zurück, ohne `DESTATIS_API_TOKEN` fällt `fetch_mode="destatis_api"` auf den
+  Destatis-Export zurück – der enthält nur die letzten Jahre, die VPI-Langreihe in
+  `inflation_de_monat.csv` würde dann kürzer. Die App selbst braucht keine Schlüssel. `.env` nie committen oder ausgeben.
 * Abgrenzungen nicht vermischen: Maastricht-Schulden (Eurostat) ≠ Schulden beim
   nicht-öffentlichen Bereich (Destatis); Zinsausgaben ≠ theoretische Zinslast;
   Bundeshaushalt (Kernhaushalt) ≠ Gesamtstaat (VGR). Siehe README „Abgrenzungen“.
