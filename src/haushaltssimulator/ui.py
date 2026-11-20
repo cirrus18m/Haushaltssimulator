@@ -161,6 +161,11 @@ def bund_interest_plan() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def bund_budget_areas() -> pd.DataFrame:
+    return dataset.load_bund_budget_areas()
+
+
+@st.cache_data(show_spinner=False)
 def laender_debt() -> pd.DataFrame:
     return dataset.load_laender_debt()
 

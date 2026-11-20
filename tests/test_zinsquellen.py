@@ -111,3 +111,26 @@ def test_finanzplan_interest_stays_in_line_with_drucksache() -> None:
         68.0,
         80.6,
     ]
+
+
+def test_finanzplan_areas_follow_drucksache() -> None:
+    """Die Ausgaben je Aufgabenbereich folgen Tabelle 8 der Drucksache 21/7301."""
+    frame = dataset.load_bund_budget_areas()
+
+    assert frame["einzelplan"].nunique() == 26
+    assert frame["art"].drop_duplicates().tolist() == ["Ist", "Soll", "Entwurf", "Finanzplan"]
+
+    # Zeilensummen gegen die Gesamtzeile der Tabelle (Rundungsdifferenzen möglich).
+    gesamt = frame.groupby("jahr", observed=True)["ausgaben_mrd_eur"].sum()
+    assert gesamt.tolist() == pytest.approx(
+        [494.935, 524.540, 555.436, 588.172, 597.843, 635.364], abs=0.01
+    )
+
+    verteidigung = frame[(frame["einzelplan"] == 14) & (frame["jahr"] == 2030)]
+    assert verteidigung["aufgabenbereich"].tolist() == ["Bundesministerium der Verteidigung"]
+    assert verteidigung["ausgaben_mrd_eur"].iloc[0] == pytest.approx(183.658)
+
+    # Der Einzelplan 24 ist erst ab 2026 veranschlagt.
+    digital = frame[frame["einzelplan"] == 24].set_index("jahr")["ausgaben_mrd_eur"]
+    assert pytest.approx(1.360) == digital.loc[2026]
+    assert digital.loc[2025] != digital.loc[2025]  # NaN

@@ -31,3 +31,32 @@ def parse_interest_csv(raw: bytes) -> pd.DataFrame:
             }
         )
     return pd.DataFrame.from_records(records)
+
+
+def parse_areas_csv(raw: bytes) -> pd.DataFrame:
+    """Liest die Ausgaben nach Aufgabenbereichen je Haushaltsjahr.
+
+    Der manuelle Export hat eine Kopfzeile mit den Haushaltsjahren, danach je Zeile
+    Einzelplan, Aufgabenbereich und die Ausgaben in Mrd. EUR; "-" steht für einen
+    nicht veranschlagten Betrag.
+    """
+    text = raw.decode("utf-8-sig")
+    rows = [row for row in csv.reader(io.StringIO(text), delimiter=";") if row]
+    if not rows:
+        raise ValueError("Leerer Export der Ausgaben nach Aufgabenbereichen")
+    jahre = [int(spalte) for spalte in rows[0][2:] if spalte.strip()]
+    records = []
+    for row in rows[1:]:
+        if len(row) < 2 or not row[0].strip():
+            continue
+        bereich = " ".join(row[1].split())
+        for jahr, wert in zip(jahre, row[2:], strict=False):
+            records.append(
+                {
+                    "einzelplan": row[0].strip(),
+                    "aufgabenbereich": bereich,
+                    "jahr": jahr,
+                    "ausgaben_mrd_eur": parse_number(wert),
+                }
+            )
+    return pd.DataFrame.from_records(records)

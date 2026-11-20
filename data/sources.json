@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-19T23:02:46+00:00",
+  "aktualisiert_am": "2026-11-20T13:23:22+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -791,6 +791,21 @@
       "abgerufen_am": "2026-11-19T23:00:08+00:00",
       "sha256": "4112c9f2fa56a0f2e11d35c7ce5ed5a1bd9a374eccee89a68f3af77c41b07953",
       "bytes": 157
+    },
+    {
+      "key": "bund_finanzplan_aufgabenbereiche",
+      "titel": "Finanzplan des Bundes 2026 bis 2030 (Drucksache 21/7301)",
+      "herausgeber": "Deutscher Bundestag, 21. Wahlperiode",
+      "lizenz": "© Deutscher Bundestag, Quellenangabe erforderlich",
+      "url": "https://dserver.bundestag.de/btd/21/073/2107301.pdf",
+      "beschreibung": "Manuell aus Drucksache 21/7301 (Tabelle 8, Die Ausgaben des Bundes 2025 bis 2030 nach Aufgabenbereichen im Kernhaushalt) übernommen: Ausgaben je Einzelplan in Mrd. EUR für Ist 2025, Soll 2026, Entwurf 2027 und Finanzplan 2028 bis 2030",
+      "datei": "manual/bund_finanzplan_2026-2030_aufgabenbereiche.csv",
+      "datensaetze": [
+        "bund_ausgaben_aufgabenbereiche.csv"
+      ],
+      "abgerufen_am": "2026-11-20T12:59:57+00:00",
+      "sha256": "c0bf78b4b4603e7059f20e3389ec01d9e963591f7917ed3f27fc253ed46e3619",
+      "bytes": 2209
     }
   ],
   "anbieter": [
@@ -890,6 +905,13 @@
       "daten": "Zinsausgaben des Bundes am Kreditmarkt",
       "portal": "https://www.bundeshaushalt.de/",
       "api": "",
+      "zugang": "kostenlos, ohne API-Key"
+    },
+    {
+      "anbieter": "Deutscher Bundestag",
+      "daten": "Finanzplan des Bundes: Zinsausgaben und Ausgaben nach Aufgabenbereichen",
+      "portal": "https://www.bundestag.de/services/opendata",
+      "api": "https://dserver.bundestag.de/btd/",
       "zugang": "kostenlos, ohne API-Key"
     }
   ]
