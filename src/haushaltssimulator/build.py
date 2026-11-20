@@ -288,6 +288,28 @@ def _laender_population(raw_dir: Path) -> pd.DataFrame:
     return frame[["jahr", "geo", "bevoelkerung"]].dropna(subset=["bevoelkerung"])
 
 
+def build_bevoelkerung_20_59(raw_dir: Path) -> pd.DataFrame:
+    """Bevölkerung von 20 bis unter 60 Jahren je Land und Jahr (Eurostat demo_pjangroup).
+
+    Summe der acht Fünf-Jahres-Gruppen; Jahre, in denen eine Gruppe fehlt, entfallen.
+    """
+    frame = eurostat.jsonstat_to_frame(
+        _load_json(raw_dir, "eurostat_demo_pjangroup_20_59.json")
+    ).dropna(subset=["value"])
+    gruppen = frame.groupby(["geo", "time"]).agg(
+        bevoelkerung_20_59=("value", "sum"), gruppen=("age", "nunique")
+    )
+    gruppen = gruppen[gruppen["gruppen"] == len(sources.BEVOELKERUNG_20_59_GRUPPEN)]
+    gruppen = gruppen.reset_index()
+    gruppen["jahr"] = gruppen["time"].astype(int)
+    namen = dict(laender.EUROPA_LAENDER)
+    gruppen["land"] = gruppen["geo"].map(namen)
+    columns = ["jahr", "geo", "land", "bevoelkerung_20_59"]
+    return gruppen.dropna(subset=["land"])[columns].sort_values(["land", "jahr"]).reset_index(
+        drop=True
+    )
+
+
 def _imf_roh(raw_dir: Path) -> pd.DataFrame:
     return pd.read_csv(raw_dir / "imf_fiskal.csv")
 
@@ -1313,6 +1335,7 @@ BUILDERS = {
     "inflation_de_monat.csv": build_inflation_de,
     "co2_preis_jahr.csv": build_co2_preis,
     "co2_aufschlag_jahr.csv": build_co2_aufschlag,
+    "bevoelkerung_20_59_jahr.csv": build_bevoelkerung_20_59,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -1344,6 +1367,7 @@ FLOAT_FORMATS = {
     "leitzinsen.csv": "%.2f",
     "co2_preis_jahr.csv": "%.0f",
     "co2_aufschlag_jahr.csv": "%.4f",
+    "bevoelkerung_20_59_jahr.csv": "%.0f",
 }
 
 

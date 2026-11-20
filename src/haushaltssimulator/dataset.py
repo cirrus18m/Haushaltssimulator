@@ -44,6 +44,7 @@ KEY_RATES = "leitzinsen.csv"
 INFLATION_GERMANY = "inflation_de_monat.csv"
 CO2_PRICE = "co2_preis_jahr.csv"
 CO2_SURCHARGE = "co2_aufschlag_jahr.csv"
+WORKING_AGE = "bevoelkerung_20_59_jahr.csv"
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -83,6 +84,7 @@ DATASET_LABELS = {
     INFLATION_GERMANY: "Inflation in Deutschland: HVPI, Kerninflation und VPI",
     CO2_PRICE: "CO₂-Preis im nationalen Emissionshandel (BEHG)",
     CO2_SURCHARGE: "CO₂-Aufschlag je Liter bzw. kWh auf Heizöl, Kraftstoffe und Erdgas",
+    WORKING_AGE: "Bevölkerung von 20 bis unter 60 Jahren je Land",
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -284,3 +286,7 @@ def load_co2_price(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 
 def load_co2_surcharge(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     return _read(CO2_SURCHARGE, processed_dir)
+
+
+def load_working_age(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    return _read(WORKING_AGE, processed_dir)

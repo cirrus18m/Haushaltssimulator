@@ -39,6 +39,7 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `produktion_vergleich_monat.csv` | Produktionsindex im Ländervergleich | Eurostat `sts_inpr_m` | 1995-01–2026-09 |
 | `energie_maerkte_monat.csv` | Heizöl sowie regionale Gas- und Öl-Benchmarks | EU Weekly Oil Bulletin; IWF und EIA über FRED; EZB | 1999-01–2026-11 |
 | `inflation_de_monat.csv` | Inflation Deutschland: HVPI, Kerninflation, VPI | EZB ICP; Destatis 61111-0002 | 1992-01–2026-10 |
+| `bevoelkerung_20_59_jahr.csv` | Bevölkerung von 20 bis unter 60 Jahren je Land (Summe der Gruppen 20–24 bis 55–59) | Eurostat `demo_pjangroup` | 2015–2025 |
 | `co2_preis_jahr.csv` | CO₂-Preis je Tonne nach BEHG (Festpreis bzw. Preiskorridor) | BEHG § 10 Abs. 2; Bundestag, Drucksache 21/7869 | 2021–2027 |
 | `co2_aufschlag_jahr.csv` | CO₂-Aufschlag je Liter bzw. kWh, netto und mit Umsatzsteuer | BEHG; EBeV 2030, Anlage 2 | 2021–2027 |
 | `leitzinsen.csv` | Leitzinsen von EZB und Fed an den Tagen ihrer Änderung | EZB FM; Federal Reserve über FRED (`DFEDTAR`, `DFEDTARU`) | 1982–2026 |

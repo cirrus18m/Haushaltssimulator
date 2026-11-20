@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-20T21:25:40+00:00",
+  "aktualisiert_am": "2026-11-20T23:34:10+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -198,6 +198,21 @@
       "abgerufen_am": "2026-11-17T22:30:05+00:00",
       "sha256": "a68bd1606ad4aeffad0c26dda3f9e59bc97f0b037ea90b03188153a1405300dd",
       "bytes": 16725
+    },
+    {
+      "key": "eurostat_bevoelkerung_20_59",
+      "titel": "Bevölkerung von 20 bis unter 60 Jahren: europäische Länder, jährlich",
+      "herausgeber": "Eurostat, Datensatz demo_pjangroup",
+      "lizenz": "CC BY 4.0",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjangroup?format=JSON&lang=EN&geo=BE&geo=BG&geo=DK&geo=DE&geo=EE&geo=FI&geo=FR&geo=EL&geo=IE&geo=IT&geo=HR&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SE&geo=SK&geo=SI&geo=ES&geo=CZ&geo=HU&geo=UK&geo=CY&sex=T&age=Y20-24&age=Y25-29&age=Y30-34&age=Y35-39&age=Y40-44&age=Y45-49&age=Y50-54&age=Y55-59&sinceTimePeriod=2015",
+      "beschreibung": "Eurostat demo_pjangroup: Bevölkerung am 1. Januar nach Fünf-Jahres-Altersgruppen 20–24 bis 55–59, je Land, ab 2015",
+      "datei": "eurostat_demo_pjangroup_20_59.json",
+      "datensaetze": [
+        "bevoelkerung_20_59_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-20T23:34:09+00:00",
+      "sha256": "73f306c44f33228876248d108c7ebfff9c40a8d5d40217335a7001581f6b3b19",
+      "bytes": 38692
     },
     {
       "key": "eurostat_inflation_laender",

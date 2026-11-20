@@ -289,3 +289,18 @@ def test_co2_share_of_consumer_price_uses_yearly_means() -> None:
     assert frame.loc["Heizöl EL", "preis_ct_l"] == 80
     assert frame.loc["Diesel", "preis_ct_l"] == pytest.approx(140)
     assert frame.loc["Heizöl EL", "anteil_pct"] == pytest.approx(7.962 / 80 * 100, abs=0.01)
+
+
+def test_interest_per_working_age_uses_latest_population() -> None:
+    zinslast = pd.DataFrame({"land": ["A", "B"], "zins_theoretisch_mio_eur": [100_000, 50]})
+    bevoelkerung = pd.DataFrame(
+        {
+            "land": ["A", "A", "B"],
+            "jahr": [2024, 2025, 2025],
+            "bevoelkerung_20_59": [50_000_000, 40_000_000, 1_000_000],
+        }
+    )
+    frame = analysis.interest_per_working_age(zinslast, bevoelkerung).set_index("land")
+    assert frame.loc["A", "bevoelkerung_jahr"] == 2025
+    assert frame.loc["A", "zins_je_person_20_59_eur"] == pytest.approx(2500)
+    assert frame.loc["B", "zins_je_person_20_59_eur"] == pytest.approx(50)

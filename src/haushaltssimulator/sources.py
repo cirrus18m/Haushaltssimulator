@@ -81,6 +81,10 @@ ROSSTAT_CPI_INDICATOR = 31074
 
 # Ab diesem Jahr liefert die Bank of Russia die Zinskurve in der genutzten Form.
 CBR_START_YEAR = 2015
+# Altersgruppen von 20 bis unter 60 Jahren im Eurostat-Datensatz demo_pjangroup.
+BEVOELKERUNG_20_59_GRUPPEN = (
+    "Y20-24", "Y25-29", "Y30-34", "Y35-39", "Y40-44", "Y45-49", "Y50-54", "Y55-59",
+)
 # Erstes Jahr für Destatis-Tabellen über die API; der öffentliche Export enthält nur
 # die letzten Jahre.
 DESTATIS_API_START_YEAR = 1991
@@ -367,6 +371,27 @@ SOURCES: tuple[Source, ...] = (
         datasets=("laender_haushalt_jahr.csv",),
         description=(
             "Eurostat demo_pjan: Bevölkerung am 1. Januar, jährlich ab 1995, je Land"
+        ),
+    ),
+    Source(
+        key="eurostat_bevoelkerung_20_59",
+        filename="eurostat_demo_pjangroup_20_59.json",
+        url=_eurostat(
+            "demo_pjangroup",
+            format="JSON",
+            lang="EN",
+            geo=[code for code, _ in laender.EUROPA_LAENDER],
+            sex="T",
+            age=list(BEVOELKERUNG_20_59_GRUPPEN),
+            sinceTimePeriod="2015",
+        ),
+        title="Bevölkerung von 20 bis unter 60 Jahren: europäische Länder, jährlich",
+        publisher="Eurostat, Datensatz demo_pjangroup",
+        license="CC BY 4.0",
+        datasets=("bevoelkerung_20_59_jahr.csv",),
+        description=(
+            "Eurostat demo_pjangroup: Bevölkerung am 1. Januar nach Fünf-Jahres-"
+            "Altersgruppen 20–24 bis 55–59, je Land, ab 2015"
         ),
     ),
     Source(

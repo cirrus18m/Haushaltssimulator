@@ -429,3 +429,26 @@ def co2_share_of_consumer_price(
     frame["preis_ct_l"] = frame["brennstoff"].map(preise)
     frame["anteil_pct"] = frame["aufschlag_max_brutto_ct"] / frame["preis_ct_l"] * 100
     return frame.reset_index(drop=True)
+
+
+def interest_per_working_age(burden: pd.DataFrame, population: pd.DataFrame) -> pd.DataFrame:
+    """Zinslast je Person von 20 bis unter 60 Jahren in Euro pro Jahr.
+
+    ``burden`` enthält je ``land`` die Spalte ``zins_theoretisch_mio_eur`` (z. B. aus
+    ``theoretical_interest_by_country``), ``population`` je Land und Jahr
+    ``bevoelkerung_20_59``. Verwendet wird das jüngste Jahr der Bevölkerung.
+    """
+    neueste = (
+        population.dropna(subset=["bevoelkerung_20_59"])
+        .sort_values(["land", "jahr"])
+        .groupby("land", as_index=False)
+        .tail(1)
+        .rename(columns={"jahr": "bevoelkerung_jahr"})
+    )
+    frame = burden[["land", "zins_theoretisch_mio_eur"]].merge(
+        neueste[["land", "bevoelkerung_jahr", "bevoelkerung_20_59"]], on="land", how="inner"
+    )
+    frame["zins_je_person_20_59_eur"] = (
+        frame["zins_theoretisch_mio_eur"] * 1_000_000 / frame["bevoelkerung_20_59"]
+    )
+    return frame.reset_index(drop=True)
