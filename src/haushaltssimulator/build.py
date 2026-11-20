@@ -1213,6 +1213,24 @@ def build_inflation_de(raw_dir: Path) -> pd.DataFrame:
     return frame[columns].sort_values("monat").reset_index(drop=True)
 
 
+def _co2_preise(raw_dir: Path) -> pd.DataFrame:
+    frame = pd.read_csv(raw_dir / "manual" / "behg_co2_preise.csv")
+    if (frame["preis_min_eur_t"] > frame["preis_max_eur_t"]).any():
+        raise ValueError("CO₂-Preis: Mindestpreis über Höchstpreis")
+    return frame.sort_values("jahr").reset_index(drop=True)
+
+
+def build_co2_preis(raw_dir: Path) -> pd.DataFrame:
+    """CO₂-Preis je Tonne nach § 10 Abs. 2 BEHG: Festpreise und Preiskorridore."""
+    return _co2_preise(raw_dir)
+
+
+def build_co2_aufschlag(raw_dir: Path) -> pd.DataFrame:
+    """Aufschlag des CO₂-Preises auf Heizöl, Diesel, Benzin und Erdgas (BEHG, EBeV 2030)."""
+    faktoren = pd.read_csv(raw_dir / "manual" / "ebev_2030_standardwerte.csv")
+    return analysis.co2_surcharge(_co2_preise(raw_dir), faktoren)
+
+
 # Leitzinsen: Bezeichnung in der App und Kennung im EZB-Export.
 LEITZINS_EZB_HAUPTREFI = "EZB Hauptrefinanzierungssatz"
 LEITZINS_EZB_EINLAGE = "EZB Einlagesatz"
@@ -1293,6 +1311,8 @@ BUILDERS = {
     "energie_maerkte_monat.csv": build_energy_markets,
     "leitzinsen.csv": build_leitzinsen,
     "inflation_de_monat.csv": build_inflation_de,
+    "co2_preis_jahr.csv": build_co2_preis,
+    "co2_aufschlag_jahr.csv": build_co2_aufschlag,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -1322,6 +1342,8 @@ FLOAT_FORMATS = {
     "produktion_vergleich_monat.csv": "%.2f",
     "energie_maerkte_monat.csv": "%.2f",
     "leitzinsen.csv": "%.2f",
+    "co2_preis_jahr.csv": "%.0f",
+    "co2_aufschlag_jahr.csv": "%.4f",
 }
 
 

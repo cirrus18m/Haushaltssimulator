@@ -39,6 +39,8 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `produktion_vergleich_monat.csv` | Produktionsindex im Ländervergleich | Eurostat `sts_inpr_m` | 1995-01–2026-09 |
 | `energie_maerkte_monat.csv` | Heizöl sowie regionale Gas- und Öl-Benchmarks | EU Weekly Oil Bulletin; IWF und EIA über FRED; EZB | 1999-01–2026-11 |
 | `inflation_de_monat.csv` | Inflation Deutschland: HVPI, Kerninflation, VPI | EZB ICP; Destatis 61111-0002 | 1992-01–2026-10 |
+| `co2_preis_jahr.csv` | CO₂-Preis je Tonne nach BEHG (Festpreis bzw. Preiskorridor) | BEHG § 10 Abs. 2; Bundestag, Drucksache 21/7869 | 2021–2027 |
+| `co2_aufschlag_jahr.csv` | CO₂-Aufschlag je Liter bzw. kWh, netto und mit Umsatzsteuer | BEHG; EBeV 2030, Anlage 2 | 2021–2027 |
 | `leitzinsen.csv` | Leitzinsen von EZB und Fed an den Tagen ihrer Änderung | EZB FM; Federal Reserve über FRED (`DFEDTAR`, `DFEDTARU`) | 1982–2026 |
 
 ### Spalten
@@ -166,6 +168,17 @@ unterschiedlich weit (HVPI und Kerninflation bei der EZB bis Dezember 2025, VPI 
 | `hvpi_pct` | Harmonisierter Verbraucherpreisindex (EZB ICP `000000`) |
 | `hvpi_kern_pct` | Kerninflation: HVPI ohne Energie, Nahrungsmittel, Alkohol und Tabak (EZB ICP `XEF000`) |
 | `vpi_pct` | Nationaler Verbraucherpreisindex mit selbst genutztem Wohneigentum (Destatis 61111-0002) |
+
+**`co2_preis_jahr.csv`** – `jahr`, `preis_min_eur_t`, `preis_max_eur_t` (beim Festpreis
+gleich, sonst Preiskorridor), `art`, `rechtsgrundlage`. Rohdaten:
+`raw/manual/behg_co2_preise.csv`, von Hand aus § 10 Abs. 2 BEHG übernommen; 2027 nach
+dem Bundestagsbeschluss vom 15.10.2026, Verkündung ausstehend.
+
+**`co2_aufschlag_jahr.csv`** – je Jahr und Brennstoff (`Heizöl EL`, `Diesel`, `Benzin`,
+`Erdgas`): `einheit_verbrauch` (l bzw. kWh), `kg_co2_je_einheit` (Dichte × Heizwert ×
+Emissionsfaktor aus `raw/manual/ebev_2030_standardwerte.csv`),
+`aufschlag_min_netto_ct`, `aufschlag_max_netto_ct` und dieselben Werte `_brutto_ct`
+mit 19 % Umsatzsteuer, jeweils in Cent je Liter bzw. kWh.
 
 **`leitzinsen.csv`** – eine Zeile je Zinsänderung (Stufenreihe; der letzte
 Beobachtungstag der Fed-Reihe ist als Endpunkt enthalten).

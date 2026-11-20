@@ -217,6 +217,16 @@ def test_inflation_germany_has_three_measures() -> None:
     assert oktober_2022["hvpi_pct"] > oktober_2022["vpi_pct"] > oktober_2022["hvpi_kern_pct"]
 
 
+def test_co2_price_follows_behg() -> None:
+    preise = dataset.load_co2_price().set_index("jahr")
+    assert preise.loc[2021, "preis_min_eur_t"] == 25
+    assert preise.loc[2025, "preis_max_eur_t"] == 55
+    assert (preise.loc[2026, ["preis_min_eur_t", "preis_max_eur_t"]] == [55, 65]).all()
+    aufschlag = dataset.load_co2_surcharge()
+    assert set(aufschlag["brennstoff"]) == {"Heizöl EL", "Diesel", "Benzin", "Erdgas"}
+    assert set(aufschlag["jahr"]) == set(preise.index)
+
+
 def test_key_rates_cover_ecb_and_fed() -> None:
     frame = dataset.load_key_rates()
     assert set(frame["leitzins"]) == {

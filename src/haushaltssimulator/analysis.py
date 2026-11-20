@@ -349,3 +349,83 @@ def extend_steps(frame: pd.DataFrame, end: pd.Timestamp, group_column: str) -> p
         return frame
     result = pd.concat(parts, ignore_index=True)
     return result.astype(frame.dtypes.to_dict())
+
+
+# Regelsatz der Umsatzsteuer (§ 12 Abs. 1 UStG); der CO₂-Preis ist Teil des Entgelts.
+UMSATZSTEUER_PCT = 19.0
+
+
+def co2_emissions_per_unit(factors: pd.DataFrame) -> pd.DataFrame:
+    """CO₂ je Liter bzw. je kWh aus den Standardwerten der EBeV 2030.
+
+    Flüssige Brennstoffe: Dichte (t/1000 l) × Heizwert (GJ/t) × Emissionsfaktor
+    (t CO₂/GJ) ergibt t CO₂ je 1000 l = kg CO₂ je Liter. Erdgas: Umrechnungsfaktor
+    (GJ/MWh) × Emissionsfaktor ergibt t CO₂ je MWh = kg CO₂ je kWh.
+    """
+    frame = factors.copy()
+    fluessig = frame["einheit"] == "1000 l"
+    energie_gj = frame["dichte_t_je_1000l"] * frame["heizwert_gj_je_t"]
+    energie_gj = energie_gj.where(fluessig, frame["umrechnung_gj_je_mwh"])
+    frame["kg_co2_je_einheit"] = energie_gj * frame["emissionsfaktor_t_co2_je_gj"]
+    frame["einheit_verbrauch"] = frame["einheit"].map({"1000 l": "l", "MWh": "kWh"})
+    return frame[["brennstoff", "einheit_verbrauch", "kg_co2_je_einheit"]]
+
+
+def co2_surcharge(prices: pd.DataFrame, factors: pd.DataFrame) -> pd.DataFrame:
+    """Aufschlag des CO₂-Preises je Liter bzw. kWh in Cent, netto und mit Umsatzsteuer.
+
+    ``prices`` enthält je Jahr ``preis_min_eur_t`` und ``preis_max_eur_t`` (beim
+    Festpreis gleich). Euro je Tonne × kg CO₂ je Einheit / 1000 × 100 ergibt Cent.
+    """
+    emissionen = co2_emissions_per_unit(factors)
+    frame = prices[["jahr", "preis_min_eur_t", "preis_max_eur_t", "art"]].merge(
+        emissionen, how="cross"
+    )
+    for grenze in ("min", "max"):
+        netto = frame[f"preis_{grenze}_eur_t"] * frame["kg_co2_je_einheit"] / 10
+        frame[f"aufschlag_{grenze}_netto_ct"] = netto
+        frame[f"aufschlag_{grenze}_brutto_ct"] = netto * (1 + UMSATZSTEUER_PCT / 100)
+    columns = [
+        "jahr",
+        "brennstoff",
+        "einheit_verbrauch",
+        "kg_co2_je_einheit",
+        "art",
+        "aufschlag_min_netto_ct",
+        "aufschlag_max_netto_ct",
+        "aufschlag_min_brutto_ct",
+        "aufschlag_max_brutto_ct",
+    ]
+    return frame[columns].sort_values(["brennstoff", "jahr"]).reset_index(drop=True)
+
+
+def co2_share_of_consumer_price(
+    surcharge: pd.DataFrame,
+    energy_markets: pd.DataFrame,
+    fuel_prices: pd.DataFrame,
+    jahr: int,
+) -> pd.DataFrame:
+    """Anteil des CO₂-Aufschlags (mit Umsatzsteuer) am mittleren Verbraucherpreis.
+
+    Heizöl kommt aus ``energy_markets`` (``heizoel_ct_l``), Diesel und Benzin aus
+    ``fuel_prices`` (Deutschland). Alle Preise enthalten Steuern. Bei einem
+    Preiskorridor wird die Obergrenze verwendet.
+    """
+    def jahresmittel(frame: pd.DataFrame, column: str) -> float:
+        return frame.loc[frame["monat"].str[:4] == str(jahr), column].mean()
+
+    deutschland = fuel_prices[fuel_prices["land"] == "Deutschland"]
+    preise = {
+        "Heizöl EL": jahresmittel(energy_markets, "heizoel_ct_l"),
+        "Diesel": jahresmittel(deutschland[deutschland["produkt"] == "Diesel"], "preis_eur_l")
+        * 100,
+        "Benzin": jahresmittel(
+            deutschland[deutschland["produkt"] == "Superbenzin (Euro 95)"], "preis_eur_l"
+        )
+        * 100,
+    }
+    frame = surcharge[(surcharge["jahr"] == jahr) & surcharge["brennstoff"].isin(preise)]
+    frame = frame[["brennstoff", "aufschlag_max_brutto_ct"]].copy()
+    frame["preis_ct_l"] = frame["brennstoff"].map(preise)
+    frame["anteil_pct"] = frame["aufschlag_max_brutto_ct"] / frame["preis_ct_l"] * 100
+    return frame.reset_index(drop=True)

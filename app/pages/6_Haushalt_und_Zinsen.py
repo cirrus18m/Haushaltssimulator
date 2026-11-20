@@ -14,25 +14,28 @@ ZEITMARKEN = (
     ("Start Agenda 2010", "2003-03-14", 0.02, "left"),
     ("Lehman-Pleite", "2008-09-15", 0.02, "left"),
     ("Corona", "2020-03-16", 0.02, "left"),
+    ("CO₂-Preis: 25 €/t", "2021-01-01", 0.02, "left"),
     ("Russland Sanktionen", "2022-03-02", 0.14, "left"),
     ("Hormus", "2026-02-28", 0.02, "right"),
 )
 
-# Reihenfolge der vier Teilbilder von oben nach unten.
+# Reihenfolge der fünf Teilbilder von oben nach unten.
 ZEILE_SCHULDEN = 1
 ZEILE_RENDITE = 2
 ZEILE_ZINSLAST = 3
 ZEILE_INFLATION = 4
+ZEILE_CO2 = 5
 
-# Achsen der vier Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
-# Nur das Zinslast-Teilbild (Zeile 3) hat eine zweite y-Achse (y4), daher heißt die
-# Hauptachse der vierten Zeile y5.
+# Achsen der fünf Teilbilder: je Zeile die x-Achse und die senkrechte Hauptachse.
+# Nur das Zinslast-Teilbild (Zeile 3) hat eine zweite y-Achse (y4), daher heißen die
+# Hauptachsen der Zeilen 4 und 5 y5 und y6.
 # Die Zeitmarken werden in allen Zeilen an derselben Stelle der Achsenhöhe beschriftet.
 TEILBILD_ACHSEN = (
     ("x", "y domain"),
     ("x2", "y2 domain"),
     ("x3", "y3 domain"),
     ("x4", "y5 domain"),
+    ("x5", "y6 domain"),
 )
 
 # Inflationsmaße im unteren Teilbild: Spalte, Bezeichnung, Farbe, Strichart.
@@ -64,10 +67,11 @@ LEGENDEN = (
     ("legend2", "y2", "Rendite"),
     ("legend3", "y3", "Zinslast"),
     ("legend4", "y5", "Inflation und Leitzinsen"),
+    ("legend5", "y6", "CO₂-Preis auf Heizöl, Erdgas und Kraftstoffe (BEHG)"),
 )
 # Zuordnung der y-Achsen zu den Legenden; y4 ist die zweite Achse von Teilbild 3.
 LEGENDE_JE_ACHSE = {"y": "legend", "y2": "legend2", "y3": "legend3", "y4": "legend3"}
-LEGENDE_JE_ACHSE["y5"] = "legend4"
+LEGENDE_JE_ACHSE.update({"y5": "legend4", "y6": "legend5"})
 
 st.title("Haushalt, Schulden und Zinslast")
 st.markdown(
@@ -87,6 +91,8 @@ bund_plan = ui.bund_interest_plan()
 daily_yield = ui.bund_yield()
 inflation = ui.inflation_germany()
 leitzinsen = ui.key_rates()
+co2_preis = ui.co2_price()
+co2_aufschlag = ui.co2_surcharge()
 
 if total.empty or zinslast.empty:
     st.warning("Keine Daten gefunden. Bitte `uv run scripts/build_data.py` ausführen.")
@@ -122,21 +128,23 @@ st.markdown(
     "Zinsausgaben** gegenüber, ergänzt um den **Effektivzins** auf den Schuldenstand und "
     "um die im Finanzplan veranschlagten Zinsausgaben des Bundes. Das untere Teilbild "
     "zeigt drei **Inflationsmaße** – HVPI, Kerninflation und nationaler VPI – und die "
-    "**Leitzinsen von EZB und Fed**, an denen sich die Marktzinsen orientieren."
+    "**Leitzinsen von EZB und Fed**, an denen sich die Marktzinsen orientieren. Ganz "
+    "unten steht der **CO₂-Preis** auf Heizöl, Erdgas und Kraftstoffe seit 2021."
 )
 
 plan = bund_plan.dropna(subset=["zinsausgaben_mrd_eur"]).sort_values("jahr")
 
 figure = make_subplots(
-    rows=4,
+    rows=5,
     cols=1,
-    row_heights=[0.22, 0.22, 0.30, 0.26],
-    vertical_spacing=0.1,
+    row_heights=[0.19, 0.19, 0.25, 0.22, 0.15],
+    vertical_spacing=0.08,
     # Nur die Zinslast (ZEILE_ZINSLAST) hat eine zweite y-Achse.
     specs=[
         [{"secondary_y": False}],
         [{"secondary_y": False}],
         [{"secondary_y": True}],
+        [{"secondary_y": False}],
         [{"secondary_y": False}],
     ],
     shared_xaxes=True,
@@ -241,6 +249,38 @@ figure.add_trace(
     secondary_y=True,
 )
 
+# CO₂-Preis nach BEHG: je Jahr ein Festpreis oder ein Korridor aus Mindest- und
+# Höchstpreis. Als Stufenlinie bis zum Ende des letzten Jahres; die Fläche zwischen
+# den beiden Linien ist der Preiskorridor.
+co2_stufen = co2_preis.assign(
+    datum=pd.to_datetime(co2_preis["jahr"].astype(str) + "-01-01"), reihe="co2"
+)
+co2_stufen = analysis.extend_steps(
+    co2_stufen, pd.Timestamp(f"{int(co2_preis['jahr'].max())}-12-31"), "reihe"
+)
+for spalte, name, fuellung in (
+    ("preis_min_eur_t", "Festpreis bzw. Mindestpreis", None),
+    ("preis_max_eur_t", "Höchstpreis im Preiskorridor", "tonexty"),
+):
+    figure.add_trace(
+        go.Scatter(
+            x=co2_stufen["datum"],
+            y=co2_stufen[spalte],
+            name=name,
+            mode="lines",
+            line={"color": "#2e7d32", "width": 2, "shape": "hv"},
+            fill=fuellung,
+            fillcolor="rgba(46, 125, 50, 0.15)",
+            customdata=co2_stufen[["art", "rechtsgrundlage"]],
+            hovertemplate=(
+                "%{x|%Y}: %{y:.0f} €/t (%{customdata[0]}, %{customdata[1]})"
+                "<extra>%{fullData.name}</extra>"
+            ),
+        ),
+        row=ZEILE_CO2,
+        col=1,
+    )
+
 # Schuldenstand im Monatsraster: die Jahresendbestände und die daraus interpolierte
 # Reihe, mit der die theoretische Zinslast gerechnet wird.
 jahresende = pd.to_datetime(debt["jahr"].astype(int).astype(str) + "-12-31")
@@ -307,6 +347,7 @@ figure.update_yaxes(title_text="Schuldenstand in Mrd. €", row=ZEILE_SCHULDEN, 
 figure.update_yaxes(title_text="Rendite in %", row=ZEILE_RENDITE, col=1)
 figure.update_yaxes(title_text="Inflation / Leitzins in %", row=ZEILE_INFLATION, col=1)
 figure.update_yaxes(title_text="Mrd. €", row=ZEILE_ZINSLAST, col=1, secondary_y=False)
+figure.update_yaxes(title_text="€ je t CO₂", rangemode="tozero", row=ZEILE_CO2, col=1)
 figure.update_yaxes(
     title_text="Effektivzins in %",
     showgrid=False,
@@ -353,13 +394,15 @@ for legende, achse, titel in LEGENDEN:
                 "y": oberkante + 0.005,
                 "yanchor": "bottom",
                 "font": {"size": 10},
+                # Gefüllte Flächen kehren die Legende sonst um (Höchst- vor Mindestpreis).
+                "traceorder": "normal",
             }
         }
     )
 ui.plot(
     figure,
     filename="zins_bund_10j_und_zinslast",
-    height=1500,
+    height=1850,
     top_margin=80,
     own_legends=True,
 )
@@ -383,13 +426,107 @@ st.caption(
     "fortgeführt – EZB-Hauptrefinanzierungssatz (Juni 2000 bis Oktober 2008 "
     "Mindestbietungssatz der Zinstender) und Einlagesatz (EZB FM) sowie der "
     "Federal-Funds-Zielsatz der Fed, ab 16.12.2008 die Obergrenze der Zielspanne "
-    "(Federal Reserve über FRED, DFEDTAR und DFEDTARU). Alle Teilbilder "
+    "(Federal Reserve über FRED, DFEDTAR und DFEDTARU). Ganz unten: CO₂-Preis je "
+    "Tonne nach § 10 Abs. 2 BEHG – Festpreise 2021 bis 2025, Preiskorridor 2026; für "
+    "2027 der vom Bundestag am 15.10.2026 beschlossene Korridor (Drucksache 21/7869, "
+    "Verkündung ausstehend). Alle Teilbilder "
     "teilen die Jahresachse, die gestrichelten Marken "
     "gelten in allen Teilbildern: Start der Agenda 2010 (14.03.2003), Lehman-Pleite "
-    "(15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), Beginn der "
+    "(15.09.2008), Beginn der Corona-Shutdowns (16.03.2020), Einführung des CO₂-Preises "
+    "von 25 €/t auf Heizöl, Erdgas und Kraftstoffe (01.01.2021), Beginn der "
     "Russland-Sanktionen (02.03.2022) und die Schließung der Straße von Hormus nach dem "
     "Angriff der USA und Israels auf den Iran (28.02.2026)."
 )
+
+
+def _ct(zeile: pd.Series, art: str, nachkommastellen: int = 1) -> str:
+    """Aufschlag in Cent; beim Preiskorridor als Spanne."""
+    unten = ui.format_number(zeile[f"aufschlag_min_{art}_ct"], nachkommastellen)
+    oben = ui.format_number(zeile[f"aufschlag_max_{art}_ct"], nachkommastellen)
+    return unten if unten == oben else f"{unten}–{oben}"
+
+
+with st.expander("CO₂-Preis: Was er je Liter und je Kilowattstunde ausmacht"):
+    emission = co2_aufschlag.drop_duplicates("brennstoff").set_index("brennstoff")
+    kg = emission["kg_co2_je_einheit"]
+    st.markdown(
+        "Seit dem 1. Januar 2021 gilt in Deutschland nach dem "
+        "Brennstoffemissionshandelsgesetz (BEHG) ein **CO₂-Preis auf Heizöl, Erdgas, "
+        "Benzin und Diesel**. Wer die Brennstoffe in Verkehr bringt, muss je Tonne CO₂ "
+        "ein Emissionszertifikat kaufen und gibt die Kosten über den Preis weiter. Bis "
+        "2025 galten Festpreise, 2026 gilt ein Preiskorridor von 55 bis 65 €/t. Für "
+        "2027 hat der Bundestag am 15.10.2026 denselben Korridor beschlossen; die "
+        "Verkündung steht noch aus. Danach soll der europäische Emissionshandel für "
+        "Gebäude und Verkehr (ETS 2) den nationalen Preis ablösen – nach seiner "
+        "Verschiebung frühestens 2028. Der Preis bildet sich dann am Markt.\n\n"
+        "**Rechnung:** Die Emissionsberichterstattungsverordnung (EBeV 2030, Anlage 2) "
+        "legt je Brennstoff Dichte, Heizwert und Emissionsfaktor fest. Daraus folgen "
+        f"**{ui.format_number(kg['Heizöl EL'], 2)} kg CO₂ je Liter** Heizöl EL und "
+        f"Diesel, {ui.format_number(kg['Benzin'], 2)} kg je Liter Benzin (rund "
+        f"{ui.format_number((1 - kg['Benzin'] / kg['Diesel']) * 100, 0)} % weniger als "
+        f"Diesel) und {ui.format_number(kg['Erdgas'], 3)} kg je Kilowattstunde Erdgas. "
+        "Ein Euro je Tonne CO₂ kostet je Liter Heizöl also "
+        f"{ui.format_number(kg['Heizöl EL'] / 10, 3)} Cent. Auf den CO₂-Preis kommt "
+        f"die Umsatzsteuer von {ui.format_number(analysis.UMSATZSTEUER_PCT, 0)} %."
+    )
+
+    tabelle = co2_preis[["jahr", "preis_min_eur_t", "preis_max_eur_t"]].copy()
+    tabelle["CO₂-Preis (€/t)"] = [
+        f"{unten:.0f}" if unten == oben else f"{unten:.0f}–{oben:.0f}"
+        for unten, oben in zip(
+            tabelle["preis_min_eur_t"], tabelle["preis_max_eur_t"], strict=True
+        )
+    ]
+    spalten = {
+        "Heizöl EL": ("Heizöl / Diesel, ct/l mit USt.", "brutto", 1),
+        "Benzin": ("Benzin, ct/l mit USt.", "brutto", 1),
+        "Erdgas": ("Erdgas, ct/kWh ohne USt.", "netto", 2),
+    }
+    for brennstoff, (titel, art, stellen) in spalten.items():
+        werte = co2_aufschlag[co2_aufschlag["brennstoff"] == brennstoff].set_index("jahr")
+        tabelle[titel] = [_ct(werte.loc[jahr], art, stellen) for jahr in tabelle["jahr"]]
+    tabelle["Jahr"] = [
+        f"{jahr}*" if jahr == tabelle["jahr"].max() else str(jahr) for jahr in tabelle["jahr"]
+    ]
+    st.dataframe(
+        tabelle[["Jahr", "CO₂-Preis (€/t)", *[titel for titel, _, _ in spalten.values()]]],
+        hide_index=True,
+        width="stretch",
+    )
+    st.caption(
+        "Cent je Liter entspricht Euro je 100 Liter. * 2027: vom Bundestag beschlossen, "
+        "Verkündung ausstehend."
+    )
+
+    erstes_jahr = int(co2_preis["jahr"].min())
+    anteil = analysis.co2_share_of_consumer_price(
+        co2_aufschlag, ui.energy_markets(), ui.fuel_prices(), erstes_jahr
+    ).set_index("brennstoff")
+    st.markdown(
+        "**Hinweise**\n\n"
+        f"* **Inflation {erstes_jahr}:** Der Aufschlag von "
+        f"{ui.format_number(anteil.loc['Heizöl EL', 'aufschlag_max_brutto_ct'], 1)} Cent "
+        f"je Liter Heizöl entsprach rund "
+        f"{ui.format_number(anteil.loc['Heizöl EL', 'anteil_pct'], 0)} % des mittleren "
+        f"Heizölpreises {erstes_jahr} "
+        f"({ui.format_number(anteil.loc['Heizöl EL', 'preis_ct_l'], 1)} ct/l), bei "
+        f"Diesel rund {ui.format_number(anteil.loc['Diesel', 'anteil_pct'], 0)} % und "
+        f"bei Benzin rund {ui.format_number(anteil.loc['Benzin', 'anteil_pct'], 0)} %. "
+        "Zum Jahreswechsel 2020/21 endete außerdem die befristete Senkung der "
+        "Umsatzsteuer aus dem zweiten Halbjahr 2020; beides hob die Inflationsrate im "
+        "Januar 2021 sprunghaft an.\n"
+        "* **Biokraftstoffe:** Die Werte gelten für rein fossile Brennstoffe. "
+        "Beimischungen wie im Diesel (B7) oder Benzin (E10) sind nicht berücksichtigt; "
+        "der tatsächliche Aufschlag an der Tankstelle kann daher etwas niedriger liegen.\n"
+        "* **Erdgas** ist ohne Umsatzsteuer angegeben, je Kilowattstunde bezogen auf "
+        "den Brennwert, wie er auf Gasrechnungen steht."
+    )
+    st.caption(
+        "Quellen: § 10 Abs. 2 BEHG (gesetze-im-internet.de/behg/__10.html); Deutscher "
+        "Bundestag, Drucksache 21/7869, Beschluss vom 15.10.2026; EBeV 2030, Anlage 2 "
+        "Teil 4 (gesetze-im-internet.de/ebev_2030/anlage_2.html); Preise: EU Weekly Oil "
+        "Bulletin (Heizöl, Diesel, Benzin, jeweils mit Steuern)."
+    )
 
 aktuell = monatszinslast.iloc[-1]
 latest_debt = debt.iloc[-1]

@@ -1,0 +1,29 @@
+jahr,brennstoff,einheit_verbrauch,kg_co2_je_einheit,art,aufschlag_min_netto_ct,aufschlag_max_netto_ct,aufschlag_min_brutto_ct,aufschlag_max_brutto_ct
+2021,Benzin,l,2.3942,Festpreis,5.9855,5.9855,7.1228,7.1228
+2022,Benzin,l,2.3942,Festpreis,7.1827,7.1827,8.5474,8.5474
+2023,Benzin,l,2.3942,Festpreis,7.1827,7.1827,8.5474,8.5474
+2024,Benzin,l,2.3942,Festpreis,10.7740,10.7740,12.8210,12.8210
+2025,Benzin,l,2.3942,Festpreis,13.1682,13.1682,15.6702,15.6702
+2026,Benzin,l,2.3942,Preiskorridor,13.1682,15.5624,15.6702,18.5193
+2027,Benzin,l,2.3942,Preiskorridor,13.1682,15.5624,15.6702,18.5193
+2021,Diesel,l,2.6763,Festpreis,6.6907,6.6907,7.9619,7.9619
+2022,Diesel,l,2.6763,Festpreis,8.0289,8.0289,9.5543,9.5543
+2023,Diesel,l,2.6763,Festpreis,8.0289,8.0289,9.5543,9.5543
+2024,Diesel,l,2.6763,Festpreis,12.0433,12.0433,14.3315,14.3315
+2025,Diesel,l,2.6763,Festpreis,14.7196,14.7196,17.5163,17.5163
+2026,Diesel,l,2.6763,Preiskorridor,14.7196,17.3958,17.5163,20.7011
+2027,Diesel,l,2.6763,Preiskorridor,14.7196,17.3958,17.5163,20.7011
+2021,Erdgas,kWh,0.1814,Festpreis,0.4535,0.4535,0.5396,0.5396
+2022,Erdgas,kWh,0.1814,Festpreis,0.5442,0.5442,0.6476,0.6476
+2023,Erdgas,kWh,0.1814,Festpreis,0.5442,0.5442,0.6476,0.6476
+2024,Erdgas,kWh,0.1814,Festpreis,0.8163,0.8163,0.9714,0.9714
+2025,Erdgas,kWh,0.1814,Festpreis,0.9977,0.9977,1.1872,1.1872
+2026,Erdgas,kWh,0.1814,Preiskorridor,0.9977,1.1791,1.1872,1.4031
+2027,Erdgas,kWh,0.1814,Preiskorridor,0.9977,1.1791,1.1872,1.4031
+2021,Heizöl EL,l,2.6763,Festpreis,6.6907,6.6907,7.9619,7.9619
+2022,Heizöl EL,l,2.6763,Festpreis,8.0289,8.0289,9.5543,9.5543
+2023,Heizöl EL,l,2.6763,Festpreis,8.0289,8.0289,9.5543,9.5543
+2024,Heizöl EL,l,2.6763,Festpreis,12.0433,12.0433,14.3315,14.3315
+2025,Heizöl EL,l,2.6763,Festpreis,14.7196,14.7196,17.5163,17.5163
+2026,Heizöl EL,l,2.6763,Preiskorridor,14.7196,17.3958,17.5163,20.7011
+2027,Heizöl EL,l,2.6763,Preiskorridor,14.7196,17.3958,17.5163,20.7011

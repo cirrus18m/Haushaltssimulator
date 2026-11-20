@@ -42,6 +42,8 @@ PRODUCTION_COMPARISON = "produktion_vergleich_monat.csv"
 ENERGY_MARKETS = "energie_maerkte_monat.csv"
 KEY_RATES = "leitzinsen.csv"
 INFLATION_GERMANY = "inflation_de_monat.csv"
+CO2_PRICE = "co2_preis_jahr.csv"
+CO2_SURCHARGE = "co2_aufschlag_jahr.csv"
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -79,6 +81,8 @@ DATASET_LABELS = {
     ENERGY_MARKETS: "Heizöl, Gas und Brent-Rohöl im Monatsvergleich",
     KEY_RATES: "Leitzinsen von EZB und Fed",
     INFLATION_GERMANY: "Inflation in Deutschland: HVPI, Kerninflation und VPI",
+    CO2_PRICE: "CO₂-Preis im nationalen Emissionshandel (BEHG)",
+    CO2_SURCHARGE: "CO₂-Aufschlag je Liter bzw. kWh auf Heizöl, Kraftstoffe und Erdgas",
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -272,3 +276,11 @@ def load_key_rates(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 
 def load_inflation_germany(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     return _read(INFLATION_GERMANY, processed_dir)
+
+
+def load_co2_price(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    return _read(CO2_PRICE, processed_dir)
+
+
+def load_co2_surcharge(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    return _read(CO2_SURCHARGE, processed_dir)

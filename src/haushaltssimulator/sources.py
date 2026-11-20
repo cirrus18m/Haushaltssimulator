@@ -1131,6 +1131,42 @@ SOURCES: tuple[Source, ...] = (
             "2028 bis 2030"
         ),
     ),
+    Source(
+        key="behg_co2_preis",
+        filename="manual/behg_co2_preise.csv",
+        url="https://www.gesetze-im-internet.de/behg/__10.html",
+        title="CO₂-Preis im nationalen Emissionshandel (§ 10 Abs. 2 BEHG)",
+        publisher=(
+            "Brennstoffemissionshandelsgesetz (BEHG), Bundesamt für Justiz; für 2027 "
+            "Deutscher Bundestag, Drucksache 21/7869"
+        ),
+        license="Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+        datasets=("co2_preis_jahr.csv", "co2_aufschlag_jahr.csv"),
+        fetch_mode="manual",
+        description=(
+            "Manuell aus § 10 Abs. 2 BEHG übernommen: Festpreise je Emissionszertifikat "
+            "(1 t CO₂) 2021 bis 2025 und Preiskorridor 55 bis 65 Euro für 2026. Für 2027 "
+            "der vom Bundestag am 15.10.2026 beschlossene Korridor von 55 bis 65 Euro "
+            "(Drittes Gesetz zur Änderung des BEHG, Drucksache 21/7869; "
+            "https://www.bundestag.de/dokumente/textarchiv/2026/"
+            "kw39-de-brennstoffemissionshandelsgesetz-1211312), Verkündung ausstehend"
+        ),
+    ),
+    Source(
+        key="ebev_standardwerte",
+        filename="manual/ebev_2030_standardwerte.csv",
+        url="https://www.gesetze-im-internet.de/ebev_2030/anlage_2.html",
+        title="Standardwerte zur Berechnung von Brennstoffemissionen (EBeV 2030, Anlage 2)",
+        publisher="Emissionsberichterstattungsverordnung 2030, Bundesamt für Justiz",
+        license="Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+        datasets=("co2_aufschlag_jahr.csv",),
+        fetch_mode="manual",
+        description=(
+            "Manuell aus Anlage 2 Teil 4 EBeV 2030 übernommen: Dichte, Heizwert und "
+            "heizwertbezogener Emissionsfaktor für Heizöl EL (Nr. 3b), Diesel (Nr. 3a), "
+            "Benzin (Nr. 1) und Erdgas (Nr. 6, Umrechnungsfaktor 3,2508 GJ/MWh)"
+        ),
+    ),
 )
 
 # Portale und API-Dokumentation der Anbieter – erscheint als "Quellen & Links"

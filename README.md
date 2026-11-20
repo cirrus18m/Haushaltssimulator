@@ -56,7 +56,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Bundesländer** | Ranking und Entwicklung der 16 Länder, Anteile, Veränderung seit 2024 |
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
-| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe, darunter Inflation (HVPI, Kerninflation, VPI) und Leitzinsen von EZB und Fed – jedes Teilbild mit eigener Legende –, sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben, den Schuldenstand im Monatsraster und der Haushaltsplan des Bundes nach Aufgabenbereichen – in Mrd. €, in % der Einnahmen und in % des BIP |
+| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe, Inflation (HVPI, Kerninflation, VPI), Leitzinsen von EZB und Fed und der CO₂-Preis nach BEHG mit einer aufklappbaren Erläuterung der Mehrkosten je Liter – jedes Teilbild mit eigener Legende –, sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben, den Schuldenstand im Monatsraster und der Haushaltsplan des Bundes nach Aufgabenbereichen – in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, drei Einkommensgrößen, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
@@ -148,6 +148,8 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [FRED `DHHNGSP`](https://fred.stlouisfed.org/series/DHHNGSP) | Henry-Hub-Gaspreis, täglich (EIA) | EIA-Bedingungen |
 | [The Economist Big-Mac-Data](https://github.com/TheEconomist/big-mac-data) | Big-Mac-Index je Land | Quellenangabe erforderlich |
 | [Eurostat `ilc_lvho02`](https://ec.europa.eu/eurostat/databrowser/view/ilc_lvho02/default/table) | Eigentums- und Mietquote | CC BY 4.0 |
+| [BEHG § 10](https://www.gesetze-im-internet.de/behg/__10.html) | CO₂-Preis je Tonne 2021–2026 (Festpreise, Preiskorridor); 2027 nach Bundestagsbeschluss vom 15.10.2026 (Drucksache 21/7869), manuell übernommen | Amtliches Werk, gemeinfrei |
+| [EBeV 2030, Anlage 2](https://www.gesetze-im-internet.de/ebev_2030/anlage_2.html) | Standardwerte für Dichte, Heizwert und Emissionsfaktor von Heizöl, Diesel, Benzin und Erdgas, manuell übernommen | Amtliches Werk, gemeinfrei |
 | [BMF Bundeshaushalt](https://www.bundeshaushalt.de/) | Zinsausgaben des Bundes am Kreditmarkt | Quellenangabe erforderlich |
 
 Details zu Dateien und Spalten: [data/README.md](data/README.md).

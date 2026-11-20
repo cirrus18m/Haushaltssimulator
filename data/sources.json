@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "aktualisiert_am": "2026-11-20T19:21:40+00:00",
+  "aktualisiert_am": "2026-11-20T21:25:40+00:00",
   "hinweis": "Automatisch erzeugt von haushaltssimulator.sources – nicht manuell bearbeiten.",
   "quellen": [
     {
@@ -881,6 +881,37 @@
       "abgerufen_am": "2026-11-20T12:59:57+00:00",
       "sha256": "c0bf78b4b4603e7059f20e3389ec01d9e963591f7917ed3f27fc253ed46e3619",
       "bytes": 2209
+    },
+    {
+      "key": "behg_co2_preis",
+      "titel": "CO₂-Preis im nationalen Emissionshandel (§ 10 Abs. 2 BEHG)",
+      "herausgeber": "Brennstoffemissionshandelsgesetz (BEHG), Bundesamt für Justiz; für 2027 Deutscher Bundestag, Drucksache 21/7869",
+      "lizenz": "Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+      "url": "https://www.gesetze-im-internet.de/behg/__10.html",
+      "beschreibung": "Manuell aus § 10 Abs. 2 BEHG übernommen: Festpreise je Emissionszertifikat (1 t CO₂) 2021 bis 2025 und Preiskorridor 55 bis 65 Euro für 2026. Für 2027 der vom Bundestag am 15.10.2026 beschlossene Korridor von 55 bis 65 Euro (Drittes Gesetz zur Änderung des BEHG, Drucksache 21/7869; https://www.bundestag.de/dokumente/textarchiv/2026/kw39-de-brennstoffemissionshandelsgesetz-1211312), Verkündung ausstehend",
+      "datei": "manual/behg_co2_preise.csv",
+      "datensaetze": [
+        "co2_preis_jahr.csv",
+        "co2_aufschlag_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-20T21:25:05+00:00",
+      "sha256": "edd61b258366e17401b4d79197cc44017f996cd660192a20687441b5c10649a9",
+      "bytes": 402
+    },
+    {
+      "key": "ebev_standardwerte",
+      "titel": "Standardwerte zur Berechnung von Brennstoffemissionen (EBeV 2030, Anlage 2)",
+      "herausgeber": "Emissionsberichterstattungsverordnung 2030, Bundesamt für Justiz",
+      "lizenz": "Amtliches Werk, gemeinfrei (§ 5 UrhG)",
+      "url": "https://www.gesetze-im-internet.de/ebev_2030/anlage_2.html",
+      "beschreibung": "Manuell aus Anlage 2 Teil 4 EBeV 2030 übernommen: Dichte, Heizwert und heizwertbezogener Emissionsfaktor für Heizöl EL (Nr. 3b), Diesel (Nr. 3a), Benzin (Nr. 1) und Erdgas (Nr. 6, Umrechnungsfaktor 3,2508 GJ/MWh)",
+      "datei": "manual/ebev_2030_standardwerte.csv",
+      "datensaetze": [
+        "co2_aufschlag_jahr.csv"
+      ],
+      "abgerufen_am": "2026-11-20T21:25:05+00:00",
+      "sha256": "1ce2cc7674684e55bfcaf346eee2079a99f0891118820124b98dc3a4f39b591d",
+      "bytes": 249
     }
   ],
   "anbieter": [

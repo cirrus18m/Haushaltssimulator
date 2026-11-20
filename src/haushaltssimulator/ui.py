@@ -232,6 +232,16 @@ def inflation_germany() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def co2_price() -> pd.DataFrame:
+    return dataset.load_co2_price()
+
+
+@st.cache_data(show_spinner=False)
+def co2_surcharge() -> pd.DataFrame:
+    return dataset.load_co2_surcharge()
+
+
+@st.cache_data(show_spinner=False)
 def sources_library() -> dict:
     """Quellenbibliothek mit URLs, Lizenzen, Prüfsummen und Abrufzeitpunkten."""
     return sources.read_library()
