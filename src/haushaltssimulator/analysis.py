@@ -40,6 +40,49 @@ def with_interest_burden(frame: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
+def monthly_interest_burden(debt: pd.DataFrame, yields: pd.DataFrame) -> pd.DataFrame:
+    """Theoretische Zinslast je Monat aus Schuldenstand und Monatsrendite.
+
+    Der Schuldenstand liegt nur als Jahresendbestand vor. Er wird linear zwischen den
+    Jahresenden interpoliert, über den letzten bekannten Stichtag hinaus unverändert
+    fortgeschrieben und mit dem Monatsmittel der Rendite verzinst. Jeder Monatswert
+    ist damit die auf ein Jahr hochgerechnete Last, die der Schuldenstand beim
+    Monatsmittel der Rendite kosten würde. Das Ergebnis ist eine Modellrechnung und
+    nicht mit den tatsächlich gebuchten Zinsausgaben gleichzusetzen.
+    """
+    monatsrendite = (
+        yields.dropna(subset=["rendite_pct"])
+        .groupby("monat", as_index=False)["rendite_pct"]
+        .mean()
+        .sort_values("monat")
+        .reset_index(drop=True)
+    )
+    jahresbestand = debt.dropna(subset=["schulden_mio_eur"])
+    jahresende = pd.to_datetime(jahresbestand["jahr"].astype(int).astype(str) + "-12-31")
+    bestand = pd.Series(
+        jahresbestand["schulden_mio_eur"].to_numpy(dtype=float),
+        index=jahresende.to_numpy(),
+    ).sort_index()
+
+    monate = pd.to_datetime(monatsrendite["monat"] + "-01")
+    reihe = bestand.reindex(bestand.index.union(monate)).interpolate(method="time")
+    reihe = reihe.ffill().bfill()
+
+    result = monatsrendite.assign(
+        datum=monate.to_numpy(),
+        schulden_mio_eur=reihe.reindex(monate).to_numpy(),
+    )
+    result["zins_theoretisch_mio_eur"] = result["schulden_mio_eur"] * result["rendite_pct"] / 100
+    columns = [
+        "monat",
+        "datum",
+        "schulden_mio_eur",
+        "rendite_pct",
+        "zins_theoretisch_mio_eur",
+    ]
+    return result[columns]
+
+
 def theoretical_interest_by_country(
     debt: pd.DataFrame,
     budget: pd.DataFrame,

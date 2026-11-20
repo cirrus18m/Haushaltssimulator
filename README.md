@@ -56,7 +56,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Bundesländer** | Ranking und Entwicklung der 16 Länder, Anteile, Veränderung seit 2024 |
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
-| **Haushalt & Zinsen** | Einnahmen ohne neue Schulden, Ausgaben, Schuldenstand, 10-jährige Bundesanleihe mit Inflation sowie die daraus folgende theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes – in Mrd. €, in % der Einnahmen und in % des BIP |
+| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe mit Inflation sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben und den Schuldenstand im Monatsraster – in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, drei Einkommensgrößen, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |

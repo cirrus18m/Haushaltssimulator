@@ -74,13 +74,18 @@ Ziel: Die 10-jährige Bundesanleihe mit dem Schuldenstand verknüpfen.
   theoretische Zinslast in Mrd. Euro, dazu Anteil an den Einnahmen (ohne neue
   Schulden) und am BIP – ergänzt um die tatsächlich gebuchten Zinsausgaben und die
   effektive Verzinsung (Zinsausgaben/Schuldenstand).
-* ✅ Seite **Haushalt & Zinsen**, Abschnitte Schulden und Zinslast: Darstellung von
-  Rendite, Schuldenstand und den drei Kennzahlen, inklusive Vergleich „theoretisch
-  gegen tatsächlich“.
-* ✅ Gemeinsames Diagramm für Rendite/Inflation und Zinslast: zwei Teilbilder in einer
-  Grafik, mit den Zeitmarken in beiden Teilbildern, dem Effektivzins und den im
-  Finanzplan 2026 bis 2030 veranschlagten Zinsausgaben des Bundes (Drucksache
-  21/7301, Tabelle 9; manuelle Quelle `bund_finanzplan_zinsausgaben`).
+* ✅ Seite **Haushalt & Zinsen**, Abschnitte Zinslast, Haushalt und Schulden (in dieser
+  Reihenfolge): Darstellung von Rendite, Schuldenstand und den drei Kennzahlen,
+  inklusive Vergleich „theoretisch gegen tatsächlich“.
+* ✅ Gemeinsames Diagramm für Rendite/Inflation, Zinslast und Schuldenstand: drei
+  Teilbilder in einer Grafik mit gemeinsamer Jahresachse, mit den Zeitmarken in allen
+  Teilbildern, dem Effektivzins und den im Finanzplan 2026 bis 2030 veranschlagten
+  Zinsausgaben des Bundes (Drucksache 21/7301, Tabelle 9; manuelle Quelle
+  `bund_finanzplan_zinsausgaben`). Die theoretische Zinslast wird monatlich aus dem
+  zwischen den Jahresenden interpolierten Schuldenstand und dem Monatsmittel der
+  Rendite gerechnet; der letzte Jahresendbestand wird bis zum letzten Renditemonat
+  fortgeschrieben. Das dritte Teilbild zeigt diesen Recheninput: die Jahresendbestände
+  und die daraus interpolierte Monatsreihe samt schraffierter Fortschreibung.
 
 Abnahmekriterien: Für das letzte Datenjahr existieren theoretische Zinslast in
 Mrd. Euro, in Prozent der Einnahmen und in Prozent des BIP; die Rechenwege sind im
@@ -201,4 +206,6 @@ Ziel: Weitere Datenquellen anbindbar machen, ohne Geheimnisse zu versionieren.
 * ⬜ Für Russland liefert die OECD-Reihe nur Daten bis 2018; deshalb der Rückgriff auf
   die Tagesdaten der Bank of Russia (Monatsendwerte). Eine dauerhafte Lösung ist offen.
 * Hinweis: Die theoretische Zinslast ist eine Modellrechnung (gesamter Schuldenstand zur
-  aktuellen Rendite) und keine Prognose der tatsächlichen Zinsausgaben.
+  aktuellen Rendite) und keine Prognose der tatsächlichen Zinsausgaben. Für die
+  Monatsreihe wird der jahresweise Schuldenstand interpoliert und nach dem letzten
+  Jahresende unverändert fortgeschrieben.
