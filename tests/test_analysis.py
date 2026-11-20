@@ -110,3 +110,71 @@ def test_linear_trend_extrapolates_fit_period() -> None:
     assert trend.iloc[0] == pytest.approx(10.0, abs=0.05)
     assert trend.iloc[-1] == pytest.approx(22.0, abs=0.05)
     assert trend.is_monotonic_increasing
+
+
+def test_budget_shares_normalise_per_year() -> None:
+    frame = pd.DataFrame(
+        {
+            "jahr": [2025, 2025, 2025, 2026, 2026],
+            "aufgabenbereich": ["A", "B", "C", "A", "B"],
+            "ausgaben_mrd_eur": [50.0, 30.0, 20.0, 60.0, 40.0],
+        }
+    )
+
+    anteile = analysis.budget_shares(frame)
+
+    assert anteile.groupby("jahr")["anteil_pct"].sum().round(6).tolist() == [100.0, 100.0]
+    assert anteile.loc[0, "anteil_pct"] == pytest.approx(50.0)
+
+
+def test_budget_shares_skip_missing_values() -> None:
+    frame = pd.DataFrame(
+        {
+            "jahr": [2025, 2025],
+            "aufgabenbereich": ["A", "B"],
+            "ausgaben_mrd_eur": [80.0, float("nan")],
+        }
+    )
+
+    anteile = analysis.budget_shares(frame)
+
+    assert anteile.loc[0, "anteil_pct"] == pytest.approx(100.0)
+    assert pd.isna(anteile.loc[1, "anteil_pct"])
+
+
+def test_largest_areas_groups_small_budgets_per_year() -> None:
+    frame = pd.DataFrame(
+        {
+            "jahr": [2025, 2025, 2025, 2026, 2026, 2026],
+            "aufgabenbereich": ["Groß", "Mittel", "Klein", "Groß", "Mittel", "Klein"],
+            "ausgaben_mrd_eur": [60.0, 20.0, 20.0, 70.0, 20.0, 10.0],
+            "anteil_pct": [60.0, 20.0, 20.0, 70.0, 20.0, 10.0],
+        }
+    )
+
+    gruppen = analysis.largest_areas(frame, threshold_pct=25.0)
+
+    assert set(gruppen["aufgabenbereich"]) == {"Groß", "Übrige Aufgabenbereiche"}
+    rest = gruppen[gruppen["aufgabenbereich"] == "Übrige Aufgabenbereiche"].set_index("jahr")
+    assert rest.loc[2025, "anteil_pct"] == pytest.approx(40.0)
+    assert rest.loc[2026, "ausgaben_mrd_eur"] == pytest.approx(30.0)
+
+
+def test_share_change_reports_percentage_points() -> None:
+    frame = pd.DataFrame(
+        {
+            "jahr": [2025, 2025, 2030, 2030],
+            "aufgabenbereich": ["A", "B", "A", "B"],
+            "ausgaben_mrd_eur": [50.0, 50.0, 30.0, 70.0],
+            "anteil_pct": [50.0, 50.0, 30.0, 70.0],
+        }
+    )
+
+    wechsel = analysis.share_change(frame, start_year=2025, end_year=2030).set_index(
+        "aufgabenbereich"
+    )
+
+    assert wechsel.loc["A", "anteil_veraenderung_pp"] == pytest.approx(-20.0)
+    assert wechsel.loc["B", "anteil_veraenderung_pp"] == pytest.approx(20.0)
+    assert wechsel.loc["B", "ausgaben_2030_mrd_eur"] == pytest.approx(70.0)
+    assert wechsel.index[0] == "B", "größter Anteil im Endjahr steht oben"

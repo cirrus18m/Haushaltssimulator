@@ -56,7 +56,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Bundesländer** | Ranking und Entwicklung der 16 Länder, Anteile, Veränderung seit 2024 |
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
-| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe mit Inflation sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben und den Schuldenstand im Monatsraster – in Mrd. €, in % der Einnahmen und in % des BIP |
+| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe mit Inflation sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben, den Schuldenstand im Monatsraster und der Haushaltsplan des Bundes nach Aufgabenbereichen – in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, drei Einkommensgrößen, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
 | **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
@@ -125,6 +125,7 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [FRED `CPIAUCSL`](https://fred.stlouisfed.org/series/CPIAUCSL) | Verbraucherpreisindex der USA, monatlich | BLS-Bedingungen |
 | [Destatis 52411-0002](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0002) | Beantragte Insolvenzverfahren, Monate | DL-DE-BY-2.0 |
 | [Destatis 52411-0011](https://www-genesis.destatis.de/datenbank/online/statistic/52411/table/52411-0011) | Insolvenzverfahren von Unternehmen, Monate | DL-DE-BY-2.0 |
+| [Bundestag Drucksache 21/7301](https://dserver.bundestag.de/btd/21/073/2107301.pdf) | Finanzplan des Bundes 2026–2030: Zinsausgaben (Tabelle 9) und Ausgaben nach Aufgabenbereichen (Tabelle 8), manueller Export | © Deutscher Bundestag, Quellenangabe erforderlich |
 | [Destatis 52411-0017](https://genesis.destatis.de/datenbank/online/table/52411-0017) | Unternehmensinsolvenzen 2003–2026 nach Größenklassen (manueller Export) | DL-DE-BY-2.0 |
 | [Destatis 81000-0001](https://www-genesis.destatis.de/datenbank/online/statistic/81000/table/81000-0001) | Bruttoinlandsprodukt nominal und real, Wachstumsraten, Jahre | DL-DE-BY-2.0 |
 | [Destatis 81000-0025](https://www-genesis.destatis.de/datenbank/online/statistic/81000/table/81000-0025) | Bruttoanlageinvestitionen des Staates und der nichtstaatlichen Sektoren | DL-DE-BY-2.0 |
@@ -234,6 +235,9 @@ Werkzeugleiste den Kamera-Button im SVG-Format an.
   2022; für längere Zeitreihen je Ebene dienen die Destatis-Tabellen ab 2010.
 * Das Szenario-Modell rechnet mit konstanten Wachstumsraten und ohne Zinsen – es zeigt die
   Richtung, ist aber keine Prognose.
+* Der **Haushaltsplan des Bundes** (Drucksache 21/7301, Tabelle 8) ist der Kernhaushalt
+  ohne Sondervermögen, Länder und Gemeinden. Seine Summen sind kleiner als die Ausgaben
+  des Gesamtstaats in der VGR-Abgrenzung und dürfen nicht mit ihnen saldiert werden.
 
 ## Entwicklung
 

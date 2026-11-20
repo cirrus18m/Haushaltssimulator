@@ -233,3 +233,74 @@ def linear_trend(
     slope = x_fit.cov(y_fit) / x_fit.var()
     intercept = y_fit.mean() - slope * x_fit.mean()
     return intercept + slope * x
+
+
+def budget_shares(
+    frame: pd.DataFrame,
+    *,
+    value_column: str = "ausgaben_mrd_eur",
+    year_column: str = "jahr",
+) -> pd.DataFrame:
+    """Anteil jeder Zeile an der Jahressumme in Prozent.
+
+    Die Anteile beziehen sich auf die Gesamtausgaben des jeweiligen Jahres, sodass sich
+    die Planjahre trotz steigender Summen vergleichen lassen. Fehlende Werte (nicht
+    veranschlagte Beträge) bleiben leer und zählen nicht zur Summe.
+    """
+    result = frame.copy()
+    gesamt = result.groupby(year_column, observed=True)[value_column].transform("sum")
+    result["anteil_pct"] = result[value_column] / gesamt * 100
+    return result
+
+
+def largest_areas(
+    frame: pd.DataFrame,
+    *,
+    threshold_pct: float,
+    label: str = "Übrige Aufgabenbereiche",
+    label_column: str = "aufgabenbereich",
+    value_column: str = "ausgaben_mrd_eur",
+    share_column: str = "anteil_pct",
+    year_column: str = "jahr",
+) -> pd.DataFrame:
+    """Fasst Aufgabenbereiche unterhalb der Anteilsschwelle je Jahr zusammen.
+
+    Ein Bereich bleibt einzeln erhalten, sobald er in mindestens einem Jahr die Schwelle
+    erreicht; alle übrigen werden je Jahr zu einer Sammelposition addiert. So bleibt das
+    Säulendiagramm lesbar, ohne Bereiche stillschweigend zu verschlucken.
+    """
+    gross = set(frame.loc[frame[share_column] >= threshold_pct, label_column])
+    teile = [frame[frame[label_column].isin(gross)]]
+    rest = frame[~frame[label_column].isin(gross)]
+    if not rest.empty:
+        summe = rest.groupby(year_column, observed=True)[[value_column, share_column]].sum()
+        summe[label_column] = label
+        teile.append(summe.reset_index())
+    return pd.concat(teile, ignore_index=True)[list(frame.columns)]
+
+
+def share_change(
+    frame: pd.DataFrame,
+    *,
+    start_year: int,
+    end_year: int,
+    label_column: str = "aufgabenbereich",
+    value_column: str = "ausgaben_mrd_eur",
+    share_column: str = "anteil_pct",
+    year_column: str = "jahr",
+) -> pd.DataFrame:
+    """Ausgaben und Anteile zweier Jahre samt Veränderung des Anteils in Prozentpunkten."""
+    start = frame[frame[year_column] == start_year].set_index(label_column)
+    ende = frame[frame[year_column] == end_year].set_index(label_column)
+    result = pd.DataFrame(
+        {
+            f"ausgaben_{start_year}_mrd_eur": start[value_column],
+            f"ausgaben_{end_year}_mrd_eur": ende[value_column],
+            f"anteil_{start_year}_pct": start[share_column],
+            f"anteil_{end_year}_pct": ende[share_column],
+        }
+    )
+    result["anteil_veraenderung_pp"] = (
+        result[f"anteil_{end_year}_pct"] - result[f"anteil_{start_year}_pct"]
+    )
+    return result.sort_values(f"anteil_{end_year}_pct", ascending=False).reset_index()

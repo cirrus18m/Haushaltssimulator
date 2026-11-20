@@ -164,13 +164,39 @@ Offene Punkte dieser Stufe:
 * ⬜ **Sondervermögen** des Bundes liegen nicht als frei maschinenlesbare Zeitreihe vor.
   Die Seite weist sie deshalb noch nicht separat aus.
 
-## Stufe 5 – Haushaltspläne im Vergleich ⬜
+## Stufe 5 – Haushaltspläne im Vergleich 🟡
 
+Ziel: Den Bundeshaushalt dort zeigen, wo er entsteht – nach Aufgabenbereichen
+(Einzelplänen) und über die Finanzplanjahre hinweg. Bisher stand auf der Seite
+**Haushalt & Zinsen** nur die VGR-Abgrenzung des Gesamtstaats; der Kernhaushalt des
+Bundes war allein über die Zinsausgaben sichtbar.
+
+* ✅ **Tabelle 8** der Bundestagsdrucksache 21/7301 („Die Ausgaben des Bundes 2025 bis
+  2030 nach Aufgabenbereichen im Kernhaushalt“, Mrd. €) als manuelle Quelle
+  `bund_finanzplan_aufgabenbereiche` erfassen: Rohdatei
+  `data/raw/manual/bund_finanzplan_2026-2030_aufgabenbereiche.csv`, Parser
+  `bmf.parse_areas_csv`, aufbereitete Tabelle `bund_ausgaben_aufgabenbereiche.csv`
+  im langen Format (`einzelplan`, `aufgabenbereich`, `jahr`, `art`,
+  `ausgaben_mrd_eur`).
+* ✅ Anteile je Jahr in `analysis.budget_shares` berechnen (ohne Streamlit testbar) und
+  kleine Aufgabenbereiche über `analysis.largest_areas` zu einer Restgruppe
+  zusammenfassen, damit das Säulendiagramm lesbar bleibt.
+* ✅ Abschnitt **„Der Haushaltsplan des Bundes nach Aufgabenbereichen“** im
+  Haushalts-Abschnitt der Seite Haushalt & Zinsen:
+  * 100-%-Säulen der Anteile je Jahr (Ist 2025 bis Finanzplan 2030) mit den größten
+    Aufgabenbereichen und einer Sammelposition für den Rest,
+  * Linien der Anteile für frei wählbare Aufgabenbereiche,
+  * Tabelle mit Ausgaben in Mrd. €, Anteilen je Jahr und der Veränderung des Anteils
+    von 2025 bis 2030 in Prozentpunkten.
 * ⬜ Haushaltspläne von Bundesregierung und Opposition als strukturierte Daten erfassen
   (Grundlage unter anderem Bundestagsdrucksache 21/073/2107301).
 * ⬜ Einheitliches Schema für Einnahmen und Ausgaben je Ressort, damit Pläne
   vergleichbar werden.
 * ⬜ Vergleichsseite mit Differenzen je Ressort.
+
+Hinweis zur Abgrenzung: Die Zahlen sind der Kernhaushalt des Bundes, also ohne
+Sondervermögen und ohne die Länder und Gemeinden. Sie sind deshalb nicht mit den
+Gesamtstaatszahlen der VGR (Eurostat) zu saldieren.
 
 ## Stufe 6 – Zugangsdaten und API-Struktur 🟡
 

@@ -444,6 +444,141 @@ figure.update_layout(
 )
 ui.plot(figure, filename="haushalt_zinsausgaben", height=380)
 
+st.subheader("Der Haushaltsplan des Bundes nach Aufgabenbereichen")
+st.markdown(
+    "Der Haushaltsplan ist enger abgegrenzt als die Gesamtrechnung oben: Er umfasst den "
+    "**Kernhaushalt des Bundes**, also ohne Sondervermögen und ohne Länder und Gemeinden. "
+    "Die Anteile zeigen, wie sich die Ausgaben zwischen den Aufgabenbereichen verschieben – "
+    "vom Ist 2025 über den Regierungsentwurf 2027 bis zum Finanzplan 2030 (Tabelle 8 der "
+    "Drucksache 21/7301)."
+)
+
+plan_bereiche = ui.bund_budget_areas().dropna(subset=["ausgaben_mrd_eur"])
+if plan_bereiche.empty:
+    st.info("Keine Daten zum Haushaltsplan verfügbar.")
+else:
+    anteile = analysis.budget_shares(plan_bereiche)
+    anteile["jahr_label"] = anteile["jahr"].astype(str) + "<br>" + anteile["art"]
+    anteile["einzelplan_label"] = anteile["einzelplan"].astype(int).astype(str).str.zfill(2)
+
+    # Bereiche unter der Schwelle verschwinden nicht, sondern werden je Jahr zur
+    # Sammelposition addiert – sonst wäre das Säulendiagramm bei 26 Einzelplänen unlesbar.
+    schwelle = 3.0
+    gruppen = analysis.largest_areas(anteile, threshold_pct=schwelle).sort_values("jahr")
+    letztes_jahr = gruppen["jahr"].max()
+    reihenfolge = list(
+        gruppen[gruppen["jahr"] == letztes_jahr]
+        .sort_values("anteil_pct", ascending=False)["aufgabenbereich"]
+    )
+    farben = {
+        name: ("#7f7f7f" if name.startswith("Übrige") else ui.chart_color(index))
+        for index, name in enumerate(reihenfolge)
+    }
+
+    figure = go.Figure()
+    for name in reihenfolge:
+        teil = gruppen[gruppen["aufgabenbereich"] == name]
+        figure.add_trace(
+            go.Bar(
+                x=teil["jahr_label"],
+                y=teil["anteil_pct"],
+                name=name,
+                marker_color=farben[name],
+                customdata=list(
+                    zip(teil["ausgaben_mrd_eur"], teil["einzelplan_label"], strict=True)
+                ),
+                hovertemplate=(
+                    "%{x}: %{y:.1f} % der Ausgaben<br>%{customdata[0]:,.1f} Mrd. € "
+                    "(Epl. %{customdata[1]})<extra>" + name + "</extra>"
+                ),
+            )
+        )
+    # "relative" stapelt positive Anteile nach oben und negative Gegenposten nach unten.
+    figure.update_layout(barmode="relative")
+    figure.update_yaxes(
+        title_text="Anteil an den Gesamtausgaben in %", range=[-5, 105], dtick=10
+    )
+    ui.plot(figure, filename="bund_ausgaben_anteile", height=520, top_margin=150)
+    st.caption(
+        f"Säulen: Anteile an den Gesamtausgaben des jeweiligen Jahres. Einzeln gezeigt "
+        f"werden alle Aufgabenbereiche mit mindestens {schwelle:.0f} % Anteil in "
+        f"mindestens einem Jahr, der Rest ist zur Sammelposition „Übrige "
+        f"Aufgabenbereiche“ addiert. Negative Anteile entstehen bei der Allgemeinen "
+        f"Finanzverwaltung, weil dort Gegenposten wie globale Minderausgaben veranschlagt "
+        f"sind. Quelle: Deutscher Bundestag, Drucksache 21/7301, Tabelle 8 (Kernhaushalt)."
+    )
+
+    auswahl = st.multiselect(
+        "Aufgabenbereiche im Zeitverlauf",
+        options=reihenfolge,
+        default=[name for name in reihenfolge if not name.startswith("Übrige")][:5],
+        key="bund_plan_bereiche",
+    )
+    if not auswahl:
+        st.info("Bitte mindestens einen Aufgabenbereich auswählen.")
+    figure = go.Figure()
+    for name in auswahl:
+        teil = gruppen[gruppen["aufgabenbereich"] == name].sort_values("jahr")
+        figure.add_trace(
+            go.Scatter(
+                x=teil["jahr_label"],
+                y=teil["anteil_pct"],
+                name=name,
+                mode="lines+markers",
+                line={"color": farben[name], "width": 2.5},
+                marker={"size": 7},
+                hovertemplate="%{x}: %{y:.1f} %<extra>" + name + "</extra>",
+            )
+        )
+    figure.update_yaxes(title_text="Anteil an den Gesamtausgaben in %")
+    if auswahl:
+        ui.plot(figure, filename="bund_ausgaben_anteile_zeitreihe", height=380)
+    st.caption(
+        "Anteile derselben Aufgabenbereiche im Zeitverlauf, in Prozent der "
+        "Gesamtausgaben des jeweiligen Jahres. Quelle: Deutscher Bundestag, Drucksache "
+        "21/7301, Tabelle 8 (Kernhaushalt)."
+    )
+
+    start_jahr, end_jahr = int(anteile["jahr"].min()), int(anteile["jahr"].max())
+    vergleich = analysis.share_change(anteile, start_year=start_jahr, end_year=end_jahr)
+    spalten = {
+        "aufgabenbereich": "Aufgabenbereich",
+        f"ausgaben_{end_jahr}_mrd_eur": f"Ausgaben {end_jahr} (Mrd. €)",
+        f"anteil_{start_jahr}_pct": f"Anteil {start_jahr} (%)",
+        f"anteil_{end_jahr}_pct": f"Anteil {end_jahr} (%)",
+        "anteil_veraenderung_pp": "Veränderung (Prozentpunkte)",
+    }
+    tabelle = vergleich.round(1)[list(spalten)].rename(columns=spalten)
+    st.dataframe(
+        tabelle,
+        hide_index=True,
+        width="stretch",
+        column_config={
+            spalte: st.column_config.NumberColumn(format="%.1f")
+            for spalte in list(spalten.values())[1:]
+        },
+    )
+    st.caption(
+        f"Ausgaben in Mrd. € und Anteile in Prozent der Gesamtausgaben; die letzte Spalte "
+        f"ist die Veränderung des Anteils in Prozentpunkten von {start_jahr} bis "
+        f"{end_jahr}. Werte gerundet, Rundungsdifferenzen möglich. Quelle: Deutscher "
+        f"Bundestag, Drucksache 21/7301, Tabelle 8 (Kernhaushalt)."
+    )
+
+    with st.expander("Abgrenzung des Haushaltsplans"):
+        st.markdown(
+            "Die Tabelle 8 der Drucksache 21/7301 weist die Ausgaben des Bundes nach "
+            "Aufgabenbereichen (Einzelplänen) im **Kernhaushalt** aus: Ist 2025, Soll 2026, "
+            "Entwurf 2027 und Finanzplan 2028 bis 2030.\n\n"
+            "Nicht enthalten sind die Sondervermögen (z. B. Sondervermögen Bundeswehr, "
+            "Klima- und Transformationsfonds) sowie Länder und Gemeinden. Die Summen sind "
+            "deshalb kleiner als die Ausgaben des Gesamtstaats in der Abgrenzung der "
+            "Volkswirtschaftlichen Gesamtrechnung und dürfen nicht mit ihnen saldiert "
+            "werden. Planjahre sind Beschlusslagen, keine Prognosen.\n\n"
+            "Der Einzelplan 24 (Digitales und Staatsmodernisierung) ist erst ab 2026 "
+            "veranschlagt; für 2025 weist die Drucksache keinen Wert aus."
+        )
+
 st.divider()
 st.header("3. Schulden")
 st.markdown(

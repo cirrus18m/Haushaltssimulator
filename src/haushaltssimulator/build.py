@@ -997,6 +997,26 @@ def build_finanzplan_interest(raw_dir: Path) -> pd.DataFrame:
     return frame[columns].sort_values("jahr").reset_index(drop=True)
 
 
+# Die Drucksache weist je Haushaltsjahr eine eigene Planungsstufe aus: das Ist des
+# Vorjahres, den Soll-Ansatz, den Regierungsentwurf und danach die Finanzplanjahre.
+PLANUNGSSTUFEN = ("Ist", "Soll", "Entwurf")
+
+
+def build_finanzplan_areas(raw_dir: Path) -> pd.DataFrame:
+    """Ausgaben des Bundes nach Aufgabenbereichen im Kernhaushalt (Drucksache 21/7301)."""
+    frame = bmf.parse_areas_csv(
+        (raw_dir / "manual" / "bund_finanzplan_2026-2030_aufgabenbereiche.csv").read_bytes()
+    )
+    jahre = sorted(frame["jahr"].unique())
+    stufen = {
+        jahr: PLANUNGSSTUFEN[index] if index < len(PLANUNGSSTUFEN) else "Finanzplan"
+        for index, jahr in enumerate(jahre)
+    }
+    frame["art"] = frame["jahr"].map(stufen)
+    columns = ["einzelplan", "aufgabenbereich", "jahr", "art", "ausgaben_mrd_eur"]
+    return frame[columns].sort_values(["jahr", "einzelplan"]).reset_index(drop=True)
+
+
 PREISE_NOMINAL = "in jeweiligen Preisen (Mrd. EUR)"
 PREISE_REAL = "preisbereinigt, Kettenindex (2020=100)"
 STAAT_INVESTITIONEN = "Bruttoanlageinvestitionen des Staates"
@@ -1191,6 +1211,7 @@ BUILDERS = {
     "eigentumsquote.csv": build_homeownership,
     "bund_zinsausgaben.csv": build_bmf_interest,
     "bund_zinsausgaben_plan.csv": build_finanzplan_interest,
+    "bund_ausgaben_aufgabenbereiche.csv": build_finanzplan_areas,
     "laender_schulden_jahr.csv": build_laender_debt,
     "laender_haushalt_jahr.csv": build_laender_budget,
     "laender_inflation_monat.csv": build_laender_inflation,
@@ -1218,6 +1239,7 @@ FLOAT_FORMATS = {
     "eigentumsquote.csv": "%.1f",
     "bund_zinsausgaben.csv": "%.2f",
     "bund_zinsausgaben_plan.csv": "%.2f",
+    "bund_ausgaben_aufgabenbereiche.csv": "%.3f",
     "laender_schulden_jahr.csv": "%.1f",
     "laender_haushalt_jahr.csv": "%.1f",
     "laender_inflation_monat.csv": "%.2f",

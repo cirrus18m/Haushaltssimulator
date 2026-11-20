@@ -1022,6 +1022,22 @@ SOURCES: tuple[Source, ...] = (
             "für Ist 2025, Soll 2026, Entwurf 2027 sowie Finanzplan 2028 bis 2030"
         ),
     ),
+    Source(
+        key="bund_finanzplan_aufgabenbereiche",
+        filename="manual/bund_finanzplan_2026-2030_aufgabenbereiche.csv",
+        url="https://dserver.bundestag.de/btd/21/073/2107301.pdf",
+        title="Finanzplan des Bundes 2026 bis 2030 (Drucksache 21/7301)",
+        publisher="Deutscher Bundestag, 21. Wahlperiode",
+        license="© Deutscher Bundestag, Quellenangabe erforderlich",
+        datasets=("bund_ausgaben_aufgabenbereiche.csv",),
+        fetch_mode="manual",
+        description=(
+            "Manuell aus Drucksache 21/7301 (Tabelle 8, Die Ausgaben des Bundes 2025 bis "
+            "2030 nach Aufgabenbereichen im Kernhaushalt) übernommen: Ausgaben je "
+            "Einzelplan in Mrd. EUR für Ist 2025, Soll 2026, Entwurf 2027 und Finanzplan "
+            "2028 bis 2030"
+        ),
+    ),
 )
 
 # Portale und API-Dokumentation der Anbieter – erscheint als "Quellen & Links"
@@ -1137,6 +1153,13 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
         "daten": "Zinsausgaben des Bundes am Kreditmarkt",
         "portal": "https://www.bundeshaushalt.de/",
         "api": "",
+        "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Deutscher Bundestag",
+        "daten": "Finanzplan des Bundes: Zinsausgaben und Ausgaben nach Aufgabenbereichen",
+        "portal": "https://www.bundestag.de/services/opendata",
+        "api": "https://dserver.bundestag.de/btd/",
         "zugang": "kostenlos, ohne API-Key",
     },
 )
