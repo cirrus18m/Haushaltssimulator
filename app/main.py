@@ -50,6 +50,7 @@ pages = [
         icon=":material/account_balance_wallet:",
     ),
     st.Page("pages/14_Wirtschaft.py", title="Wirtschaft", icon=":material/trending_up:"),
+    st.Page("pages/15_Insights.py", title="Insights", icon=":material/slideshow:"),
 ]
 
 st.navigation(pages).run()

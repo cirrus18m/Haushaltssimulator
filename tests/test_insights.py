@@ -129,3 +129,29 @@ def test_pages_landing_page_links_all_decks() -> None:
             f"{datei.parent.name}/{datei.name}"
         )
         assert f'href="{ziel}"' in startseite, f"Startseite verlinkt {ziel} nicht"
+
+
+def test_module_lists_decks_with_titles_and_pages_urls() -> None:
+    from haushaltssimulator import insights
+
+    saetze = insights.foliensaetze()
+    adressen = {satz.pages_url for satz in saetze}
+    assert insights.PAGES_URL + "zinslast/" in adressen
+    assert insights.PAGES_URL + "zinslast/kurz.html" in adressen
+    kurz = next(satz for satz in saetze if satz.pfad.name == "kurz.html")
+    assert kurz.folien == 5
+    assert "Kurzfassung" in kurz.titel
+    # Je Thema die kürzere Fassung zuerst.
+    assert saetze[0].pfad.name == "kurz.html"
+
+
+@pytest.mark.parametrize("datei", FOLIENSAETZE, ids=_name)
+def test_self_contained_html_embeds_local_files(datei) -> None:
+    from haushaltssimulator import insights
+
+    html = insights.eigenstaendiges_html(datei)
+    assert 'href="stil.css"' not in html
+    assert not re.search(r'src="bilder/', html), "Diagramme sind nicht eingebettet"
+    assert "data:image/svg+xml;base64," in html
+    assert "--min-schrift" in html, "Stylesheet fehlt"
+    assert "reveal.js" in html

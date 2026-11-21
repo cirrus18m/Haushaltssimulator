@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import functools
 from datetime import datetime
+from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
 import streamlit as st
 
-from . import dataset, sources
+from . import dataset, insights, sources
 
 EBENE_ORDER = [
     "Bund (Zentralstaat)",
@@ -239,6 +240,18 @@ def co2_price() -> pd.DataFrame:
 @st.cache_data(show_spinner=False)
 def co2_surcharge() -> pd.DataFrame:
     return dataset.load_co2_surcharge()
+
+
+@st.cache_data(show_spinner=False)
+def insight_decks() -> list[insights.Foliensatz]:
+    """Foliensätze aus insights/ (Datengeschichten)."""
+    return insights.foliensaetze()
+
+
+@st.cache_data(show_spinner=False)
+def insight_html(pfad: str) -> str:
+    """Foliensatz als eigenständiges HTML zum Einbetten."""
+    return insights.eigenstaendiges_html(Path(pfad))
 
 
 @st.cache_data(show_spinner=False)

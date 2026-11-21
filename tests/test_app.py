@@ -194,6 +194,7 @@ def test_app_does_not_import_api_clients() -> None:
         "pages/12_Preisniveau_und_Wohnen.py",
         "pages/13_Bund_und_Schuldendienst.py",
         "pages/14_Wirtschaft.py",
+        "pages/15_Insights.py",
     ],
 )
 def test_streamlit_pages_run_without_exception(script: str) -> None:
