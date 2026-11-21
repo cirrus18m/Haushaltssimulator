@@ -67,6 +67,23 @@
     "anstieg_seit_hormus_pp": 0.52,
     "letzter_tag": "2026-11-17"
   },
+  "rendite_stichtage": {
+    "sanktionen": {
+      "tag": "2022-03-01",
+      "rendite_pct": 0.06
+    },
+    "irankrieg": {
+      "tag": "2026-02-27",
+      "rendite_pct": 2.69
+    },
+    "heute": {
+      "tag": "2026-11-17",
+      "rendite_pct": 3.35
+    },
+    "sanktionen_bis_iran_pp": 2.63,
+    "seit_iran_pp": 0.66,
+    "verhaeltnis": 4.0
+  },
   "international": {
     "Deutschland": 0.53,
     "Frankreich": 0.63,
@@ -122,6 +139,21 @@
       "Heizöl EL": 11
     }
   },
+  "sanktionen_bis_iran": {
+    "start": {
+      "tag": "2022-03-01",
+      "rendite_pct": 0.06,
+      "schulden_mrd_eur": 2513,
+      "zinslast_mrd_eur": 1.5
+    },
+    "ende": {
+      "tag": "2026-02-27",
+      "rendite_pct": 2.69,
+      "schulden_mrd_eur": 2859,
+      "zinslast_mrd_eur": 76.9
+    },
+    "anstieg_mrd_eur": 75
+  },
   "zinslast": {
     "dez_2021_mrd_eur": -8.2,
     "okt_2022_mrd_eur": 56.4,
@@ -133,6 +165,12 @@
     "effektivzins_2021_pct": 0.87,
     "effektivzins_2025_pct": 1.72,
     "einnahmen_staat_2025_mrd_eur": 2138
+  },
+  "zinslast_stichtag": {
+    "tag": "2026-11-17",
+    "rendite_pct": 3.35,
+    "schulden_mrd_eur": 2973,
+    "zinslast_mrd_eur": 99.6
   },
   "zerlegung": {
     "schulden_aktuell_mrd_eur": 2973,

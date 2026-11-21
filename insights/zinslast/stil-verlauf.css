@@ -1,0 +1,80 @@
+/* Farbverlauf-Design (Extrakurz-Fassung), wird nach stil.css geladen.
+   Verlauf #6c1b4d → #dc3e2d (69 %) → #f4711b. Weiße Schrift auf dem hellen Orange hat
+   nur etwa 3:1 Kontrast; Kästen und Diagramme liegen deshalb auf dunklem, halb-
+   durchsichtigem Grund. Hervorhebungen in Gelb (#ffcc00) und Hellcyan (#7fe3ff). */
+:root {
+  --verlauf-gelb: #ffcc00;
+  --verlauf-cyan: #7fe3ff;
+  --verlauf-text-hell: #fde8dc;
+  --verlauf-grund: rgba(50, 5, 30, 0.45);
+}
+.reveal-viewport {
+  background: linear-gradient(90deg, #6c1b4d 0%, #dc3e2d 69%, #f4711b 100%);
+}
+.reveal,
+.reveal h1,
+.reveal h2,
+.reveal p,
+.reveal li {
+  color: #ffffff;
+}
+.reveal h1,
+.reveal h2 {
+  text-shadow: 0 2px 8px rgba(40, 0, 20, 0.45);
+}
+.kicker { color: var(--verlauf-gelb); }
+.klein,
+.reveal .klein,
+.quelle { color: var(--verlauf-text-hell); }
+.kern,
+.reveal blockquote.zitat,
+.hervorhebung,
+.stufe {
+  background: var(--verlauf-grund);
+  color: #ffffff;
+  border-left-color: var(--verlauf-gelb);
+}
+.kern.rot { border-color: var(--verlauf-gelb); }
+.kern.gold,
+.kern.gruen { border-color: var(--verlauf-cyan); }
+.zahl,
+.zahl.rot,
+.hervorhebung .gross { color: var(--verlauf-gelb); }
+.zahl.gold { color: var(--verlauf-cyan); }
+.reveal img.diagramm {
+  background: rgba(50, 5, 30, 0.32);
+  border-radius: 14px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.reveal table.tabelle th,
+.reveal table.tabelle td {
+  color: #ffffff;
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+.reveal table.tabelle thead th { color: var(--verlauf-text-hell); }
+.titel .gross { color: var(--verlauf-gelb); }
+.reveal .controls { color: #ffffff; }
+.reveal .progress { color: var(--verlauf-gelb); }
+/* Titelfolie ohne eigene Hintergrundfarbe, damit der Verlauf durchscheint. */
+.titel { background: transparent; }
+/* Zitatfolie: Fließtext kleiner, die Kernaussagen groß und gelb. */
+.reveal blockquote.zitat-allein {
+  font-size: 44px;
+  line-height: 1.35;
+}
+.reveal blockquote.zitat-allein .betont {
+  display: inline;
+  font-size: 76px;
+  line-height: 1.1;
+  font-weight: 800;
+  font-style: normal;
+  color: var(--verlauf-gelb);
+}
+/* Schlussgedanke auf der letzten Folie: deutlich hervorgehoben. */
+.kern.schluss {
+  background: rgba(50, 5, 30, 0.6);
+  border-left-color: var(--verlauf-cyan);
+  font-size: 40px;
+}
+.kern.schluss b { color: var(--verlauf-gelb); }

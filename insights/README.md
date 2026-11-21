@@ -11,6 +11,7 @@ nutzbar.
 | Foliensatz | Thema | Online |
 | --- | --- | --- |
 | [zinslast/index.html](zinslast/index.html) | Fast 100 Milliarden Euro Zinsen – woher kommt das? (13 Folien) | [Öffnen](https://cirrus18m.github.io/Haushaltssimulator/zinslast/) |
+| [zinslast/extrakurz.html](zinslast/extrakurz.html) | Extrakurz: Renditesprung, Begründung der Regierung, Zinslast, Frankreich und Italien (Titel und 4 Folien) | [Öffnen](https://cirrus18m.github.io/Haushaltssimulator/zinslast/extrakurz.html) |
 | [zinslast/kurz.html](zinslast/kurz.html) | Kurzfassung: Haushaltslücke, Kosten der Schulden, Vergleich, Verzögerung, Frankreich und Italien (5 Folien) | [Öffnen](https://cirrus18m.github.io/Haushaltssimulator/zinslast/kurz.html) |
 
 Varianten eines Themas liegen im selben Ordner und teilen sich `stil.css`, `bilder/` und

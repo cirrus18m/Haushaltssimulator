@@ -16,6 +16,7 @@ from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 
 from haushaltssimulator import analysis, dataset
 
@@ -92,6 +93,57 @@ def _marke(figure: go.Figure, datum: pd.Timestamp, text: str, *, y: float = 0.98
         font={"size": MIN_SCHRIFT, "color": ROT},
         bgcolor="rgba(255,255,255,0.85)",
     )
+
+
+# Farbverlauf-Hintergrund (Extrakurz-Fassung): Aus jeder Farbe des hellen Designs wird
+# eine, die auf #6c1b4d → #dc3e2d → #f4711b gut lesbar ist.
+VERLAUF_FARBEN = {
+    BLAU: "#ffffff",
+    ROT: "#ffcc00",
+    GOLD: "#7fe3ff",
+    "#8a6d00": "#7fe3ff",
+    "#6a3d9a": "#7fe3ff",
+    "#7c3aed": "#ffcc00",
+    GRUEN: "#7fe3ff",
+    "#9db4cc": "#d9d9d9",
+    "#c9b3e6": "#ffe680",
+    "#a5d6a7": "#c4f1ff",
+    "#c7ccd4": "#d9d9d9",
+    "#4b5563": "#ffffff",
+    "#111827": "#ffffff",
+    "#9ca3af": "#f0c9b8",
+    "rgba(255,255,255,0.85)": "rgba(60,8,40,0.6)",
+    "rgba(255,255,255,0.9)": "rgba(60,8,40,0.75)",
+}
+
+
+def _verlauf(figure: go.Figure) -> go.Figure:
+    """Kopie des Diagramms für den Farbverlauf: transparent, helle Linien und Schrift."""
+    text = figure.to_json()
+    for alt, neu in VERLAUF_FARBEN.items():
+        text = text.replace(f'"{alt}"', f'"{neu}"')
+    kopie = pio.from_json(text)
+    kopie.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#ffffff"},
+        title_font_color="#ffffff",
+        legend_font_color="#ffffff",
+    )
+    achsen = {
+        "gridcolor": "rgba(255,255,255,0.2)",
+        "zerolinecolor": "rgba(255,255,255,0.4)",
+        "linecolor": "rgba(255,255,255,0.4)",
+        "tickfont_color": "#ffffff",
+        "title_font_color": "#ffffff",
+    }
+    kopie.update_xaxes(**achsen)
+    kopie.update_yaxes(**achsen)
+    # Schattierte Zeiträume brauchen auf dem dunklen Grund mehr Deckkraft.
+    for form in kopie.layout.shapes:
+        if form.type == "rect" and form.opacity is not None and form.opacity < 0.3:
+            form.opacity = 0.22
+    return kopie
 
 
 def _speichern(figure: go.Figure, name: str) -> None:
@@ -301,6 +353,63 @@ def rendite(kennzahlen: dict) -> None:
     _speichern(figure, "rendite")
 
 
+def rendite_stichtage(kennzahlen: dict) -> None:
+    """Rendite mit Zeiträumen nach Stichtagen: Russlandsanktionen → Irankrieg → heute.
+
+    Gleiche Abgrenzung wie die Zinslast in ``kennzahlen["sanktionen_bis_iran"]``:
+    Tagesrendite am 1.3.2022, am letzten Handelstag vor dem Irankrieg und am letzten
+    verfügbaren Tag. Für die Extrakurz-Fassung.
+    """
+    monat, _, _ = _monatsdaten()
+    tage = dataset.load_bund_yield().set_index("datum")["rendite_pct"]
+    stichtage = {
+        "sanktionen": tage[:"2022-03-01"],
+        "irankrieg": tage[: HORMUS - pd.Timedelta(days=1)],
+        "heute": tage,
+    }
+    werte = {name: (reihe.index[-1], float(reihe.iloc[-1])) for name, reihe in stichtage.items()}
+    bis_iran = werte["irankrieg"][1] - werte["sanktionen"][1]
+    seit_iran = werte["heute"][1] - werte["irankrieg"][1]
+    kennzahlen["rendite_stichtage"] = {
+        **{
+            name: {"tag": str(tag.date()), "rendite_pct": round(wert, 2)}
+            for name, (tag, wert) in werte.items()
+        },
+        "sanktionen_bis_iran_pp": round(bis_iran, 2),
+        "seit_iran_pp": round(seit_iran, 2),
+        "verhaeltnis": round(bis_iran / seit_iran, 1),
+    }
+
+    ab = monat[monat["datum"] >= "2015-01-01"]
+    figure = go.Figure(
+        go.Scatter(x=ab["datum"], y=ab["rendite_pct"], line={"color": BLAU, "width": 4},
+                   name="10-jährige Bundesanleihe")
+    )
+    figure.add_hline(y=0, line={"color": "#9ca3af", "width": 1})
+    figure.add_vrect(x0=werte["sanktionen"][0], x1=werte["irankrieg"][0], fillcolor=ROT,
+                     opacity=0.08, line_width=0)
+    figure.add_vrect(x0=HORMUS, x1=werte["heute"][0], fillcolor=GOLD, opacity=0.15,
+                     line_width=0)
+    _marke(figure, SANKTIONEN, "Russlandsanktionen")
+    _marke(figure, HORMUS, "Irankrieg / Hormus")
+    # Beschriftungen im freien Bereich unter der Kurve, damit sie die Marken oben nicht
+    # überdecken.
+    figure.add_annotation(
+        x="2024-09-01", y=0.9, showarrow=False, xanchor="center",
+        font={"size": MIN_SCHRIFT, "color": ROT},
+        text=f"<b>+{_zahl(bis_iran)} Prozentpunkte</b>",
+    )
+    figure.add_annotation(
+        x=werte["heute"][0], y=-0.45, showarrow=False, xanchor="right",
+        font={"size": MIN_SCHRIFT, "color": "#8a6d00"},
+        text=f"<b>seit Irankrieg: +{_zahl(seit_iran)}</b>",
+    )
+    _layout(figure, "Rendite der 10-jährigen Bundesanleihe<br>(Monatsmittel)", y_titel="%")
+    figure.update_layout(showlegend=False)
+    figure.update_yaxes(range=[-1, 4.5])
+    _speichern(_verlauf(figure), "rendite_stichtage")
+
+
 def rendite_international(kennzahlen: dict) -> None:
     vergleich = pd.read_csv(dataset.PROCESSED_DIR / dataset.INTERNATIONAL_YIELDS)
     laender = {
@@ -427,6 +536,24 @@ def zinslast(kennzahlen: dict) -> None:
     okt22 = m.loc["2022-10", "zins_theoretisch_mio_eur"] / 1000
     aktuell = monate.iloc[-1]
     tats = jahre.set_index("jahr")
+    # Russland-Sanktionen 2022 bis Iran-Krieg 2026: Tagesrendite am Stichtag × Schuldenstand
+    # des Monats (letzter Handelstag vor dem jeweiligen Datum).
+    tage = dataset.load_bund_yield().set_index("datum")["rendite_pct"]
+    zeitraum = {}
+    for name, stichtag in (("start", "2022-03-01"), ("ende", HORMUS - pd.Timedelta(days=1))):
+        bis = tage[:stichtag]
+        tag = bis.index[-1]
+        schulden_mrd = m.loc[tag.strftime("%Y-%m"), "schulden_mio_eur"] / 1000
+        zeitraum[name] = {
+            "tag": str(tag.date()),
+            "rendite_pct": round(float(bis.iloc[-1]), 2),
+            "schulden_mrd_eur": round(schulden_mrd),
+            "zinslast_mrd_eur": round(schulden_mrd * bis.iloc[-1] / 100, 1),
+        }
+    zeitraum["anstieg_mrd_eur"] = round(
+        zeitraum["ende"]["zinslast_mrd_eur"] - zeitraum["start"]["zinslast_mrd_eur"]
+    )
+    kennzahlen["sanktionen_bis_iran"] = zeitraum
     kennzahlen["zinslast"] = {
         "dez_2021_mrd_eur": round(tief, 1),
         "okt_2022_mrd_eur": round(okt22, 1),
@@ -444,7 +571,7 @@ def zinslast(kennzahlen: dict) -> None:
     figure = go.Figure()
     figure.add_trace(
         go.Scatter(x=ab["datum"], y=ab["zins_theoretisch_mio_eur"] / 1000,
-                   name="theoretisch (Schulden × Rendite)", line={"color": BLAU, "width": 4})
+                   name="theoretisch (Schulden × Rendite)", line={"color": BLAU, "width": 9})
     )
     seit = tats.loc[2019:]
     figure.add_trace(
@@ -465,6 +592,40 @@ def zinslast(kennzahlen: dict) -> None:
             y_titel="Mrd. €", hoehe=1080)
     figure.update_layout(margin={"b": 170})
     figure.update_xaxes(range=["2019-01-01", "2030-12-31"])
+    figure.update_yaxes(range=[-22, 115])
+
+    def markiert(basis: go.Figure, datum: pd.Timestamp, wert: float, stellen: int) -> go.Figure:
+        """Marker und gut sichtbare Beschriftung für den aktuellen Wert."""
+        kopie = go.Figure(basis)
+        kopie.add_trace(
+            go.Scatter(
+                x=[datum], y=[wert], mode="markers", showlegend=False, hoverinfo="skip",
+                marker={"size": 26, "color": ROT, "line": {"color": "#ffffff", "width": 4}},
+            )
+        )
+        kopie.add_annotation(
+            x=datum, y=wert, text=f"<b>≈ {_zahl(wert, stellen)} Mrd. €</b>",
+            showarrow=True, arrowhead=0, arrowwidth=3, arrowcolor=ROT, ax=45, ay=0,
+            xanchor="left", font={"size": MIN_SCHRIFT + 14, "color": ROT},
+            bgcolor="rgba(255,255,255,0.9)", bordercolor=ROT, borderwidth=3, borderpad=6,
+        )
+        return kopie
+
+    # Hell (ausführliche Fassung): Monatsmodell. Verlauf (Extrakurz): Tagesrendite am
+    # letzten verfügbaren Tag × Schuldenstand dieses Monats.
+    stichtag = tage.index[-1]
+    schulden_stichtag = m.loc[stichtag.strftime("%Y-%m"), "schulden_mio_eur"] / 1000
+    zins_stichtag = schulden_stichtag * tage.iloc[-1] / 100
+    kennzahlen["zinslast_stichtag"] = {
+        "tag": str(stichtag.date()),
+        "rendite_pct": round(float(tage.iloc[-1]), 2),
+        "schulden_mrd_eur": round(schulden_stichtag),
+        "zinslast_mrd_eur": round(zins_stichtag, 1),
+    }
+    _speichern(
+        _verlauf(markiert(figure, stichtag, round(zins_stichtag, 1), 1)), "zinslast_verlauf"
+    )
+    figure = markiert(figure, aktuell["datum"], aktuell["zins_theoretisch_mio_eur"] / 1000, 0)
     _speichern(figure, "zinslast")
 
 
@@ -586,6 +747,13 @@ def frankreich(kennzahlen: dict) -> None:
         figure.add_trace(go.Bar(x=[None], y=[None], name=name, marker_color=farbe,
                                 orientation="h", showlegend=True))
     _speichern(figure, "vergleich_frankreich")
+    # Extrakurz-Fassung: flacheres Format, damit das Bild in voller Breite – und damit
+    # mit voller Schriftgröße – über Tabelle und Kästen passt.
+    flach = _verlauf(figure)
+    flach.update_layout(height=620, bargap=0.08, margin={"t": 110, "b": 120})
+    # Plotly verkleinert Beschriftungen sonst auf die Balkendicke.
+    flach.update_traces(constraintext="none", selector={"type": "bar"})
+    _speichern(flach, "vergleich_frankreich_verlauf")
 
 
 def main() -> None:
@@ -594,6 +762,7 @@ def main() -> None:
         schuldenstand,
         haushalt,
         rendite,
+        rendite_stichtage,
         rendite_international,
         inflation_leitzins,
         co2_preis,
