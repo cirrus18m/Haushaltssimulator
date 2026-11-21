@@ -141,8 +141,8 @@ def test_module_lists_decks_with_titles_and_pages_urls() -> None:
     kurz = next(satz for satz in saetze if satz.pfad.name == "kurz.html")
     assert kurz.folien == 5
     assert "Kurzfassung" in kurz.titel
-    # Je Thema die kürzere Fassung zuerst.
-    assert saetze[0].pfad.name == "kurz.html"
+    # Je Thema die kürzere Fassung zuerst, bei Gleichstand nach Dateiname.
+    assert [satz.pfad.name for satz in saetze][:2] == ["extrakurz.html", "kurz.html"]
 
 
 @pytest.mark.parametrize("datei", FOLIENSAETZE, ids=_name)
@@ -155,3 +155,31 @@ def test_self_contained_html_embeds_local_files(datei) -> None:
     assert "data:image/svg+xml;base64," in html
     assert "--min-schrift" in html, "Stylesheet fehlt"
     assert "reveal.js" in html
+
+
+def test_extra_short_deck_matches_key_figures() -> None:
+    """Die Extrakurz-Fassung nutzt dieselben Zahlen wie die anderen Fassungen."""
+    ordner = INSIGHTS / "zinslast"
+    html = (ordner / "extrakurz.html").read_text(encoding="utf-8")
+    k = json.loads((ordner / "kennzahlen.json").read_text(encoding="utf-8"))
+
+    def deutsch(wert: float, stellen: int = 1) -> str:
+        return f"{wert:.{stellen}f}".replace(".", ",")
+
+    erwartet = [
+        f"≈ {deutsch(k['zinslast_stichtag']['zinslast_mrd_eur'])} Mrd. €",
+        f"+{deutsch(k['rendite_stichtage']['sanktionen_bis_iran_pp'])} Prozentpunkte",
+        f"+{deutsch(k['rendite_stichtage']['seit_iran_pp'])} Prozentpunkte",
+        f"<b>{deutsch(k['rendite_stichtage']['sanktionen']['rendite_pct'], 2)} %</b> (1.3.2022)",
+        f"<b>{deutsch(k['rendite_stichtage']['irankrieg']['rendite_pct'], 2)} %</b> (27.2.2026)",
+        f"<b>{deutsch(k['rendite_stichtage']['heute']['rendite_pct'], 2)} %</b> (17.11.2026)",
+        f"<b>+{k['sanktionen_bis_iran']['anstieg_mrd_eur']} Milliarden</b>",
+        f"<b>{deutsch(k['sanktionen_bis_iran']['start']['zinslast_mrd_eur'])} Mrd. €</b>",
+        f"<b>{deutsch(k['sanktionen_bis_iran']['ende']['zinslast_mrd_eur'])} Mrd. €</b>",
+        f"daher {round(k['frankreich_vergleich']['Deutschland']['theoretisch_mrd_eur'])} statt "
+        f"{deutsch(k['zinslast_stichtag']['zinslast_mrd_eur'])} Mrd. €",
+    ]
+    for werte in k["frankreich_vergleich"].values():
+        erwartet.append(f"<td>{round(werte['theoretisch_mrd_eur'])} Mrd. €</td>")
+    fehlend = [text for text in erwartet if text not in html]
+    assert not fehlend, f"Zahlen in extrakurz.html weichen von kennzahlen.json ab: {fehlend}"

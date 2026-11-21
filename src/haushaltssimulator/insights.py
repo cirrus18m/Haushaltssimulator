@@ -59,9 +59,9 @@ def _lies(pfad: Path) -> Foliensatz:
 
 
 def foliensaetze(ordner: Path = INSIGHTS_DIR) -> list[Foliensatz]:
-    """Alle Foliensätze, je Thema die kürzeste Fassung zuerst."""
+    """Alle Foliensätze, je Thema die kürzeste Fassung zuerst (bei Gleichstand nach Name)."""
     saetze = [_lies(pfad) for pfad in ordner.glob("*/*.html")]
-    return sorted(saetze, key=lambda satz: (satz.pfad.parent.name, satz.folien))
+    return sorted(saetze, key=lambda satz: (satz.pfad.parent.name, satz.folien, satz.pfad.name))
 
 
 def eigenstaendiges_html(pfad: Path) -> str:
