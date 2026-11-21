@@ -64,6 +64,7 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Energiepreise** | Strom- und Gaspreise für Haushalte, Börsenstrompreis, Kraftstoffe im EU-Vergleich, Heizöl sowie regionale Gas- und Öl-Benchmarks (TTF, JKM, Henry Hub; Brent, WTI, Dubai) |
 | **Preisniveau & Wohnen** | Big-Mac-Index und Eigentumsquote in Europa |
 | **Bund & Schuldendienst** | Zinsausgaben und Schuldenstand des Bundes, Planwerte aus dem Bundeshaushalt |
+| **Insights** | Datengeschichten als Foliensätze im Hochformat (Reveal.js), eingebettet und als Link zu GitHub Pages – derzeit die Zinslast in einer Kurz- und einer ausführlichen Fassung |
 | **Wirtschaft** | Reales BIP-Wachstum, Produktion im Verarbeitenden Gewerbe, Industrieproduktion im langfristigen Trend sowie private/staatliche Investitionen |
 
 ## Projektstruktur
