@@ -12,8 +12,47 @@ gitignoriert.
 
 Streamlit-App (Python 3.12, `uv`, Plotly, pandas), die deutsche Staatsschulden, Haushalt,
 Zinsen und Wirtschaftsindikatoren aus frei verfügbaren Quellen (Eurostat, Destatis,
-Bundesbank, EZB, FRED, IWF, Bank of Russia u. a.) darstellt. Alles – UI, Doku,
-Commit-Messages, Bezeichner für Fachbegriffe – ist **auf Deutsch**.
+Bundesbank, EZB, FRED, IWF, Bank of Russia u. a.) darstellt. Die **Website ist
+deutsch**, der **Code englisch** (siehe „Sprache“).
+
+## Sprache
+
+* **Deutsch** ist alles, was Nutzerinnen und Nutzer sehen: Seitentitel, Texte,
+  Diagrammtitel, Achsen, Legenden, Hover, Captions, Tabellenköpfe, Fehlermeldungen in
+  der App, Foliensätze. Ebenso Doku (README, `docs/`, diese Datei) und Commit-Messages.
+* **Englisch** ist der Code: Modul-, Klassen-, Funktions-, Variablen- und
+  Konstantennamen, Parameter, Kommentare, Docstrings, Test-Namen und Dateinamen
+  (`federal_core_budget_svr.csv`). Also `class Block`, nicht `class Baustein`;
+  `charts.core_budget()`, nicht `diagramme.kernhaushalt()`.
+* **Spaltennamen der Datensätze** bleiben so, wie die **Quelle** sie liefert (SVR-Reihe
+  „Ausgaben für Soziale Sicherung, Verteidigung und Zinsen Zinsen“, `geo`, `na_item`),
+  oder so, wie die **App sie zeigt**, wenn ein Datensatz als Tabelle eingeblendet wird.
+  Sie werden nicht ins Englische übersetzt. Der Code greift über Konstanten in
+  `dataset.py` darauf zu (`dataset.CORE_BUDGET_INTEREST`), nicht über verstreute
+  Zeichenketten. Selbst gebildete Spalten tragen die Einheit im Namen (`_mio_eur`,
+  `_pct`); bei Quellnamen steht die Einheit in `DATASET_LABELS` und `data/README.md`.
+* **Ausnahmen vom englischen Code:** Namen von App-Seiten
+  (`app/pages/6_Haushalt_und_Zinsen.py` – sie bilden die URL), Codes und Feldnamen der
+  Quellen (`geo`, `S1311`, `na_item`) sowie deutsche Rechts- und Haushaltsbegriffe ohne
+  genaue englische Entsprechung (`einzelplan`, `behg`, `maastricht`).
+* **Erweiterbar auf Deutsch:** Auch Menschen ohne Englischkenntnisse sollen die Website
+  mit Claude auf Deutsch erweitern können. Darum:
+  * Claude antwortet, plant und erklärt auf Deutsch – auch englische Bezeichner,
+    Fehlermeldungen und Testausgaben – und fragt nach, statt englische Fachbegriffe
+    vorauszusetzen.
+  * Aufträge in deutscher Sprache genügen, etwa „Füge Abbildung 12 aus dem
+    SVR-Gutachten auf der Seite Haushalt und Zinsen hinzu“. Claude findet die Stelle über
+    die sichtbaren deutschen Texte: Titel, Achsen und Captions stehen als Zeichenketten
+    im Code (`charts.CORE_BUDGET_TITLE`), eine Suche nach dem Text auf der Website führt
+    zur Funktion.
+  * Die Rezepte in dieser Datei und die Doku bleiben deutsch und beschreiben Aufgaben
+    in den Worten der Website („neue Datenreihe“, „neue Seite“).
+  * Bausteine tragen deutsche Titel, Kernaussagen und Erklärungen; nur ihre Namen im Code
+    sind englisch.
+* **Bestand:** Viele ältere Bezeichner sind noch deutsch (`bausteine/`, `ZEITMARKEN`).
+  Neuer Code ist englisch; ein Modul wird beim größeren Umbau insgesamt umgestellt,
+  nicht Zeile für Zeile. Umbenennungen von Spalten in `data/processed/` ändern die
+  Datenschnittstelle und brauchen Tests und Rücksprache.
 
 ## Befehle
 
@@ -47,13 +86,16 @@ Paket `src/haushaltssimulator/`:
 | --- | --- |
 | `sources.py` | `Source`-Dataclass und Tupel `SOURCES` (alle Quellen mit Lizenz, URL, `fetch_mode`), `PROVIDER_LINKS` für die Quellenseite, Download und Fortschreibung von `data/sources.json` (SHA-256, Abrufzeit). Größte Datei. |
 | `build.py` | Je Ausgabedatei eine `build_*(raw_dir)`-Funktion; registriert im Dict `BUILDERS` (Dateiname → Funktion), Nachkommastellen in `FLOAT_FORMATS` (Standard `%.1f`). `main()` = Einstieg von `scripts/build_data.py`. |
-| `destatis.py`, `eurostat.py`, `bundesbank.py`, `fred.py`, `cbr.py`, `ecb.py`, `imf.py`, `oil.py`, `bigmac.py`, `bmf.py`, `rosstat.py`, `weltbank.py` | Reine Parser je Quelle: Bytes/Dateien → DataFrame, ohne Netzwerk, ohne Streamlit. |
+| `destatis.py`, `eurostat.py`, `bundesbank.py`, `fred.py`, `cbr.py`, `ecb.py`, `imf.py`, `oil.py`, `bigmac.py`, `bmf.py`, `rosstat.py`, `weltbank.py`, `svr.py` | Reine Parser je Quelle: Bytes/Dateien → DataFrame, ohne Netzwerk, ohne Streamlit. |
 | `destatis_api.py`, `fred_api.py`, `config.py` | API-Clients und Zugangsdaten (`.env`, `KNOWN_SECRETS`, Platzhalter `MY_…_HERE` gilt als „nicht gesetzt“). Nur für Skripte/Datenaufbau. |
 | `analysis.py` | Berechnungen (Wachstumsraten, CAGR, Trends, Zinslast …), ohne Streamlit testbar. |
 | `laender.py` | Länderlisten/-namen für den europäischen Vergleich (`EUROPA_LAENDER`). |
 | `dataset.py` | Dateinamen-Konstanten der Processed-CSVs, `DATASET_LABELS`, `load_*`-Funktionen (parsen Datumsspalten `stichtag`, `quartalsende`, `datum`). |
 | `ui.py` | Gecachte Lader für die Seiten, Farbpaletten (`EBENE_COLORS`, `CHART_COLORS`), deutsche Zahlenformatierung (`format_number`, `format_mrd`, `format_eur`, `format_month`), `style()` und `plot()`. |
 | `paths.py` | `PROJECT_ROOT`, `RAW_DIR`, `PROCESSED_DIR`, `SOURCES_FILE`. |
+| `format.py` | Deutsche Formatierung ohne Streamlit (`format_number`, `format_signed` …); `ui` re-exportiert sie. |
+| `bausteine/` | `kern.py`: `Baustein` (Titel, Art, Ebene einfach/Experte, Quellen, Kernaussage, Erklärung, Methodik, `Parameter`, reine `erzeuge(Kontext)`), `Seite`/`Abschnitt`, `REGISTRY`, `SEITEN`. Je Thema ein Modul (bisher `insolvenzen.py`), in `bausteine/__init__.py` importiert. Ohne Streamlit. |
+| `bericht.py` | `BerichtKonfiguration` (JSON) → `erzeuge_bericht()`: Reveal.js-HTML mit Titel-, Baustein- und Quellenfolie; Formate `quer`/`hoch`, Diagramme interaktiv (Plotly-JSON im Browser) oder statisch (SVG). CSS in `vorlagen/bericht.css`. |
 
 Insights: `insights/<thema>/` enthält je eine Reveal.js-Präsentation (`index.html`,
 Hochformat 1080 × 1920) mit `diagramme.py`, das Diagramme (`bilder/*.svg`) und
@@ -70,13 +112,24 @@ nur Laden, Filtern, Darstellen – Fachlogik gehört nach `analysis.py` oder `bu
 1. `Source(...)` in `sources.SOURCES` ergänzen (Titel, Herausgeber, Lizenz, Datensätze).
    Neuer Anbieter → auch `PROVIDER_LINKS`. Manueller Export → Datei nach
    `data/raw/manual/`, `fetch_mode="manual"`.
-2. Parser im passenden Quellmodul (rein, testbar).
+2. Parser im passenden Quellmodul (rein, testbar). Abbildungen aus dem
+   SVR-Jahresgutachten: Das PDF enthält je Abbildung die Daten als Anhang `AbbNNN.csv`
+   (Annotation „Daten (CSV)“); extrahieren z. B. mit
+   `uv run --with pypdf python -c "from pypdf import PdfReader; ..."` über
+   `PdfReader(pfad).attachments`, unverändert nach `data/raw/manual/` legen und mit
+   `svr.parse_figure_csv` lesen.
 3. `build_*`-Funktion in `build.py`, Eintrag in `BUILDERS` und ggf. `FLOAT_FORMATS`.
 4. Dateinamen-Konstante, `DATASET_LABELS`-Eintrag und `load_*` in `dataset.py`;
    gecachter Wrapper in `ui.py`.
 5. `uv run scripts/build_data.py` ausführen und die geänderten `data/processed/*.csv`
    **und** `data/sources.json` mit committen. `sources.json` nie von Hand bearbeiten.
 6. Tests in `tests/` (Parser/Analyse) und ggf. Plausibilitätstest in `tests/test_app.py`.
+
+**Neuer Baustein / Seite aus Bausteinen** (Pilot: `bausteine/insolvenzen.py`)
+1. Im Themenmodul unter `bausteine/` eine reine Funktion `f(k: Kontext) -> Diagramm | list[Kennzahl] | DataFrame | str` mit `@baustein(id="<thema>.<name>", …)` versehen. Daten über `k.daten("insolvencies")` (= `dataset.load_insolvencies` bzw. `ui.insolvencies`), Einstellungen als `Parameter` und `k.wert(name)`. Kein Endlayout – das setzen `ui.plot` bzw. `bericht.folienlayout`.
+2. `ebene=Ebene.EINFACH` nur für Kernaussagen-Diagramme; alles andere `EXPERTE`. Kernaussagen mit Zahlen als Funktion von `Kontext`, nie als feste Zahl.
+3. Baustein in einen `Abschnitt` der `Seite` aufnehmen (`registriere_seite`); die Seitendatei ruft nur `ui.zeige_seite(SEITE)`.
+4. `tests/test_bausteine.py` prüft Quellen, Kernaussage, Achsentitel und Erzeugung automatisch für alle Bausteine.
 
 **Neue Seite**
 1. Datei unter `app/pages/` anlegen, in `app/main.py` als `st.Page` eintragen.
@@ -105,6 +158,7 @@ Achsen mit Einheit und Quellen-Caption gehören dazu.
   Keine Bytes mehr vorab erzeugen; den Export prüft `tests/test_ui.py`. Fehlt
   Kaleido/Chrome, liefert `ui._svg_bytes` die Ersatzgrafik `SVG_NICHT_VERFUEGBAR`.
 * `tests/test_app.py` wird übersprungen, wenn `data/processed/` fehlt.
+* Ansicht (`st.session_state["experte"]`) und Berichtskorb (`st.session_state["bericht"]`) setzt `app/main.py`; Seiten, die allein laufen (AppTest), nutzen die einfache Ansicht. Widgets der Seite Bericht hält `ui.optionen_erhalten()` beim Seitenwechsel fest – neue Optionen dort in `ui.BERICHT_OPTIONEN` eintragen.
 * `test_app_does_not_import_api_clients` schlägt fehl, sobald eine Datei unter `app/`
   `destatis_api` oder `urllib.request` enthält.
 * `data/raw/*` ist gitignoriert (Ausnahme `data/raw/manual/`). Ein Datenaufbau ohne
@@ -117,8 +171,9 @@ Achsen mit Einheit und Quellen-Caption gehören dazu.
 * Abgrenzungen nicht vermischen: Maastricht-Schulden (Eurostat) ≠ Schulden beim
   nicht-öffentlichen Bereich (Destatis); Zinsausgaben ≠ theoretische Zinslast;
   Bundeshaushalt (Kernhaushalt) ≠ Gesamtstaat (VGR). Siehe README „Abgrenzungen“.
-* Spaltennamen tragen die Einheit (`_mio_eur`, `_mrd_eur`, `_pct`, `_eur_kwh` …);
-  Quell-Codes wie `geo`, `S13`, `TR` bleiben unverändert.
+* Selbst gebildete Spaltennamen tragen die Einheit (`_mio_eur`, `_mrd_eur`, `_pct`,
+  `_eur_kwh` …); Spaltennamen und Codes der Quelle (`geo`, `S13`, `TR`, SVR-Reihennamen)
+  bleiben unverändert (siehe „Sprache“).
 
 ## Deployment
 

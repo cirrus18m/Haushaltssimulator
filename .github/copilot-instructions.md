@@ -9,14 +9,23 @@ von Menschen oder von KI-Assistenten vorgenommen werden.
 
 * Die gesamte Anwendung, alle Diagramme, Tabellen, Beschriftungen, Captions und
   Dokumentationen sind **auf Deutsch**.
-* Fachbegriffe der Datenquellen (z. B. `na_item`, `geo`, `S1311`) bleiben unverändert.
-* Variablen- und Spaltennamen folgen der bestehenden Konvention: deutsche
-  Fachbegriffe mit Einheit, z. B. `schulden_mio_eur`, `zinsausgaben_mio_eur`,
-  `rendite_pct`.
+* Der **Code ist englisch**: Bezeichner (Module, Klassen, Funktionen, Variablen,
+  Konstanten), Kommentare, Docstrings, Test- und Dateinamen. Ausnahmen: Namen von
+  App-Seiten (`6_Haushalt_und_Zinsen.py`), Fachbegriffe der Datenquellen (z. B.
+  `na_item`, `geo`, `S1311`) und deutsche Rechtsbegriffe ohne genaue Entsprechung
+  (`einzelplan`). Bestehende deutsche Bezeichner werden beim Umbau eines Moduls
+  umgestellt; Details in `CLAUDE.md`, Abschnitt „Sprache“.
+* **Spaltennamen der Datensätze** bleiben wie in der Quelle oder wie in der App
+  angezeigt (z. B. SVR-Reihennamen, `geo`); sie werden nicht übersetzt. Zugriff im Code
+  über Konstanten in `dataset.py`.
+* Die Website muss sich **auf Deutsch erweitern** lassen, auch von Menschen ohne
+  Englischkenntnisse: Antworten, Erklärungen, Doku und Rezepte sind deutsch, und die
+  sichtbaren deutschen Texte stehen im Code, damit man Diagramme über ihren Titel findet.
 * Zahlen werden deutsch formatiert (Tausenderpunkt, Dezimalkomma). Dafür sind
   `ui.format_number`, `ui.format_mrd` und `ui.format_eur` zu verwenden.
-* Einheiten gehören in den Spaltennamen (`_mio_eur`, `_mrd_eur`, `_pct`) oder in die
-  Achsenbeschriftung – nicht in den nackten Wert.
+* Einheiten gehören in selbst gebildete Spaltennamen (`_mio_eur`, `_mrd_eur`, `_pct`)
+  oder in die Achsenbeschriftung – nicht in den nackten Wert. Spaltennamen der Quelle
+  bleiben unverändert; ihre Einheit steht in `DATASET_LABELS` und `data/README.md`.
 
 ## 2. Diagramme: immer SVG und HTML
 
