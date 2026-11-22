@@ -1,0 +1,38 @@
+# Prototype: static website next to Streamlit (see docs/evaluation_statische_website.md).
+# Build: uv run --with quarto-cli --with nbclient --with nbformat --with ipykernel \
+#        quarto render site
+project:
+  type: website
+  output-dir: _site
+  pre-render: python prepare_site.py
+  resources:
+    - assets/plotly.min.js
+    - data/*.json
+
+website:
+  title: "Haushaltssimulator"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Start
+      - href: haushalt.qmd
+        text: Haushalt & Zinsen
+      - href: laender.qmd
+        text: Ländervergleich
+  page-footer:
+    center: "Daten: Eurostat, Destatis, Bundesbank, SVR u. a. – Quellen an jedem Diagramm"
+
+format:
+  html:
+    lang: de
+    theme: default
+    css: styles.css
+    toc: false
+    page-layout: full
+    # plotly.js is served from this site, not from a CDN (no third-party requests).
+    include-in-header:
+      text: '<script src="assets/plotly.min.js" charset="utf-8"></script>'
+
+execute:
+  echo: false
+  warning: false

@@ -1,0 +1,13 @@
+/* Adjustments so the original insights stylesheets fit Quarto's reveal.js output. */
+
+/* Pipe tables have no row header cells: first column left-aligned and bold like <th>. */
+.reveal table.tabelle td:first-child { text-align: left; font-weight: 700; }
+/* Quarto wraps inline text in <p>; keep the paragraph spacing of the original. */
+.reveal .slides section > p { margin: 20px 0; line-height: 1.35; }
+/* The kicker sits inside the slide heading (## [kicker]{.kicker} Title): own line. */
+.reveal h2 .kicker { display: block; line-height: 1.3; }
+/* Pandoc wraps the text of boxes in <p>: no extra margin inside boxes. */
+.reveal .kern > p,
+.reveal .hervorhebung > p,
+.reveal .quelle > p { margin: 0; }
+.reveal .hervorhebung > p + p { margin-top: 6px; }

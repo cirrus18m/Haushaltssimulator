@@ -1,0 +1,134 @@
+---
+title: "Renditen im Ländervergleich"
+---
+
+Rendite zehnjähriger Staatsanleihen in Prozent. Wähle Länder aus: Diagramm und alle
+Exporte (Bild, Daten, eigenständige HTML-Datei) enthalten nur diese Länder. Die
+Auswahl steht in der Adresse und lässt sich als Link weitergeben.
+
+```{=html}
+<details class="country-picker" open>
+  <summary>Länder (<span id="country-count">0</span> ausgewählt)</summary>
+  <div id="country-list"></div>
+</details>
+<div id="yield-chart" style="width:100%; height:480px"></div>
+<p class="figure-caption" id="yield-source"></p>
+<div class="export-buttons">
+  Export der Auswahl:
+  <button type="button" data-export="png">PNG</button>
+  <button type="button" data-export="svg">SVG</button>
+  <button type="button" data-export="csv">CSV</button>
+  <button type="button" data-export="html">HTML</button>
+</div>
+<script>
+(async () => {
+  const DEFAULT = ["Deutschland", "Frankreich", "Italien"];
+  const TITLE = "Rendite zehnjähriger Staatsanleihen";
+  const EXPORT = {width: 1200, height: 700};
+  if (window.innerWidth < 700) document.querySelector(".country-picker").open = false;
+  const data = await (await fetch("data/yields.json")).json();
+  const countries = Object.keys(data).sort((a, b) => a.localeCompare(b, "de"));
+  const fromHash = decodeURIComponent(location.hash.replace(/^#laender=/, ""))
+    .split(",").filter(name => countries.includes(name));
+  const list = document.getElementById("country-list");
+  for (const name of countries) {
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" value="${name}"> ${name}`;
+    label.firstChild.checked = (fromHash.length ? fromHash : DEFAULT).includes(name);
+    list.append(label);
+  }
+  const chart = document.getElementById("yield-chart");
+  const chosen = () => [...list.querySelectorAll("input:checked")].map(box => box.value);
+  // Sources of the chosen countries only, so every export names its own sources.
+  const source = () =>
+    "Quelle: " + [...new Set(chosen().map(name => data[name].quelle))].join(", ");
+
+  // On the page: short title, source as caption below the chart (fits phone screens).
+  function figure() {
+    return {
+      data: chosen().map(name => ({
+        type: "scatter", mode: "lines", name,
+        x: data[name].monat, y: data[name].rendite_pct,
+        hovertemplate: "%{y:.2f} %<extra>" + name + "</extra>"
+      })),
+      layout: {
+        title: {text: TITLE},
+        template: "plotly_white", separators: ",.", hovermode: "x unified",
+        yaxis: {title: {text: "Rendite in %"}},
+        legend: {orientation: "h", y: -0.12},
+        margin: {t: 50, b: 40, l: 60, r: 10}
+      },
+      // Image export only via the buttons below, which add title and source.
+      config: {displaylogo: false, responsive: true, locale: "de",
+               modeBarButtonsToRemove: ["toImage"]}
+    };
+  }
+  // Standalone figure for exports: countries in the title, source inside the image,
+  // fixed size so the source line is placed reliably.
+  function exportFigure() {
+    const fig = figure();
+    return {
+      data: fig.data,
+      layout: {
+        ...fig.layout, ...EXPORT,
+        title: {text: TITLE + ": " + chosen().join(", ")},
+        legend: {orientation: "h", y: -0.07},
+        margin: {t: 70, b: 110, l: 70, r: 30},
+        annotations: [{text: source(), xref: "paper", yref: "paper", x: 0, y: -0.17,
+                       xanchor: "left", yanchor: "top", showarrow: false,
+                       font: {size: 12, color: "#6c757d"}}]
+      },
+      config: {displaylogo: false, responsive: true, locale: "de"}
+    };
+  }
+  function draw() {
+    const fig = figure();
+    document.getElementById("country-count").textContent = fig.data.length;
+    document.getElementById("yield-source").textContent = source();
+    history.replaceState(null, "", "#laender=" + encodeURIComponent(chosen().join(",")));
+    return Plotly.react(chart, fig.data, fig.layout, fig.config);
+  }
+  function save(blob, filename) {
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  }
+  const german = value => String(value).replace(".", ",");
+  const exporters = {
+    png: () => Plotly.downloadImage(exportFigure(),
+                                    {format: "png", ...EXPORT, filename: "renditen_auswahl"}),
+    svg: () => Plotly.downloadImage(exportFigure(),
+                                    {format: "svg", ...EXPORT, filename: "renditen_auswahl"}),
+    csv: () => {
+      const lines = ["Monat;Land;Rendite in %"];
+      for (const name of chosen()) {
+        data[name].monat.forEach((month, i) =>
+          lines.push(`${month};${name};${german(data[name].rendite_pct[i])}`));
+      }
+      lines.push("", source());
+      save(new Blob(["﻿" + lines.join("\r\n")], {type: "text/csv"}), "renditen_auswahl.csv");
+    },
+    html: async () => {
+      // Self-contained file: plotly.js from this site is inlined, no CDN needed.
+      const plotly = await (await fetch("assets/plotly.min.js")).text();
+      const fig = exportFigure();
+      fig.layout.width = fig.layout.height = undefined;
+      const html = `<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<title>${fig.layout.title.text}</title><script>${plotly}<\/script></head><body>
+<div id="chart" style="width:100%;height:90vh"></div><script>
+const fig = ${JSON.stringify(fig)};
+Plotly.newPlot("chart", fig.data, fig.layout, fig.config);
+<\/script></body></html>`;
+      save(new Blob([html], {type: "text/html"}), "renditen_auswahl.html");
+    }
+  };
+  list.addEventListener("change", draw);
+  document.querySelectorAll("[data-export]").forEach(button =>
+    button.addEventListener("click", () => exporters[button.dataset.export]()));
+  await draw();
+  chart.dataset.ready = "1";
+})();
+</script>
+```

@@ -1,0 +1,128 @@
+---
+title: "Fast 100 Milliarden Euro Zinsen – Extrakurz (Quarto-Nachbau)"
+lang: de
+format:
+  revealjs:
+    # Hochformat 9:16 wie das Original insights/zinslast/extrakurz.html
+    width: 1080
+    height: 1920
+    margin: 0
+    min-scale: 0.1
+    max-scale: 2.0
+    center: false
+    hash: true
+    controls: true
+    progress: true
+    slide-number: c/t
+    transition: slide
+    # Quarto would stretch single images to the remaining height (r-stretch); the
+    # original layout uses fixed chart heights.
+    auto-stretch: false
+    # No formulas: keeps Quarto from loading MathJax from a CDN.
+    html-math-method: plain
+    theme: default
+    css: [zinslast/stil.css, zinslast/stil-verlauf.css, quarto-anpassung.css]
+    title-slide-attributes:
+      data-visibility: hidden
+---
+
+## {.titel}
+
+::: {style="margin-top: 260px"}
+[≈ 99,6 Mrd. €]{.gross}
+
+<h1>Zinsen pro Jahr – woher kommt das?</h1>
+
+Und stimmt die Erklärung der Bundesregierung, der Iran-Krieg habe die Zinsen getrieben?
+
+[Die Antwort in vier Folien.<br>Datenstand: 17. November 2026]{.klein style="color:#dbe7f3; display:block; margin-top: 80px"}
+:::
+
+## [1 · Die offizielle Begründung]{.kicker}
+
+```{=html}
+<blockquote class="zitat zitat-allein">
+  „<strong class="betont">Der Anstieg der Zinsausgaben</strong> ist wesentlich auf den
+  erhöhten Schuldenstand sowie auf gestiegene Renditen für Bundeswertpapiere
+  zurückzuführen, die sich <strong class="betont">aufgrund des Irankriegs</strong> und der
+  damit gestiegenen Inflation bzw. Inflationserwartung erhöht haben.“
+</blockquote>
+```
+
+::: {.quelle}
+Finanzplan des Bundes 2026–2030, Abschnitt 4.4.1 Zinsausgaben – Deutscher Bundestag,
+Drucksache 21/7301, S. 40.
+:::
+
+## [2 · Die Kosten der Schulden]{.kicker} Der große Sprung kam 2022
+
+![](zinslast/bilder/rendite_stichtage.svg){.diagramm style="max-height: 880px" fig-alt="Rendite der 10-jährigen Bundesanleihe 2015 bis 2026"}
+
+[Die Rendite der 10-jährigen Bundesanleihe ist der Zins, zu dem sich der Bund neues Geld leiht.]{.klein}
+
+::: {.kern .rot}
+Russlandsanktionen 2022 bis Irankrieg 2026: von **0,06 %** (1.3.2022) auf **2,69 %**
+(27.2.2026) = [+2,6 Prozentpunkte]{.zahl .rot}
+:::
+
+::: {.kern .gold}
+Seit dem Irankrieg: von **2,69 %** auf **3,35 %** (17.11.2026) =
+[+0,7 Prozentpunkte]{.zahl .gold}
+:::
+
+[Rund viermal so viel wie seit dem Irankrieg. Was bedeutet das in Euro?]{.klein}
+
+::: {.quelle}
+Deutsche Bundesbank: Tagesrendite an den Stichtagen, Diagramm mit Monatsmittel.
+:::
+
+## [3 · Die Zinslast]{.kicker} Fast 100 Milliarden Euro Zinsen pro Jahr
+
+![](zinslast/bilder/zinslast_verlauf.svg){.diagramm .diagramm-kompakt fig-alt="Theoretische, tatsächliche und geplante Zinslast 2019 bis 2030"}
+
+::: {.hervorhebung}
+[≈ 99,6 Mrd. €]{.gross}
+
+pro Jahr – so viel kostete der gesamte Schuldenstand zum Zins der Bundesanleihe vom
+17.11.2026.
+:::
+
+::: {.kern .rot}
+Russlandsanktionen 2022 bis Irankrieg 2026: **+75 Milliarden** – von **1,5 Mrd. €**
+(1.3.2022) auf **76,9 Mrd. €** (27.2.2026).
+:::
+
+[Gezahlt wird mit Verzögerung, weil alte Anleihen erst nach und nach ersetzt werden. Wie stehen andere Länder da?]{.klein}
+
+::: {.quelle}
+Modell: Schuldenstand × Rendite der Bundesanleihe; Stichtage mit Tagesrendite, Diagramm
+mit Monatsmittel.
+:::
+
+## [4 · Zum Vergleich: Frankreich und Italien]{.kicker} Frankreich und Italien trifft es noch härter
+
+![](zinslast/bilder/vergleich_frankreich_verlauf.svg){.diagramm fig-alt="Zinsen pro Jahr in Deutschland, Frankreich und Italien"}
+
+|             | Schulden    | Rendite | Zinslast  | 20–59 J.  | je Person   |
+|-------------|-------------|---------|-----------|-----------|-------------|
+| Deutschland | 2,85 Bio. € | 3,42 %  | 97 Mrd. € | 42,5 Mio. | **2.290 €** |
+| Frankreich  | 3,46 Bio. € | 4,89 %  | 169 Mrd. €| 33,8 Mio. | **5.000 €** |
+| Italien     | 3,10 Bio. € | 4,68 %  | 145 Mrd. €| 30,0 Mio. | **4.840 €** |
+
+: {.tabelle}
+
+::: {.kern .rot}
+Für jeden Menschen zwischen 20 und 59 Jahren entspricht das pro Jahr: Frankreich
+[≈ 5.000 €]{.zahl .rot}, Italien [≈ 4.840 €]{.zahl .rot}, Deutschland [≈ 2.290 €]{.zahl}.
+:::
+
+::: {.kern .schluss}
+Das Geld für Zinsen fehlt nicht nur im Haushalt. Es fehlt für Investitionen – das bremst
+Nachfrage und Wachstum. **Doch genau dieses Wachstum bräuchten wir, um die Zinsen zu
+erwirtschaften.**
+:::
+
+::: {.quelle}
+Gleiche Rechnung für alle drei Länder: Schulden Ende 2025 × Rendite Okt. 2026 (Eurostat)
+– daher 97 statt 99,6 Mrd. € für Deutschland. 20- bis 59-Jährige: demo_pjangroup.
+:::

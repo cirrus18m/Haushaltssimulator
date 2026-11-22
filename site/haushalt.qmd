@@ -1,0 +1,80 @@
+---
+title: "Haushalt & Zinsen"
+---
+
+```{python}
+#| include: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd()))  # site_layout.py
+from haushaltssimulator import charts, dataset
+from site_layout import show_responsive
+
+frame = dataset.load_federal_core_budget_svr()
+```
+
+```{python}
+#| output: asis
+print(f"## {charts.CORE_BUDGET_TITLE}\n\n{charts.CORE_BUDGET_INTRO}\n")
+```
+
+```{python}
+#| output: asis
+show_responsive(
+    charts.core_budget(frame),
+    charts.core_budget(frame, narrow=True),
+    height=640,
+    narrow_height=1150,
+)
+```
+
+```{python}
+#| output: asis
+print(charts.core_budget_summary(frame) + "\n")
+print(f"\n::: {{.figure-caption}}\n{charts.CORE_BUDGET_CAPTION}\n:::\n")
+```
+
+## Auswahl im Browser
+
+Ohne Server: Die Daten liegen in der Seite, die Auswahl rechnet der Browser
+(Observable JS).
+
+```{ojs}
+//| echo: false
+payload = FileAttachment("data/core_budget.json").json()
+core_budget = payload.rows
+blocks = payload.blocks
+```
+
+```{ojs}
+viewof chosen = Inputs.checkbox(blocks.map(b => b.name), {
+  label: "Ausgabenblöcke",
+  value: blocks.map(b => b.name)
+})
+```
+
+```{ojs}
+{
+  const div = html`<div style="height:420px; width:100%"></div>`;
+  const traces = blocks
+    .filter(b => chosen.includes(b.name))
+    .map(b => ({
+      type: "bar", name: b.name, x: core_budget["Jahr"], y: core_budget[b.column],
+      marker: {color: b.colour},
+      hovertemplate: "%{y:.1f} % der Einnahmen<extra>" + b.name + "</extra>"
+    }));
+  window.Plotly.newPlot(div, traces, {
+    barmode: "stack", template: "plotly_white", separators: ",.",
+    width: Math.min(width, 900), height: 420,
+    margin: {l: 60, r: 10, t: 30, b: 40},
+    yaxis: {title: {text: "% der Einnahmen ohne Kredite"}},
+    legend: {orientation: "h", y: -0.15}
+  }, {displaylogo: false, responsive: true});
+  return div;
+}
+```
+
+::: {.figure-caption}
+Quelle: Sachverständigenrat Wirtschaft, Jahresgutachten 2026/27, Abbildung 37.
+:::
