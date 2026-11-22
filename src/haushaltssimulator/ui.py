@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import functools
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 
@@ -10,8 +11,17 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
 import streamlit as st
+from streamlit.delta_generator import DeltaGenerator
 
-from . import dataset, insights, sources
+from . import bausteine, dataset, insights, sources
+from .format import (  # noqa: F401 – Formatierung wird über ui angeboten
+    MONATSNAMEN,
+    format_eur,
+    format_month,
+    format_mrd,
+    format_number,
+    format_signed,
+)
 
 EBENE_ORDER = [
     "Bund (Zentralstaat)",
@@ -168,6 +178,11 @@ def bund_budget_areas() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def federal_core_budget_svr() -> pd.DataFrame:
+    return dataset.load_federal_core_budget_svr()
+
+
+@st.cache_data(show_spinner=False)
 def laender_debt() -> pd.DataFrame:
     return dataset.load_laender_debt()
 
@@ -275,45 +290,6 @@ def format_timestamp(value: str | None) -> str:
     return datetime.fromisoformat(value).astimezone().strftime("%d.%m.%Y, %H:%M Uhr")
 
 
-MONATSNAMEN = (
-    "Januar",
-    "Februar",
-    "März",
-    "April",
-    "Mai",
-    "Juni",
-    "Juli",
-    "August",
-    "September",
-    "Oktober",
-    "November",
-    "Dezember",
-)
-
-
-def format_month(value: str) -> str:
-    """Formatiert einen Monat ``JJJJ-MM`` in deutscher Schreibweise."""
-    return f"{MONATSNAMEN[int(value[5:7]) - 1]} {value[:4]}"
-
-
-def format_number(value: float, decimals: int = 1, unit: str = "") -> str:
-    """Formatiert Zahlen in deutscher Schreibweise."""
-    if value is None or pd.isna(value):
-        return "–"
-    text = f"{value:,.{decimals}f}"
-    text = text.replace(",", "\u202f").replace(".", ",").replace("\u202f", ".")
-    return f"{text}{unit}"
-
-
-def format_mrd(value_mio_eur: float, decimals: int = 1) -> str:
-    """Millionen Euro als Milliarden Euro."""
-    return format_number(value_mio_eur / 1000, decimals, " Mrd. €")
-
-
-def format_eur(value_eur: float) -> str:
-    return format_number(value_eur, 0, " €")
-
-
 def style(
     fig: go.Figure,
     *,
@@ -374,8 +350,12 @@ def plot(
     legend_y: float = 1.02,
     top_margin: int = 40,
     own_legends: bool = False,
+    zusatz: Callable[[DeltaGenerator], None] | None = None,
 ) -> None:
     """Zeigt ein Diagramm und bietet es als SVG und als HTML zum Download an.
+
+    ``zusatz`` zeichnet ein weiteres Bedienelement neben die Download-Buttons, etwa
+    den Knopf „Bericht“ der Bausteine.
 
     Beide Dateien entstehen erst beim Klick auf den jeweiligen Button. Das SVG-Rendern
     mit Kaleido dauert pro Diagramm etwa eine Sekunde und würde sonst jeden Seitenaufruf
@@ -395,7 +375,11 @@ def plot(
     }
     st.plotly_chart(styled, width="stretch", config=config)
 
-    svg_column, html_column, _ = st.columns([1, 1, 5])
+    if zusatz is None:
+        svg_column, html_column, _ = st.columns([1, 1, 5])
+    else:
+        svg_column, html_column, zusatz_column, _ = st.columns([1, 1, 2, 3])
+        zusatz(zusatz_column)
     svg_column.download_button(
         "SVG",
         lambda: _svg_bytes(styled.to_json()),
@@ -414,3 +398,237 @@ def plot(
         type="tertiary",
         help="Interaktives Diagramm als eigenständige Datei",
     )
+
+
+# --------------------------------------------------------------------------- Bausteine
+# Ansicht (einfach/Experte) und Berichtskorb liegen in st.session_state. Der Umschalter
+# steht in app/main.py; Seiten, die allein laufen (Tests), nutzen die einfache Ansicht.
+
+ANSICHT_KEY = "experte"
+BERICHT_KEY = "bericht"
+# Widgets der Seite „Bericht“; main.py hält ihren Zustand beim Seitenwechsel fest.
+BERICHT_OPTIONEN = (
+    "bericht_titel",
+    "bericht_untertitel",
+    "bericht_autor",
+    "bericht_format",
+    "bericht_diagramme",
+    "bericht_text",
+    "bericht_quellenfolie",
+)
+
+
+def ansicht() -> bausteine.Ebene:
+    """Aktuelle Ansicht; ohne Umschalter die einfache."""
+    if st.session_state.get(ANSICHT_KEY):
+        return bausteine.Ebene.EXPERTE
+    return bausteine.Ebene.EINFACH
+
+
+def optionen_erhalten() -> None:
+    """Verhindert, dass Streamlit Widget-Zustände anderer Seiten verwirft."""
+    for key in BERICHT_OPTIONEN:
+        if key in st.session_state:
+            st.session_state[key] = st.session_state[key]
+
+
+def bericht_eintraege() -> list[dict]:
+    """Berichtskorb: Liste von ``{"id": …, "parameter": {…}}``."""
+    return st.session_state.setdefault(BERICHT_KEY, [])
+
+
+def im_bericht(baustein_id: str) -> bool:
+    return any(eintrag["id"] == baustein_id for eintrag in bericht_eintraege())
+
+
+def _param_key(baustein: bausteine.Baustein, name: str) -> str:
+    return f"param.{baustein.id}.{name}"
+
+
+def _aktuelle_parameter(baustein: bausteine.Baustein) -> dict:
+    """Gewählte Parameter; in der einfachen Ansicht immer die Standardwerte."""
+    if ansicht() != bausteine.Ebene.EXPERTE:
+        return baustein.parameterwerte()
+    werte = {
+        p.name: st.session_state[_param_key(baustein, p.name)]
+        for p in baustein.parameter
+        if _param_key(baustein, p.name) in st.session_state
+    }
+    return baustein.parameterwerte(werte)
+
+
+def bericht_hinzufuegen(baustein_id: str, parameter: dict | None = None) -> None:
+    if im_bericht(baustein_id):
+        return
+    baustein = bausteine.hole(baustein_id)
+    werte = parameter if parameter is not None else _aktuelle_parameter(baustein)
+    bericht_eintraege().append({"id": baustein_id, "parameter": baustein.parameterwerte(werte)})
+
+
+def bericht_entfernen(baustein_id: str) -> None:
+    st.session_state[BERICHT_KEY] = [
+        eintrag for eintrag in bericht_eintraege() if eintrag["id"] != baustein_id
+    ]
+
+
+def bericht_verschieben(index: int, schritt: int) -> None:
+    eintraege = bericht_eintraege()
+    ziel = index + schritt
+    if 0 <= index < len(eintraege) and 0 <= ziel < len(eintraege):
+        eintraege[index], eintraege[ziel] = eintraege[ziel], eintraege[index]
+
+
+def _bericht_umschalten(baustein_id: str) -> None:
+    if im_bericht(baustein_id):
+        bericht_entfernen(baustein_id)
+    else:
+        bericht_hinzufuegen(baustein_id)
+
+
+def _bericht_knopf(baustein: bausteine.Baustein, ziel: DeltaGenerator) -> None:
+    drin = im_bericht(baustein.id)
+    ziel.button(
+        "Im Bericht" if drin else "Zum Bericht",
+        key=f"bericht.{baustein.id}",
+        icon=":material/playlist_add_check:" if drin else ":material/playlist_add:",
+        type="tertiary",
+        on_click=_bericht_umschalten,
+        args=(baustein.id,),
+        help="Für den eigenen Bericht (Seite „Bericht“) vormerken bzw. wieder entfernen. "
+        "Die aktuellen Einstellungen werden mitgenommen.",
+    )
+
+
+def _app_lader(name: str) -> pd.DataFrame:
+    """Gecachter Lader aus diesem Modul, sonst die reine Ladefunktion."""
+    lader = globals().get(name)
+    return lader() if callable(lader) else bausteine.lade_aus_dataset(name)
+
+
+def quellen_caption(schluessel: tuple[str, ...]) -> str:
+    teile = []
+    for eintrag in bausteine.quellenangaben(schluessel, sources_library()):
+        text = eintrag.get("herausgeber") or ""
+        text = f"{text}: {eintrag['titel']}" if text else eintrag["titel"]
+        if eintrag.get("lizenz"):
+            text += f" ({eintrag['lizenz']})"
+        if eintrag.get("abgerufen_am"):
+            text += f", abgerufen am {datetime.fromisoformat(eintrag['abgerufen_am']):%d.%m.%Y}"
+        teile.append(text)
+    return "Quelle: " + "; ".join(teile)
+
+
+def _parameter_widgets(baustein: bausteine.Baustein) -> None:
+    for parameter in baustein.parameter:
+        key = _param_key(baustein, parameter.name)
+        if key not in st.session_state:
+            st.session_state[key] = parameter.standard
+        if parameter.art == "ganzzahl":
+            st.slider(
+                parameter.beschriftung,
+                min_value=parameter.minimum,
+                max_value=parameter.maximum,
+                step=parameter.schritt,
+                key=key,
+                help=parameter.hilfe or None,
+            )
+        elif parameter.art == "auswahl":
+            st.selectbox(
+                parameter.beschriftung,
+                parameter.optionen,
+                key=key,
+                help=parameter.hilfe or None,
+            )
+
+
+def zeige_baustein(baustein: bausteine.Baustein | str) -> None:
+    """Stellt einen Baustein mit Text, Inhalt, Downloads, Berichtsknopf und Quelle dar."""
+    if isinstance(baustein, str):
+        baustein = bausteine.hole(baustein)
+    experte = ansicht() == bausteine.Ebene.EXPERTE
+
+    st.subheader(baustein.titel)
+    if experte and baustein.parameter:
+        _parameter_widgets(baustein)
+    kontext = baustein.kontext(_app_lader, _aktuelle_parameter(baustein))
+    if aussage := baustein.aussage(kontext):
+        st.markdown(f"**{aussage}**")
+    if baustein.erklaerung:
+        st.markdown(baustein.erklaerung)
+
+    inhalt = baustein.erzeuge(kontext)
+    knopf = functools.partial(_bericht_knopf, baustein)
+    if isinstance(inhalt, bausteine.Diagramm):
+        plot(
+            inhalt.figur,
+            filename=baustein.id.replace(".", "_"),
+            height=inhalt.hoehe,
+            legend=inhalt.legende,
+            own_legends=inhalt.eigene_legenden,
+            zusatz=knopf,
+        )
+    else:
+        if isinstance(inhalt, pd.DataFrame):
+            st.dataframe(inhalt, hide_index=True, width="stretch")
+        elif isinstance(inhalt, list):
+            spalten = st.columns(len(inhalt) or 1)
+            for spalte, kennzahl in zip(spalten, inhalt, strict=False):
+                spalte.metric(
+                    kennzahl.beschriftung,
+                    kennzahl.wert,
+                    kennzahl.veraenderung,
+                    delta_color=kennzahl.farbe,
+                )
+        else:
+            st.markdown(str(inhalt))
+        knopf(st.container())
+
+    if experte and baustein.methodik:
+        with st.expander("Methodik"):
+            st.markdown(baustein.methodik)
+    st.caption(quellen_caption(baustein.quellen))
+
+
+def _abschnitt_zum_bericht(ids: tuple[str, ...]) -> None:
+    for baustein_id in ids:
+        bericht_hinzufuegen(baustein_id)
+
+
+def zeige_seite(seite: bausteine.Seite) -> None:
+    """Stellt eine aus Bausteinen zusammengesetzte Seite in der aktuellen Ansicht dar."""
+    aktuelle = ansicht()
+    st.title(seite.titel)
+    if seite.einleitung:
+        st.markdown(seite.einleitung)
+    if aktuelle == bausteine.Ebene.EINFACH:
+        versteckt = sum(not bausteine.hole(bid).sichtbar(aktuelle) for bid in seite.baustein_ids())
+        if versteckt:
+            st.caption(
+                f"Einfache Ansicht – {versteckt} weitere Diagramme, Tabellen und "
+                "Erläuterungen zeigt die **Expertenansicht** (Schalter in der Seitenleiste)."
+            )
+
+    nummer = 0
+    for abschnitt in seite.abschnitte:
+        sichtbar = tuple(
+            bid for bid in abschnitt.bausteine if bausteine.hole(bid).sichtbar(aktuelle)
+        )
+        if not sichtbar:
+            continue
+        nummer += 1
+        st.divider()
+        kopf, knopf = st.columns([3, 1], vertical_alignment="bottom")
+        kopf.header(f"{nummer}. {abschnitt.titel}")
+        knopf.button(
+            "Abschnitt zum Bericht",
+            key=f"abschnitt.{seite.id}.{abschnitt.titel}",
+            icon=":material/library_add:",
+            type="tertiary",
+            disabled=all(im_bericht(bid) for bid in sichtbar),
+            on_click=_abschnitt_zum_bericht,
+            args=(sichtbar,),
+        )
+        if abschnitt.einleitung:
+            st.markdown(abschnitt.einleitung)
+        for baustein_id in sichtbar:
+            zeige_baustein(baustein_id)

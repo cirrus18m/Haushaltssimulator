@@ -195,6 +195,7 @@ def test_app_does_not_import_api_clients() -> None:
         "pages/13_Bund_und_Schuldendienst.py",
         "pages/14_Wirtschaft.py",
         "pages/15_Insights.py",
+        "pages/16_Bericht.py",
     ],
 )
 def test_streamlit_pages_run_without_exception(script: str) -> None:
@@ -204,6 +205,35 @@ def test_streamlit_pages_run_without_exception(script: str) -> None:
     # daher in ein bis zwei Sekunden; das Timeout lässt Reserve für langsame Rechner.
     test = AppTest.from_file(str(Path(APP_DIR) / script), default_timeout=60)
     test.run()
+    assert not test.exception, [str(exception.value) for exception in test.exception]
+
+
+@pytest.mark.parametrize("experte", [False, True], ids=["einfach", "experte"])
+def test_baustein_page_runs_in_both_views(experte: bool) -> None:
+    from streamlit.testing.v1 import AppTest
+
+    test = AppTest.from_file(str(APP_DIR / "pages/9_Insolvenzen.py"), default_timeout=60)
+    test.session_state["experte"] = experte
+    test.run()
+    assert not test.exception, [str(exception.value) for exception in test.exception]
+    titel = [element.value for element in test.subheader]
+    assert "Unternehmensinsolvenzen seit 2003" in titel
+    assert ("Verfahrensausgang" in titel) is experte
+    assert (len(test.slider) > 0) is experte
+
+
+def test_report_page_lists_collected_bausteine() -> None:
+    from streamlit.testing.v1 import AppTest
+
+    test = AppTest.from_file(str(APP_DIR / "pages/16_Bericht.py"), default_timeout=60)
+    test.session_state["bericht"] = [
+        {"id": "insolvenzen.kennzahlen", "parameter": {}},
+        {"id": "insolvenzen.langreihe", "parameter": {"mittel_monate": 6}},
+    ]
+    test.run()
+    assert not test.exception, [str(exception.value) for exception in test.exception]
+    assert any("2 Folien" in element.value for element in test.subheader)
+    test.toggle(key="bericht_vorschau").set_value(True).run()
     assert not test.exception, [str(exception.value) for exception in test.exception]
 
 
