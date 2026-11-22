@@ -45,6 +45,34 @@ INFLATION_GERMANY = "inflation_de_monat.csv"
 CO2_PRICE = "co2_preis_jahr.csv"
 CO2_SURCHARGE = "co2_aufschlag_jahr.csv"
 WORKING_AGE = "bevoelkerung_20_59_jahr.csv"
+FEDERAL_CORE_BUDGET_SVR = "federal_core_budget_svr.csv"
+# Columns of FEDERAL_CORE_BUDGET_SVR keep the series names of the SVR figure CSV (footnote
+# digits removed). "Einnahmen und Ausgaben ...": % of GDP; "Ausgaben für ...": % of tax
+# and other revenue excluding borrowing. "Finanzplan": the year belongs to the fiscal plan.
+SVR_GDP_PANEL = "Einnahmen und Ausgaben"
+SVR_REVENUE_PANEL = "Ausgaben für Soziale Sicherung, Verteidigung und Zinsen"
+CORE_BUDGET_YEAR = "Jahr"
+CORE_BUDGET_PLAN = "Finanzplan"
+CORE_BUDGET_REVENUE = f"{SVR_GDP_PANEL} Einnahmen Steuereinnahmen und sonstige Einnahmen"
+CORE_BUDGET_BORROWING = f"{SVR_GDP_PANEL} Einnahmen Kreditaufnahme"
+CORE_BUDGET_EXPENDITURE = f"{SVR_GDP_PANEL} Ausgaben Insgesamt"
+CORE_BUDGET_SOCIAL_DEFENCE_INTEREST = (
+    f"{SVR_GDP_PANEL} Ausgaben Soziale Sicherung, Verteidigung und Zinsen"
+)
+CORE_BUDGET_SOCIAL_INSURANCE = f"{SVR_REVENUE_PANEL} Zuschüsse an die Sozialversicherungen"
+CORE_BUDGET_OTHER_SOCIAL = f"{SVR_REVENUE_PANEL} Sonstige Soziale Sicherung"
+CORE_BUDGET_DEFENCE = f"{SVR_REVENUE_PANEL} Verteidigung"
+CORE_BUDGET_INTEREST = f"{SVR_REVENUE_PANEL} Zinsen"
+CORE_BUDGET_SVR_SERIES = (
+    CORE_BUDGET_REVENUE,
+    CORE_BUDGET_BORROWING,
+    CORE_BUDGET_EXPENDITURE,
+    CORE_BUDGET_SOCIAL_DEFENCE_INTEREST,
+    CORE_BUDGET_SOCIAL_INSURANCE,
+    CORE_BUDGET_OTHER_SOCIAL,
+    CORE_BUDGET_DEFENCE,
+    CORE_BUDGET_INTEREST,
+)
 
 # Beschreibung der aufbereiteten Tabellen für die Quellenseite.
 DATASET_LABELS = {
@@ -85,6 +113,10 @@ DATASET_LABELS = {
     CO2_PRICE: "CO₂-Preis im nationalen Emissionshandel (BEHG)",
     CO2_SURCHARGE: "CO₂-Aufschlag je Liter bzw. kWh auf Heizöl, Kraftstoffe und Erdgas",
     WORKING_AGE: "Bevölkerung von 20 bis unter 60 Jahren je Land",
+    FEDERAL_CORE_BUDGET_SVR: (
+        "Kernhaushalt des Bundes: Einnahmen und Ausgaben in % des BIP, Soziale Sicherung, "
+        "Verteidigung und Zinsen in % der Einnahmen (SVR)"
+    ),
 }
 
 _DATE_COLUMNS = ("stichtag", "quartalsende", "datum")
@@ -290,3 +322,8 @@ def load_co2_surcharge(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
 
 def load_working_age(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
     return _read(WORKING_AGE, processed_dir)
+
+
+def load_federal_core_budget_svr(processed_dir: Path = PROCESSED_DIR) -> pd.DataFrame:
+    """Federal core budget 2010-2030 from figure 37 of the SVR annual report 2026/27."""
+    return _read(FEDERAL_CORE_BUDGET_SVR, processed_dir)

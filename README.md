@@ -56,16 +56,19 @@ die Daten regelmäßig aufgefrischt werden, kann ein GitHub-Actions-Workflow
 | **Bundesländer** | Ranking und Entwicklung der 16 Länder, Anteile, Veränderung seit 2024 |
 | **Analysen** | Wachstumsraten, CAGR, Schuldenquote vs. 60-%-Referenz, Schuldenwachstum vs. BIP-Wachstum |
 | **Szenario-Rechner** | Einfache Fortschreibung von Schulden und BIP mit einstellbaren Wachstumsraten |
-| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe, Inflation (HVPI, Kerninflation, VPI), Leitzinsen von EZB und Fed und der CO₂-Preis nach BEHG mit einer aufklappbaren Erläuterung der Mehrkosten je Liter – jedes Teilbild mit eigener Legende –, sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben, den Schuldenstand im Monatsraster und der Haushaltsplan des Bundes nach Aufgabenbereichen – in Mrd. €, in % der Einnahmen und in % des BIP |
+| **Haushalt & Zinsen** | Zinslast zuerst: 10-jährige Bundesanleihe, Inflation (HVPI, Kerninflation, VPI), Leitzinsen von EZB und Fed und der CO₂-Preis nach BEHG mit einer aufklappbaren Erläuterung der Mehrkosten je Liter – jedes Teilbild mit eigener Legende –, sowie die daraus monatlich berechnete theoretische Zinslast gegen die tatsächlichen Zinsausgaben und die im Finanzplan 2026–2030 veranschlagten Zinsausgaben des Bundes, danach Einnahmen ohne neue Schulden, Ausgaben, der Kernhaushalt des Bundes nach Abbildung 37 des SVR-Jahresgutachtens 2026/27, den Schuldenstand im Monatsraster und der Haushaltsplan des Bundes nach Aufgabenbereichen – in Mrd. €, in % der Einnahmen und in % des BIP |
 | **Zinsvergleich** | Renditen 10-jähriger Staatsanleihen europäischer Länder, der USA und Russlands, dazu Schuldenstand, Schuldenquote, Zinsausgaben je Einwohner:in, theoretische Zinslast, drei Einkommensgrößen, Inflation und Realzins |
 | **Quellen** | Welche Quelle liefert welche Daten – inklusive Lizenz, Prüfsumme, Abrufdatum und Links zu Portalen und API-Dokumentation |
-| **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer |
+| **Insolvenzen** | Beantragte Verfahren gesamt und von Unternehmen, Forderungen und betroffene Arbeitnehmer – Pilotseite der Bausteine mit einfacher und Expertenansicht |
 | **Geld & Kaufkraft** | Geldmenge M3, Inflation und kumulierter Kaufkraftverlust |
 | **Energiepreise** | Strom- und Gaspreise für Haushalte, Börsenstrompreis, Kraftstoffe im EU-Vergleich, Heizöl sowie regionale Gas- und Öl-Benchmarks (TTF, JKM, Henry Hub; Brent, WTI, Dubai) |
 | **Preisniveau & Wohnen** | Big-Mac-Index und Eigentumsquote in Europa |
 | **Bund & Schuldendienst** | Zinsausgaben und Schuldenstand des Bundes, Planwerte aus dem Bundeshaushalt |
 | **Insights** | Datengeschichten als Foliensätze im Hochformat (Reveal.js), eingebettet und als Link zu GitHub Pages – derzeit die Zinslast in einer Kurz- und einer ausführlichen Fassung |
 | **Wirtschaft** | Reales BIP-Wachstum, Produktion im Verarbeitenden Gewerbe, Industrieproduktion im langfristigen Trend sowie private/staatliche Investitionen |
+| **Bericht** | Eigener Bericht: mit „Zum Bericht“ gesammelte Diagramme, Kennzahlen und Tabellen ordnen und als Reveal.js-Präsentation (Quer- oder Hochformat, eine HTML-Datei mit Quellenfolie) exportieren; Zusammenstellung als JSON speichern und laden |
+
+In der Seitenleiste schaltet **Expertenansicht** zwischen einfacher Ansicht (Kernaussagen, wichtigste Diagramme) und Expertenansicht (alle Diagramme, Tabellen, Einstellungen, Methodik) um; ein Link mit `?ansicht=experte` startet direkt in der Expertenansicht. Bisher ist die Seite Insolvenzen auf Bausteine umgestellt (siehe [PLAN_BAUSTEINE.md](PLAN_BAUSTEINE.md)).
 
 ## Projektstruktur
 
@@ -154,6 +157,7 @@ Portale und API-Dokumentation aller Anbieter listet die Seite **Quellen** im Abs
 | [BEHG § 10](https://www.gesetze-im-internet.de/behg/__10.html) | CO₂-Preis je Tonne 2021–2026 (Festpreise, Preiskorridor); 2027 nach Bundestagsbeschluss vom 15.10.2026 (Drucksache 21/7869), manuell übernommen | Amtliches Werk, gemeinfrei |
 | [EBeV 2030, Anlage 2](https://www.gesetze-im-internet.de/ebev_2030/anlage_2.html) | Standardwerte für Dichte, Heizwert und Emissionsfaktor von Heizöl, Diesel, Benzin und Erdgas, manuell übernommen | Amtliches Werk, gemeinfrei |
 | [BMF Bundeshaushalt](https://www.bundeshaushalt.de/) | Zinsausgaben des Bundes am Kreditmarkt | Quellenangabe erforderlich |
+| [Sachverständigenrat, Jahresgutachten 2026/27](https://www.sachverstaendigenrat-wirtschaft.de/jahresgutachten-2026.html) ([PDF](https://www.sachverstaendigenrat-wirtschaft.de/fileadmin/dateiablage/gutachten/jg202627/JG202627_Gesamtausgabe.pdf)) | Abbildung 37: Kernhaushalt des Bundes 2010–2030 in % des BIP und Soziale Sicherung, Verteidigung, Zinsen in % der Einnahmen; Daten-CSV aus dem PDF (jede Abbildung hat dort einen eingebetteten Anhang `AbbNNN.csv`) | © Sachverständigenrat, Quellenangabe erforderlich |
 
 Details zu Dateien und Spalten: [data/README.md](data/README.md).
 

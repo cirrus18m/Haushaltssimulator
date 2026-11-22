@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
 
-from haushaltssimulator import analysis, ui
+from haushaltssimulator import analysis, charts, ui
 
 # Zeitmarken für die Diagramme: Beschriftung, Datum, Höhe im oberen Teilbild, Anker.
 ZEITMARKEN = (
@@ -685,6 +685,22 @@ figure.update_layout(
     yaxis2={"title": "% der Einnahmen", "overlaying": "y", "side": "right", "showgrid": False},
 )
 ui.plot(figure, filename="haushalt_zinsausgaben", height=380)
+
+st.subheader(charts.CORE_BUDGET_TITLE)
+st.markdown(charts.CORE_BUDGET_INTRO)
+core_budget = ui.federal_core_budget_svr()
+if core_budget.empty:
+    st.info("Keine Daten zum Kernhaushalt verfügbar.")
+else:
+    ui.plot(
+        charts.core_budget(core_budget),
+        filename="bund_kernhaushalt_svr",
+        height=640,
+        top_margin=60,
+        own_legends=True,
+    )
+    st.markdown(charts.core_budget_summary(core_budget))
+    st.caption(charts.CORE_BUDGET_CAPTION)
 
 st.subheader("Der Haushaltsplan des Bundes nach Aufgabenbereichen")
 st.markdown(
