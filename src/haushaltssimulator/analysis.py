@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import pandas as pd
+
+from . import dataset
 
 
 def year_over_year(frame: pd.DataFrame, value_column: str, group_column: str) -> pd.DataFrame:
@@ -452,3 +456,50 @@ def interest_per_working_age(burden: pd.DataFrame, population: pd.DataFrame) -> 
         frame["zins_theoretisch_mio_eur"] * 1_000_000 / frame["bevoelkerung_20_59"]
     )
     return frame.reset_index(drop=True)
+
+
+# Expenditure blocks of SVR figure 37, as % of tax and other revenue excluding borrowing.
+CORE_BUDGET_BLOCK_COLUMNS = (
+    dataset.CORE_BUDGET_SOCIAL_INSURANCE,
+    dataset.CORE_BUDGET_OTHER_SOCIAL,
+    dataset.CORE_BUDGET_DEFENCE,
+    dataset.CORE_BUDGET_INTEREST,
+)
+
+
+@dataclass(frozen=True)
+class CoreBudgetHighlights:
+    """Key figures of the federal core budget (SVR figure 37) for captions and texts."""
+
+    last_year: int
+    interest_last_pct: float
+    interest_low_year: int
+    interest_low_pct: float
+    defence_last_pct: float
+    blocks_last_pct: float
+    first_year_blocks_above_revenue: int | None
+
+
+def core_budget_block_total(frame: pd.DataFrame) -> pd.Series:
+    """Social security, defence and interest together, as % of revenue."""
+    return frame[list(CORE_BUDGET_BLOCK_COLUMNS)].sum(axis=1)
+
+
+def core_budget_highlights(frame: pd.DataFrame) -> CoreBudgetHighlights:
+    """Last year, interest low point and the first year the four blocks exceed revenue."""
+    year = dataset.CORE_BUDGET_YEAR
+    by_year = frame.set_index(year)
+    totals = core_budget_block_total(frame)
+    above = frame.loc[totals > 100, year]
+    last_year = int(by_year.index.max())
+    interest = by_year[dataset.CORE_BUDGET_INTEREST]
+    low_year = int(interest.idxmin())
+    return CoreBudgetHighlights(
+        last_year=last_year,
+        interest_last_pct=float(interest.loc[last_year]),
+        interest_low_year=low_year,
+        interest_low_pct=float(interest.loc[low_year]),
+        defence_last_pct=float(by_year.loc[last_year, dataset.CORE_BUDGET_DEFENCE]),
+        blocks_last_pct=float(totals.loc[frame[year] == last_year].iloc[0]),
+        first_year_blocks_above_revenue=int(above.min()) if not above.empty else None,
+    )

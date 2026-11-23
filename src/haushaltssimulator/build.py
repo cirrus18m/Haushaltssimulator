@@ -14,6 +14,7 @@ from . import (
     bigmac,
     bmf,
     bundesbank,
+    dataset,
     destatis,
     ecb,
     eurostat,
@@ -23,6 +24,7 @@ from . import (
     oil,
     paths,
     sources,
+    svr,
     weltbank,
 )
 
@@ -1039,6 +1041,28 @@ def build_finanzplan_areas(raw_dir: Path) -> pd.DataFrame:
     return frame[columns].sort_values(["jahr", "einzelplan"]).reset_index(drop=True)
 
 
+# First year inside the "Finanzplan" area of SVR figure 37 (dashed line).
+SVR_PLAN_START_YEAR = 2026
+
+
+def build_svr_core_budget(raw_dir: Path) -> pd.DataFrame:
+    """Federal core budget as % of GDP and % of revenue (SVR annual report, figure 37).
+
+    Columns keep the SVR series names (``dataset.CORE_BUDGET_SVR_SERIES``). From
+    ``SVR_PLAN_START_YEAR`` on the values are the federal government's fiscal plan
+    (column ``Finanzplan``).
+    """
+    figure = svr.parse_figure_csv((raw_dir / "manual" / "svr_jg2026-27_abb037.csv").read_bytes())
+    missing = set(dataset.CORE_BUDGET_SVR_SERIES) - set(figure.data.columns)
+    if missing:
+        raise ValueError(f"SVR figure 37: columns missing: {sorted(missing)}")
+    frame = figure.data
+    year = dataset.CORE_BUDGET_YEAR
+    frame[dataset.CORE_BUDGET_PLAN] = frame[year] >= SVR_PLAN_START_YEAR
+    columns = [year, dataset.CORE_BUDGET_PLAN, *dataset.CORE_BUDGET_SVR_SERIES]
+    return frame[columns].sort_values(year).reset_index(drop=True)
+
+
 PREISE_NOMINAL = "in jeweiligen Preisen (Mrd. EUR)"
 PREISE_REAL = "preisbereinigt, Kettenindex (2020=100)"
 STAAT_INVESTITIONEN = "Bruttoanlageinvestitionen des Staates"
@@ -1336,6 +1360,7 @@ BUILDERS = {
     "co2_preis_jahr.csv": build_co2_preis,
     "co2_aufschlag_jahr.csv": build_co2_aufschlag,
     "bevoelkerung_20_59_jahr.csv": build_bevoelkerung_20_59,
+    "federal_core_budget_svr.csv": build_svr_core_budget,
 }
 
 # Zinsreihen brauchen zwei Nachkommastellen, Mengen genügt eine.
@@ -1368,6 +1393,7 @@ FLOAT_FORMATS = {
     "co2_preis_jahr.csv": "%.0f",
     "co2_aufschlag_jahr.csv": "%.4f",
     "bevoelkerung_20_59_jahr.csv": "%.0f",
+    "federal_core_budget_svr.csv": "%.2f",
 }
 
 

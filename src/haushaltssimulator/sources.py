@@ -1192,6 +1192,33 @@ SOURCES: tuple[Source, ...] = (
             "Benzin (Nr. 1) und Erdgas (Nr. 6, Umrechnungsfaktor 3,2508 GJ/MWh)"
         ),
     ),
+    Source(
+        key="svr_jg2026_abb37",
+        filename="manual/svr_jg2026-27_abb037.csv",
+        url=(
+            "https://www.sachverstaendigenrat-wirtschaft.de/fileadmin/dateiablage/"
+            "gutachten/jg202627/JG202627_Gesamtausgabe.pdf"
+        ),
+        title=(
+            "Jahresgutachten 2026/27, Abbildung 37: Einnahmen- und Ausgabenentwicklung "
+            "im Kernhaushalt des Bundes"
+        ),
+        publisher=(
+            "Sachverständigenrat zur Begutachtung der gesamtwirtschaftlichen Entwicklung "
+            "(SVR Wirtschaft); Quellen dort: BMF, BMWE, Statistisches Bundesamt"
+        ),
+        license="© Sachverständigenrat, Quellenangabe erforderlich",
+        datasets=("federal_core_budget_svr.csv",),
+        fetch_mode="manual",
+        description=(
+            "Unveränderte Datei Abb037.csv, die im PDF des Jahresgutachtens 2026/27 an "
+            "Abbildung 37 (S. 96, Abbildungsnummer 26-200-02) als Anhang „Daten (CSV)“ "
+            "eingebettet ist: Kernhaushalt des Bundes 2010 bis 2030 – Einnahmen, "
+            "Kreditaufnahme und Ausgaben in % des BIP sowie Zuschüsse an die "
+            "Sozialversicherungen, sonstige Soziale Sicherung, Verteidigung (Einzelplan 14) "
+            "und Zinsen in % der Steuer- und sonstigen Einnahmen; ab 2026 Finanzplan"
+        ),
+    ),
 )
 
 # Portale und API-Dokumentation der Anbieter – erscheint als "Quellen & Links"
@@ -1318,6 +1345,19 @@ PROVIDER_LINKS: tuple[dict[str, str], ...] = (
         "portal": "https://www.bundestag.de/services/opendata",
         "api": "https://dserver.bundestag.de/btd/",
         "zugang": "kostenlos, ohne API-Key",
+    },
+    {
+        "anbieter": "Sachverständigenrat Wirtschaft (SVR)",
+        "daten": (
+            "Jahresgutachten 2026/27: Kernhaushalt des Bundes (Abbildung 37); das PDF "
+            "enthält zu jeder Abbildung die Daten als eingebettete CSV"
+        ),
+        "portal": "https://www.sachverstaendigenrat-wirtschaft.de/jahresgutachten-2026.html",
+        "api": (
+            "https://www.sachverstaendigenrat-wirtschaft.de/fileadmin/dateiablage/"
+            "gutachten/jg202627/JG202627_Gesamtausgabe.pdf"
+        ),
+        "zugang": "kostenlos, PDF mit eingebetteten Abbildungsdaten",
     },
 )
 

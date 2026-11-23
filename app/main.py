@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
+from haushaltssimulator import ui
+
 st.set_page_config(
     page_title="Haushaltssimulator – Deutsche Staatsschulden",
     page_icon="🇩🇪",
@@ -52,5 +54,29 @@ pages = [
     st.Page("pages/14_Wirtschaft.py", title="Wirtschaft", icon=":material/trending_up:"),
     st.Page("pages/15_Insights.py", title="Insights", icon=":material/slideshow:"),
 ]
+bericht_seite = st.Page("pages/16_Bericht.py", title="Bericht", icon=":material/present_to_all:")
+pages.append(bericht_seite)
 
-st.navigation(pages).run()
+navigation = st.navigation(pages)
+
+# Ansicht und Berichtskorb gelten für alle Seiten. Ein Link mit ?ansicht=experte startet
+# direkt in der Expertenansicht.
+if ui.ANSICHT_KEY not in st.session_state:
+    st.session_state[ui.ANSICHT_KEY] = st.query_params.get("ansicht") == "experte"
+ui.optionen_erhalten()
+with st.sidebar:
+    st.toggle(
+        "Expertenansicht",
+        key=ui.ANSICHT_KEY,
+        help="Einfach: Kernaussagen und wichtigste Diagramme. Experte: zusätzlich alle "
+        "Diagramme, Tabellen, Einstellungen und Methodik. Bisher auf der Seite "
+        "Insolvenzen umgesetzt.",
+    )
+    anzahl = len(ui.bericht_eintraege())
+    st.page_link(
+        bericht_seite,
+        label=f"Eigener Bericht ({anzahl} Bausteine)",
+        icon=":material/present_to_all:",
+    )
+
+navigation.run()

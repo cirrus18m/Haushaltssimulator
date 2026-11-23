@@ -1,0 +1,14 @@
+/* Wide chart from 700 px on, stacked variant below (see site_layout.show_responsive). */
+.chart-narrow { display: none; }
+@media (max-width: 699px) {
+  .chart-wide { display: none; }
+  .chart-narrow { display: block; }
+}
+.figure-caption { color: #6c757d; font-size: 0.9rem; }
+/* Country selection (laender.qmd) */
+.country-picker #country-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: 0.2rem 1rem;
+  margin: 0.5rem 0 1rem;
+}
+.export-buttons { margin: 0.5rem 0 1rem; }
+.export-buttons button { margin-left: 0.4rem; }

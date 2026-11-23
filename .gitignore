@@ -176,7 +176,7 @@ conda-meta/
 .ropeproject
 
 # mkdocs/Zensical documentation
-/site
+# /site (mkdocs default) removed: site/ holds the Quarto prototype sources
 
 # mypy
 .mypy_cache/
@@ -234,3 +234,11 @@ __marimo__/
 data/raw/*
 !data/raw/manual/
 !data/raw/manual/**
+
+# Quarto prototype (site/): build output and copied assets
+site/_site/
+site/.quarto/
+site/assets/plotly.min.js
+site/folien/zinslast/
+site/data/
+site/*.quarto_ipynb

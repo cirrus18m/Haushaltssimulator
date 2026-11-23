@@ -1,0 +1,113 @@
+# DRAFT (evaluation, see docs/evaluation_statische_website.md) - not active.
+# Starts only by hand (workflow_dispatch). Builds the static Quarto site under site/,
+# exports the insights decks as PDF/PNG and uploads to Host Europe via SFTP only when
+# the person starting the run chooses mode "hochladen" on the main branch.
+#
+# Approval: the manual start with mode "hochladen" is the approval (decided 22.11.2026;
+# GitHub Free has no environments with required reviewers in private repositories).
+#
+# Repository secrets (Settings -> Secrets and variables -> Actions); never commit values:
+#   HE_SSH_USER         SSH user from KIS "SSH Zugang konfigurieren" (wp... or ftp...)
+#   HE_SSH_PASSWORD     its password (Host Europe web hosting allows no SSH keys)
+#   HE_SSH_KNOWN_HOSTS  host key line(s) of ssh.server-he.de; check them against the
+#                       fingerprints in the Host Europe FAQ before saving
+# Repository variable:
+#   HE_TARGET_DIR       directory of the domain on the web space, e.g. /deutschlandmonitor
+name: Statische Website (Entwurf)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Nach dem Bauen: nichts, Probelauf (zeigt nur an) oder hochladen"
+        type: choice
+        options: [nur bauen, probelauf, hochladen]
+        default: nur bauen
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Python-Umgebung
+        run: uv sync --frozen
+
+      - name: Tests
+        run: uv run pytest -q
+
+      - name: Website bauen (Quarto über PyPI-Paket quarto-cli)
+        run: >
+          uv run --with quarto-cli --with nbclient --with nbformat --with ipykernel
+          quarto render site
+
+      # Google Chrome and Node.js 22 are preinstalled on ubuntu-24.04 runners
+      # (actions/runner-images, Ubuntu2404-Readme.md); DeckTape needs Node >= 22.12.
+      - name: Foliensätze exportieren (PDF und PNG je Folie)
+        run: |
+          python3 -m http.server 8000 --directory insights &
+          sleep 1
+          mkdir -p site/_site/export
+          for deck in zinslast/extrakurz zinslast/kurz zinslast/index; do
+            name=$(echo "$deck" | tr '/' '_')
+            mkdir -p "site/_site/export/$name"
+            npx --yes decktape@3.17.0 reveal \
+              --chrome-path "$(command -v google-chrome)" \
+              --chrome-arg=--no-sandbox \
+              --size 1080x1920 \
+              --screenshots --screenshots-directory "site/_site/export/$name" \
+              "http://localhost:8000/$deck.html" "site/_site/export/$name.pdf"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website
+          path: site/_site
+          retention-days: 7
+
+  upload:
+    needs: build
+    if: ${{ inputs.mode != 'nur bauen' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: website
+          path: site/_site
+
+      # lftp is not preinstalled on the runner (only ftp). Host Europe web hosting:
+      # SFTP via ssh.server-he.de port 22, login with user name and password only.
+      - name: lftp installieren
+        run: sudo apt-get update -q && sudo apt-get install -y -q lftp
+
+      - name: Hostschlüssel hinterlegen
+        env:
+          KNOWN_HOSTS: ${{ secrets.HE_SSH_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      # mirror --reverse uploads site/_site; --delete removes files that are no longer
+      # built; --dry-run only prints the commands. sftp:auto-confirm stays false, so an
+      # unknown host key aborts the upload.
+      - name: Per SFTP hochladen
+        env:
+          LFTP_PASSWORD: ${{ secrets.HE_SSH_PASSWORD }}
+          HE_SSH_USER: ${{ secrets.HE_SSH_USER }}
+          TARGET_DIR: ${{ vars.HE_TARGET_DIR }}
+          DRY_RUN: ${{ inputs.mode == 'probelauf' && '--dry-run' || '' }}
+        run: |
+          test -n "$TARGET_DIR" || { echo "Variable HE_TARGET_DIR fehlt"; exit 1; }
+          lftp -u "$HE_SSH_USER" --env-password sftp://ssh.server-he.de -e "
+            set sftp:auto-confirm false;
+            set net:max-retries 2;
+            mirror --reverse --delete --verbose $DRY_RUN site/_site/ $TARGET_DIR/;
+            bye"

@@ -1,0 +1,12 @@
+---
+title: "Haushaltssimulator"
+subtitle: "Prototyp der statischen Website"
+---
+
+Diese Seiten entstehen beim Bauen aus denselben Daten und Diagrammfunktionen wie die
+Streamlit-App. Sie brauchen keinen Server mit Python und lassen sich als einfache Dateien
+ausliefern.
+
+* [Haushalt & Zinsen](haushalt.qmd) – Kernhaushalt des Bundes nach dem Jahresgutachten
+  des Sachverständigenrats
+* Szenario-Rechner und freie Auswahl: weiterhin in der Streamlit-App

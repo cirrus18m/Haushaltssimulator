@@ -27,6 +27,7 @@ aufbereiteten Tabellen in `processed/` (versioniert, tidy long format).
 | `big_mac.csv` | Big-Mac-Preis in US-Dollar und Abweichung | The Economist | 2000–2026 |
 | `eigentumsquote.csv` | Eigentums- und Mietquote je Land | Eurostat `ilc_lvho02` | 2010–2025 |
 | `bund_zinsausgaben.csv` | Zinsausgaben des Bundes am Kreditmarkt | BMF | 2022–2027 |
+| `federal_core_budget_svr.csv` | Kernhaushalt des Bundes. Spalten wie im SVR-CSV (ohne Fußnotenziffern): „Einnahmen und Ausgaben …“ (Einnahmen, Kreditaufnahme, Ausgaben) in % des BIP, „Ausgaben für Soziale Sicherung, Verteidigung und Zinsen …“ in % der Einnahmen ohne Kredite; `Finanzplan` = Jahr aus dem Finanzplan | Sachverständigenrat, Jahresgutachten 2026/27, Abb. 37 (Daten-CSV im PDF) | 2010–2030 (ab 2026 Finanzplan) |
 | `laender_schulden_jahr.csv` | Schuldenstand und Schuldenquote im Ländervergleich | Eurostat `gov_10dd_edpt1`; IWF WEO/FPP für USA und Russland | 1995–2024 |
 | `laender_haushalt_jahr.csv` | Einnahmen, Zinsausgaben, Quoten und Zins je Einwohner:in im Ländervergleich | Eurostat `gov_10a_main`, `nama_10_gdp`, `demo_pjan`; IWF WEO/FPP | 1995–2024 |
 | `laender_inflation_monat.csv` | Inflationsrate je Land | Eurostat `prc_hicp_manr`, FRED `CPIAUCSL`, Rosstat/EMISS bzw. Bank of Russia | 1997-01–2026-10 |
